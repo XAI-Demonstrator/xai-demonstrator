@@ -6,6 +6,6 @@ services:
     volumes:
       - ./sentiment:/usr/src/app
     ports:
-      - 8000:80
+      - 8000:8000
 
 
