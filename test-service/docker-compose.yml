@@ -1,0 +1,11 @@
+version: '3.7'
+
+services:
+  sentiment-service:
+    build: ./sentiment
+    volumes:
+      - ./sentiment:/usr/src/app
+    ports:
+      - 8000:80
+
+
