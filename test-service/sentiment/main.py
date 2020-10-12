@@ -16,7 +16,7 @@ def explain(message: str):
 
 @app.get("/")
 async def read_root():
-    return "Welcome to my service!"
+    return {"msg": "Welcome to my service!"}
 
 
 @app.post('/predict', status_code=201)
