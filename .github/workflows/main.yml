@@ -12,12 +12,10 @@ jobs:
         uses: actions/setup-python@v1
         with:
           python-version: 3.7
-      - name: Change to sentiment directory
-        run: |
-          cd ./test-service/sentiment
-          echo $PWD
       - name: Install dependencies
         run: |
+          set -e
+          cd ./test-service/sentiment
           echo $PWD
           python -m pip install --upgrade pip
           pip install -r requirements.txt
@@ -30,6 +28,9 @@ jobs:
           flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
       - name: Test with pytest
         run: |
+          set -e
+          cd ./test-service/sentiment
+          echo $PWD
           pip install pytest
           pytest
      
