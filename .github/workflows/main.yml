@@ -43,9 +43,24 @@ jobs:
       uses: elgohr/Publish-Docker-Github-Action@master
       with:
         name: xai-demonstrator/template-service
-        username: ${{ github.actor }}
-        password: ${{ secrets.DOCKER_TOKEN }}
+        username: ${{ secrets.GHCR_PAT_OWNER }}
+        password: ${{ secrets.GHCR_WRITE }}
         registry: ghcr.io
         workdir: test-service/sentiment
         
-  
+  deploy:
+     runs-on: ubuntu-latest
+     needs: build
+     steps:
+       - name: SSH Remote Commands
+         uses: appleboy/ssh-action@v0.1.3
+         with:
+           host: ${{ secrets.TEST_HOST }}
+           username: ${{ secrets.TEST_USER }}
+           key: ${{ secrets.TEST_KEY }}
+           script: |
+             sudo docker stop $(docker ps -a -q)
+             export CR_PAT=${{ secrets.GHCR_READ }}
+             echo $CR_PAT | sudo docker login ghcr.io -u ${{ secrets.GHCR_PAT_OWNER }} --password-stdin
+             sudo docker pull ghcr.io/xai-demonstrator/template-service:latest
+             sudo docker run -p 80:8000 ghcr.io/xai-demonstrator/template-service
