@@ -52,6 +52,7 @@ jobs:
      runs-on: ubuntu-latest
      needs: build
      steps:
+       - uses: actions/checkout@master
        - name: Copy docker-compose.yml to test server
          uses: appleboy/scp-action@v0.1.1
          with:
