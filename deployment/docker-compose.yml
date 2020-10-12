@@ -1,0 +1,7 @@
+version: '3.7'
+
+services:
+  sentiment:
+    image: ghcr.io/xai-demonstrator/template-service
+    ports:
+      - 80:8000
