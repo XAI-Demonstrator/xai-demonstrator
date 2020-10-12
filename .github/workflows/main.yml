@@ -13,9 +13,12 @@ jobs:
         with:
           python-version: 3.7
       - name: Change to sentiment directory
-        run: cd ./test-service/sentiment
+        run: |
+          cd ./test-service/sentiment
+          echo $PWD
       - name: Install dependencies
         run: |
+          echo $PWD
           python -m pip install --upgrade pip
           pip install -r requirements.txt
       - name: Lint with flake8
