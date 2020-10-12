@@ -72,7 +72,7 @@ jobs:
              set -e
              export CR_PAT=${{ secrets.GHCR_READ }}
              echo $CR_PAT | sudo docker login ghcr.io -u ${{ secrets.GHCR_PAT_OWNER }} --password-stdin
-             cd test-deployment
+             cd test-deployment/deployment
              sudo docker pull ghcr.io/xai-demonstrator/template-service:latest
              sudo docker logout
              unset CR_PAT
