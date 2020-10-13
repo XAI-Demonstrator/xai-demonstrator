@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moin</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body style="margin: 0;">
+<div id="app" style="width: 100%; max-width: 500px; margin: 0 auto;">
+    <table style="margin: 0 auto;">
+        <tr>
+            <td><strong>Sentiment Explainer</strong></td>
+        </tr>
+        <tr>
+            <td><textarea ref="input" id="input" style="width: 80vw; height: 30vh; font-size: 12pt;"></textarea></td>
+        </tr>
+        <tr>
+            <td>
+                <button v-on:click="onButtonClick" style="width: 80vw; height: 10vh;">Predict & Explain</button>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>Sentiment:</strong> {{ sentiment }}</td>
+        </tr>
+        <tr>
+            <td><strong>Explanation:</strong> {{ explanation }}</td>
+        </tr>
+    </table>
+
+</div>
+<script>
+    new Vue({
+        el: '#app',
+        data() {
+            return {
+                explanation: null,
+                sentiment: null
+            }
+        },
+        methods: {
+            onButtonClick() {
+                console.log(this.$refs.input.value)
+                axios
+                    .post('/explain', {"text": this.$refs.input.value})
+                    .then(response => {
+                        this.explanation = response.data.explanation
+                        this.sentiment = response.data.prediction
+                    })
+            }
+        }
+    })
+</script>
+</body>
+</html>
