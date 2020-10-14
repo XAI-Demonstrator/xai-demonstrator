@@ -2,3 +2,8 @@ fastapi
 uvicorn
 requests
 aiofiles
+transformers
+
+--find-links https://download.pytorch.org/whl/torch_stable.html
+torch==1.6.0+cpu
+

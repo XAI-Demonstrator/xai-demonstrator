@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Moin</title>
+    <title>XAI Demonstrator Customer Review Sentiment</title>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
@@ -46,7 +46,7 @@
                     .post('/explain', {"text": this.$refs.input.value})
                     .then(response => {
                         this.explanation = response.data.explanation
-                        this.sentiment = response.data.prediction
+                        this.sentiment = "★".repeat(response.data.prediction.map((x, i) => [x, i]).reduce((r, a) => (a[0] > r[0] ? a : r))[1] + 1)
                     })
             }
         }

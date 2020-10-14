@@ -1,11 +1,18 @@
 import random as rd
+from typing import List
 import uuid
 
 from fastapi import FastAPI
 from pydantic import BaseModel
 from fastapi.responses import FileResponse
 
+import model.model as model
+
+import logging
+
 app = FastAPI()
+
+logger = logging.getLogger("api")
 
 
 class ExplanationRequest(BaseModel):
@@ -14,7 +21,7 @@ class ExplanationRequest(BaseModel):
 
 class ExplanationResponse(BaseModel):
     prediction_id: uuid.UUID
-    prediction: str
+    prediction: List[float]
     explanation_id: uuid.UUID
     explanation: str
 
@@ -25,11 +32,7 @@ class PredictionRequest(BaseModel):
 
 class PredictionResponse(BaseModel):
     prediction_id: uuid.UUID
-    prediction: str
-
-
-def predict(message: str):
-    return rd.choice(["positive", "negative"])
+    prediction: List[float]
 
 
 def explain(message: str) -> str:
@@ -48,14 +51,14 @@ def frontend():
 @app.post('/predict')
 async def predict_sentiment(request: PredictionRequest):
     return PredictionResponse(prediction_id=uuid.uuid4(),
-                              prediction=predict(request.text))
+                              prediction=model.predict_sentiment(request.text))
 
 
 @app.post('/explain')
 async def explain_sentiment(request: ExplanationRequest):
     return ExplanationResponse(
         prediction_id=uuid.uuid4(),
-        prediction=predict(request.text),
+        prediction=model.predict_sentiment(request.text),
         explanation_id=uuid.uuid4(),
         explanation=explain(request.text)
     )

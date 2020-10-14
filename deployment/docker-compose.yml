@@ -3,5 +3,9 @@ version: '3.7'
 services:
   sentiment:
     image: ghcr.io/xai-demonstrator/template-service
+    volumes:
+      - type: bind
+        source: /home/ubuntu/model-cache
+        target: /app/model/cache
     ports:
       - 80:8000
