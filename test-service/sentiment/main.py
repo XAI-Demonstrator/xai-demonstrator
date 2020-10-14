@@ -1,12 +1,13 @@
 import random as rd
 from typing import List
 import uuid
+import pathlib
 
 from fastapi import FastAPI
 from pydantic import BaseModel
 from fastapi.responses import FileResponse
 
-import model.model as model
+from .model import model
 
 import logging
 
@@ -45,7 +46,7 @@ def explain(message: str) -> str:
 
 @app.get("/")
 def frontend():
-    return FileResponse("./static/frontend.html")
+    return FileResponse(pathlib.Path(__file__).parent/"static/frontend.html")
 
 
 @app.post('/predict')

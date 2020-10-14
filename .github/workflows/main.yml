@@ -29,7 +29,7 @@ jobs:
       - name: Test with pytest
         run: |
           set -e
-          cd ./test-service/sentiment
+          cd ./test-service
           echo $PWD
           pip install pytest
           pytest

@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   sentiment:
-    build: ./sentiment
+    build: .
     volumes:
       - type: bind
         source: ./sentiment/model/cache
