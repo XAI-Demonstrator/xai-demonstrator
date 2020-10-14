@@ -15,7 +15,7 @@ jobs:
       - name: Install dependencies
         run: |
           set -e
-          cd ./test-service/sentiment
+          cd ./test-service
           echo $PWD
           python -m pip install --upgrade pip
           pip install -r requirements.txt
@@ -46,7 +46,7 @@ jobs:
         username: ${{ secrets.GHCR_PAT_OWNER }}
         password: ${{ secrets.GHCR_WRITE }}
         registry: ghcr.io
-        workdir: test-service/sentiment
+        workdir: test-service/
         
   deploy:
      runs-on: ubuntu-latest
