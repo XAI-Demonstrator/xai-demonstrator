@@ -18,7 +18,12 @@
         </tr>
         <tr>
             <td>
-                <button v-on:click="onButtonClick" style="width: 80vw; height: 10vh;">Predict & Explain</button>
+                <button v-on:click="onPredictButtonClick" style="width: 80vw; height: 10vh;">Predict</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <button v-on:click="onExplainButtonClick" style="width: 80vw; height: 10vh;">Predict & Explain</button>
             </td>
         </tr>
         <tr>
@@ -40,12 +45,21 @@
             }
         },
         methods: {
-            onButtonClick() {
+            onExplainButtonClick() {
                 console.log(this.$refs.input.value)
                 axios
                     .post('/explain', {"text": this.$refs.input.value})
                     .then(response => {
-                        this.explanation = response.data.explanation
+                        this.explanation = response.data.explanation.explanation
+                        this.sentiment = "★".repeat(response.data.prediction.prediction.map((x, i) => [x, i]).reduce((r, a) => (a[0] > r[0] ? a : r))[1] + 1)
+                    })
+            },
+            onPredictButtonClick() {
+                console.log(this.$refs.input.value)
+                axios
+                    .post('/predict', {"text": this.$refs.input.value})
+                    .then(response => {
+                        this.explanation = ""
                         this.sentiment = "★".repeat(response.data.prediction.map((x, i) => [x, i]).reduce((r, a) => (a[0] > r[0] ? a : r))[1] + 1)
                     })
             }

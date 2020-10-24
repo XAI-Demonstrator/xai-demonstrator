@@ -8,6 +8,7 @@ from pydantic import BaseModel
 from fastapi.responses import FileResponse
 
 from .model import model
+from .explainer import gradient_explainer
 
 import logging
 
@@ -16,24 +17,17 @@ app = FastAPI()
 logger = logging.getLogger("api")
 
 
+class PredictionRequest(BaseModel):
+    text: str
+
+
 class ExplanationRequest(BaseModel):
     text: str
 
 
 class ExplanationResponse(BaseModel):
-    prediction_id: uuid.UUID
-    prediction: List[float]
-    explanation_id: uuid.UUID
-    explanation: str
-
-
-class PredictionRequest(BaseModel):
-    text: str
-
-
-class PredictionResponse(BaseModel):
-    prediction_id: uuid.UUID
-    prediction: List[float]
+    prediction: model.Prediction
+    explanation: gradient_explainer.Explanation
 
 
 def explain(message: str) -> str:
@@ -51,15 +45,10 @@ def frontend():
 
 @app.post('/predict')
 async def predict_sentiment(request: PredictionRequest):
-    return PredictionResponse(prediction_id=uuid.uuid4(),
-                              prediction=model.predict_sentiment(request.text))
+    return model.predict_sentiment(request.text)
 
 
 @app.post('/explain')
-async def explain_sentiment(request: ExplanationRequest):
-    return ExplanationResponse(
-        prediction_id=uuid.uuid4(),
-        prediction=model.predict_sentiment(request.text),
-        explanation_id=uuid.uuid4(),
-        explanation=explain(request.text)
-    )
+async def explain_sentiment(request: ExplanationRequest) -> ExplanationResponse:
+    prediction, explanation = gradient_explainer.explain(request.text)
+    return ExplanationResponse(prediction=prediction, explanation=explanation)

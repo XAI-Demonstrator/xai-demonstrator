@@ -40,3 +40,4 @@ def test_that_empty_prediction_passes():
 def test_that_empty_explanation_passes():
     response = client.post('/predict', json={"text": ""})
     assert response.status_code == 200
+
