@@ -54,6 +54,7 @@ def merge_and_attribute(tokens: torch.Tensor, scores: torch.Tensor) -> List[Tupl
 
 
 def explain(text: str) -> Tuple[Prediction, Explanation]:
+    # FIXME: Deal with the case of empty text as input
     text_input_ids, ref_input_ids = construct_input_and_reference(text, ref_token_id=tokenizer.pad_token_id)
 
     prediction = sentiment_forward(text_input_ids)

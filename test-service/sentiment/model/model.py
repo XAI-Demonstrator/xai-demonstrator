@@ -1,3 +1,4 @@
+from typing import Callable
 import pathlib
 import uuid
 from typing import List
@@ -8,11 +9,58 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
 PATH = pathlib.Path(__file__).parent
 
-tokenizer = AutoTokenizer.from_pretrained("nlptown/bert-base-multilingual-uncased-sentiment",
-                                          cache_dir=PATH / "cache")
+
+class LazyLoader:
+    """Prevent huge assets from being loaded at startup, allows for mocking."""
+
+    def __init__(self):
+        self._object = None
+
+    def load(self) -> Callable:
+        raise NotImplementedError
+
+    def __call__(self, *args, **kwargs):
+        if self._object is None:
+            self._object = self.load()
+
+        return self._object(*args, **kwargs)
+
+
+class Model(LazyLoader):
+
+    def load(self):
+        return AutoModelForSequenceClassification.from_pretrained("nlptown/bert-base-multilingual-uncased-sentiment",
+                                                                  cache_dir=PATH / "cache")
+
+    @property
+    def bert(self):
+        if self._object is None:
+            self._object = self.load()
+        return self._object.bert
+
+
+class Tokenizer(LazyLoader):
+
+    def load(self):
+        return AutoTokenizer.from_pretrained("nlptown/bert-base-multilingual-uncased-sentiment",
+                                             cache_dir=PATH / "cache")
+
+    def encode(self, *args, **kwargs):
+        if self._object is None:
+            self._object = self.load()
+        return self._object.encode(*args, **kwargs)
+
+    @property
+    def pad_token_id(self):
+        if self._object is None:
+            self._object = self.load()
+        return self._object.pad_token_id
+
 
 model = AutoModelForSequenceClassification.from_pretrained("nlptown/bert-base-multilingual-uncased-sentiment",
                                                            cache_dir=PATH / "cache")
+tokenizer = AutoTokenizer.from_pretrained("nlptown/bert-base-multilingual-uncased-sentiment",
+                                          cache_dir=PATH / "cache")
 
 
 class Prediction(BaseModel):

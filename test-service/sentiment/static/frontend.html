@@ -6,6 +6,7 @@
     <title>XAI Demonstrator Customer Review Sentiment</title>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="charty.css" />
 </head>
 <body style="margin: 0;">
 <div id="app" style="width: 100%; max-width: 500px; margin: 0 auto;">
@@ -30,7 +31,30 @@
             <td><strong>Sentiment:</strong> {{ sentiment }}</td>
         </tr>
         <tr>
-            <td><strong>Explanation:</strong> {{ explanation }}</td>
+            <td><strong>Explanation:</strong>
+
+                <table data-id="flexbox-bar-graph" data-layout="horizontal">
+                    <tbody>
+                    <tr>
+                        <td>
+                            <span ref="bar1" style="--data-set:0;" class="positive">{{ score1 }}</span>
+                        </td>
+                        <td>
+                            <span ref="bar2" style="--data-set:0;" class="positive">{{ score2 }}</span>
+                        </td>
+                        <td>
+                            <span ref="bar3" style="--data-set:0;" class="positive">{{ score3 }}</span>
+                        </td>
+                    </tr>
+                    <tr style="width: auto;">
+                        <td>{{ word1 }}</td>
+                        <td>{{ word2 }}</td>
+                        <td>{{ word3 }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </td>
         </tr>
     </table>
 
@@ -41,7 +65,13 @@
         data() {
             return {
                 explanation: null,
-                sentiment: null
+                sentiment: null,
+                word1: "",
+                word2: "",
+                word3: "",
+                score1: null,
+                score2: null,
+                score3: null
             }
         },
         methods: {
@@ -51,6 +81,7 @@
                     .post('/explain', {"text": this.$refs.input.value})
                     .then(response => {
                         this.explanation = response.data.explanation.explanation
+                        this.computeExplanation(this.explanation)
                         this.sentiment = "★".repeat(response.data.prediction.prediction.map((x, i) => [x, i]).reduce((r, a) => (a[0] > r[0] ? a : r))[1] + 1)
                     })
             },
@@ -62,6 +93,32 @@
                         this.explanation = ""
                         this.sentiment = "★".repeat(response.data.prediction.map((x, i) => [x, i]).reduce((r, a) => (a[0] > r[0] ? a : r))[1] + 1)
                     })
+            },
+            computeExplanation(unsorted_explanation) {
+                console.log(unsorted_explanation)
+                let explanation = unsorted_explanation.sort(function(a,b) {return Math.abs(b[1]) - Math.abs(a[1])})
+                console.log(explanation)
+
+                let score1 = explanation[0][1];
+                let score2 = explanation[1][1];
+                let score3 = explanation[2][1];
+
+                this.$refs.bar1.style.setProperty('--data-set', score1)
+                this.$refs.bar1.className = (score1 >= 0 ? "positive": "negative")
+
+                this.$refs.bar2.style.setProperty('--data-set', score2)
+                this.$refs.bar2.className = (score2 >= 0 ? "positive": "negative")
+
+                this.$refs.bar3.style.setProperty('--data-set', score3)
+                this.$refs.bar3.className = (score3 >= 0 ? "positive": "negative")
+
+                this.score1 = score1.toFixed(2);
+                this.score2 = score2.toFixed(2);
+                this.score3 = score3.toFixed(2);
+
+                this.word1 = explanation[0][0]
+                this.word2 = explanation[1][0]
+                this.word3 = explanation[2][0]
             }
         }
     })

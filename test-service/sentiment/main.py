@@ -40,7 +40,12 @@ def explain(message: str) -> str:
 
 @app.get("/")
 def frontend():
-    return FileResponse(pathlib.Path(__file__).parent/"static/frontend.html")
+    return FileResponse(pathlib.Path(__file__).parent / "static/frontend.html")
+
+
+@app.get("/charty.css")
+def style():
+    return FileResponse(pathlib.Path(__file__).parent / "static/charty.css")
 
 
 @app.post('/predict')
