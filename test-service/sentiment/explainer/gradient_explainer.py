@@ -18,6 +18,11 @@ class Explanation(BaseModel):
 
 def construct_input_and_reference(text: str, ref_token_id):
     text_input_ids = tokenizer.encode(text, add_special_tokens=False)
+    # ref_input_ids = tokenizer.encode("Das ist absolut herausragend toll!")
+    #
+    # ref_input_ids = ref_input_ids * 100
+    # ref_input_ids = ref_input_ids[:len(text_input_ids)]
+
     ref_input_ids = [ref_token_id] * len(text_input_ids)
 
     return torch.tensor([text_input_ids]), torch.tensor([ref_input_ids])
@@ -61,7 +66,7 @@ def explain(text: str) -> Tuple[Prediction, Explanation]:
     target = prediction.argmax().item()
 
     attributions, delta = lig.attribute(inputs=text_input_ids,
-                                        target=target,
+                                        target=4,
                                         baselines=ref_input_ids,
                                         return_convergence_delta=True)
 
