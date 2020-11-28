@@ -37,19 +37,19 @@
                     <tbody>
                     <tr>
                         <td>
-                            <span ref="bar1" style="--data-set:0;" class="positive"></span>
+                            <span ref="bar1" style="--data-set:0; display: none;" class="positive"></span>
                         </td>
                         <td>
-                            <span ref="bar2" style="--data-set:0;" class="positive"></span>
+                            <span ref="bar2" style="--data-set:0; display: none;" class="positive"></span>
                         </td>
                         <td>
-                            <span ref="bar3" style="--data-set:0;" class="positive"></span>
+                            <span ref="bar3" style="--data-set:0; display: none;" class="positive"></span>
                         </td>
                     </tr>
                     <tr style="width: auto;">
-                        <td>{{ word1 }}</td>
-                        <td>{{ word2 }}</td>
-                        <td>{{ word3 }}</td>
+                        <td>{{ words[0] }}</td>
+                        <td>{{ words[1] }}</td>
+                        <td>{{ words[2] }}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -66,9 +66,7 @@
             return {
                 explanation: null,
                 sentiment: null,
-                word1: "",
-                word2: "",
-                word3: ""
+                words: ["", "", ""]
             }
         },
         methods: {
@@ -96,22 +94,26 @@
                 let explanation = unsorted_explanation.sort(function(a,b) {return Math.abs(b[1]) - Math.abs(a[1])})
                 console.log(explanation)
 
-                let score1 = explanation[0][1];
-                let score2 = explanation[1][1];
-                let score3 = explanation[2][1];
+                this.words = ["", "", ""]
 
-                this.$refs.bar1.style.setProperty('--data-set', score1)
-                this.$refs.bar1.className = (score1 >= 0 ? "positive": "negative")
+                let bars = [this.$refs.bar1, this.$refs.bar2, this.$refs.bar3]
 
-                this.$refs.bar2.style.setProperty('--data-set', score2)
-                this.$refs.bar2.className = (score2 >= 0 ? "positive": "negative")
+                for (let bar of bars) {
+                    bar.style.setProperty('--data-set', 0.0)
+                    bar.style.setProperty('display', 'none')
+                    bar.className = "positive"
+                }
 
-                this.$refs.bar3.style.setProperty('--data-set', score3)
-                this.$refs.bar3.className = (score3 >= 0 ? "positive": "negative")
+                let len = Math.min(3, explanation.length)
+                for (let i=0; i < len; i++) {
+                    console.log(explanation[i])
+                    this.words[i] = explanation[i][0]
+                    bars[i].style.setProperty('--data-set', explanation[i][1])
+                    bars[i].style.setProperty('display', 'inline')
+                    bars[i].className = (explanation[i][1] >= 0 ? "positive": "negative")
+                }
 
-                this.word1 = explanation[0][0]
-                this.word2 = explanation[1][0]
-                this.word3 = explanation[2][0]
+                console.log(this.words)
             }
         }
     })
