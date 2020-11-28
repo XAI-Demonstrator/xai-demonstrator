@@ -37,13 +37,13 @@
                     <tbody>
                     <tr>
                         <td>
-                            <span ref="bar1" style="--data-set:0;" class="positive">{{ score1 }}</span>
+                            <span ref="bar1" style="--data-set:0;" class="positive"></span>
                         </td>
                         <td>
-                            <span ref="bar2" style="--data-set:0;" class="positive">{{ score2 }}</span>
+                            <span ref="bar2" style="--data-set:0;" class="positive"></span>
                         </td>
                         <td>
-                            <span ref="bar3" style="--data-set:0;" class="positive">{{ score3 }}</span>
+                            <span ref="bar3" style="--data-set:0;" class="positive"></span>
                         </td>
                     </tr>
                     <tr style="width: auto;">
@@ -68,10 +68,7 @@
                 sentiment: null,
                 word1: "",
                 word2: "",
-                word3: "",
-                score1: null,
-                score2: null,
-                score3: null
+                word3: ""
             }
         },
         methods: {
@@ -111,10 +108,6 @@
 
                 this.$refs.bar3.style.setProperty('--data-set', score3)
                 this.$refs.bar3.className = (score3 >= 0 ? "positive": "negative")
-
-                this.score1 = score1.toFixed(2);
-                this.score2 = score2.toFixed(2);
-                this.score3 = score3.toFixed(2);
 
                 this.word1 = explanation[0][0]
                 this.word2 = explanation[1][0]
