@@ -1,5 +1,6 @@
+import string
 import uuid
-from typing import Tuple, Dict, List
+from typing import Tuple, List
 
 import torch
 from captum.attr import LayerIntegratedGradients
@@ -18,11 +19,6 @@ class Explanation(BaseModel):
 
 def construct_input_and_reference(text: str, ref_token_id):
     text_input_ids = tokenizer.encode(text, add_special_tokens=False)
-    # ref_input_ids = tokenizer.encode("Das ist absolut herausragend toll!")
-    #
-    # ref_input_ids = ref_input_ids * 100
-    # ref_input_ids = ref_input_ids[:len(text_input_ids)]
-
     ref_input_ids = [ref_token_id] * len(text_input_ids)
 
     return torch.tensor([text_input_ids]), torch.tensor([ref_input_ids])
@@ -55,7 +51,8 @@ def merge_and_attribute(tokens: torch.Tensor, scores: torch.Tensor) -> List[Tupl
     real_attributions = torch.tensor(real_attributions)
     real_attributions = real_attributions / torch.norm(real_attributions)
 
-    return [(word, score) for word, score in zip(real_words, real_attributions.tolist())]
+    return [(word, score) for word, score in zip(real_words, real_attributions.tolist())
+            if word not in string.punctuation]
 
 
 def explain(text: str) -> Tuple[Prediction, Explanation]:
