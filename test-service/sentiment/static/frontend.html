@@ -6,32 +6,37 @@
     <title>XAI Demonstrator Customer Review Sentiment</title>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <link rel="stylesheet" href="charty.css" />
+    <link rel="stylesheet" href="charty.css"/>
 </head>
-<body style="margin: 0;">
+<body style="margin: 0; font-family: sans-serif;">
 <div id="app" style="width: 100%; max-width: 500px; margin: 0 auto;">
     <table style="margin: 0 auto;">
         <tr>
-            <td><strong>XAI Demonstrator</strong></td>
+            <td><strong>XAI Demonstrator</strong>
+                <p style="width: 80vw; font-size: smaller; text-align: justify;">Geben Sie ein Review ein. Sie können
+                    beispielsweise Ihren letzten Restaurantbesuch oder einen Film bewerten.</p>
+            </td>
         </tr>
         <tr>
             <td><textarea ref="input" id="input" style="width: 80vw; height: 25vh; font-size: 12pt;"></textarea></td>
         </tr>
         <tr>
             <td>
-                <button v-on:click="onPredictButtonClick" style="width: 80vw; height: 8vh;">Predict</button>
+                <button v-on:click="onPredictButtonClick" style="width: 80vw; height: 8vh;">Review analysieren
+                </button>
             </td>
+        </tr>
+        <tr>
+            <td><strong>Bewertung:</strong> {{ sentiment }}</td>
         </tr>
         <tr>
             <td>
-                <button v-on:click="onExplainButtonClick" style="width: 80vw; height: 8vh;">Predict & Explain</button>
+                <button v-on:click="onExplainButtonClick" style="width: 80vw; height: 8vh;">Review analysieren &<br /> Bewertung erklären</button>
             </td>
         </tr>
+
         <tr>
-            <td><strong>Sentiment:</strong> {{ sentiment }}</td>
-        </tr>
-        <tr>
-            <td><strong>Explanation:</strong>
+            <td><strong>Erklärung:</strong>
 
                 <table data-id="flexbox-bar-graph" data-layout="horizontal">
                     <tbody>
@@ -56,6 +61,12 @@
 
             </td>
         </tr>
+        <tr>
+            <td ref="wordcloud"><strong>Erklärung:</strong>&#32;<span v-for="word in explanation"><span v-bind:style="{'font-size': (10 + (4 * Math.abs(word[1]))**2) + 'pt', 'color': 'hsl(' + ((1 + word[1]) * 60) + ',100%,' + (45 - Math.abs(word[1]) * 10) + '%)'}">{{word[0]}}&#32;</span></span></td>
+        </tr>
+        <tr>
+            <td ref="highlight"><strong>Erklärung:</strong>&#32;<span v-for="word in explanation"><span v-bind:style="{'background-color': 'hsl(' + ((1 + word[1]) * 60) + ',100%,' + (100 - Math.abs(word[1]) * 60) + '%)'}">{{word[0]}}&#32;</span></span></td>
+        </tr>
     </table>
 
 </div>
@@ -66,7 +77,7 @@
             return {
                 explanation: null,
                 sentiment: null,
-                words: ["", "", ""]
+                words: ["", "", ""],
             }
         },
         methods: {
@@ -91,7 +102,9 @@
             },
             computeExplanation(unsorted_explanation) {
                 console.log(unsorted_explanation)
-                let explanation = unsorted_explanation.sort(function(a,b) {return Math.abs(b[1]) - Math.abs(a[1])})
+                let explanation = [...unsorted_explanation].sort(function (a, b) {
+                    return Math.abs(b[1]) - Math.abs(a[1])
+                })
                 console.log(explanation)
 
                 this.words = ["", "", ""]
@@ -105,12 +118,12 @@
                 }
 
                 let len = Math.min(3, explanation.length)
-                for (let i=0; i < len; i++) {
+                for (let i = 0; i < len; i++) {
                     console.log(explanation[i])
                     this.words[i] = explanation[i][0]
                     bars[i].style.setProperty('--data-set', explanation[i][1])
                     bars[i].style.setProperty('display', 'inline')
-                    bars[i].className = (explanation[i][1] >= 0 ? "positive": "negative")
+                    bars[i].className = (explanation[i][1] >= 0 ? "positive" : "negative")
                 }
 
                 console.log(this.words)
