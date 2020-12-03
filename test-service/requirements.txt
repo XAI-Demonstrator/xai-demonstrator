@@ -2,8 +2,8 @@ fastapi
 uvicorn
 requests
 aiofiles
-transformers
-captum
+transformers==3.3.1
+captum==0.2.0
 
 
 --find-links https://download.pytorch.org/whl/torch_stable.html
