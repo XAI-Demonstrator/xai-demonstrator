@@ -6,9 +6,7 @@ import torch
 from captum.attr import LayerIntegratedGradients
 from pydantic import BaseModel
 
-from ..model.model import model, sentiment_forward, tokenizer, Prediction
-
-lig = LayerIntegratedGradients(sentiment_forward, model.bert.embeddings)
+from ..model.model import get, sentiment_forward
 
 
 class Explanation(BaseModel):
@@ -18,6 +16,7 @@ class Explanation(BaseModel):
 
 
 def construct_input_and_reference(text: str, ref_token_id):
+    tokenizer = get.tokenizer
     text_input_ids = tokenizer.encode(text, add_special_tokens=False)
     ref_input_ids = [ref_token_id] * len(text_input_ids)
 
@@ -25,6 +24,7 @@ def construct_input_and_reference(text: str, ref_token_id):
 
 
 def merge_and_attribute(tokens: torch.Tensor, scores: torch.Tensor) -> List[Tuple[str, float]]:
+    tokenizer = get.tokenizer
     decoded = [tokenizer.decode([token]) for token in tokens]
 
     real_words = []
@@ -55,15 +55,14 @@ def merge_and_attribute(tokens: torch.Tensor, scores: torch.Tensor) -> List[Tupl
             if word not in string.punctuation]
 
 
-def explain(text: str) -> Tuple[Prediction, Explanation]:
-    # FIXME: Deal with the case of empty text as input
+def explain(text: str, target: int) -> Explanation:
+    tokenizer = get.tokenizer
     text_input_ids, ref_input_ids = construct_input_and_reference(text, ref_token_id=tokenizer.pad_token_id)
 
-    prediction = sentiment_forward(text_input_ids)
-    target = prediction.argmax().item()
+    lig = LayerIntegratedGradients(sentiment_forward, get.model.bert.embeddings)
 
     attributions, delta = lig.attribute(inputs=text_input_ids,
-                                        target=4,
+                                        target=target,
                                         baselines=ref_input_ids,
                                         return_convergence_delta=True)
 
@@ -71,8 +70,6 @@ def explain(text: str) -> Tuple[Prediction, Explanation]:
 
     explanation = merge_and_attribute(tokens=text_input_ids[0], scores=scores)
 
-    return (Prediction(prediction_id=uuid.uuid4(),
-                       prediction=list(map(float, prediction.tolist()[0]))),
-            Explanation(explanation_id=uuid.uuid4(),
-                        explanation=explanation,
-                        delta=delta.item()))
+    return Explanation(explanation_id=uuid.uuid4(),
+                       explanation=explanation,
+                       delta=delta.item())

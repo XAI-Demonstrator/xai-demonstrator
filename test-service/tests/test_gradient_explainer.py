@@ -8,4 +8,4 @@ def test_merge_and_attribute():
 
 
 def test_explain():
-    prediction, explanation = explain("Der Hund")
+    prediction = explain("Der Hund", target=4)
