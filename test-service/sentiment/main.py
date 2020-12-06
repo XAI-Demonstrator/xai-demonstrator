@@ -1,16 +1,12 @@
-import random as rd
-from typing import List
-import uuid
+import logging
 import pathlib
 
 from fastapi import FastAPI
-from pydantic import BaseModel, validator
 from fastapi.responses import FileResponse
+from pydantic import BaseModel, validator
 
-from .model import model
-from .explainer import gradient_explainer
-
-import logging
+from .explainer.explainer import Explanation, explain, EXPLAINERS
+from .model.predict import Prediction, predict
 
 app = FastAPI()
 
@@ -30,6 +26,7 @@ class PredictionRequest(BaseModel):
 class ExplanationRequest(BaseModel):
     text: str
     target: int = 4
+    method: str = "integrated_gradients"
 
     @validator('text')
     def text_must_not_be_empty(cls, v):
@@ -43,10 +40,15 @@ class ExplanationRequest(BaseModel):
             raise ValueError('Target must be between 0 and 4')
         return v
 
+    @validator('method')
+    def method_must_be_available(cls, v):
+        if v not in EXPLAINERS:
+            raise ValueError(f'{v} is not an available explanation method')
+
 
 class ExplanationResponse(BaseModel):
-    prediction: model.Prediction
-    explanation: gradient_explainer.Explanation
+    prediction: Prediction
+    explanation: Explanation
 
 
 @app.get("/")
@@ -61,13 +63,13 @@ def style():
 
 @app.post('/predict')
 async def predict_sentiment(request: PredictionRequest):
-    return model.predict_sentiment(request.text)
+    return predict(request.text)
 
 
 @app.post('/explain')
 async def explain_sentiment(request: ExplanationRequest) -> ExplanationResponse:
     # TODO: Parallelize
-    prediction = model.predict_sentiment(request.text)
+    prediction = predict(request.text)
     # TODO: Allow explanation based on prediction
-    explanation = gradient_explainer.explain(request.text, request.target)
+    explanation = explain(request.text, request.target, request.method)
     return ExplanationResponse(prediction=prediction, explanation=explanation)
