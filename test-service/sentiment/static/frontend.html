@@ -18,7 +18,7 @@
             </td>
         </tr>
         <tr>
-            <td><textarea ref="input" id="input" style="width: 80vw; height: 25vh; font-size: 12pt;"></textarea></td>
+            <td><textarea ref="input" id="input" style="width: 80vw; height: 25vh; font-size: 12pt;" :placeholder="[[ defaultReview ]]"></textarea></td>
         </tr>
         <tr>
             <td>
@@ -78,11 +78,18 @@
                 explanation: null,
                 sentiment: null,
                 words: ["", "", ""],
+                defaultReview: "Super Pizza und schneller Service - gerne bald wieder!!"
             }
         },
         methods: {
             onExplainButtonClick() {
+                this.resetAll()
+                this.explanation = ""
+
                 console.log(this.$refs.input.value)
+                if (!this.$refs.input.value) {
+                    this.$refs.input.value = this.defaultReview
+                }
                 axios
                     .post('/explain', {"text": this.$refs.input.value})
                     .then(response => {
@@ -92,7 +99,14 @@
                     })
             },
             onPredictButtonClick() {
+                this.resetAll()
+                this.explanation = ""
+                this.sentiment = ""
+
                 console.log(this.$refs.input.value)
+                if (!this.$refs.input.value) {
+                    this.$refs.input.value = this.defaultReview
+                }
                 axios
                     .post('/predict', {"text": this.$refs.input.value})
                     .then(response => {
@@ -101,21 +115,15 @@
                     })
             },
             computeExplanation(unsorted_explanation) {
+                this.resetAll()
+
                 console.log(unsorted_explanation)
                 let explanation = [...unsorted_explanation].sort(function (a, b) {
                     return Math.abs(b[1]) - Math.abs(a[1])
                 })
                 console.log(explanation)
 
-                this.words = ["", "", ""]
-
                 let bars = [this.$refs.bar1, this.$refs.bar2, this.$refs.bar3]
-
-                for (let bar of bars) {
-                    bar.style.setProperty('--data-set', 0.0)
-                    bar.style.setProperty('display', 'none')
-                    bar.className = "positive"
-                }
 
                 let len = Math.min(3, explanation.length)
                 for (let i = 0; i < len; i++) {
@@ -127,6 +135,18 @@
                 }
 
                 console.log(this.words)
+            },
+            resetAll() {
+                this.words = ["", "", ""]
+
+                let bars = [this.$refs.bar1, this.$refs.bar2, this.$refs.bar3]
+
+                for (let bar of bars) {
+                    bar.style.setProperty('--data-set', 0.0)
+                    bar.style.setProperty('display', 'none')
+                    bar.className = "positive"
+                }
+
             }
         }
     })
