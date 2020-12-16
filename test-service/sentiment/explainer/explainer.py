@@ -5,6 +5,8 @@ from typing import Tuple, List
 import torch
 import re
 import numpy as np
+import pathlib
+
 from pydantic import BaseModel
 from transformers import BatchEncoding
 from transformers.tokenization_bert import BertTokenizer
@@ -13,7 +15,10 @@ from transformers.modeling_bert import BertForSequenceClassification
 from .integrated_gradients import attribute_integrated_gradients
 from ..model.model import get
 
-STOPWORDS = ["und"]
+PATH = pathlib.Path(__file__).parent
+
+with open(PATH/"small_words_to_filter.txt", "rt", encoding="utf-8") as f:
+    STOPWORDS = [word.strip() for word in f]
 
 EXPLAINERS = {
     "integrated_gradients": attribute_integrated_gradients
@@ -53,12 +58,12 @@ def align_text(text: str,
             for idx, word in enumerate(split_text)]
 
 
-def filter_attributions(attributions, remove_stopwords=False, remove_punctuation=True):
+def filter_attributions(attributions, remove_stopwords=True, remove_punctuation=True):
     if remove_punctuation:
-        attributions = ((word, score) for word, score in attributions if word not in string.punctuation)
+        attributions = ((word, score if word not in string.punctuation else 0.0) for word, score in attributions)
 
     if remove_stopwords:
-        attributions = ((word, score) for word, score in attributions if word not in STOPWORDS)
+        attributions = ((word, score if word not in STOPWORDS else 0.0) for word, score in attributions)
 
     return list(attributions)
 
