@@ -53,12 +53,22 @@ class ExplanationResponse(BaseModel):
 
 @app.get("/")
 def frontend():
-    return FileResponse(pathlib.Path(__file__).parent / "static/frontend.html")
+    return FileResponse(pathlib.Path(__file__).parent / "static" / "index.html")
 
 
-@app.get("/charty.css")
-def style():
-    return FileResponse(pathlib.Path(__file__).parent / "static/charty.css")
+@app.get("/favicon.ico")
+def favicon():
+    return FileResponse(pathlib.Path(__file__).parent / "static" / "favicon.ico")
+
+
+@app.get("/css/{fname}")
+def style(fname):
+    return FileResponse(pathlib.Path(__file__).parent / "static" / "css" / fname)
+
+
+@app.get("/js/{fname}")
+def script(fname):
+    return FileResponse(pathlib.Path(__file__).parent / "static" / "js" / fname)
 
 
 @app.post('/predict')

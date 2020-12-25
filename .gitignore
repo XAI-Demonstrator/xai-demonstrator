@@ -3,10 +3,11 @@ __pycache__
 .ipynb_checkpoints/
 
 /test-service/sentiment/model/cache/
+/test-service/sentiment/static/
 /node_modules
 
 -r /test-service/sentiment-frontend/.gitignore
--r /test-service/sentiment/.gitignore
+
 
 .idea/
 
