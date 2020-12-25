@@ -5,12 +5,6 @@ from sentiment.main import app
 client = TestClient(app)
 
 
-def test_read_root():
-    response = client.get("/")
-
-    assert response.status_code == 200
-
-
 def test_predict_sentiment():
     test_str = "This is a test!"
     test_dict = {"text": test_str}
