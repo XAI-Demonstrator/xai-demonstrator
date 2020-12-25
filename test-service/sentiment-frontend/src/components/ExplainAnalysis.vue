@@ -8,6 +8,7 @@
 </template>
 <script>
 import axios from 'axios'
+import {Indicator} from "mint-ui";
 
 import TextHighlight from "@/components/TextHighlight";
 import BarChart from "@/components/BarChart";
@@ -26,6 +27,8 @@ export default {
   ],
   methods: {
     explanationRequested() {
+      Indicator.open()
+
       this.resetComponent()
 
       axios
@@ -37,6 +40,7 @@ export default {
                     score: pair[1]
                   }
                 })
+                Indicator.close()
               }
           )
     },

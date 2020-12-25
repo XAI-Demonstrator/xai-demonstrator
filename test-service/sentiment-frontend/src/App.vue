@@ -20,6 +20,7 @@ import ComposeReview from "@/components/ComposeReview";
 import AnalyzeReview from "@/components/AnalyzeReview";
 import ExplainAnalysis from "@/components/ExplainAnalysis";
 
+
 export default {
   name: 'App',
   components: {
@@ -53,9 +54,9 @@ export default {
     },
 
     analysisRequested() {
-      /* Prepare UI */
       this.$refs.explainer.resetComponent()
       this.numberOfStars = null
+
     },
 
     analysisCompleted(value) {

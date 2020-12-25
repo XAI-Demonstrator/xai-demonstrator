@@ -8,6 +8,7 @@
 </template>
 <script>
 import axios from 'axios'
+import {Indicator} from "mint-ui";
 
 export default {
   name: 'AnalyzeReview',
@@ -21,16 +22,17 @@ export default {
   },
   methods: {
     analysisRequested() {
+      Indicator.open()
+
       this.resetComponent()
       this.$emit('analysisRequested')
-
-      console.log("Review text: " + this.reviewText)
 
       axios.post('/predict', {"text": this.reviewText})
           .then(response => {
             this.numOfStars = response.data.prediction.map((x, i) => [x, i]).reduce((r, a) => (a[0] > r[0] ? a : r))[1] + 1
-            this.sentiment = "★".repeat(this.numOfStars)
+            this.sentiment = "⭐".repeat(this.numOfStars)
             this.$emit('analysisCompleted', this.numOfStars)
+            Indicator.close()
           })
     },
     resetComponent() {
