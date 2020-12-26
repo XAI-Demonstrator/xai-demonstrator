@@ -20,7 +20,7 @@ jobs:
         uses: rtCamp/action-slack-notify@master
         env:
           SLACK_CHANNEL: xai-tech
-          SLACK_MESSAGE: 'Cannot reach test deployment at http://test.xaidemo.de :enttäuscht:'
+          SLACK_MESSAGE: 'Cannot reach test deployment at http://test.xaidemo.de :disappointed:'
           SLACK_TITLE: Test Deployment Is Down
           SLACK_USERNAME: Deployment Monitor
           SLACK_COLOR: danger
