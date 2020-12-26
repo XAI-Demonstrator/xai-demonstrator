@@ -4,8 +4,11 @@ __pycache__
 .idea/
 .DS_STORE
 
+/experiments
 /node_modules
 
 -r /review-sentiment/sentiment-frontend/.gitignore
 -r /review-sentiment/.gitignore
 
+-r /visual-inspection/inspection-frontend/.gitignore
+-r /visual-inspection/.gitignore
