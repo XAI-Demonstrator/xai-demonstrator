@@ -2,7 +2,7 @@ FROM python:3.7-slim
 
 WORKDIR /
 
-COPY ./sentiment-backend /app
+COPY ./sentiment /app
 COPY ./requirements.txt /requirements.txt
 
 RUN pip install --upgrade pip
