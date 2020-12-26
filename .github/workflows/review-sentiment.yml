@@ -55,8 +55,8 @@ jobs:
         echo $PWD
         npm install
         npm run build
-        mkdir ../sentiment-backend/static
-        cp -r ./dist/* ../sentiment-backend/static/
+        mkdir ../sentiment/static
+        cp -r ./dist/* ../sentiment/static/
     - name: Create container and publish to Registry
       uses: elgohr/Publish-Docker-Github-Action@master
       with:
