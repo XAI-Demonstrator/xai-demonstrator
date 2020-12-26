@@ -5,7 +5,7 @@ services:
     build: .
     volumes:
       - type: bind
-        source: ./sentiment/model/cache
+        source: ./sentiment-backend/model/cache
         target: /app/model/cache
     ports:
       - 8000:8000
