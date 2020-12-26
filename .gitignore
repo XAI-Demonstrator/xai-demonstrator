@@ -1,16 +1,11 @@
 __pycache__
 .pytest_cache/
 .ipynb_checkpoints/
-
-/test-service/sentiment/model/cache/
-/test-service/sentiment/static/
-/node_modules
-
--r /test-service/sentiment-frontend/.gitignore
-
-
 .idea/
-
 .DS_STORE
 
+/node_modules
+
+-r /review-sentiment/sentiment-frontend/.gitignore
+-r /review-sentiment/.gitignore
 

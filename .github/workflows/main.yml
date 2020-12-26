@@ -3,7 +3,7 @@ name: Test Pipeline
 on:
   push:
     paths:
-      - 'test-service/**'
+      - 'review-sentiment/**'
 
 
 jobs:
@@ -19,7 +19,7 @@ jobs:
       - name: Install dependencies
         run: |
           set -e
-          cd ./test-service
+          cd ./review-sentiment
           echo $PWD
           python -m pip install --upgrade pip
           pip install -r requirements.txt
@@ -33,7 +33,7 @@ jobs:
       - name: Test with pytest
         run: |
           set -e
-          cd ./test-service
+          cd ./review-sentiment
           echo $PWD
           pip install pytest
           pytest
@@ -51,20 +51,20 @@ jobs:
     - name: Build frontend
       run: |
         set -e
-        cd ./test-service/sentiment-frontend
+        cd ./review-sentiment/sentiment-frontend
         echo $PWD
         npm install
         npm run build
-        mkdir ../sentiment/static
-        cp -r ./dist/* ../sentiment/static/
+        mkdir ../sentiment-backend/static
+        cp -r ./dist/* ../sentiment-backend/static/
     - name: Create container and publish to Registry
       uses: elgohr/Publish-Docker-Github-Action@master
       with:
-        name: xai-demonstrator/template-service
+        name: xai-demonstrator/review-sentiment-service
         username: ${{ secrets.GHCR_PAT_OWNER }}
         password: ${{ secrets.GHCR_WRITE }}
         registry: ghcr.io
-        workdir: test-service/
+        workdir: review-sentiment/
         
   deploy:
      runs-on: ubuntu-latest
@@ -91,7 +91,7 @@ jobs:
              export CR_PAT=${{ secrets.GHCR_READ }}
              echo $CR_PAT | sudo docker login ghcr.io -u ${{ secrets.GHCR_PAT_OWNER }} --password-stdin
              cd test-deployment/deployment
-             sudo docker pull ghcr.io/xai-demonstrator/template-service:latest
+             sudo docker pull ghcr.io/xai-demonstrator/review-sentiment-service:latest
              sudo docker logout
              unset CR_PAT
              sudo docker-compose down

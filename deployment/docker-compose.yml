@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   sentiment:
-    image: ghcr.io/xai-demonstrator/template-service
+    image: ghcr.io/xai-demonstrator/review-sentiment-service
     volumes:
       - type: bind
         source: /home/ubuntu/model-cache
