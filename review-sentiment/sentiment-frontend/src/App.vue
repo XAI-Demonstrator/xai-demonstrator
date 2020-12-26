@@ -1,5 +1,13 @@
 <template>
   <div id="app">
+    <mt-header fixed title="Review Sentiment" class="navigation-header">
+      <a href="/" slot="left">
+        <mt-button icon="back"></mt-button>
+      </a>
+      <a href="./" slot="right">
+        <mt-button><span style="font-size: 16px; font-weight:bold;">↻</span></mt-button>
+      </a>
+    </mt-header>
     <ComposeReview ref="composer"
                    v-bind:introduction-text="introductionTexts[reviewTopic]"
                    v-bind:default-review="defaultReviews[reviewTopic]"
@@ -78,15 +86,20 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 40px;
+  margin-top: 60px;
 }
 
 @media screen and (min-width: 500px) {
   #app {
-    margin: auto;
+    margin: 60px auto auto;
     max-width: 500px;
-    padding: 5px;
     border: 1px solid #2c3e50;
+    padding: 5px;
+  }
+
+  .navigation-header {
+    margin: auto;
+    max-width: 512px;
   }
 }
 </style>

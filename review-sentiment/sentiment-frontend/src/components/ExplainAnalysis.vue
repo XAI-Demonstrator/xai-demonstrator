@@ -1,6 +1,7 @@
 <template>
   <div v-if="isActive">
-    <mt-button type="primary" size="large" v-on:click="explanationRequested">Kannst du diese Entscheidung begründen?
+    <mt-button type="primary" size="large" v-on:click="explanationRequested" v-if="!explanationResult">Kannst du diese
+      Entscheidung begründen?
     </mt-button>
     <BarChart v-if="explanationResult" v-bind:explanation="explanationResult"></BarChart>
     <TextHighlight v-if="explanationResult != null" v-bind:explanation="explanationResult"></TextHighlight>

@@ -1,9 +1,10 @@
 <template>
-  <div>
-    <mt-button type="primary" size="large" v-on:click="analysisRequested">Wie viele Sterne sollte meine Bewertung
+  <div class="sentiment">
+    <mt-button type="primary" size="large" v-on:click="analysisRequested" v-if="!numOfStars">Wie viele Sterne sollte
+      meine Bewertung
       erhalten?
     </mt-button>
-    <p>{{ sentiment }}</p>
+    <div v-if="numOfStars">{{ sentiment }}</div>
   </div>
 </template>
 <script>
@@ -17,7 +18,8 @@ export default {
   ],
   data() {
     return {
-      sentiment: ''
+      sentiment: '',
+      numOfStars: null
     }
   },
   methods: {
@@ -43,4 +45,10 @@ export default {
 }
 </script>
 <style scoped>
+.sentiment {
+  height: 3em;
+  display: inline-flex;
+  align-items: center;
+  margin-top: 5px;
+}
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div id="highlightbox">
+  <div class="highlightbox">
     <span v-for="pair in explanation" :key="pair.word + Math.random()"
           v-bind:style="{'color': 'hsl(' + ((1 + 3*pair.score) * 60) + ',100%,' + (pair.score === 0 ? 0 : 50) + '%)'}">{{
         pair.word
@@ -17,8 +17,10 @@ export default {
 </script>
 
 <style scoped>
-#highlightbox {
+.highlightbox {
   background-color: darkgray;
   padding: 10px;
+  margin-top: 10px;
+
 }
 </style>
