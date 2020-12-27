@@ -51,7 +51,7 @@ export default {
 .progress {
   position: absolute;
   display: block;
-  background-color: #357EC7;
+  background-color: #77A6F7;
   width: max(calc(var(--importance) * 35%), calc(var(--importance) * -35%));
   height: 10px;
   margin-left: min(calc(35% + var(--importance) * 35%), 35%);;

@@ -48,25 +48,44 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin-top: 50px;
 }
 
 #image-container {
-  height: 200px;
+  height: 70vh;
+  max-height: 400px;
   margin-bottom: 10px;
 }
 
+.navigation-header {
+  background-color: #77A6F7 !important;
+}
+
+.mint-indicator-wrapper {
+  background-color: #00887A !important;
+}
+
+.mint-spinner-snake {
+  border-top-color: #D3E3FC !important;
+  border-bottom-color: #D3E3FC !important;
+  border-left-color: #D3E3FC !important;
+}
+
 @media screen and (min-width: 500px) {
+  body {
+    background-color: #FFFFFF;
+  }
+
   #app {
-    margin: 60px auto auto;
-    max-width: 500px;
-    border: 1px solid #2c3e50;
+    margin: 40px auto auto;
+    max-width: 425px;
+    border: 1px solid #D3E3FC;
     padding: 5px;
   }
 
   .navigation-header {
     margin: auto;
-    max-width: 512px;
+    max-width: 437px;
   }
 }
 </style>
