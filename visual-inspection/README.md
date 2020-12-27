@@ -1,7 +1,7 @@
 # Visual inspection explanation service
-
-A microservice built with [FastAPI](https://fastapi.tiangolo.com/).
+![Visual Inspection](https://github.com/XAI-Demonstrator/template-service/workflows/Visual%20Inspection/badge.svg)
 
 ## Components
 
+- Backend microservice built with [FastAPI](https://fastapi.tiangolo.com/)
 - Frontend created with [VueJS](https://vuejs.org/) using [Mint UI](https://mint-ui.github.io/) components

@@ -11,4 +11,4 @@ __pycache__
 -r /review-sentiment/sentiment-backend/.gitignore
 
 -r /visual-inspection/inspection-frontend/.gitignore
--r /visual-inspection/.gitignore
+-r /visual-inspection/inspection-backend/.gitignore
