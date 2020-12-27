@@ -71,6 +71,11 @@ def script(fname):
     return FileResponse(pathlib.Path(__file__).parent / "static" / "js" / fname)
 
 
+@app.get("/img/{fname}")
+def script(fname):
+    return FileResponse(pathlib.Path(__file__).parent / "static" / "img" / fname)
+
+
 @app.post('/predict')
 async def predict_sentiment(request: PredictionRequest):
     return predict(request.text)

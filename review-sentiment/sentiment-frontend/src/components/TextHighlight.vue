@@ -1,9 +1,7 @@
 <template>
-  <div class="highlightbox">
+  <div class="highlight-box">
     <span v-for="pair in explanation" :key="pair.word + Math.random()"
-          v-bind:style="{'color': 'hsl(' + ((1 + 3*pair.score) * 60) + ',100%,' + (pair.score === 0 ? 0 : 50) + '%)'}">{{
-        pair.word
-      }}&#32;</span>
+          v-bind:style="{'color': calcHSL(pair.score), 'font-weight': calcWeight(pair.score)}">{{ whitespace(pair.word) }}{{ pair.word }}</span>
   </div>
 </template>
 
@@ -12,15 +10,51 @@ export default {
   name: "TextHighlight",
   props: [
     "explanation"
-  ]
+  ],
+  data() {
+    return {
+      noSpaceInFrontOf: [",", ".", "!", ":", ";", "?"]
+    }
+  },
+  methods: {
+    calcHSL(score) {
+      return 'hsl(' + this.calcHue(score) + ',' + this.calcSat(score) + '%,' + this.calcLightness(score) + '%)'
+    },
+    calcHue(score) {
+      if (score <= 0) {
+        return "14"
+      } else {
+        return "174"
+      }
+    },
+    calcSat(score) {
+      return Math.abs(score) * 100
+    },
+    calcLightness(score) {
+      if (score <= 0) {
+        return "87"
+      } else {
+        return "27"
+      }
+    },
+    calcWeight(score) {
+      return 100 + Math.min(1600 * Math.abs(score), 800)
+    },
+    whitespace(word) {
+      if (this.noSpaceInFrontOf.includes(word)) {
+        return ""
+      } else {
+        return " "
+      }
+
+    }
+  }
 }
 </script>
 
 <style scoped>
-.highlightbox {
-  background-color: darkgray;
-  padding: 10px;
-  margin-top: 10px;
-
+.highlight-box {
+  background-color: #77A6F7;
+  padding: 5px 10px;
 }
 </style>

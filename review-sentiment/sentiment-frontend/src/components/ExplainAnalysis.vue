@@ -1,10 +1,13 @@
 <template>
   <div v-if="isActive">
-    <mt-button type="primary" size="large" v-on:click="explanationRequested" v-if="!explanationResult">Kannst du diese
+    <mt-button type="primary" size="large" v-on:click="explanationRequested" v-if="!explanationResult"
+               class="my-button">Kannst du diese
       Entscheidung begründen?
     </mt-button>
-    <BarChart v-if="explanationResult" v-bind:explanation="explanationResult"></BarChart>
-    <TextHighlight v-if="explanationResult != null" v-bind:explanation="explanationResult"></TextHighlight>
+    <div class="explanation-container" v-if="explanationResult">
+      <BarChart v-if="explanationResult" v-bind:explanation="explanationResult"></BarChart>
+      <TextHighlight v-if="explanationResult != null" v-bind:explanation="explanationResult"></TextHighlight>
+    </div>
   </div>
 </template>
 <script>
@@ -52,4 +55,21 @@ export default {
 }
 </script>
 <style scoped>
+.explanation-container {
+  border: 1px solid #77A6F7;
+  padding: 0px 5px 5px;
+}
+
+.explanation-container div {
+  margin-top: 5px;
+}
+
+.my-button {
+  background-color: #77A6F7;
+  border-radius: 0;
+  font-size: 1em;
+  font-weight: normal;
+  height: auto;
+  padding: 10px;
+}
 </style>

@@ -1,8 +1,8 @@
 <template>
   <div>
     <p v-on:click="reviewChanged" class="intro-text">{{ introductionText }}</p>
-    <mt-field label="" v-bind:placeholder="defaultReview" type="textarea" rows="4" v-model="text"
-              v-on:input="reviewChanged" class="text-input"></mt-field>
+    <mt-field label="" v-bind:placeholder="defaultReview" type="textarea" rows="3" v-model="text"
+              v-on:input="reviewChanged" class="text-input" id="review-input-field"></mt-field>
   </div>
 </template>
 <script>
@@ -27,9 +27,12 @@ export default {
 <style scoped>
 .intro-text {
   text-align: left;
+  padding-left: 5px;
+  padding-right: 5px;
+  font-size: 1em;
 }
 
 .text-input {
-  border: 1px solid darkslategray;
+  border: 1px solid #77A6F7;
 }
 </style>

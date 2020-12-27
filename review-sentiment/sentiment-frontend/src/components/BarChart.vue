@@ -2,7 +2,7 @@
   <div class="barchart">
     <div class="bar" v-for="pair in sortedExplanation.slice(0,maxNumOfBars)" :key="pair.word + Math.random()">
       <div class="progress" v-bind:style="{'--importance': pair.score,
-         'background-color': pair.score < 0 ? '#7D0541' : '#357EC7'}">
+         'background-color': pair.score < 0 ? '#FFCCBC' : '#00887A'}">
       </div>
       <div class="word">{{ pair.word }}</div>
     </div>
@@ -37,10 +37,9 @@ export default {
 }
 
 .barchart {
-  margin-top: 10px;
-  margin-bottom: 10px;
+  background-color: #D3E3FC;
+  padding: 5px 10px;
 }
-
 
 .bar {
   /*border: 2px solid black;*/
