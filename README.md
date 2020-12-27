@@ -7,6 +7,7 @@ The XAI Demonstrator is a modular platform that lets users interact with product
 ## Use Cases 
 
 ![Review Sentiment](https://github.com/XAI-Demonstrator/template-service/workflows/Review%20Sentiment/badge.svg)
+![Visual Inspection](https://github.com/XAI-Demonstrator/template-service/workflows/Visual%20Inspection/badge.svg)
 
 ## Deployments
 
