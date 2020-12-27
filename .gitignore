@@ -7,6 +7,8 @@ __pycache__
 /experiments
 /node_modules
 
+-r /landing-page/frontend/.gitignore
+
 -r /review-sentiment/sentiment-frontend/.gitignore
 -r /review-sentiment/sentiment-backend/.gitignore
 

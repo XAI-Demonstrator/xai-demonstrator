@@ -1,0 +1,10 @@
+**/.pytest_cache
+**/.gitignore
+**/__pycache__
+**/node_modules
+**/dist
+
+.git
+.cache
+./experiments
+./review-sentiment/sentiment-backend/sentiment/model/cache

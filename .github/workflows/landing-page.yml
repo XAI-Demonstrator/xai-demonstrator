@@ -1,0 +1,23 @@
+name: Landing Page
+
+on:
+  push:
+    paths:
+      - 'landing-page/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@master
+    - name: Create container and publish to Registry
+      uses: elgohr/Publish-Docker-Github-Action@master
+      with:
+        name: xai-demonstrator/landing-page-service
+        username: ${{ secrets.GHCR_PAT_OWNER }}
+        password: ${{ secrets.GHCR_WRITE }}
+        registry: ghcr.io
+        workdir: ./
+        context: ./
+        dockerfile: landing-page/Dockerfile
