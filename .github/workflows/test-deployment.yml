@@ -1,0 +1,55 @@
+name: Test Deployment
+
+on:
+  workflow_run:
+    workflows:
+      - "Landing Page"
+      - "Review Sentiment"
+      - "Visual Inspection"
+    branches:
+      - master
+    types:
+      - completed
+
+
+jobs:
+  deploy:
+     runs-on: ubuntu-latest
+     steps:
+       - uses: actions/checkout@master
+       - name: Copy docker-compose.yml to test server
+         uses: appleboy/scp-action@v0.1.1
+         with:
+           host: ${{ secrets.TEST_HOST }}
+           username: ${{ secrets.TEST_USER }}
+           key: ${{ secrets.TEST_KEY }}
+           source: "deployment/docker-compose.yml"
+           target: "test-deployment"
+           rm: true
+       - name: SSH Remote Commands
+         uses: appleboy/ssh-action@v0.1.3
+         with:
+           host: ${{ secrets.TEST_HOST }}
+           username: ${{ secrets.TEST_USER }}
+           key: ${{ secrets.TEST_KEY }}
+           script: |
+             set -e
+             export CR_PAT=${{ secrets.GHCR_READ }}
+             echo $CR_PAT | sudo docker login ghcr.io -u ${{ secrets.GHCR_PAT_OWNER }} --password-stdin
+             cd test-deployment/deployment
+             sudo docker pull ghcr.io/xai-demonstrator/landing-page-service:latest
+             sudo docker pull ghcr.io/xai-demonstrator/review-sentiment-service:latest
+             sudo docker pull ghcr.io/xai-demonstrator/visual-inspection-service:latest
+             sudo docker logout
+             unset CR_PAT
+             sudo docker-compose down
+             sudo docker-compose up -d
+       - name: Slack Notification
+         uses: rtCamp/action-slack-notify@master
+         env:
+            SLACK_CHANNEL: xai-tech
+            SLACK_MESSAGE: 'Successfully deployed a new version to http://test.xaidemo.de :rocket:'
+            SLACK_TITLE: New Test Deployment
+            SLACK_USERNAME: Deployment Monitor
+            SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+            MSG_MINIMAL: true

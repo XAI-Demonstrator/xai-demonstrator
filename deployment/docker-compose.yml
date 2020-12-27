@@ -1,11 +1,17 @@
 version: '3.7'
 
 services:
+  landing:
+    image: ghcr.io/xai-demonstrator/landing-page-service
+    ports:
+      - 80:80
+
   sentiment:
     image: ghcr.io/xai-demonstrator/review-sentiment-service
     volumes:
       - type: bind
         source: /home/ubuntu/model-cache
         target: /app/model/cache
-    ports:
-      - 80:8000
+
+  inspection:
+    image: ghcr.io/xai-demonstrator/visual-inspection-service
