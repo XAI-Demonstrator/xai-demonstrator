@@ -22,7 +22,8 @@ export default {
   components: {BarChart, TextHighlight},
   data() {
     return {
-      explanationResult: null
+      explanationResult: null,
+      backendUrl: process.env.VUE_APP_BACKEND_URL
     }
   },
   props: [
@@ -36,7 +37,7 @@ export default {
       this.resetComponent()
 
       axios
-          .post('/explain', {"text": this.reviewText})
+          .post(this.backendUrl + '/explain', {"text": this.reviewText})
           .then(response => {
                 this.explanationResult = response.data.explanation.explanation.map(function (pair) {
                   return {

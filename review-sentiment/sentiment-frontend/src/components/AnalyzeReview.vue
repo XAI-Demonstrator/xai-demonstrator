@@ -19,7 +19,8 @@ export default {
   ],
   data() {
     return {
-      numOfStars: null
+      numOfStars: null,
+      backendUrl: process.env.VUE_APP_BACKEND_URL
     }
   },
   methods: {
@@ -29,7 +30,7 @@ export default {
       this.resetComponent()
       this.$emit('analysisRequested')
 
-      axios.post('/predict', {"text": this.reviewText})
+      axios.post(this.backendUrl + '/predict', {"text": this.reviewText})
           .then(response => {
             this.numOfStars = response.data.prediction.map((x, i) => [x, i]).reduce((r, a) => (a[0] > r[0] ? a : r))[1] + 1
             this.$emit('analysisCompleted', this.numOfStars)
@@ -48,6 +49,7 @@ export default {
   width: 100%;
   margin-top: 5px;
   margin-bottom: 5px;
+  text-align: center;
 }
 
 .sentiment-stars {

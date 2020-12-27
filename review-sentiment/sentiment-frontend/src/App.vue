@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <mt-header fixed title="Review Sentiment" class="navigation-header">
-      <a href="/" slot="left">
+      <a href="/" slot="left" v-if="backendUrl">
         <mt-button icon="back"></mt-button>
       </a>
       <a href="./" slot="right">
@@ -50,7 +50,8 @@ export default {
       },
       reviewText: '',
       numberOfStars: null,
-      reviewTopic: ['movie', 'restaurant', 'travel'][Math.floor(Math.random() * 3)]
+      reviewTopic: ['movie', 'restaurant', 'travel'][Math.floor(Math.random() * 3)],
+      backendUrl: process.env.VUE_APP_BACKEND_URL
     }
   },
   methods: {
@@ -87,7 +88,6 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
   margin-top: 80px;
 }

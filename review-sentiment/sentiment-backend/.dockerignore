@@ -1,4 +1,0 @@
-*.pytest_cache*
-./sentiment/model/cache
-*.ipynb*
-.gitignore
