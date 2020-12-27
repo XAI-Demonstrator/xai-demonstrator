@@ -1,0 +1,7 @@
+**/.pytest_cache
+**/.gitignore
+**/__pycache__
+**/node_modules
+**/dist
+
+./inspection-backend/inspection/static

@@ -1,0 +1,7 @@
+version: '3.7'
+
+services:
+  inspection:
+    build: .
+    ports:
+      - 8002:8000

@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <mt-header fixed title="Visual Inspection" class="navigation-header">
-      <a href="/" slot="left">
+      <a href="/" slot="left" v-if="backendUrl">
         <mt-button icon="back"></mt-button>
       </a>
       <a href="./" slot="right">
@@ -35,7 +35,8 @@ export default {
   },
   data() {
     return {
-      selectionMode: true
+      selectionMode: true,
+      backendUrl: process.env.VUE_APP_BACKEND_URL
     }
   }
 }
@@ -46,7 +47,6 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
   margin-top: 50px;
 }
@@ -71,7 +71,7 @@ export default {
   border-left-color: #D3E3FC !important;
 }
 
-@media screen and (min-width: 500px) {
+@media screen and (min-width: 450px) {
   body {
     background-color: #FFFFFF;
   }
