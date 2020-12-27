@@ -20,7 +20,5 @@ def predict(text: str,
     model_output = model(model_input)
     prediction = torch.softmax(model_output[0], dim=1)
 
-    print(prediction)
-
     return Prediction(prediction_id=uuid.uuid4(),
                       prediction=list(map(float, prediction[0].tolist())))

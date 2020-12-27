@@ -1,4 +1,4 @@
-name: Review Sentiment pipeline
+name: Review Sentiment
 
 on:
   push:
@@ -19,7 +19,7 @@ jobs:
       - name: Install dependencies
         run: |
           set -e
-          cd ./review-sentiment
+          cd ./review-sentiment/sentiment-backend
           echo $PWD
           python -m pip install --upgrade pip
           pip install -r requirements.txt
@@ -33,7 +33,7 @@ jobs:
       - name: Test with pytest
         run: |
           set -e
-          cd ./review-sentiment
+          cd ./review-sentiment/sentiment-backend
           echo $PWD
           pip install pytest
           pytest
@@ -55,8 +55,8 @@ jobs:
         echo $PWD
         npm install
         npm run build
-        mkdir ../sentiment/static
-        cp -r ./dist/* ../sentiment/static/
+        mkdir ../sentiment-backend/sentiment/static
+        cp -r ./dist/* ../sentiment-backend/sentiment/static/
     - name: Create container and publish to Registry
       uses: elgohr/Publish-Docker-Github-Action@master
       with:
@@ -64,7 +64,7 @@ jobs:
         username: ${{ secrets.GHCR_PAT_OWNER }}
         password: ${{ secrets.GHCR_WRITE }}
         registry: ghcr.io
-        workdir: review-sentiment/
+        workdir: review-sentiment/sentiment-backend/
         
   deploy:
      runs-on: ubuntu-latest

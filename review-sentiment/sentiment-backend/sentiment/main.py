@@ -1,14 +1,15 @@
 import logging
-import pathlib
 
 from fastapi import FastAPI
-from fastapi.responses import FileResponse
+
 from pydantic import BaseModel, validator
 
 from .explainer.explainer import Explanation, explain, EXPLAINERS
 from .model.predict import Prediction, predict
+from .routers import frontend
 
 app = FastAPI()
+app.include_router(frontend.router)
 
 logger = logging.getLogger("api")
 
@@ -49,31 +50,6 @@ class ExplanationRequest(BaseModel):
 class ExplanationResponse(BaseModel):
     prediction: Prediction
     explanation: Explanation
-
-
-@app.get("/")
-def frontend():
-    return FileResponse(pathlib.Path(__file__).parent / "static" / "index.html")
-
-
-@app.get("/favicon.ico")
-def favicon():
-    return FileResponse(pathlib.Path(__file__).parent / "static" / "favicon.ico")
-
-
-@app.get("/css/{fname}")
-def style(fname):
-    return FileResponse(pathlib.Path(__file__).parent / "static" / "css" / fname)
-
-
-@app.get("/js/{fname}")
-def script(fname):
-    return FileResponse(pathlib.Path(__file__).parent / "static" / "js" / fname)
-
-
-@app.get("/img/{fname}")
-def script(fname):
-    return FileResponse(pathlib.Path(__file__).parent / "static" / "img" / fname)
 
 
 @app.post('/predict')
