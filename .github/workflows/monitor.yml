@@ -3,7 +3,6 @@ on:
   schedule:
     - cron: "5 * * * *"
 
-
 jobs:
   test:
     name: Check Test Deployment
@@ -26,4 +25,3 @@ jobs:
           SLACK_COLOR: danger
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           MSG_MINIMAL: true
-      
