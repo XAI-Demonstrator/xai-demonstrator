@@ -1,8 +1,11 @@
 <template>
   <div>
-    <p v-on:click="reviewChanged" class="intro-text">{{ introductionText }}</p>
-    <mt-field label="" v-bind:placeholder="defaultReview" type="textarea" rows="3" v-model="text"
-              v-on:input="reviewChanged" class="text-input" id="review-input-field"></mt-field>
+    <p class="intro-text">{{ introductionText }}</p>
+    <mt-field label=""
+              v-bind:placeholder="defaultReview"
+              type="textarea" rows="3" v-model="text"
+              v-on:input="reviewChanged"
+              class="text-input" id="review-input-field"></mt-field>
   </div>
 </template>
 <script>
