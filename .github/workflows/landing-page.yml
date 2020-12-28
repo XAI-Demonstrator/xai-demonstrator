@@ -4,6 +4,8 @@ on:
   push:
     paths:
       - 'landing-page/**'
+      - 'review-sentiment/sentiment-frontend/**'
+      - 'visual-inspection/inspection-frontend/**' 
 
 jobs:
   build:
