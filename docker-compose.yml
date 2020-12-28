@@ -1,0 +1,19 @@
+version: '3.7'
+
+services:
+  landing:
+    build:
+      context: .
+      dockerfile: ./landing-page/Dockerfile
+    ports:
+      - 8000:80
+
+  sentiment:
+    build: ./review-sentiment/
+    volumes:
+      - type: bind
+        source: ./review-sentiment/sentiment-backend/sentiment/model/cache
+        target: /app/model/cache
+
+  inspection:
+    build: ./visual-inspection/
