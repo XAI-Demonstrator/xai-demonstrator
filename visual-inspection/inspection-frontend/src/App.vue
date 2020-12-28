@@ -38,6 +38,9 @@ export default {
       selectionMode: true,
       backendUrl: process.env.VUE_APP_BACKEND_URL
     }
+  },
+  created() {
+    document.title = "Visual Inspection – XAI Demonstrator"
   }
 }
 </script>
