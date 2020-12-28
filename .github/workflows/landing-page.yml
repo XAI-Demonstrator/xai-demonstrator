@@ -5,7 +5,9 @@ on:
     paths:
       - 'landing-page/**'
       - 'review-sentiment/sentiment-frontend/**'
-      - 'visual-inspection/inspection-frontend/**' 
+      - 'visual-inspection/inspection-frontend/**'
+    branches:
+      - master
 
 jobs:
   build:
