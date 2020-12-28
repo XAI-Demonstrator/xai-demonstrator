@@ -12,7 +12,7 @@ wait for all builds to complete and access the app at [localhost:8000](http://lo
 ## Deployments
 ![Test Deployment](https://github.com/XAI-Demonstrator/template-service/workflows/Test%20Deployment/badge.svg) ![Monitor Deployment(s)](https://github.com/XAI-Demonstrator/template-service/workflows/Monitor%20Deployment(s)/badge.svg)
 
-There is a (currently publicly accessible) test deployment at [http://test.xaidemo.de](http://test.xaidemo.de) that always runs the latest versions of the landing page and all use cases.
+There is a (currently publicly accessible) test deployment at [https://test.xaidemo.de](https://test.xaidemo.de) that always runs the latest versions of the landing page and all use cases.
 
 ## Landing Page
 ![Landing Page](https://github.com/XAI-Demonstrator/template-service/workflows/Landing%20Page/badge.svg)
