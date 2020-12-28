@@ -12,7 +12,7 @@ jobs:
       - name: URL Health Check
         uses: Jtalk/url-health-check-action@v1.3
         with:
-          url: http://test.xaidemo.de|${{ secrets.TEST_HOST }}
+          url: https://test.xaidemo.de
           max-attempts: 3
           retry-delay: 30s
       - name: Notify Slack
@@ -20,7 +20,7 @@ jobs:
         uses: rtCamp/action-slack-notify@master
         env:
           SLACK_CHANNEL: xai-tech
-          SLACK_MESSAGE: 'Cannot reach test deployment at http://test.xaidemo.de :disappointed:'
+          SLACK_MESSAGE: 'Cannot reach test deployment at https://test.xaidemo.de :disappointed:'
           SLACK_TITLE: Test Deployment Is Down
           SLACK_USERNAME: Deployment Monitor
           SLACK_COLOR: danger
