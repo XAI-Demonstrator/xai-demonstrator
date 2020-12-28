@@ -25,6 +25,9 @@ export default {
           route: "/inspection/"
         }]
     }
+  },
+  created() {
+    document.title = "XAI Demonstrator"
   }
 }
 </script>
