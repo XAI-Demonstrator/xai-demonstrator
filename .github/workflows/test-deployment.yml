@@ -23,7 +23,7 @@ jobs:
            host: ${{ secrets.TEST_HOST }}
            username: ${{ secrets.TEST_USER }}
            key: ${{ secrets.TEST_KEY }}
-           source: "deployment/docker-compose.yml"
+           source: "deployment/test-deployment/docker-compose.yml"
            target: "test-deployment"
            rm: true
        - name: SSH Remote Commands
@@ -36,7 +36,7 @@ jobs:
              set -e
              export CR_PAT=${{ secrets.GHCR_READ }}
              echo $CR_PAT | sudo docker login ghcr.io -u ${{ secrets.GHCR_PAT_OWNER }} --password-stdin
-             cd test-deployment/deployment
+             cd test-deployment/deployment/test-deployment/
              sudo docker pull ghcr.io/xai-demonstrator/landing-page-service:latest
              sudo docker pull ghcr.io/xai-demonstrator/review-sentiment-service:latest
              sudo docker pull ghcr.io/xai-demonstrator/visual-inspection-service:latest
@@ -48,7 +48,7 @@ jobs:
          uses: rtCamp/action-slack-notify@master
          env:
             SLACK_CHANNEL: xai-tech
-            SLACK_MESSAGE: 'Successfully deployed a new version to http://test.xaidemo.de :rocket:'
+            SLACK_MESSAGE: 'Successfully deployed a new version to https://test.xaidemo.de :rocket:'
             SLACK_TITLE: New Test Deployment
             SLACK_USERNAME: Deployment Monitor
             SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
