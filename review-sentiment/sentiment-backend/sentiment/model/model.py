@@ -1,3 +1,5 @@
+
+import os
 import pathlib
 
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
@@ -33,6 +35,7 @@ class _ObjectManager:
 
     @staticmethod
     def load_model() -> BertForSequenceClassification:
+        print(os.listdir("/app/model/saved_model"))
         return AutoModelForSequenceClassification.from_pretrained("/app/model/saved_model")
 
     @staticmethod
