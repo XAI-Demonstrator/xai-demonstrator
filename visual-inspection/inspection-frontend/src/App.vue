@@ -9,10 +9,12 @@
       </a>
     </mt-header>
     <div id="image-container">
-      <SelectImage v-if="selectionMode" v-on:imageChanged="imageChanged"/>
-      <ExamineInspection v-if="!selectionMode"/>
+      <SelectImage v-if="!explainMode" v-on:imageChanged="imageChanged"/>
+      <ExamineExplanation ref="examiner" v-if="explainMode"/>
     </div>
-    <InspectImage v-on:buttonClicked="toggleMode"/>
+    <InspectImage ref="inspector" v-on:predictionReceived="predictionReceived" />
+    <ExplainInspection v-if="!selectionMode && !explainMode"
+                       v-on:explanationRequested="explanationRequested"/>
   </div>
 </template>
 
@@ -20,27 +22,40 @@
 
 import SelectImage from "@/components/SelectImage";
 import InspectImage from "@/components/InspectImage";
-import ExamineInspection from "@/components/ExamineInspection";
+import ExamineExplanation from "@/components/ExamineExplanation";
+import ExplainInspection from "@/components/ExplainInspection";
 
 export default {
   name: 'App',
-  components: {ExamineInspection, SelectImage, InspectImage},
+  components: {ExamineExplanation, SelectImage, InspectImage, ExplainInspection},
   methods: {
     imageChanged(index) {
-      console.log(index)
+      this.$refs.inspector.predict(index)
+      this.selectionMode = true
     },
-    toggleMode() {
-      this.selectionMode = !this.selectionMode
+    explanationRequested() {
+      console.log("Requested Click")
+      this.selectionMode = false
+      this.explainMode = true
+      this.$refs.examiner.requestExplanation()
+    },
+    predictionReceived() {
+      console.log("Received Prediction")
+      this.selectionMode = false
     }
   },
   data() {
     return {
       selectionMode: true,
+      explainMode: false,
       backendUrl: process.env.VUE_APP_BACKEND_URL
     }
   },
   created() {
     document.title = "Visual Inspection – XAI Demonstrator"
+  },
+  mounted() {
+    this.$refs.inspector.predict(0)
   }
 }
 </script>
