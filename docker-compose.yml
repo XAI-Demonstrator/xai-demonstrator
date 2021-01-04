@@ -5,6 +5,9 @@ services:
     build:
       context: .
       dockerfile: ./landing-page/Dockerfile
+    depends_on:
+      - inspection
+      - sentiment
     ports:
       - 8000:80
 

@@ -5,7 +5,7 @@
       meine Bewertung
       erhalten?
     </mt-button>
-    <div class="sentiment-stars" v-if="numOfStars"><img class="my-star" src="@/assets/star.svg" v-for="star in numOfStars" :key="star" /></div>
+    <div class="sentiment-stars" v-if="numOfStars"><p>Ich denke, dein Review entspricht</p><img class="my-star" src="@/assets/star.svg" v-for="star in numOfStars" :key="star" /></div>
   </div>
 </template>
 <script>
@@ -61,7 +61,7 @@ export default {
 
 .my-star {
   height: 25px;
-  margin-right: 5px;
+  margin-left: 5px;
 }
 
 .my-button {

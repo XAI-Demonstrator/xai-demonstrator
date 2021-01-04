@@ -1,10 +1,10 @@
 <template>
   <div v-if="isActive">
     <mt-button type="primary" size="large" v-on:click="explanationRequested" v-if="!explanationResult"
-               class="my-button">Kannst du diese
-      Entscheidung begründen?
+               class="my-button">Wie kommst du zu dieser Einschätzung?
     </mt-button>
     <div class="explanation-container" v-if="explanationResult">
+      <p>Ich habe die Wörter deines Reviews wie folgt eingeordnet:</p>
       <BarChart v-if="explanationResult" v-bind:explanation="explanationResult"></BarChart>
       <TextHighlight v-if="explanationResult != null" v-bind:explanation="explanationResult"></TextHighlight>
     </div>
