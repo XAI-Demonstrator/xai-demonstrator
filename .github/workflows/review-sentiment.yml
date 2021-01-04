@@ -23,7 +23,7 @@ jobs:
           echo $PWD
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-	  python sentiment/model/download_model.py
+	  python3 sentiment/model/download_model.py
       - name: Lint with flake8
         run: |
           pip install flake8
