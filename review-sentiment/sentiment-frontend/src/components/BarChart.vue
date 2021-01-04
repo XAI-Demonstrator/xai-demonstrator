@@ -1,11 +1,11 @@
 <template>
   <div class="barchart">
     <div class="bar" v-for="pair in sortedExplanation.slice(0,maxNumOfBars)" :key="pair.word + Math.random()">
-      <div class="progress" v-bind:style="{'--importance': pair.score,
+        <div class="progress" v-bind:style="{'--importance': pair.score,
          'background-color': pair.score < 0 ? '#FFCCBC' : '#00887A'}">
+        </div>
+        <div class="word">{{ pair.word }}</div>
       </div>
-      <div class="word">{{ pair.word }}</div>
-    </div>
   </div>
 </template>
 
@@ -42,7 +42,6 @@ export default {
 }
 
 .bar {
-  /*border: 2px solid black;*/
   width: 100%;
   position: relative;
   height: 20px;
@@ -50,20 +49,17 @@ export default {
 
 .progress {
   position: absolute;
-  display: block;
   background-color: #77A6F7;
   width: max(calc(var(--importance) * 35%), calc(var(--importance) * -35%));
-  height: 10px;
+  height: 12px;
   margin-left: min(calc(35% + var(--importance) * 35%), 35%);;
-  margin-top: 5px;
+  margin-top: 4px;
 }
 
 .word {
   position: absolute;
-  display: block;
   margin-left: 70%;
   margin-right: 0;
-  /*border: 1px solid blue;*/
 }
 
 </style>
