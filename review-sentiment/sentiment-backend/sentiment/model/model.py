@@ -35,12 +35,13 @@ class _ObjectManager:
 
     @staticmethod
     def load_model() -> BertForSequenceClassification:
-        print(os.listdir("/app/model/saved_model"))
-        return AutoModelForSequenceClassification.from_pretrained("/app/model/saved_model")
+        return AutoModelForSequenceClassification.from_pretrained("nlptown/bert-base-multilingual-uncased-sentiment",
+                                                                  cache_dir=PATH / "cache")
 
     @staticmethod
     def load_tokenizer() -> BertTokenizer:
-        return AutoTokenizer.from_pretrained("/app/model/saved_model")
+        return AutoTokenizer.from_pretrained("nlptown/bert-base-multilingual-uncased-sentiment",
+                                             cache_dir=PATH / "cache", use_fast=True)
 
 
 get = _ObjectManager()
