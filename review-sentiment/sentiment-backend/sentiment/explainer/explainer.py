@@ -53,7 +53,7 @@ def align_text(text: str,
     split_text = re.findall(r"[\w']+|" + f"[{string.punctuation}]", text)
 
     words = np.array(encoding.words())
-    scores = scores.detach().numpy()
+    scores = scores.cpu().detach().numpy()
 
     return [(word, float(np.mean(scores[words == idx])))
             for idx, word in enumerate(split_text)]

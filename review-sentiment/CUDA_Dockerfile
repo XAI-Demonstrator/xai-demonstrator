@@ -1,0 +1,58 @@
+# first build step: build frontend
+FROM node:12-alpine as builder
+
+WORKDIR /
+
+COPY ./sentiment-frontend/ .
+RUN npm install && npm run build
+
+# second build step: copy frontend and build backend
+
+# special base image for CUDA use: version has to match NVIDIA drivers of machine!
+FROM nvidia/cuda:10.0-base
+
+WORKDIR /
+
+COPY sentiment-backend/sentiment /app
+COPY sentiment-backend/CUDA_requirements.txt /requirements.txt
+RUN mkdir /app/static
+COPY --from=builder /dist/ /app/static/
+
+# CUDA image does not come with Python3: manual installation of Python3.8
+RUN apt-get update  
+RUN apt-get -y install locales
+RUN apt-get -y install python3.8
+RUN apt-get -y install python3-pip 
+
+RUN : \
+    && apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        software-properties-common \
+    && add-apt-repository -y ppa:deadsnakes \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        python3.8-venv \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* \
+    && :
+
+
+RUN python3.8 -m venv /venv
+ENV PATH=/venv/bin:$PATH
+
+# Set the locale
+RUN locale-gen en_US.UTF-8  
+ENV LANG en_US.UTF-8  
+ENV LANGUAGE en_US:en  
+ENV LC_ALL en_US.UTF-8 
+
+# load libraries
+RUN pip3 install --upgrade pip
+# torch version has to be compatible with CUDA version: here CUDA10.0 + torch1.4.0
+RUN pip3 install -r /requirements.txt \
+    && rm -rf /root/.cache/pip3
+
+# load model into image
+RUN python -m app.model.download_model
+
+# start server of sentiment service listening on (container-) port 8000 
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

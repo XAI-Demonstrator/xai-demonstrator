@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+requests
+aiofiles
+numpy
+transformers==3.3.1
+captum==0.2.0
+
+--find-links https://download.pytorch.org/whl/cu100/torch_stable.html
+torch==1.4.0
