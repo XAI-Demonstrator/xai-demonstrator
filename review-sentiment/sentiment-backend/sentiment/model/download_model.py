@@ -1,4 +1,4 @@
 from .model import get
 
-model = get.model()
-tokenizer = get.tokenizer()
+model = get.model
+tokenizer = get.tokenizer

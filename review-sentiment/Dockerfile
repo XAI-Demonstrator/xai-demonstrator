@@ -18,6 +18,6 @@ RUN pip install --upgrade pip
 RUN pip install -r /requirements.txt \
     && rm -rf /root/.cache/pip
 
-RUN python -m sentiment.model.download_model
+RUN python -m app.model.download_model
 
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
