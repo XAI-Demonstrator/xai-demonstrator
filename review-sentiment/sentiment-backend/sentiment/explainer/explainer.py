@@ -16,6 +16,7 @@ from .integrated_gradients import attribute_integrated_gradients
 from ..model.model import get
 
 PATH = pathlib.Path(__file__).parent
+my_device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 with open(PATH/"small_words_to_filter.txt", "rt", encoding="utf-8") as f:
     STOPWORDS = [word.strip() for word in f]
@@ -43,7 +44,7 @@ def construct_input_and_reference(encoding: BatchEncoding,
     text_input_ids = encoding["input_ids"]
     ref_input_ids = [ref_token_id] * len(text_input_ids)
 
-    return torch.tensor([text_input_ids]), torch.tensor([ref_input_ids])
+    return torch.tensor([text_input_ids], device=my_device), torch.tensor([ref_input_ids], device=my_device)
 
 
 def align_text(text: str,
@@ -52,7 +53,7 @@ def align_text(text: str,
     split_text = re.findall(r"[\w']+|" + f"[{string.punctuation}]", text)
 
     words = np.array(encoding.words())
-    scores = scores.detach().numpy()
+    scores = scores.cpu().detach().numpy()
 
     return [(word, float(np.mean(scores[words == idx])))
             for idx, word in enumerate(split_text)]

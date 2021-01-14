@@ -3,9 +3,5 @@ version: '3.7'
 services:
   sentiment:
     build: .
-    volumes:
-      - type: bind
-        source: ./sentiment-backend/sentiment/model/cache
-        target: /app/model/cache
     ports:
-      - 8001:8000
+      - 8000:8000
