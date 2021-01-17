@@ -1,3 +1,5 @@
+import pytest
+
 from fastapi.testclient import TestClient
 
 from sentiment.main import app
@@ -5,6 +7,7 @@ from sentiment.main import app
 client = TestClient(app)
 
 
+@pytest.mark.integration
 def test_predict_sentiment():
     test_str = "This is a test!"
     test_dict = {"text": test_str}
@@ -15,6 +18,7 @@ def test_predict_sentiment():
     assert "prediction" in response_dict
 
 
+@pytest.mark.integration
 def test_that_sentiment_is_explained():
     test_str = "This is a test!"
     test_dict = {"text": test_str}
@@ -26,6 +30,7 @@ def test_that_sentiment_is_explained():
     assert "explanation" in response_dict
 
 
+@pytest.mark.integration
 def test_that_sentiment_is_explained_with_custom_target():
     test_str = "This is a test!"
     test_dict = {"text": test_str, "target": 2}

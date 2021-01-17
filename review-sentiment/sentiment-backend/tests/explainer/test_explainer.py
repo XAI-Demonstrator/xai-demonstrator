@@ -1,11 +1,13 @@
+import pytest
 import torch
 
 from sentiment.explainer.explainer import align_text
-from sentiment.model.model import get
+from sentiment.model.model import bert
 
 
+@pytest.mark.integration
 def test_simple_text_alignment():
-    tokenizer = get.tokenizer
+    tokenizer = bert.tokenizer
 
     text = "Ein einfacher Satz."
     encoding = tokenizer.encode_plus(text, add_special_tokens=False)
