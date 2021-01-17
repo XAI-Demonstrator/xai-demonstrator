@@ -14,7 +14,7 @@ FROM nvidia/cuda:10.0-base
 WORKDIR /
 
 COPY sentiment-backend/sentiment /app
-COPY sentiment-backend/CUDA_requirements.txt /requirements.txt
+COPY sentiment-backend/requirements-cuda.txt /requirements.txt
 RUN mkdir /app/static
 COPY --from=builder /dist/ /app/static/
 

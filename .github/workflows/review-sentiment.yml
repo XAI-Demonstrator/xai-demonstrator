@@ -35,8 +35,8 @@ jobs:
           set -e
           cd ./review-sentiment/sentiment-backend
           echo $PWD
-          pip install pytest pytest-mock
-          pytest -v -m "not integration" tests/
+          pip install -r requirements-test.txt
+          pytest -v --cov=sentiment -m "not integration" tests/
 
   build:
     runs-on: ubuntu-latest
