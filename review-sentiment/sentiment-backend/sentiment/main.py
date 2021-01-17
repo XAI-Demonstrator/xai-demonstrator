@@ -53,7 +53,7 @@ class ExplanationResponse(BaseModel):
 
 
 @app.post('/predict')
-async def predict_sentiment(request: PredictionRequest):
+async def predict_sentiment(request: PredictionRequest) -> Prediction:
     return predict(request.text)
 
 

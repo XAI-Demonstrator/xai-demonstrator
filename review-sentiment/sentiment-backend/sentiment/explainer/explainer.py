@@ -1,21 +1,19 @@
+import pathlib
+import re
 import string
 import uuid
 from typing import Tuple, List
 
-import torch
-import re
 import numpy as np
-import pathlib
-
+import torch
 from pydantic import BaseModel
 from transformers import BatchEncoding
-from transformers.tokenization_bert import BertTokenizer
-from transformers.modeling_bert import BertForSequenceClassification
 
 from .integrated_gradients import attribute_integrated_gradients
-from ..model.model import get
+from ..model.model import bert, BertManager
 
 PATH = pathlib.Path(__file__).parent
+
 my_device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 with open(PATH/"small_words_to_filter.txt", "rt", encoding="utf-8") as f:
@@ -71,13 +69,12 @@ def filter_attributions(attributions, remove_stopwords=True, remove_punctuation=
 
 def explain(text: str, target: int,
             explainer: str = "integrated_gradients",
-            model: BertForSequenceClassification = get.model,
-            tokenizer: BertTokenizer = get.tokenizer) -> Explanation:
-    encoding = tokenizer.encode_plus(text, add_special_tokens=False)
+            bert_: BertManager = bert) -> Explanation:
+    encoding = bert_.tokenizer.encode_plus(text, add_special_tokens=False)
 
-    text_input_ids, ref_input_ids = construct_input_and_reference(encoding, ref_token_id=tokenizer.pad_token_id)
+    text_input_ids, ref_input_ids = construct_input_and_reference(encoding, ref_token_id=bert_.tokenizer.pad_token_id)
 
-    attributions, delta = EXPLAINERS[explainer](text_input_ids, ref_input_ids, target, model)
+    attributions, delta = EXPLAINERS[explainer](text_input_ids, ref_input_ids, target, bert_.model)
     scores = attributions.sum(dim=-1).squeeze(0)
 
     explanation = filter_attributions(align_text(text=text, encoding=encoding, scores=scores))
