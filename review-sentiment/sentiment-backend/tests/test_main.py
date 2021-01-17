@@ -2,9 +2,9 @@ import pytest
 
 from fastapi.testclient import TestClient
 
-from sentiment.main import app
+from sentiment import main
 
-client = TestClient(app)
+client = TestClient(main.app)
 
 
 @pytest.mark.integration
@@ -58,3 +58,15 @@ def test_that_custom_explanation_target_outside_range_is_not_accepted():
 
     response = client.post('/explain', json={"text": "This is a review.", "target": -4})
     assert response.status_code == 422
+
+
+def test_that_availability_check_works(mocker):
+    mocker.patch.object(main, 'EXPLAINERS', ["existing"])
+
+    good_exp_req = main.ExplanationRequest(text="some text",
+                                           target=3,
+                                           method="existing")
+    with pytest.raises(ValueError):
+        bad_exp_req = main.ExplanationRequest(text="some text",
+                                              target=3,
+                                              method="unavailable")

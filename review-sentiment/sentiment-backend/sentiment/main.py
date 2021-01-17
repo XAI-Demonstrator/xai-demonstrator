@@ -45,6 +45,7 @@ class ExplanationRequest(BaseModel):
     def method_must_be_available(cls, v):
         if v not in EXPLAINERS:
             raise ValueError(f'{v} is not an available explanation method')
+        return v
 
 
 class ExplanationResponse(BaseModel):
