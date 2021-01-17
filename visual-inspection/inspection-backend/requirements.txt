@@ -1,3 +1,5 @@
 fastapi
 uvicorn
 aiofiles
+
+tensorflow==2.4.0
