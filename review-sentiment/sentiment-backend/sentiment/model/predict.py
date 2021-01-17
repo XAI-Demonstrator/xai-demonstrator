@@ -2,7 +2,7 @@ import uuid
 from typing import List
 
 import torch
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 
 from .model import bert, BertManager
 
@@ -12,6 +12,12 @@ my_device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 class Prediction(BaseModel):
     prediction_id: uuid.UUID
     prediction: List[float]
+
+    @validator('prediction')
+    def prediction_must_be_of_length_five(cls, v):
+        if len(v) != 5:
+            raise ValueError("Prediction must be list of length 5.")
+        return v
 
 
 def predict(text: str,
