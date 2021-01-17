@@ -3,7 +3,7 @@ import pathlib
 import torch
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from transformers.modeling_bert import BertForSequenceClassification
-from transformers.tokenization_bert import BertTokenizer
+from transformers.tokenization_bert import BertTokenizerFast
 
 PATH = pathlib.Path(__file__).parent
 my_device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -28,7 +28,7 @@ class BertManager:
         return self._model
 
     @property
-    def tokenizer(self) -> BertTokenizer:
+    def tokenizer(self) -> BertTokenizerFast:
         if self._tokenizer is None:
             self._tokenizer = self.load_tokenizer()
         return self._tokenizer
@@ -41,7 +41,7 @@ class BertManager:
         return model
 
     @staticmethod
-    def load_tokenizer() -> BertTokenizer:
+    def load_tokenizer() -> BertTokenizerFast:
         return AutoTokenizer.from_pretrained("nlptown/bert-base-multilingual-uncased-sentiment",
                                              cache_dir=PATH / "cache", use_fast=True)
 
