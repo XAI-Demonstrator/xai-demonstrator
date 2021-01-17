@@ -1,3 +1,4 @@
+import math
 import uuid
 from typing import List
 
@@ -16,7 +17,13 @@ class Prediction(BaseModel):
     @validator('prediction')
     def prediction_must_be_of_length_five(cls, v):
         if len(v) != 5:
-            raise ValueError("Prediction must be list of length 5.")
+            raise ValueError(f"Prediction must be list of length 5 (actual: {len(v)}).")
+        return v
+
+    @validator('prediction')
+    def prediction_must_sum_to_one(cls, v):
+        if not math.isclose(sum(v), 1.0, abs_tol=1e-6):
+            raise ValueError(f"Prediction must sum to 1.0 (actual: {sum(v)}).")
         return v
 
 
