@@ -4,6 +4,4 @@
 **/node_modules
 **/dist
 
-./sentiment-backend/sentiment/model/cache
 ./sentiment-backend/sentiment/static
-

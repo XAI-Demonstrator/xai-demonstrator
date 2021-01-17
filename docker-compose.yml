@@ -13,10 +13,6 @@ services:
 
   sentiment:
     build: ./review-sentiment/
-    volumes:
-      - type: bind
-        source: ./review-sentiment/sentiment-backend/sentiment/model/cache
-        target: /app/model/cache
 
   inspection:
     build: ./visual-inspection/
