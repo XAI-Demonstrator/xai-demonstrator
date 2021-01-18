@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Tuple, Dict
 
 import numpy as np
 import torch
@@ -10,7 +10,7 @@ def attribute_integrated_gradients(text_input_ids,
                                    ref_input_ids,
                                    target: int,
                                    model: BertForSequenceClassification
-                                   ) -> Tuple[np.ndarray, float]:
+                                   ) -> Tuple[np.ndarray, Dict[str, float]]:
     def forward(model_input):
         pred = model(model_input)
         return torch.softmax(pred[0], dim=1)
@@ -27,4 +27,4 @@ def attribute_integrated_gradients(text_input_ids,
     scores = attributions.sum(dim=-1).squeeze(0)
     scores = scores.cpu().detach().numpy()
 
-    return scores, delta.item()
+    return scores, {"delta": delta.item()}
