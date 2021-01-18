@@ -1,7 +1,7 @@
 import pytest
 import torch
 
-from sentiment.explainer.explainer import align_text
+from sentiment.explainer.explainer import align_text, explain
 from sentiment.model.model import bert
 
 
@@ -23,3 +23,6 @@ def test_simple_text_alignment():
     assert result[2] == ("Satz", 1.0)
     assert result[3] == (".", 1.0)
 
+
+def test_random():
+    explain("Der Hund hat Husten", target=4, explainer="random")
