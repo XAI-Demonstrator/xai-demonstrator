@@ -4,7 +4,7 @@ on:
   push:
     paths:
       - 'review-sentiment/**'
-
+      - '!review-sentiment/**.md'
 
 jobs:
   test-backend:
