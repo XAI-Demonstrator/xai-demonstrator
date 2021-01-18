@@ -48,20 +48,11 @@ class ExplanationRequest(BaseModel):
         return v
 
 
-class ExplanationResponse(BaseModel):
-    prediction: Prediction
-    explanation: Explanation
-
-
 @app.post('/predict')
 async def predict_sentiment(request: PredictionRequest) -> Prediction:
     return predict(request.text)
 
 
 @app.post('/explain')
-async def explain_sentiment(request: ExplanationRequest) -> ExplanationResponse:
-    # TODO: Parallelize
-    prediction = predict(request.text)
-    # TODO: Allow explanation based on prediction
-    explanation = explain(request.text, request.target, request.method)
-    return ExplanationResponse(prediction=prediction, explanation=explanation)
+async def explain_sentiment(request: ExplanationRequest) -> Explanation:
+    return explain(request.text, request.target, request.method)
