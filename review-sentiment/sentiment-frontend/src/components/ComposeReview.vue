@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="intro-text">{{ introductionText }}</p>
+    <p class="intro-text">{{ introductionText }} Gebe deine Bewertung ein oder nutze das Beispiel:</p>
     <mt-field label=""
               v-bind:placeholder="defaultReview"
               type="textarea" rows="3" v-model="text"
