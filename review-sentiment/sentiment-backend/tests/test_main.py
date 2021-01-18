@@ -42,6 +42,18 @@ def test_that_sentiment_is_explained_with_custom_target():
     assert "explanation" in response_dict
 
 
+@pytest.mark.integration
+def test_that_sentiment_is_explained_with_custom_explainer():
+    test_str = "This is a very good review."
+    test_dict = {"text": test_str, "method": "integrated_gradients"}
+    response = client.post('/explain', json=test_dict)
+    response_dict = response.json()
+
+    assert response.status_code == 200
+    assert "prediction" in response_dict
+    assert "explanation" in response_dict
+
+
 def test_that_empty_text_is_not_predicted():
     response = client.post('/predict', json={"text": ""})
     assert response.status_code == 422
@@ -52,7 +64,7 @@ def test_that_empty_text_is_not_explained():
     assert response.status_code == 422
 
 
-def test_that_custom_explanation_target_outside_range_is_not_accepted():
+def test_that_custom_explanation_targets_outside_range_are_not_accepted():
     response = client.post('/explain', json={"text": "This is a review.", "target": 10})
     assert response.status_code == 422
 
@@ -60,7 +72,15 @@ def test_that_custom_explanation_target_outside_range_is_not_accepted():
     assert response.status_code == 422
 
 
-def test_that_availability_check_works(mocker):
+def test_that_only_available_explainers_are_accepted(mocker):
+    mocker.patch.object(main, 'EXPLAINERS', ["existing"])
+
+    response = client.post('/explain', json={"text": "This is a stellar review.",
+                                             "target": 4, "method": "unavailable"})
+    assert response.status_code == 422
+
+
+def test_that_the_explainer_availability_check_works(mocker):
     mocker.patch.object(main, 'EXPLAINERS', ["existing"])
 
     good_exp_req = main.ExplanationRequest(text="some text",
