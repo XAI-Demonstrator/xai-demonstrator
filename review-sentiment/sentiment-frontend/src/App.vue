@@ -39,9 +39,9 @@ export default {
   data() {
     return {
       introductionTexts: {
-        'movie': 'Wie war der Film, den Sie zuletzt gesehen haben?',
-        'restaurant': 'Bewerten Sie bitte kurz Ihren letzten Restaurant-Besuch:',
-        'travel': 'Wie hat Ihnen Ihre letzte Reise gefallen?'
+        'movie': 'Wie war der Film, den du zuletzt gesehen hast?',
+        'restaurant': 'Wie war dein letzter Restaurant-Besuch?',
+        'travel': 'Wie hat dir deine letzte Reise gefallen?'
       },
       defaultReviews: {
         'movie': 'Die Story war ziemlich vorhersehbar, würde ich nicht empfehlen...',
