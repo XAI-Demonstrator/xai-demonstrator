@@ -6,11 +6,12 @@ from captum.attr import LayerIntegratedGradients
 from transformers.modeling_bert import BertForSequenceClassification
 
 
-def attribute_integrated_gradients(text_input_ids,
-                                   ref_input_ids,
+# noinspection PyUnusedLocal
+def attribute_integrated_gradients(text_input_ids: torch.Tensor,
+                                   ref_input_ids: torch.Tensor,
                                    target: int,
-                                   model: BertForSequenceClassification
-                                   ) -> Tuple[np.ndarray, Dict[str, float]]:
+                                   model: BertForSequenceClassification,
+                                   **kwargs) -> Tuple[np.ndarray, Dict[str, float]]:
     def forward(model_input):
         pred = model(model_input)
         return torch.softmax(pred[0], dim=1)

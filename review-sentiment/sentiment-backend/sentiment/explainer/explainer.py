@@ -2,7 +2,7 @@ import pathlib
 import re
 import string
 import uuid
-from typing import Tuple, List, Dict, Any, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 import torch
@@ -10,7 +10,8 @@ from pydantic import BaseModel
 
 from .explainers.integrated_gradients import attribute_integrated_gradients
 from .explainers.random_words import attribute_random_words
-from ..model.model import bert, BertManager
+from .explainers.shapley_value_sampling import attribute_sampled_shapley_values
+from ..model.model import BertManager, bert
 
 PATH = pathlib.Path(__file__).parent
 
@@ -21,7 +22,8 @@ with open(PATH / "small_words_to_filter.txt", "rt", encoding="utf-8") as f:
 
 EXPLAINERS = {
     "integrated_gradients": attribute_integrated_gradients,
-    "random": attribute_random_words
+    "random": attribute_random_words,
+    "shapley_value_sampling": attribute_sampled_shapley_values
 }
 
 
@@ -55,7 +57,7 @@ def filter_attributions(attributions: List[Tuple[str, float]],
                         for word, score in attributions)
 
     if remove_stopwords:
-        attributions = ((word, score if word not in STOPWORDS else 0.0)
+        attributions = ((word, score if word.lower() not in STOPWORDS else 0.0)
                         for word, score in attributions)
 
     return list(attributions)
@@ -63,7 +65,10 @@ def filter_attributions(attributions: List[Tuple[str, float]],
 
 def explain(text: str, target: int,
             explainer: str = "integrated_gradients",
+            settings: Optional[Dict[str, Any]] = None,
             bert_: BertManager = bert) -> Explanation:
+    settings = settings or {}
+
     encoding = bert_.tokenizer.encode_plus(text, add_special_tokens=False)
 
     text_input_ids, ref_input_ids = construct_input_and_reference(encoding["input_ids"],
@@ -73,7 +78,8 @@ def explain(text: str, target: int,
         text_input_ids=text_input_ids,
         ref_input_ids=ref_input_ids,
         target=target,
-        model=bert_.model)
+        model=bert_.model,
+        settings=settings)
 
     explanation = filter_attributions(align_text(text=text,
                                                  words=np.array(encoding.words()),

@@ -43,7 +43,7 @@ def test_that_input_and_reference_are_generated():
 
 
 def test_text_alignment_with_one_to_one_match():
-    text = "we need this."
+    text = "We need this."
     # we get one score per word
     words = np.array([0, 1, 2, 3])
     scores = np.array([0.1, 0.2, 0.3, 0.4])
@@ -51,11 +51,11 @@ def test_text_alignment_with_one_to_one_match():
     result = explainer.align_text(text, words, scores)
 
     assert len(result) == 4
-    assert result == [("we", 0.1), ("need", 0.2), ("this", 0.3), (".", 0.4)]
+    assert result == [("We", 0.1), ("need", 0.2), ("this", 0.3), (".", 0.4)]
 
 
 def test_text_alignment_with_many_to_one_match():
-    text = "some complicated words"
+    text = "Some complicated words"
     # we get one score per syllable
     words = np.array([0, 1, 1, 1, 1, 2])
     scores = np.array([0.1, 0.2, 0.3, 0.4, 0.5, 0.6])
@@ -63,7 +63,7 @@ def test_text_alignment_with_many_to_one_match():
     result = explainer.align_text(text, words, scores)
 
     assert len(result) == 3
-    assert result == [("some", 0.1), ("complicated", 0.35), ("words", 0.6)]
+    assert result == [("Some", 0.1), ("complicated", 0.35), ("words", 0.6)]
 
 
 def test_that_punctuation_is_removed():
@@ -80,7 +80,7 @@ def test_that_punctuation_is_removed():
 def test_that_stopwords_are_removed(mocker):
     mocker.patch.object(explainer, "STOPWORDS", ["was", "so"])
 
-    attributions = [("this", 0.5), ("was", 0.2), ("so", 0.4), ("great", 0.9), ("!", 0.2)]
+    attributions = [("this", 0.5), ("was", 0.2), ("SO", 0.4), ("great", 0.9), ("!", 0.2)]
 
     result = explainer.filter_attributions(attributions,
                                            remove_stopwords=True,
@@ -88,5 +88,5 @@ def test_that_stopwords_are_removed(mocker):
 
     assert len(result) == 5
     assert result[1] == ("was", 0.0)
-    assert result[2] == ("so", 0.0)
-    assert result == [("this", 0.5), ("was", 0.0), ("so", 0.0), ("great", 0.9), ("!", 0.2)]
+    assert result[2] == ("SO", 0.0)
+    assert result == [("this", 0.5), ("was", 0.0), ("SO", 0.0), ("great", 0.9), ("!", 0.2)]

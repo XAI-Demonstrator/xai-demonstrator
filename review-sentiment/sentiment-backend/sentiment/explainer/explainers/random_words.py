@@ -1,11 +1,12 @@
-from typing import Tuple
+from typing import List, Tuple
 
 import numpy as np
+import torch
 
 
 # noinspection PyUnusedLocal
-def attribute_random_words(text_input_ids, **kwargs) -> Tuple[np.ndarray, None]:
-    num_of_tokens = len(text_input_ids)
+def attribute_random_words(text_input_ids: torch.Tensor, **kwargs) -> Tuple[np.ndarray, None]:
+    num_of_tokens = text_input_ids.shape[1]
 
     alpha = np.ones(num_of_tokens)
     raw_scores = np.random.default_rng().dirichlet(alpha, 1)[0]
