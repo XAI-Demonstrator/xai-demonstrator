@@ -3,7 +3,7 @@ import uuid
 import numpy as np
 import pytest
 
-from sentiment.model.predict import predict, Prediction
+from sentiment.model.predict import Prediction, predict
 
 
 @pytest.mark.integration
