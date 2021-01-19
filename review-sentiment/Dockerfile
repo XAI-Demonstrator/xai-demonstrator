@@ -5,7 +5,7 @@ WORKDIR /
 COPY ./sentiment-frontend/ .
 RUN npm install && npm run build
 
-FROM python:3.7-slim
+FROM python:3.8-slim
 
 WORKDIR /
 

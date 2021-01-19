@@ -1,9 +1,8 @@
 import pathlib
 
 import torch
-from transformers import AutoTokenizer, AutoModelForSequenceClassification
-from transformers.modeling_bert import BertForSequenceClassification
-from transformers.tokenization_bert import BertTokenizerFast
+from transformers import AutoModelForSequenceClassification, AutoTokenizer, BertForSequenceClassification, \
+    BertTokenizerFast
 
 PATH = pathlib.Path(__file__).parent
 my_device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")

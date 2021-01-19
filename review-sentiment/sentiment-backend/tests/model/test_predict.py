@@ -30,4 +30,3 @@ def test_that_prediction_sums_to_one():
     with pytest.raises(ValueError):
         bad_prediction = Prediction(prediction_id=uuid.uuid4(),
                                     prediction=[0.2, 0.4, 0.2, 0.2, 0.5])
-
