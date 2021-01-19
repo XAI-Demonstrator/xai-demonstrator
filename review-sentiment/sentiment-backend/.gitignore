@@ -1,2 +1,4 @@
+.coverage
+
 sentiment/static
 sentiment/model/cache

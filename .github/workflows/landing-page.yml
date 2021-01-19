@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'landing-page/**'
+      - '!landing-page/**.md'
       - 'review-sentiment/sentiment-frontend/**'
       - 'visual-inspection/inspection-frontend/**'
     branches:

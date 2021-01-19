@@ -30,7 +30,6 @@ To re-use this deployment elsewhere
 2. Change the domain name and e-mail adress in [proxy/docker-compose.yml](./proxy/docker-compose.yml)
 3. Change the container registry in [docker-compose.yml](./docker-compose.yml) to your own registry
    (or, if you have access to our registry, at least pin the version)
-4. If you're not running on Ubuntu, change the path for the model cache in [docker-compose.yml](./docker-compose.yml)
 
 ## Credits
 

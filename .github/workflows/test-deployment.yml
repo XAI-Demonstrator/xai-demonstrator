@@ -10,7 +10,12 @@ on:
       - master
     types:
       - completed
-
+  push:
+    branches:
+      - master
+    paths:
+      - 'deployment/test-deployment/**'
+      - '!deployment/test-deployment/**.md'
 
 jobs:
   deploy:

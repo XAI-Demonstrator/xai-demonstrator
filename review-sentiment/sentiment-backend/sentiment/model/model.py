@@ -1,14 +1,15 @@
-
 import pathlib
+
 import torch
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from transformers.modeling_bert import BertForSequenceClassification
-from transformers.tokenization_bert import BertTokenizer
+from transformers.tokenization_bert import BertTokenizerFast
 
 PATH = pathlib.Path(__file__).parent
 my_device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
-class _ObjectManager:
+
+class BertManager:
     """Lazy loading of model and tokenizer.
 
     Enables us to inject model and tokenizer as external dependencies,
@@ -25,9 +26,9 @@ class _ObjectManager:
         if self._model is None:
             self._model = self.load_model()
         return self._model
-    
+
     @property
-    def tokenizer(self) -> BertTokenizer:
+    def tokenizer(self) -> BertTokenizerFast:
         if self._tokenizer is None:
             self._tokenizer = self.load_tokenizer()
         return self._tokenizer
@@ -35,14 +36,14 @@ class _ObjectManager:
     @staticmethod
     def load_model() -> BertForSequenceClassification:
         model = AutoModelForSequenceClassification.from_pretrained("nlptown/bert-base-multilingual-uncased-sentiment",
-                                                                  cache_dir=PATH / "cache")
+                                                                   cache_dir=PATH / "cache")
         model.to(my_device)
         return model
 
     @staticmethod
-    def load_tokenizer() -> BertTokenizer:
+    def load_tokenizer() -> BertTokenizerFast:
         return AutoTokenizer.from_pretrained("nlptown/bert-base-multilingual-uncased-sentiment",
                                              cache_dir=PATH / "cache", use_fast=True)
 
 
-get = _ObjectManager()
+bert = BertManager()
