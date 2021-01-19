@@ -13,10 +13,10 @@ FROM nvidia/cuda:10.0-base
 
 WORKDIR /
 
-COPY sentiment-backend/sentiment /app
+COPY sentiment-backend/sentiment /sentiment
 COPY sentiment-backend/requirements-cuda.txt /requirements.txt
-RUN mkdir /app/static
-COPY --from=builder /dist/ /app/static/
+RUN mkdir /sentiment/static
+COPY --from=builder /dist/ /sentiment/static/
 
 # CUDA image does not come with Python3: manual installation of Python3.8
 RUN apt-get update  
@@ -52,7 +52,8 @@ RUN pip3 install -r /requirements.txt \
     && rm -rf /root/.cache/pip3
 
 # load model into image
-RUN python -m app.model.trigger_download
+COPY sentiment-backend/trigger_download.py /trigger_download.py
+RUN python trigger_download.py
 
 # start server of sentiment service listening on (container-) port 8000 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "sentiment.main:app", "--host", "0.0.0.0", "--port", "8000"]
