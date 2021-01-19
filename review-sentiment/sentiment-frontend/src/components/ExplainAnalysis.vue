@@ -39,7 +39,7 @@ export default {
       axios
           .post(this.backendUrl + '/explain', {"text": this.reviewText})
           .then(response => {
-                this.explanationResult = response.data.explanation.explanation.map(function (pair) {
+                this.explanationResult = response.data.explanation.map(function (pair) {
                   return {
                     word: pair[0],
                     score: pair[1]

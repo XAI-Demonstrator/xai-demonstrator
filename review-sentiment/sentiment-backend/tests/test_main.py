@@ -26,7 +26,6 @@ def test_that_sentiment_is_explained():
     response_dict = response.json()
 
     assert response.status_code == 200
-    assert "prediction" in response_dict
     assert "explanation" in response_dict
 
 
@@ -38,19 +37,17 @@ def test_that_sentiment_is_explained_with_custom_target():
     response_dict = response.json()
 
     assert response.status_code == 200
-    assert "prediction" in response_dict
     assert "explanation" in response_dict
 
 
 @pytest.mark.integration
 def test_that_sentiment_is_explained_with_custom_explainer():
     test_str = "This is a very good review."
-    test_dict = {"text": test_str, "method": "integrated_gradients"}
+    test_dict = {"text": test_str, "method": "random"}
     response = client.post('/explain', json=test_dict)
     response_dict = response.json()
 
     assert response.status_code == 200
-    assert "prediction" in response_dict
     assert "explanation" in response_dict
 
 
