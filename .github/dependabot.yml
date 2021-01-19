@@ -14,13 +14,28 @@ updates:
 
   # Maintain dependencies for npm
   - package-ecosystem: "npm"
-    directory: "/"
+    directory: "/review-sentiment/sentiment-frontend"
     schedule:
       interval: "weekly"
       
+  - package-ecosystem: "npm"
+    directory: "/visual-inspection/inspection-frontend"
+    schedule:
+      interval: "weekly"    
+      
+  - package-ecosystem: "npm"
+    directory: "/landing-page/frontend"
+    schedule:
+      interval: "weekly"          
+      
   # Maintain dependencies for pip
   - package-ecosystem: "pip"
-    directory: "/"
+    directory: "/review-sentiment/sentiment-backend"
+    schedule:
+      interval: "weekly"
+      
+  - package-ecosystem: "pip"
+    directory: "/visual-inspection/inspection-backend"
     schedule:
       interval: "weekly"
       
