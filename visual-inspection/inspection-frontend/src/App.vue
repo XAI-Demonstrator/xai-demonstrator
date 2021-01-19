@@ -9,46 +9,43 @@
       </a>
     </mt-header>
     <div id="image-container">
-      <SelectImage v-if="!explainMode" v-on:imageChanged="imageChanged"/>
-      <ExamineExplanation ref="examiner" v-if="explainMode"/>
+      <cropper ref="cropper" :src="img" @change="imageChanged" />
+      <ExamineExplanation ref="examiner" />
     </div>
     <InspectImage ref="inspector" v-on:predictionReceived="predictionReceived" />
-    <ExplainInspection v-if="!selectionMode && !explainMode"
-                       v-on:explanationRequested="explanationRequested"/>
+    <ExplainInspection v-on:explanationRequested="explanationRequested"/>
   </div>
 </template>
 
 <script>
+import {Cropper} from 'vue-advanced-cropper';
+import 'vue-advanced-cropper/dist/style.css'
 
-import SelectImage from "@/components/SelectImage";
 import InspectImage from "@/components/InspectImage";
 import ExamineExplanation from "@/components/ExamineExplanation";
 import ExplainInspection from "@/components/ExplainInspection";
 
 export default {
   name: 'App',
-  components: {ExamineExplanation, SelectImage, InspectImage, ExplainInspection},
+  components: {ExamineExplanation, InspectImage, ExplainInspection, Cropper},
   methods: {
-    imageChanged(index) {
-      this.$refs.inspector.predict(index)
-      this.selectionMode = true
+    imageChanged({coordinates, image}) {
+      this.coordinates = coordinates;
+      console.log(coordinates)
+      console.log(image.src)
     },
     explanationRequested() {
       console.log("Requested Click")
-      this.selectionMode = false
-      this.explainMode = true
       this.$refs.examiner.requestExplanation()
     },
     predictionReceived() {
       console.log("Received Prediction")
-      this.selectionMode = false
     }
   },
   data() {
     return {
-      selectionMode: true,
-      explainMode: false,
-      backendUrl: process.env.VUE_APP_BACKEND_URL
+      backendUrl: process.env.VUE_APP_BACKEND_URL,
+      img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Cute-dog-licking-lips.jpg/300px-Cute-dog-licking-lips.jpg'
     }
   },
   created() {

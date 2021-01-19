@@ -10,11 +10,11 @@ import axios from 'axios'
 export default {
   name: "InspectImage",
   methods: {
-    predict(index) {
+    predict(image) {
 
       this.prediction = ""
 
-      axios.post(this.backendUrl + '/predict', {"index": index})
+      axios.post(this.backendUrl + '/predict', {"image": image})
           .then(response => {
             this.prediction = response.data.prediction
             this.$emit('predictionReceived')
