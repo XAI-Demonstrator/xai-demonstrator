@@ -1,6 +1,5 @@
 import pytest
-from transformers.modeling_bert import BertForSequenceClassification
-from transformers.tokenization_bert import BertTokenizerFast
+from transformers import BertForSequenceClassification, BertTokenizerFast
 
 from sentiment.model.model import BertManager
 

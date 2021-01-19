@@ -3,7 +3,7 @@ from typing import Any, Dict, Tuple
 import numpy as np
 import torch
 from captum.attr import ShapleyValueSampling
-from transformers.modeling_bert import BertForSequenceClassification
+from transformers import BertForSequenceClassification
 
 
 # noinspection PyUnusedLocal

@@ -5,7 +5,7 @@ from typing import List
 import torch
 from pydantic import BaseModel, validator
 
-from .model import bert, BertManager
+from .model import BertManager, bert
 
 my_device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
