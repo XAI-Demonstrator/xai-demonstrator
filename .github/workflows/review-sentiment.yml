@@ -40,7 +40,7 @@ jobs:
           echo $PWD
           pip install -r requirements-test.txt
           pytest -v --cov=sentiment -m "not integration" tests/
-          coveralls
+          coveralls --service=github
 
   build:
     runs-on: ubuntu-latest
@@ -70,7 +70,7 @@ jobs:
         echo $PWD
         pip install -r requirements-test.txt
         pytest -v --cov=sentiment -m "integration" tests/
-        coveralls
+        coveralls --service=github
     - name: Create container and publish to Registry
       uses: elgohr/Publish-Docker-Github-Action@master
       with:
