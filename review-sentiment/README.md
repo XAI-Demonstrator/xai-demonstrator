@@ -1,5 +1,5 @@
 # Customer review sentiment explanation service
-![Review Sentiment](https://github.com/XAI-Demonstrator/template-service/workflows/Review%20Sentiment/badge.svg)
+![Review Sentiment](https://github.com/XAI-Demonstrator/xai-demonstrator/workflows/Review%20Sentiment/badge.svg)
 
 
 ## Components

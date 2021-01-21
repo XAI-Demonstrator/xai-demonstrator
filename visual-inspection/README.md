@@ -1,5 +1,5 @@
 # Visual inspection explanation service
-![Visual Inspection](https://github.com/XAI-Demonstrator/template-service/workflows/Visual%20Inspection/badge.svg)
+![Visual Inspection](https://github.com/XAI-Demonstrator/xai-demonstrator/workflows/Visual%20Inspection/badge.svg)
 
 ## Components
 
