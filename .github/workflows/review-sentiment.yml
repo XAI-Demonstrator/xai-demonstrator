@@ -37,7 +37,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           COVERALLS_FLAG_NAME: sentiment-backend-unit
-          COVERALLS_PARALLEL: github.ref == 'refs/heads/master'
+          COVERALLS_PARALLEL: ${{ github.ref == 'refs/heads/master' }}
         run: |
           set -e
           cd ./review-sentiment/sentiment-backend
