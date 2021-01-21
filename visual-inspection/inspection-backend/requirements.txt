@@ -1,3 +1,6 @@
 fastapi
 uvicorn
 aiofiles
+python-multipart
+
+tensorflow==2.4.0
