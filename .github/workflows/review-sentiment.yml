@@ -60,7 +60,7 @@ jobs:
         echo $PWD
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-    - name: Run integration tests with pytest
+    - name: Run tests with pytest
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         COVERALLS_FLAG_NAME: sentiment-backend
@@ -69,7 +69,7 @@ jobs:
         cd ./review-sentiment/sentiment-backend
         echo $PWD
         pip install -r requirements-test.txt
-        pytest -v --cov=sentiment -m "integration" tests/
+        pytest -v --cov=sentiment tests/
         coveralls --service=github
     - name: Create container and publish to Registry
       uses: elgohr/Publish-Docker-Github-Action@master
