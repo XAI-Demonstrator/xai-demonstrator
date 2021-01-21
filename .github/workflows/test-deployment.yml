@@ -39,15 +39,9 @@ jobs:
            key: ${{ secrets.TEST_KEY }}
            script: |
              set -e
-             export CR_PAT=${{ secrets.GHCR_READ }}
-             echo $CR_PAT | sudo docker login ghcr.io -u ${{ secrets.GHCR_PAT_OWNER }} --password-stdin
              cd test-deployment/deployment/test-deployment/
-             sudo docker pull ghcr.io/xai-demonstrator/landing-page-service:latest
-             sudo docker pull ghcr.io/xai-demonstrator/review-sentiment-service:latest
-             sudo docker pull ghcr.io/xai-demonstrator/visual-inspection-service:latest
-             sudo docker logout
-             unset CR_PAT
              sudo docker-compose down
+             sudo docker-compose pull
              sudo docker-compose up -d
        - name: Slack Notification
          uses: rtCamp/action-slack-notify@master
