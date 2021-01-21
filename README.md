@@ -10,10 +10,11 @@ wait for all builds to complete and access the app at [localhost:8000](http://lo
 ## Use Cases
 Each use case illustrates a particular application of user-centric XAI methods.
 
-Code | Description | Build | Test Coverage
+Code | Description | Build | Test
 -----|-------------|-------|--------------
 [review-sentiment](/review-sentiment) | Explain the sentiment analysis of customer reviews | ![Review Sentiment](https://github.com/XAI-Demonstrator/xai-demonstrator/workflows/Review%20Sentiment/badge.svg) | [![Coverage Status](https://coveralls.io/repos/github/XAI-Demonstrator/xai-demonstrator/badge.svg?branch=x-cov-sentiment-backend)](https://coveralls.io/github/XAI-Demonstrator/xai-demonstrator?branch=x-cov-sentiment-backend)
-[visual-inspection](/visual-inspection) | Explain the classification of images | ![Visual Inspection](https://github.com/XAI-Demonstrator/xai-demonstrator/workflows/Visual%20Inspection/badge.svg)
+[visual-inspection](/visual-inspection) | Explain the classification of images | ![Visual Inspection](https://github.com/XAI-Demonstrator/xai-demonstrator/workflows/Visual%20Inspection/badge.svg) | [![Coverage Status](https://coveralls.io/repos/github/XAI-Demonstrator/xai-demonstrator/badge.svg?branch=x-cov-inspection-backend)](https://coveralls.io/github/XAI-Demonstrator/xai-demonstrator?branch=x-cov-inspection-backend)
+
 
 ## Landing Page
 The landing page provides a common entry point to all use cases.

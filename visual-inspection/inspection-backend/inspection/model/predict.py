@@ -1,11 +1,11 @@
 import uuid
 from typing import IO
+
 import numpy as np
 import tensorflow as tf
 from PIL import Image
 from fastapi import UploadFile
 from pydantic import BaseModel
-
 
 from .model import model
 
@@ -13,6 +13,7 @@ from .model import model
 class Prediction(BaseModel):
     prediction_id: uuid.UUID
     class_id: int
+
 
 # https://deeplizard.com/learn/video/OO4HD-1wRN8
 
@@ -27,7 +28,6 @@ def load_and_preprocess(image_file: IO[bytes]):
 
 def predict(image_file: UploadFile,
             model_: tf.keras.Model = model) -> Prediction:
-
     input_img = load_and_preprocess(image_file.file)
 
     prediction = model_.predict(input_img)
