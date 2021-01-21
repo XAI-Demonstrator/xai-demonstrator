@@ -25,10 +25,9 @@ Package | Status
 ## Deployments
  ![Monitor Deployment(s)](https://github.com/XAI-Demonstrator/xai-demonstrator/workflows/Monitor%20Deployment(s)/badge.svg)
 
-Location | Description | Status
----------|-------------|-------
-[https://test.xaidemo.de](https://test.xaidemo.de) | Latest version of the landing page and all use cases | ![Test Deployment](https://github.com/XAI-Demonstrator/xai-demonstrator/workflows/Test%20Deployment/badge.svg)
+Configuration | Location | Description | Status
+--------------|----------|-------------|-------
+[test-deployment](/deployment/test-deployment) | [https://test.xaidemo.de](https://test.xaidemo.de) | Latest version of the landing page and all use cases | ![Test Deployment](https://github.com/XAI-Demonstrator/xai-demonstrator/workflows/Test%20Deployment/badge.svg)
 
 ## License
-
-TBD
+The XAI Demonstrator is licensed under the terms of the Apache 2.0 license.
