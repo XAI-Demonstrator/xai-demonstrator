@@ -31,12 +31,16 @@ jobs:
           # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
           flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
       - name: Run unit tests with pytest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COVERALLS_FLAG_NAME: sentiment-backend-unit
         run: |
           set -e
           cd ./review-sentiment/sentiment-backend
           echo $PWD
           pip install -r requirements-test.txt
           pytest -v --cov=sentiment -m "not integration" tests/
+          coveralls
 
   build:
     runs-on: ubuntu-latest
@@ -57,12 +61,16 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     - name: Run integration tests with pytest
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        COVERALLS_FLAG_NAME: sentiment-backend
       run: |
         set -e
         cd ./review-sentiment/sentiment-backend
         echo $PWD
         pip install -r requirements-test.txt
         pytest -v --cov=sentiment -m "integration" tests/
+        coveralls
     - name: Create container and publish to Registry
       uses: elgohr/Publish-Docker-Github-Action@master
       with:
