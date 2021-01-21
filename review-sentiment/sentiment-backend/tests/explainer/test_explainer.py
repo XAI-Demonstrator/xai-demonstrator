@@ -14,7 +14,7 @@ def test_integrated_text_alignment():
     encoding = tokenizer.encode_plus(text, add_special_tokens=False)
     assert len(encoding["input_ids"]) == 5
 
-    words = np.array(encoding.words())
+    words = np.array(encoding.word_ids())
     scores = np.ones(len(encoding["input_ids"]))
 
     result = explainer.align_text(text, words, scores)

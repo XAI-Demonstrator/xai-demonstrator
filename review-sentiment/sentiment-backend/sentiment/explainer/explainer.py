@@ -41,11 +41,11 @@ def construct_input_and_reference(text_input_ids: List[int],
 
 
 def align_text(text: str,
-               words: np.ndarray,
+               word_ids: np.ndarray,
                scores: np.ndarray) -> List[Tuple[str, float]]:
     split_text = re.findall(r"[\w']+|" + f"[{string.punctuation}]", text)
 
-    return [(word, float(np.mean(scores[words == idx])))
+    return [(word, float(np.mean(scores[word_ids == idx])))
             for idx, word in enumerate(split_text)]
 
 
@@ -82,7 +82,7 @@ def explain(text: str, target: int,
         settings=settings)
 
     explanation = filter_attributions(align_text(text=text,
-                                                 words=np.array(encoding.words()),
+                                                 word_ids=np.array(encoding.word_ids()),
                                                  scores=scores))
 
     return Explanation(explanation_id=uuid.uuid4(),

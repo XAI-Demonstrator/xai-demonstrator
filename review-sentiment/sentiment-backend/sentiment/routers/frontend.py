@@ -17,15 +17,15 @@ def favicon():
 
 
 @router.get("/css/{fname}")
-def style(fname):
+def css(fname):
     return FileResponse(pathlib.Path(__file__).parent.parent / "static" / "css" / fname)
 
 
 @router.get("/js/{fname}")
-def script(fname):
+def js(fname):
     return FileResponse(pathlib.Path(__file__).parent.parent / "static" / "js" / fname)
 
 
 @router.get("/img/{fname}")
-def script(fname):
+def img(fname):
     return FileResponse(pathlib.Path(__file__).parent.parent / "static" / "img" / fname)
