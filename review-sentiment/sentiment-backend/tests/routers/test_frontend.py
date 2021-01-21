@@ -21,4 +21,3 @@ def test_static():
     assert r.path.name == "file"
     assert r.path.parent.name == "folder"
     assert r.path.parent.parent.name == "static"
-

@@ -44,6 +44,9 @@ jobs:
           echo $PWD
           pip install -r requirements-test.txt
           pytest -v --cov=sentiment -m "not integration" tests/
+          # when on master, pretend to be on branch x-cov-sentiment-backend
+          $COVERALLS_PARALLEL && export GITHUB_REF="refs/heads/x-cov-sentiment-backend"
+          $COVERALLS_PARALLEL && export GITHUB_HEAD_REF="x-cov-sentiment-backend"
           coveralls --service=github
 
   build:
@@ -64,16 +67,20 @@ jobs:
         echo $PWD
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-    - name: Run tests with pytest
+    - name: Run integration tests with pytest
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         COVERALLS_FLAG_NAME: sentiment-backend
+        COVERALLS_PARALLEL: true
       run: |
         set -e
         cd ./review-sentiment/sentiment-backend
         echo $PWD
         pip install -r requirements-test.txt
-        pytest -v --cov=sentiment tests/
+        pytest -v --cov=sentiment -m "integration" tests/
+        # when on master, pretend to be on branch x-cov-sentiment-backend
+        $COVERALLS_PARALLEL && export GITHUB_REF="refs/heads/x-cov-sentiment-backend"
+        $COVERALLS_PARALLEL && export GITHUB_HEAD_REF="x-cov-sentiment-backend"
         coveralls --service=github
         coveralls --service=github --finish
     - name: Create container and publish to Registry
