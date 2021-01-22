@@ -43,7 +43,7 @@ jobs:
           cd ./visual-inspection/inspection-backend
           echo $PWD
           pip install -r requirements-test.txt
-          pytest -v --cov=sentiment -m "not integration" tests/
+          pytest -v --cov=inspection -m "not integration" tests/
           # when on master, pretend to be on branch x-cov-inspection-backend
           $COVERALLS_PARALLEL && export GITHUB_REF="refs/heads/x-cov-inspection-backend"
           $COVERALLS_PARALLEL && export GITHUB_HEAD_REF="x-cov-inspection-backend"
@@ -77,7 +77,7 @@ jobs:
         cd ./visual-inspection/inspection-backend
         echo $PWD
         pip install -r requirements-test.txt
-        pytest -v --cov=sentiment -m "integration" tests/
+        pytest -v --cov=inspection -m "integration" tests/
         # when on master, pretend to be on branch x-cov-inspection-backend
         $COVERALLS_PARALLEL && export GITHUB_REF="refs/heads/x-cov-inspection-backend"
         $COVERALLS_PARALLEL && export GITHUB_HEAD_REF="x-cov-inspection-backend"
