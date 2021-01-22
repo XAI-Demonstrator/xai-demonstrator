@@ -84,7 +84,7 @@ jobs:
         coveralls --service=github
         coveralls --service=github --finish
     - name: Create container and publish to Registry
-      uses: elgohr/Publish-Docker-Github-Action@v3.0.2
+      uses: elgohr/Publish-Docker-Github-Action@3.02
       with:
         name: xai-demonstrator/visual-inspection-service
         username: ${{ secrets.GHCR_PAT_OWNER }}
