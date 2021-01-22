@@ -70,7 +70,7 @@ jobs:
     - name: Run integration tests with pytest
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        COVERALLS_FLAG_NAME: sentiment-backend
+        COVERALLS_FLAG_NAME: sentiment-backend-int
         COVERALLS_PARALLEL: true
       run: |
         set -e
