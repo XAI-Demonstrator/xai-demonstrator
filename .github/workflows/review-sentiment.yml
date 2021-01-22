@@ -79,7 +79,8 @@ jobs:
           flag-name: sentiment-frontend
         env:
           GITHUB_REF: x-cov-sentiment-frontend
-
+          GITHUB_RUN_ID: ${{ format('{0}_f', github.run_id ) }}
+          
   build:
     runs-on: ubuntu-latest
     needs:
