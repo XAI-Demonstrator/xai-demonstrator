@@ -78,7 +78,7 @@ jobs:
           path-to-lcov: ./review-sentiment/sentiment-frontend/coverage/lcov.info
           flag-name: sentiment-frontend
         env:
-          GITHUB_REF: x-cov-sentiment-frontend
+          GITHUB_REF: refs/heads/x-cov-sentiment-frontend
           GITHUB_RUN_ID: ${{ format('{0}_f', github.run_id ) }}
           
   build:
