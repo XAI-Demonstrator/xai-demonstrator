@@ -11,6 +11,7 @@
     <ComposeReview ref="composer"
                    v-bind:introduction-text="introductionTexts[reviewTopic]"
                    v-bind:default-review="defaultReviews[reviewTopic]"
+                   v-bind:show-intro="!numberOfStars"
                    v-on:reviewChanged="reviewTextChanged"/>
     <AnalyzeReview ref="analyzer"
                    v-bind:review-text="reviewTextToAnalyze"
@@ -89,7 +90,7 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  margin-top: 80px;
+  margin-top: 60px;
 }
 
 .navigation-header {
@@ -115,7 +116,7 @@ export default {
     margin: 40px auto auto;
     max-width: 425px;
     border: 1px solid #D3E3FC;
-    padding: 5px;
+    padding: 1em 5px 5px;
   }
 
   .navigation-header {

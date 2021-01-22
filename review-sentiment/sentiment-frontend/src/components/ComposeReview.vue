@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="intro-text">{{ introductionText }} Gebe deine Bewertung ein oder nutze das Beispiel:</p>
+    <p v-if="showIntro" class="intro-text">{{ introductionText }} Gebe deine Bewertung ein oder nutze das Beispiel:</p>
     <mt-field label=""
               v-bind:placeholder="defaultReview"
               type="textarea" rows="3" v-model="text"
@@ -18,7 +18,8 @@ export default {
   },
   props: [
     "introductionText",
-    "defaultReview"
+    "defaultReview",
+    "showIntro"
   ],
   methods: {
     reviewChanged() {
@@ -28,6 +29,9 @@ export default {
 }
 </script>
 <style scoped>
+p {
+  margin-block-start: 0;
+}
 .intro-text {
   text-align: left;
   padding-left: 5px;
