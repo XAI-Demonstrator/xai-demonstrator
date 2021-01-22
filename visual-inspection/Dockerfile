@@ -22,4 +22,3 @@ COPY inspection-backend/trigger_download.py /trigger_download.py
 RUN python /trigger_download.py
 
 CMD ["uvicorn", "inspection.main:app", "--host", "0.0.0.0", "--port", "8000"]
-g
