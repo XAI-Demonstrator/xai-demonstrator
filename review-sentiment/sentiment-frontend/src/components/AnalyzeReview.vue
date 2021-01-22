@@ -15,8 +15,8 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
-import {Indicator} from "mint-ui";
+import axios from 'axios';
+import { Indicator } from 'mint-ui';
 
 export default {
   name: 'AnalyzeReview',

@@ -22,7 +22,10 @@ export default {
   name: "BarChart",
   props: {
     explanation: {
-      type: Array
+      type: Array,
+      default: function () {
+        return []
+      }
     },
     maxNumOfBars: {
       type: Number,
@@ -51,9 +54,9 @@ export default {
       })
     },
     getScalingFactor(explanation) {
-      return Math.max(1.0, 0.8 / explanation.reduce(
-          (prevMax, {score}) =>
-              Math.max(prevMax, Math.abs(score)), -Infinity))
+      return Math.max(1.0, this.minLengthOfLongestBar / explanation.reduce(
+          (prevMax, pair) =>
+              Math.max(prevMax, Math.abs(pair.score)), -Infinity))
     }
   }
 }

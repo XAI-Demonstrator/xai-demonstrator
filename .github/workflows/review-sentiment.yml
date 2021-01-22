@@ -49,45 +49,76 @@ jobs:
           $COVERALLS_PARALLEL && export GITHUB_HEAD_REF="x-cov-sentiment-backend"
           coveralls --service=github
 
+  test-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@master
+      - name: Set up Node 12
+        uses: actions/setup-node@v2
+        with:
+          node-version: '12'
+      - name: Install dependencies
+        run: |
+          set -e
+          cd ./review-sentiment/sentiment-frontend
+          echo $PWD
+          npm install
+      - name: Run tests
+        run: |
+          set -e
+          cd ./review-sentiment/sentiment-frontend
+          echo $PWD
+          npm test
+      - name: Report coverage
+        if: github.ref == 'refs/heads/master'
+        uses: coverallsapp/github-action@v1.1.2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: ./review-sentiment/sentiment-frontend/coverage/lcov.info
+          flag-name: sentiment-frontend
+        env:
+          GITHUB_REF: x-cov-sentiment-frontend
+
   build:
     runs-on: ubuntu-latest
     needs: test-backend
     if: github.ref == 'refs/heads/master'
     steps:
-    - name: Checkout code
-      uses: actions/checkout@master
-    - name: Set up Python 3.8
-      uses: actions/setup-python@v2.2.1
-      with:
-        python-version: 3.8
-    - name: Install dependencies
-      run: |
-        set -e
-        cd ./review-sentiment/sentiment-backend
-        echo $PWD
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-    - name: Run integration tests with pytest
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        COVERALLS_FLAG_NAME: sentiment-backend-int
-        COVERALLS_PARALLEL: true
-      run: |
-        set -e
-        cd ./review-sentiment/sentiment-backend
-        echo $PWD
-        pip install -r requirements-test.txt
-        pytest -v --cov=sentiment -m "integration" tests/
-        # when on master, pretend to be on branch x-cov-sentiment-backend
-        $COVERALLS_PARALLEL && export GITHUB_REF="refs/heads/x-cov-sentiment-backend"
-        $COVERALLS_PARALLEL && export GITHUB_HEAD_REF="x-cov-sentiment-backend"
-        coveralls --service=github
-        coveralls --service=github --finish
-    - name: Create container and publish to Registry
-      uses: elgohr/Publish-Docker-Github-Action@master
-      with:
-        name: xai-demonstrator/review-sentiment-service
-        username: ${{ secrets.GHCR_PAT_OWNER }}
-        password: ${{ secrets.GHCR_WRITE }}
-        registry: ghcr.io
-        workdir: review-sentiment/
+      - name: Checkout code
+        uses: actions/checkout@master
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2.2.1
+        with:
+          python-version: 3.8
+      - name: Install dependencies
+        run: |
+          set -e
+          cd ./review-sentiment/sentiment-backend
+          echo $PWD
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Run integration tests with pytest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COVERALLS_FLAG_NAME: sentiment-backend-int
+          COVERALLS_PARALLEL: true
+        run: |
+          set -e
+          cd ./review-sentiment/sentiment-backend
+          echo $PWD
+          pip install -r requirements-test.txt
+          pytest -v --cov=sentiment -m "integration" tests/
+          # when on master, pretend to be on branch x-cov-sentiment-backend
+          $COVERALLS_PARALLEL && export GITHUB_REF="refs/heads/x-cov-sentiment-backend"
+          $COVERALLS_PARALLEL && export GITHUB_HEAD_REF="x-cov-sentiment-backend"
+          coveralls --service=github
+          coveralls --service=github --finish
+      - name: Create container and publish to Registry
+        uses: elgohr/Publish-Docker-Github-Action@master
+        with:
+          name: xai-demonstrator/review-sentiment-service
+          username: ${{ secrets.GHCR_PAT_OWNER }}
+          password: ${{ secrets.GHCR_WRITE }}
+          registry: ghcr.io
+          workdir: review-sentiment/
