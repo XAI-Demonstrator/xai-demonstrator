@@ -12,11 +12,6 @@ export function makeServer({environment = "development"} = {}) {
             }))
 
             this.post("/explain", () => ({
-                prediction: {
-                    prediction_id: 'abc',
-                    prediction: [0.0, 0.0, 1.0, 0.0, 0.0]
-                },
-                explanation: {
                     explanation_id: 'def',
                     explanation: [
                         ["Super", 0.7],
@@ -32,7 +27,7 @@ export function makeServer({environment = "development"} = {}) {
                         ["!", null]
                     ]
                 }
-            }))
+            ))
 
 
         },
