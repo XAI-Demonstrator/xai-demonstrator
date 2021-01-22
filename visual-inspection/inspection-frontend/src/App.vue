@@ -9,30 +9,35 @@
       </a>
     </mt-header>
     <div id="image-container">
-      <cropper ref="cropper" :src="img" @change="imageChanged" />
-      <ExamineExplanation ref="examiner" />
+      <cropper ref="cropper" :src="img" @change="imageChanged"/>
     </div>
-    <InspectImage ref="inspector" v-on:predictionReceived="predictionReceived" />
-    <ExplainInspection v-on:explanationRequested="explanationRequested"/>
+    <p>{{ prediction }}</p>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
 import {Cropper} from 'vue-advanced-cropper';
 import 'vue-advanced-cropper/dist/style.css'
 
-import InspectImage from "@/components/InspectImage";
-import ExamineExplanation from "@/components/ExamineExplanation";
-import ExplainInspection from "@/components/ExplainInspection";
 
 export default {
   name: 'App',
-  components: {ExamineExplanation, InspectImage, ExplainInspection, Cropper},
+  components: {Cropper},
   methods: {
-    imageChanged({coordinates, image}) {
+    imageChanged({coordinates, canvas}) {
       this.coordinates = coordinates;
       console.log(coordinates)
-      console.log(image.src)
+      console.log(canvas)
+      const form = new FormData();
+      canvas.toBlob(blob => {
+        form.append('file', blob);
+        axios.post('/predict',
+            form).then(response => {
+          console.log(response.data.class_label)
+          this.prediction = response.data.class_label
+        })
+      })
     },
     explanationRequested() {
       console.log("Requested Click")
@@ -44,6 +49,7 @@ export default {
   },
   data() {
     return {
+      prediction: null,
       backendUrl: process.env.VUE_APP_BACKEND_URL,
       img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Cute-dog-licking-lips.jpg/300px-Cute-dog-licking-lips.jpg'
     }
