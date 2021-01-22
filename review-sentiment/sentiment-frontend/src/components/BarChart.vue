@@ -1,6 +1,6 @@
 <template>
   <div class="barchart">
-    <div class="bar" v-for="pair in sortedExplanation.slice(0,maxNumOfBars)" :key="pair.word + Math.random()">
+    <div class="bar" v-for="pair in processedExplanation.slice(0,maxNumOfBars)" :key="pair.word + Math.random()">
       <div class="progress" v-bind:style="{'--importance': pair.score,
          'background-color': pair.score < 0 ? '#CC0000' : '#00887A'}">
       </div>
@@ -22,18 +22,41 @@ export default {
   name: "BarChart",
   props: {
     explanation: {
-      type: Array
+      type: Array,
+      default: function () {
+        return []
+      }
     },
     maxNumOfBars: {
       type: Number,
-      default: 3
+      default: 5
+    },
+    minLengthOfLongestBar: {
+      type: Number,
+      default: 0.8
     }
   },
   computed: {
-    sortedExplanation() {
-      return [...this.explanation].sort(function (a, b) {
+    processedExplanation() {
+      return this.sortByScore(this.rescaleScores(this.explanation))
+    }
+  }, methods: {
+    sortByScore(explanation) {
+      return [...explanation].sort(function (a, b) {
         return Math.abs(b.score) - Math.abs(a.score)
       })
+    },
+    rescaleScores(explanation) {
+      const factor = this.getScalingFactor(explanation)
+      return explanation.map(function (pair) {
+        pair.score = pair.score * factor
+        return pair
+      })
+    },
+    getScalingFactor(explanation) {
+      return Math.max(1.0, this.minLengthOfLongestBar / explanation.reduce(
+          (prevMax, pair) =>
+              Math.max(prevMax, Math.abs(pair.score)), -Infinity))
     }
   }
 }

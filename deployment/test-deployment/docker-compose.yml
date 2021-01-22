@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   landing:
-    image: ghcr.io/xai-demonstrator/landing-page-service
+    image: ghcr.io/xai-demonstrator/landing-page-service:latest
     depends_on:
       - inspection
       - sentiment
@@ -16,10 +16,10 @@ services:
     restart: always
 
   sentiment:
-    image: ghcr.io/xai-demonstrator/review-sentiment-service
+    image: ghcr.io/xai-demonstrator/review-sentiment-service:latest
 
   inspection:
-    image: ghcr.io/xai-demonstrator/visual-inspection-service
+    image: ghcr.io/xai-demonstrator/visual-inspection-service:latest
 
 networks:
   default:

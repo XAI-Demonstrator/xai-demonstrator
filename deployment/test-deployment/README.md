@@ -1,5 +1,5 @@
 # test-deployment
-![Test Deployment](https://github.com/XAI-Demonstrator/template-service/workflows/Test%20Deployment/badge.svg) ![Monitor Deployment(s)](https://github.com/XAI-Demonstrator/template-service/workflows/Monitor%20Deployment(s)/badge.svg)
+![Test Deployment](https://github.com/XAI-Demonstrator/xai-demonstrator/workflows/Test%20Deployment/badge.svg) ![Monitor Deployment(s)](https://github.com/XAI-Demonstrator/template-service/workflows/Monitor%20Deployment(s)/badge.svg)
 
 _This is the deployment at [https://test.xaidemo.de](https://test.xaidemo.de)._
 

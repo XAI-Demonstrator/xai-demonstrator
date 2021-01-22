@@ -1,32 +1,34 @@
 # XAI Demonstrator
-
 The XAI Demonstrator is a modular platform that lets users interact with production-grade Explainable AI (XAI) systems.
 
-**For general information, see our project website at [xai-demonstrator.github.io](https://xai-demonstrator.github.io/)**
+**For general information and user guides, see our project website at [xai-demonstrator.github.io](https://xai-demonstrator.github.io/)**
 
 ## Getting Started
-
 To start a local instance of the XAI Demonstrator, simply run `docker-compose up` in the top-level directory,
 wait for all builds to complete and access the app at [localhost:8000](http://localhost:8000/).
 
-## Deployments
-![Test Deployment](https://github.com/XAI-Demonstrator/template-service/workflows/Test%20Deployment/badge.svg) ![Monitor Deployment(s)](https://github.com/XAI-Demonstrator/template-service/workflows/Monitor%20Deployment(s)/badge.svg)
+## Use Cases
+Each use case illustrates a particular application of user-centric XAI methods.
 
-There is a (currently publicly accessible) test deployment at [https://test.xaidemo.de](https://test.xaidemo.de) that always runs the latest versions of the landing page and all use cases.
+Code | Description | Build | Test
+-----|-------------|-------|--------------
+[review-sentiment](/review-sentiment) | Explain the sentiment analysis of customer reviews | ![Review Sentiment](https://github.com/XAI-Demonstrator/xai-demonstrator/workflows/Review%20Sentiment/badge.svg) | [![Coverage Status](https://coveralls.io/repos/github/XAI-Demonstrator/xai-demonstrator/badge.svg?branch=x-cov-sentiment-backend)](https://coveralls.io/github/XAI-Demonstrator/xai-demonstrator?branch=x-cov-sentiment-backend)
+[visual-inspection](/visual-inspection) | Explain the classification of images | ![Visual Inspection](https://github.com/XAI-Demonstrator/xai-demonstrator/workflows/Visual%20Inspection/badge.svg) | [![Coverage Status](https://coveralls.io/repos/github/XAI-Demonstrator/xai-demonstrator/badge.svg?branch=x-cov-inspection-backend)](https://coveralls.io/github/XAI-Demonstrator/xai-demonstrator?branch=x-cov-inspection-backend)
+
 
 ## Landing Page
-![Landing Page](https://github.com/XAI-Demonstrator/template-service/workflows/Landing%20Page/badge.svg)
+The landing page provides a common entry point to all use cases.
 
-## Use Cases
-Each use case illustrates a possible application of user-centric XAI.
+Package | Status
+--------|-------
+[landing-page](/landing-page) | ![Landing Page](https://github.com/XAI-Demonstrator/xai-demonstrator/workflows/Landing%20Page/badge.svg)
 
-Package | Description | Status
---------|-------------|-------
-[review-sentiment](/review-sentiment) | Explain the sentiment analysis of customer reviews | ![Review Sentiment](https://github.com/XAI-Demonstrator/template-service/workflows/Review%20Sentiment/badge.svg)
-[visual-inspection](/visual-inspection) | Explain the classification of images | ![Visual Inspection](https://github.com/XAI-Demonstrator/template-service/workflows/Visual%20Inspection/badge.svg)
+## Deployments
+ ![Monitor Deployment(s)](https://github.com/XAI-Demonstrator/xai-demonstrator/workflows/Monitor%20Deployment(s)/badge.svg)
 
-
+Configuration | Location | Description | Status
+--------------|----------|-------------|-------
+[test-deployment](/deployment/test-deployment) | [https://test.xaidemo.de](https://test.xaidemo.de) | Latest version of the landing page and all use cases | ![Test Deployment](https://github.com/XAI-Demonstrator/xai-demonstrator/workflows/Test%20Deployment/badge.svg)
 
 ## License
-
-TBD
+The XAI Demonstrator is licensed under the terms of the Apache 2.0 license.

@@ -16,16 +16,6 @@ def favicon():
     return FileResponse(pathlib.Path(__file__).parent.parent / "static" / "favicon.ico")
 
 
-@router.get("/css/{fname}")
-def style(fname):
-    return FileResponse(pathlib.Path(__file__).parent.parent / "static" / "css" / fname)
-
-
-@router.get("/js/{fname}")
-def script(fname):
-    return FileResponse(pathlib.Path(__file__).parent.parent / "static" / "js" / fname)
-
-
-@router.get("/img/{fname}")
-def script(fname):
-    return FileResponse(pathlib.Path(__file__).parent.parent / "static" / "img" / fname)
+@router.get("/{folder}/{fname}")
+def static(folder, fname):
+    return FileResponse(pathlib.Path(__file__).parent.parent / "static" / folder / fname)

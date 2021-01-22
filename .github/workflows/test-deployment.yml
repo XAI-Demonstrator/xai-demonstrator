@@ -22,6 +22,23 @@ jobs:
      runs-on: ubuntu-latest
      steps:
        - uses: actions/checkout@master
+       - name: Wait for lock to release and place lock
+         uses: appleboy/ssh-action@v0.1.4
+         with:
+           host: ${{ secrets.TEST_HOST }}
+           username: ${{ secrets.TEST_USER }}
+           key: ${{ secrets.TEST_KEY }}
+           script: |
+             set -e
+             # wait for lock
+             while [ -f .test-deployment-lock ]; do sleep 1 && echo "awaiting lock" ; done
+             # claim lock
+             echo $GITHUB_RUN_ID >> ~/.test-deployment-lock
+             # detect almost-parallel runs of this workflow
+             if [[ `cat ~/.test-deployment-lock | wc -l` > 1 ]]; then exit 1; fi
+             # shut down current deployment
+             cd test-deployment/deployment/test-deployment/ || exit 0
+             sudo docker-compose down
        - name: Copy docker-compose.yml to test server
          uses: appleboy/scp-action@v0.1.1
          with:
@@ -39,16 +56,10 @@ jobs:
            key: ${{ secrets.TEST_KEY }}
            script: |
              set -e
-             export CR_PAT=${{ secrets.GHCR_READ }}
-             echo $CR_PAT | sudo docker login ghcr.io -u ${{ secrets.GHCR_PAT_OWNER }} --password-stdin
              cd test-deployment/deployment/test-deployment/
-             sudo docker pull ghcr.io/xai-demonstrator/landing-page-service:latest
-             sudo docker pull ghcr.io/xai-demonstrator/review-sentiment-service:latest
-             sudo docker pull ghcr.io/xai-demonstrator/visual-inspection-service:latest
-             sudo docker logout
-             unset CR_PAT
-             sudo docker-compose down
+             sudo docker-compose pull
              sudo docker-compose up -d
+             sleep 10 && rm ~/.test-deployment-lock
        - name: Slack Notification
          uses: rtCamp/action-slack-notify@master
          env:

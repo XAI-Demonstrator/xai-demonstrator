@@ -1,18 +1,20 @@
-from fastapi import FastAPI
-from pydantic import BaseModel
+from typing import Dict
+from fastapi import FastAPI, UploadFile, Form, File
 
-from .model.predict import predict, Prediction
 from .routers import frontend
+from .model.predict import predict, Prediction
 
 app = FastAPI()
 app.include_router(frontend.router)
 
 
-# TODO: Define image payload etc.
-class PredictionRequest(BaseModel):
-    image: str
+@app.post("/predict")
+def predict_weather(file: UploadFile = File(...)) -> Prediction:
+    return predict(file)
 
 
-@app.post('/predict')
-async def predict_weather(request: PredictionRequest) -> Prediction:
-    return predict(request.image)
+@app.post("/explain")
+def explain(file: UploadFile = File(...),
+            method: str = "lime",
+            settings: Dict = None):
+    return file.filename

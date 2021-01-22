@@ -3,7 +3,7 @@ import uuid
 import numpy as np
 import pytest
 
-from sentiment.model.predict import predict, Prediction
+from sentiment.model.predict import Prediction, predict
 
 
 @pytest.mark.integration
@@ -30,4 +30,3 @@ def test_that_prediction_sums_to_one():
     with pytest.raises(ValueError):
         bad_prediction = Prediction(prediction_id=uuid.uuid4(),
                                     prediction=[0.2, 0.4, 0.2, 0.2, 0.5])
-
