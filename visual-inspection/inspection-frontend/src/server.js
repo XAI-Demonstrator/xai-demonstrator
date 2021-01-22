@@ -8,7 +8,13 @@ export function makeServer({environment = "development"} = {}) {
         routes() {
             this.post("/predict", () => ({
                 prediction_id: 'abc',
-                prediction: [0.0, 0.0, 1.0, 0.0, 0.0]
+                class_label: "Hund",
+                class_id: 4
+            }))
+
+            this.post("/explain", () => ({
+                explanation_id: 'def',
+                explanation: "Hat Ohren"
             }))
 
         },

@@ -9,38 +9,56 @@
       </a>
     </mt-header>
     <div id="image-container">
-      <SelectImage v-if="selectionMode" v-on:imageChanged="imageChanged"/>
-      <ExamineInspection v-if="!selectionMode"/>
+      <cropper ref="cropper" :src="img" @change="imageChanged"/>
     </div>
-    <InspectImage v-on:buttonClicked="toggleMode"/>
+    <p>{{ prediction }}</p>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
+import {Cropper} from 'vue-advanced-cropper';
+import 'vue-advanced-cropper/dist/style.css'
 
-import SelectImage from "@/components/SelectImage";
-import InspectImage from "@/components/InspectImage";
-import ExamineInspection from "@/components/ExamineInspection";
 
 export default {
   name: 'App',
-  components: {ExamineInspection, SelectImage, InspectImage},
+  components: {Cropper},
   methods: {
-    imageChanged(index) {
-      console.log(index)
+    imageChanged({coordinates, canvas}) {
+      this.coordinates = coordinates;
+      console.log(coordinates)
+      console.log(canvas)
+      const form = new FormData();
+      canvas.toBlob(blob => {
+        form.append('file', blob);
+        axios.post(this.backendUrl + '/predict',
+            form).then(response => {
+          console.log(response.data.class_label)
+          this.prediction = response.data.class_label
+        })
+      })
     },
-    toggleMode() {
-      this.selectionMode = !this.selectionMode
+    explanationRequested() {
+      console.log("Requested Click")
+      this.$refs.examiner.requestExplanation()
+    },
+    predictionReceived() {
+      console.log("Received Prediction")
     }
   },
   data() {
     return {
-      selectionMode: true,
-      backendUrl: process.env.VUE_APP_BACKEND_URL
+      prediction: null,
+      backendUrl: process.env.VUE_APP_BACKEND_URL,
+      img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Cute-dog-licking-lips.jpg/300px-Cute-dog-licking-lips.jpg'
     }
   },
   created() {
     document.title = "Visual Inspection – XAI Demonstrator"
+  },
+  mounted() {
+    this.$refs.inspector.predict(0)
   }
 }
 </script>
