@@ -51,7 +51,9 @@ export default {
       })
     },
     getScalingFactor(explanation) {
-      return Math.max(1.0, 0.8 / explanation.reduce((prevMax, {score}) => Math.max(prevMax, score), -Infinity))
+      return Math.max(1.0, 0.8 / explanation.reduce(
+          (prevMax, {score}) =>
+              Math.max(prevMax, Math.abs(score)), -Infinity))
     }
   }
 }
