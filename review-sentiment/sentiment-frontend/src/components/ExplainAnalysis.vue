@@ -4,7 +4,7 @@
                class="my-button">Wie kommst du zu dieser Einschätzung?
     </mt-button>
     <div class="explanation-container" v-if="explanationResult">
-      <p>Ich habe die Wörter deines Reviews wie folgt eingeordnet:</p>
+      <p>Die Wörter deines Reviews tragen wie folgt zur Bewertung bei:</p>
       <BarChart v-if="explanationResult" v-bind:explanation="explanationResult"></BarChart>
       <TextHighlight v-if="explanationResult != null" v-bind:explanation="explanationResult"></TextHighlight>
     </div>
