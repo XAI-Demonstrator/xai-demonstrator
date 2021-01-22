@@ -32,7 +32,7 @@ export default {
       const form = new FormData();
       canvas.toBlob(blob => {
         form.append('file', blob);
-        axios.post('/predict',
+        axios.post(this.backendUrl + '/predict',
             form).then(response => {
           console.log(response.data.class_label)
           this.prediction = response.data.class_label
