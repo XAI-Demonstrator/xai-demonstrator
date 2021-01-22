@@ -5,9 +5,12 @@
       meine Bewertung
       erhalten?
     </mt-button>
-    <div class="sentiment-stars" v-if="numOfStars"><p>Ich denke, dein Review entspricht</p>
-      <img class="my-star" src="@/assets/star_filled.svg" v-for="star in numOfStars" :key="star"/>
-      <img class="my-star" src="@/assets/star_blank.svg" v-for="star in (5 - numOfStars)" :key="star"/>
+    <div class="the-sentiment" v-if="numOfStars">
+      <p>Ich denke, dein Review entspricht</p>
+      <div class="sentiment-stars">
+        <img class="my-star" src="@/assets/star_filled.svg" v-for="star in numOfStars" :key="'pos-' + star"/>
+        <img class="my-star" src="@/assets/star_blank.svg" v-for="star in (5 - numOfStars)" :key="'neg-' + star"/>
+      </div>
     </div>
   </div>
 </template>
@@ -52,19 +55,22 @@ export default {
   width: 100%;
   margin-top: 5px;
   margin-bottom: 5px;
-  text-align: center;
+}
+
+.the-sentiment {
+  /*border: 1px solid #357EC7;*/
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
 }
 
 .sentiment-stars {
-  /*border: 1px solid #357EC7;*/
-  display: inline-flex;
-  align-items: center;
-  height: 100%;
-  text-align: left;
+  min-width: 151px;
 }
 
 .my-star {
-  height: 25px;
+  width: 25px;
   margin-left: 5px;
 }
 
