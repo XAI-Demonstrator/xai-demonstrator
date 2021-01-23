@@ -166,8 +166,10 @@ export default {
         position: 'absolute',
         width: '100%',
         height: '100%',
+        'background-repeat': 'no-repeat',
         'background-image': 'url(' + this.explanationImg + ')',
-        'z-index': 0
+        'z-index': 0,
+        'background-size': 'cover'
       }
     }
   },

@@ -14,11 +14,12 @@
                :stencil-component="$options.components.ExplanationStencil"
                :stencil-props="{
                  'explanationMode': currentExplanation,
-                 'explanationImg': explanation}"/>
+                 'explanationImg': explanation,
+                 'aspectRatio': 1.0}"/>
     </div>
     <InspectImage ref="inspector"
                   v-on:inspectionCompleted="inspectionCompleted"/>
-    <ExplainInspection ref="explainer" v-if="currentPrediction"
+    <ExplainInspection ref="explainer" v-show="currentPrediction"
                        v-on:explanationRequested="explanationRequested"
                        v-on:explanationReceived="explanationReceived"/>
     <ExplanationStencil/>
