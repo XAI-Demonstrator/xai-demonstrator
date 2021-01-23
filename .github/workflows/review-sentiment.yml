@@ -70,16 +70,6 @@ jobs:
           cd ./review-sentiment/sentiment-frontend
           echo $PWD
           npm test
-      - name: Report coverage
-        if: github.ref == 'refs/heads/master'
-        uses: coverallsapp/github-action@v1.1.2
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: ./review-sentiment/sentiment-frontend/coverage/lcov.info
-          flag-name: sentiment-frontend
-        env:
-          GITHUB_REF: refs/heads/x-cov-sentiment-frontend
-          GITHUB_RUN_ID: ${{ format('{0}_f', github.run_id ) }}
           
   build:
     runs-on: ubuntu-latest
