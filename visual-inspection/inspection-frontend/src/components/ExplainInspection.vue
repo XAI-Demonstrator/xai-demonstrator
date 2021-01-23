@@ -1,22 +1,68 @@
 <template>
-  <div>
-    <mt-button class="my-button" v-on:click="buttonClicked">Woran erkennst du das?</mt-button>
+  <div class="explainer">
+    <div class="explanation-request">
+      <mt-button class="request-button" v-on:click="buttonClicked">Woran erkennst du das?</mt-button>
+      <mt-spinner v-if="waitingForExplanation" type="triple-bounce"/>
+    </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "ExplainInspection",
+  props: {
+    method: {
+      type: String,
+      default: "lime"
+    }
+  },
   methods: {
     buttonClicked() {
-      this.$emit("explanationRequested")
+      this.$emit('explanationRequested')
+    },
+    explain(blob) {
+      this.waitingForExplanation = true;
+
+      const form = new FormData();
+      form.append('file', blob);
+      form.append('method', this.method)
+
+      axios.post(this.backendUrl + '/explain', form)
+          .then(response => {
+            this.$emit('explanationReceived', response.data)
+            this.waitingForExplanation = false;
+          })
+    }
+  },
+  data() {
+    return {
+      explanation: null,
+      waitingForExplanation: false,
+      backendUrl: process.env.VUE_APP_BACKEND_URL
     }
   }
 }
 </script>
 
 <style scoped>
-.my-button {
+.explainer {
+  width: 100%;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.explanation-request {
+  border: 1px solid #D3E3FC;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  padding: 5px 10px;
+}
+
+.request-button {
   background-color: #77A6F7;
   border-radius: 0;
   font-size: 1em;

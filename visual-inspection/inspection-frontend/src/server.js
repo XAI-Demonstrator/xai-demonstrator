@@ -2,13 +2,15 @@ import {Server} from 'miragejs'
 
 export function makeServer({environment = "development"} = {}) {
 
+    const labels = ["Hund", "Katze", "Ziege"]
+
     let server = new Server({
         environment,
 
         routes() {
             this.post("/predict", () => ({
                 prediction_id: 'abc',
-                class_label: "Hund",
+                class_label: labels[Math.floor(Math.random() * labels.length)],
                 class_id: 4
             }))
 
