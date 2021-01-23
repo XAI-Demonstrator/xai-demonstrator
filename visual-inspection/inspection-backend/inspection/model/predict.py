@@ -17,9 +17,8 @@ class Prediction(BaseModel):
 
 
 # cf. https://deeplizard.com/learn/video/OO4HD-1wRN8
-def preprocess(image_file: IO[bytes]):
-    img = Image.open(image_file)
-    img = img.resize((224, 224), Image.NEAREST)
+def preprocess(img: Image) -> np.ndarray:
+    img = img.resize((224, 224), Image.BICUBIC)
     img_array = tf.keras.preprocessing.image.img_to_array(img)
     img_array = np.expand_dims(img_array, axis=0)
     img_array = img_array[:, :, :, :3]
@@ -28,9 +27,10 @@ def preprocess(image_file: IO[bytes]):
 
 def predict(image_file: IO[bytes],
             model_: tf.keras.Model = model) -> Prediction:
-    input_img = preprocess(image_file)
+    input_img = Image.open(image_file)
+    model_input = preprocess(input_img)
 
-    prediction = model_.predict(input_img)
+    prediction = model_.predict(model_input)
 
     class_id = int(np.argmax(prediction))
     class_label = tf.keras.applications.mobilenet_v2.decode_predictions(prediction, top=1)[0][0][1]
