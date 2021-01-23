@@ -1,4 +1,4 @@
-name: Production Deployment Sentiment-Review
+name: Prod Deployment Sentiment
 
 on:
   workflow_run:
