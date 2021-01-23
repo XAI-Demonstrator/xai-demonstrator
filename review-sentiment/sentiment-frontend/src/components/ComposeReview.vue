@@ -40,6 +40,6 @@ p {
 }
 
 .text-input {
-  border: 1px solid #77A6F7;
+  border: 1px solid #D3E3FC;
 }
 </style>
