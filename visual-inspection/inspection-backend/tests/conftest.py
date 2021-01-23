@@ -5,14 +5,19 @@ import pytest
 
 
 @pytest.fixture
-def dummy_image():
-    img = [3 * [v for v in range(240)] for _ in range(240)]
-    w = png.Writer(240, 240, greyscale=False)
+def generate_image():
 
-    f = io.BytesIO()
-    w.write(f, img)
-    f.seek(0)
+    def _generate(width, height, alpha=False):
+        channels = 4 if alpha else 3
 
-    yield f
+        img = [channels * [min(255, v) for v in range(width)] for _ in range(height)]
+        w = png.Writer(width, height, greyscale=False, alpha=alpha)
 
-    f.close()
+        f = io.BytesIO()
+        w.write(f, img)
+        f.seek(0)
+
+        return f
+
+    return _generate
+

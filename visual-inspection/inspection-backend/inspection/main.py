@@ -10,7 +10,7 @@ app.include_router(frontend.router)
 
 @app.post("/predict")
 def predict_weather(file: UploadFile = File(...)) -> Prediction:
-    return predict(file)
+    return predict(file.file)
 
 
 @app.post("/explain")

@@ -11,16 +11,14 @@ client = TestClient(main.app)
 
 
 @pytest.mark.integration
-def test_prediction(dummy_image):
-    response = client.post("/predict", files={"file": dummy_image})
-    response_dict = response.json()
+def test_prediction(generate_image):
+    response = client.post("/predict", files={"file": generate_image(200, 300)})
 
     assert response.status_code == 200
-    assert "class_id" in response_dict
 
 
 @pytest.mark.integration
-def test_explanation(dummy_image):
-    r = client.post("/explain", files={"file": dummy_image})
+def test_explanation(generate_image):
+    r = client.post("/explain", files={"file": generate_image(110, 224)})
 
     assert r.status_code == 200
