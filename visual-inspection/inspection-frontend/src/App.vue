@@ -9,9 +9,10 @@
       </a>
     </mt-header>
     <div id="image-container">
-      <cropper ref="cropper" :src="img" @change="imageChanged"/>
+      <cropper ref="cropper" :src="img" @change="imageChanged"
+               :min-width="50" :min-height="30"/>
     </div>
-    <p>{{ prediction }}</p>
+    <p>{{ prediction }} </p>
   </div>
 </template>
 
@@ -20,31 +21,22 @@ import axios from 'axios'
 import {Cropper} from 'vue-advanced-cropper';
 import 'vue-advanced-cropper/dist/style.css'
 
-
 export default {
   name: 'App',
   components: {Cropper},
   methods: {
-    imageChanged({coordinates, canvas}) {
-      this.coordinates = coordinates;
-      console.log(coordinates)
-      console.log(canvas)
+    imageChanged({canvas}) {
+      this.prediction = null
+
       const form = new FormData();
       canvas.toBlob(blob => {
         form.append('file', blob);
-        axios.post(this.backendUrl + '/predict',
-            form).then(response => {
-          console.log(response.data.class_label)
-          this.prediction = response.data.class_label
-        })
+
+        axios.post(this.backendUrl + '/predict', form)
+            .then(response => {
+              this.prediction = response.data.class_label
+            })
       })
-    },
-    explanationRequested() {
-      console.log("Requested Click")
-      this.$refs.examiner.requestExplanation()
-    },
-    predictionReceived() {
-      console.log("Received Prediction")
     }
   },
   data() {
@@ -56,9 +48,6 @@ export default {
   },
   created() {
     document.title = "Visual Inspection – XAI Demonstrator"
-  },
-  mounted() {
-    this.$refs.inspector.predict(0)
   }
 }
 </script>
