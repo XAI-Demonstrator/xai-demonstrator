@@ -57,7 +57,7 @@ export default {
 </script>
 <style scoped>
 .explanation-container {
-  border: 1px solid #77A6F7;
+  border: 1px solid #D3E3FC;
   padding: 0px 5px 5px;
 }
 
