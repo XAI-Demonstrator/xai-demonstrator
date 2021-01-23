@@ -49,8 +49,7 @@ export default {
     rescaleScores(explanation) {
       const factor = this.getScalingFactor(explanation)
       return explanation.map(function (pair) {
-        pair.score = pair.score * factor
-        return pair
+        return {word: pair.word, score: pair.score * factor}
       })
     },
     getScalingFactor(explanation) {
