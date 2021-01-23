@@ -1,3 +1,26 @@
+<!--
+MIT License
+
+Copyright (c) 2019-2020 Norserium
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-->
 <script>
 import classnames from 'classnames';
 import bem from 'easy-bem';
@@ -106,6 +129,13 @@ export default {
       internalExplanationMode: false,
     };
   },
+  watch: {
+    explanationMode: function (newVal) {
+      if (newVal) {
+        this.internalExplanationMode = true;
+      }
+    }
+  },
   computed: {
     classes() {
       return {
@@ -131,12 +161,21 @@ export default {
       }
       return style;
     },
+    explanationStyle() {
+      return {
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        'background-image': 'url(' + this.explanationImg + ')',
+        'z-index': 0
+      }
+    }
   },
   methods: {
     onMove(moveEvent) {
       this.$emit('move', moveEvent);
-      // this.explanationMode = false;
       this.dragging = true;
+      this.internalExplanationMode = false;
     },
     onMoveEnd() {
       this.$emit('move-end');
@@ -144,8 +183,8 @@ export default {
     },
     onResize(resizeEvent) {
       this.$emit('resize', resizeEvent);
-      // this.explanationMode = false;
       this.dragging = true;
+      this.internalExplanationMode = false;
     },
     onResizeEnd() {
       this.$emit('resize-end');
@@ -179,16 +218,15 @@ export default {
     >
       <DraggableArea :movable="movable" @move="onMove" @move-end="onMoveEnd">
         <PreviewResult
-            v-if="!explanationMode"
             :img="img"
             :class="classes.preview"
             :transitions="transitions"
             :stencil-coordinates="stencilCoordinates"
         />
-        <div v-if="explanationMode"
-             v-bind:style="{position: 'absolute', width: '100%', height:'100%',
-             'background-image': 'url(' + explanationImg +')'}">&nbsp;</div>
+        <div v-show="internalExplanationMode" v-bind:style="explanationStyle">&nbsp;
+        </div>
       </DraggableArea>
+
     </BoundingBox>
   </div>
 </template>
