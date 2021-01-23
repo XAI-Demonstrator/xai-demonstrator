@@ -12,42 +12,46 @@
       <cropper ref="cropper" :src="img" @change="imageChanged"
                :min-width="50" :min-height="30"/>
     </div>
-    <p>{{ prediction }} </p>
+    <InspectImage ref="inspector"
+    v-on:inspectionCompleted="inspectionCompleted" />
+    <ExplainInspection ref="explainer" v-if="currentPrediction"
+    v-on:explanationRequested="explanationRequested"/>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
 import {Cropper} from 'vue-advanced-cropper';
 import 'vue-advanced-cropper/dist/style.css'
+import InspectImage from "@/components/InspectImage";
+import ExplainInspection from "@/components/ExplainInspection";
 
 export default {
   name: 'App',
-  components: {Cropper},
+  components: {Cropper, InspectImage, ExplainInspection},
   methods: {
     imageChanged({canvas}) {
-      this.prediction = null
-
-      const form = new FormData();
-      canvas.toBlob(blob => {
-        form.append('file', blob);
-
-        axios.post(this.backendUrl + '/predict', form)
-            .then(response => {
-              this.prediction = response.data.class_label
-            })
-      })
+      this.currentPrediction = false;
+      canvas.toBlob(this.$refs.inspector.predict)
+    },
+    inspectionCompleted() {
+      this.currentPrediction = true;
+    },
+    explanationRequested() {
+      this.$refs.cropper.getResult().canvas.toBlob(this.$refs.explainer.explain)
     }
   },
   data() {
     return {
-      prediction: null,
+      currentPrediction: false,
       backendUrl: process.env.VUE_APP_BACKEND_URL,
       img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Cute-dog-licking-lips.jpg/300px-Cute-dog-licking-lips.jpg'
     }
   },
   created() {
     document.title = "Visual Inspection – XAI Demonstrator"
+  },
+  mounted() {
+    this.$refs.cropper.refresh()
   }
 }
 </script>
