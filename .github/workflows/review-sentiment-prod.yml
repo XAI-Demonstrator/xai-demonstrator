@@ -1,0 +1,34 @@
+name: Production Deployment
+
+on:
+  workflow_run:
+    workflows:
+      - "Landing Page"
+      - "Review Sentiment"
+      - "Visual Inspection"
+    branches:
+      - master
+    types:
+      - completed
+  push:
+    branches:
+      - master
+    paths:
+      - 'deployment/test-deployment/**'
+      - '!deployment/test-deployment/**.md'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+        
+    - name: Deploy to Cloud Run
+      id: deploy
+      uses: google-github-actions/deploy-cloudrun@v0.2.0
+      with:
+        image: ghcr.io/xai-demonstrator/review-sentiment-service:latest
+        service: review-sentiment
+        credentials: ${{ secrets.GCP_TEST_SA_KEY }}
+
+    - name: Show Output
+      run: echo ${{ steps.deploy.outputs.url }}
