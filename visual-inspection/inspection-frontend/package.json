@@ -9,10 +9,12 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
+    "classnames": "^2.2.6",
+    "easy-bem": "^1.0.2",
     "core-js": "^3.8.3",
     "mint-ui": "^2.2.13",
     "vue": "^2.6.11",
-    "vue-advanced-cropper": "^0.20.1"
+    "vue-advanced-cropper": "0.20.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.5.11",
@@ -22,6 +24,8 @@
     "eslint": "^7.18.0",
     "eslint-plugin-vue": "^7.5.0",
     "miragejs": "^0.1.41",
+    "sass": "^1.32.5",
+    "sass-loader": "^10.1.1",
     "vue-template-compiler": "^2.6.11"
   },
   "eslintConfig": {
