@@ -3,5 +3,6 @@
 **/__pycache__
 **/node_modules
 **/dist
+**/.coverage
 
 ./inspection-backend/inspection/static
