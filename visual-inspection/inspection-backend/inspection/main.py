@@ -17,7 +17,7 @@ set_up_tracing(settings)
 
 
 class ExplanationRequest(BaseModel):
-    method: str = "lime"
+    method: str = settings.default_explainer
     settings: Dict[str, Union[StrictInt, StrictFloat, int, float, str]]
 
     @validator('method')
@@ -38,7 +38,7 @@ def predict_weather(file: UploadFile = File(...)) -> Prediction:
 
 @app.post("/explain")
 def explain_classification(file: UploadFile = File(...),
-                           method: str = Form("lime"),
+                           method: str = Form(settings.default_explainer),
                            exp_settings: Dict[str, Any] = Form({})) -> Explanation:
     request = ExplanationRequest(method=method,
                                  settings=exp_settings)
