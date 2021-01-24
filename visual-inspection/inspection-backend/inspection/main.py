@@ -1,37 +1,30 @@
-import base64
-import io
+from typing import Any, Dict, Union
 
-from fastapi import FastAPI, File, UploadFile
+from fastapi import FastAPI, File, Form, UploadFile
 from opentelemetry import trace
-from opentelemetry.exporter import jaeger
 from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
 from opentelemetry.sdk.trace import TracerProvider
+from pydantic import BaseModel, StrictFloat, StrictInt, validator
 
 from .config import settings
-from .explainer.explain import explain
+from .explainer.explain import EXPLAINERS, Explanation, explain
 from .model.predict import Prediction, predict
 from .routers import frontend
+from .tracing import set_up_tracing
 
 trace.set_tracer_provider(TracerProvider())
+set_up_tracing(settings)
 
-if settings.environment == "test":
-    from opentelemetry.sdk.trace.export import BatchExportSpanProcessor
 
-    jaeger_exporter = jaeger.JaegerSpanExporter(
-        service_name=settings.service_name,
-        agent_host_name=settings.agent_host_name,
-        agent_port=settings.agent_port,
-    )
+class ExplanationRequest(BaseModel):
+    method: str = "lime"
+    settings: Dict[str, Union[StrictInt, StrictFloat, int, float, str]]
 
-    trace.get_tracer_provider().add_span_processor(
-        BatchExportSpanProcessor(jaeger_exporter)
-    )
-else:
-    from opentelemetry.sdk.trace.export import SimpleExportSpanProcessor, ConsoleSpanExporter
-
-    trace.get_tracer_provider().add_span_processor(
-        SimpleExportSpanProcessor(ConsoleSpanExporter())
-    )
+    @validator('method')
+    def method_must_be_available(cls, v):
+        if v not in EXPLAINERS:
+            raise ValueError(f'{v} is not an available explanation method')
+        return v
 
 
 app = FastAPI()
@@ -40,24 +33,17 @@ app.include_router(frontend.router)
 
 @app.post("/predict")
 def predict_weather(file: UploadFile = File(...)) -> Prediction:
-    tracer = trace.get_tracer(__name__)
-    with tracer.start_as_current_span("classify-image"):
-        return predict(file.file)
+    return predict(file.file)
 
 
-# TODO: Define explanation request input and response content
 @app.post("/explain")
-def get_explanation(file: UploadFile = File(...)):
-    tracer = trace.get_tracer(__name__)
-    with tracer.start_as_current_span("explain-classification"):
-        exp_image = explain(file.file)
+def explain_classification(file: UploadFile = File(...),
+                           method: str = Form("lime"),
+                           exp_settings: Dict[str, Any] = Form({})) -> Explanation:
+    request = ExplanationRequest(method=method,
+                                 settings=exp_settings)
 
-    with tracer.start_as_current_span("prepare-explanation-response"):
-        buffered = io.BytesIO()
-        exp_image.save(buffered, format="png")
-        encoded_image_string = base64.b64encode(buffered.getvalue())
-
-    return {"image": bytes("data:image/png;base64,", encoding='utf-8') + encoded_image_string}
+    return explain(file.file, method=request.method, settings=request.settings)
 
 
 FastAPIInstrumentor.instrument_app(app)

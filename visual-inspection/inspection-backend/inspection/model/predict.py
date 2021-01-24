@@ -7,7 +7,7 @@ from PIL import Image
 from pydantic import BaseModel
 
 from .model import model
-
+from ..tracing import traced
 from opentelemetry import trace
 
 
@@ -18,26 +18,27 @@ class Prediction(BaseModel):
     class_label: str
 
 
-# cf. https://deeplizard.com/learn/video/OO4HD-1wRN8
-
+@traced
 def preprocess(img: Image) -> np.ndarray:
-    tracer = trace.get_tracer(__name__)
-    with tracer.start_as_current_span("preprocess-image") as span:
-        span.set_attribute("image.size", img.size)
-        img = img.resize((224, 224), Image.BICUBIC)
-        img_array = tf.keras.preprocessing.image.img_to_array(img)
-        img_array = np.expand_dims(img_array, axis=0)
-        img_array = img_array[:, :, :, :3]
-        return tf.keras.applications.mobilenet_v2.preprocess_input(img_array)
+    span = trace.get_current_span()
+    span.set_attribute("image.size", img.size)
+
+    # cf. https://deeplizard.com/learn/video/OO4HD-1wRN8
+    img = img.resize((224, 224), Image.BICUBIC)
+    img_array = tf.keras.preprocessing.image.img_to_array(img)
+    img_array = np.expand_dims(img_array, axis=0)
+    img_array = img_array[:, :, :, :3]
+    return tf.keras.applications.mobilenet_v2.preprocess_input(img_array)
 
 
+@traced
 def predict(image_file: IO[bytes],
             model_: tf.keras.Model = model) -> Prediction:
     input_img = Image.open(image_file)
     model_input = preprocess(input_img)
 
     tracer = trace.get_tracer(__name__)
-    with tracer.start_as_current_span("predict-class"):
+    with tracer.start_as_current_span("predict_class"):
         prediction = model_.predict(model_input)
 
         class_id = int(np.argmax(prediction))
