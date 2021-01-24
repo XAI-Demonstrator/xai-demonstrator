@@ -1,44 +1,53 @@
-from typing import IO, Tuple
+import base64
+import io
+import uuid
+from typing import Any, Dict, IO, Tuple, Union
 
 import numpy as np
+import tensorflow as tf
 from PIL import Image
-from lime import lime_image
 from opentelemetry import trace
-from skimage.segmentation import mark_boundaries
+from pydantic import BaseModel
 
+from .explainers.lime_ import lime_explanation
 from ..model.model import model
 from ..model.predict import preprocess
+from ..tracing import traced
 
-explainer = lime_image.LimeImageExplainer()
-
-
-def generate_output_image(raw_image: np.ndarray, size: Tuple[int, int]) -> Image:
-    tracer = trace.get_tracer(__name__)
-    with tracer.start_as_current_span("generate-output-image"):
-        exp_image = Image.fromarray((255 * raw_image).astype(np.uint8))
-        return exp_image.resize(size, Image.BICUBIC)
+EXPLAINERS = {
+    "lime": lime_explanation
+}
 
 
-def explain(image_file: IO[bytes]) -> Image:
+@traced
+def generate_output_image(raw_image: np.ndarray, size: Tuple[int, int]) -> bytes:
+    exp_image = Image.fromarray((255 * raw_image).astype(np.uint8))
+    exp_image = exp_image.resize(size, Image.BICUBIC)
+
+    buffered = io.BytesIO()
+    exp_image.save(buffered, format="png")
+    encoded_image_string = base64.b64encode(buffered.getvalue())
+
+    return bytes("data:image/png;base64,", encoding='utf-8') + encoded_image_string
+
+
+class Explanation(BaseModel):
+    explanation_id: uuid.UUID
+    image: bytes
+
+
+@traced
+def explain(image_file: IO[bytes], method: str, settings: Union[None, Dict[str, Any]] = None,
+            model_: tf.keras.models.Model = model) -> Explanation:
+    settings = settings or {}
+
     input_image = Image.open(image_file)
-
     explainer_input = preprocess(input_image)[0]
 
     tracer = trace.get_tracer(__name__)
-    with tracer.start_as_current_span("compute-explanation"):
-        explanation = explainer.explain_instance(explainer_input.astype('double'),
-                                                 model.predict,
-                                                 top_labels=5,
-                                                 hide_color=None,
-                                                 num_samples=100)
+    with tracer.start_as_current_span("compute-explanation") as span:
+        span.set_attribute('method', method)
+        raw_image = EXPLAINERS[method](explainer_input, model_, **settings)
 
-    with tracer.start_as_current_span("render-explanation"):
-        temp, mask = explanation.get_image_and_mask(
-            explanation.top_labels[0],
-            positive_only=False,
-            num_features=10,
-            hide_rest=False
-        )
-        raw_image = mark_boundaries(temp / 2 + 0.5, mask)
-
-    return generate_output_image(raw_image, input_image.size)
+    return Explanation(explanation_id=uuid.uuid4(),
+                       image=generate_output_image(raw_image, input_image.size))
