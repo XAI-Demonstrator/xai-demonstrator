@@ -27,12 +27,11 @@ export default {
 
       const form = new FormData();
       form.append('file', blob);
-      // form.append('method', this.method)
+      form.append('method', this.method)
 
       axios.post(this.backendUrl + '/explain', form)
           .then(response => {
             this.$emit('explanationReceived', response.data.image)
-            console.log(response.data.image)
             this.waitingForExplanation = false;
           })
     }
