@@ -4,5 +4,10 @@ aiofiles==0.6.0
 python-multipart==0.0.5
 lime==0.2.0.1
 
-tensorflow==2.4.0
+opentelemetry-api==0.17b0
+opentelemetry-sdk==0.17b0
+opentelemetry-instrumentation-fastapi==0.17b0
+opentelemetry-exporter-jaeger==0.17b0
+
+tensorflow-cpu==2.4.1
 Pillow==8.0.0
