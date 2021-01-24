@@ -10,8 +10,8 @@
     </mt-header>
     <div id="image-container">
       <cropper ref="cropper" :src="img" @change="imageChanged"
-               :min-width="50" :min-height="30"
-               :stencil-component="$options.components.ExplanationStencil"
+               :min-width="40" :min-height="25"
+               :stencil-component="ExplanationStencil"
                :stencil-props="{
                  'explanationMode': currentExplanation,
                  'explanationImg': explanation,
@@ -22,7 +22,6 @@
     <ExplainInspection ref="explainer" v-show="currentPrediction"
                        v-on:explanationRequested="explanationRequested"
                        v-on:explanationReceived="explanationReceived"/>
-    <ExplanationStencil/>
   </div>
 </template>
 
@@ -35,7 +34,7 @@ import ExplanationStencil from "@/components/ExplanationStencil";
 
 export default {
   name: 'App',
-  components: {Cropper, InspectImage, ExplainInspection, ExplanationStencil},
+  components: {Cropper, InspectImage, ExplainInspection},
   methods: {
     imageChanged({canvas}) {
       this.currentPrediction = false;
@@ -56,6 +55,7 @@ export default {
   },
   data() {
     return {
+      ExplanationStencil,
       currentPrediction: false,
       currentExplanation: false,
       explanation: null,
@@ -64,7 +64,7 @@ export default {
     }
   },
   created() {
-    document.title = "Visual Inspection – XAI Demonstrator"
+    document.title = "Visual Inspection – XAI Demonstrator";
   },
   mounted() {
     this.$refs.cropper.refresh()
