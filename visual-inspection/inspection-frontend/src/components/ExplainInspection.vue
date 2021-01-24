@@ -12,12 +12,6 @@ import axios from "axios";
 
 export default {
   name: "ExplainInspection",
-  props: {
-    method: {
-      type: String,
-      default: "lime"
-    }
-  },
   methods: {
     buttonClicked() {
       this.$emit('explanationRequested')
@@ -27,7 +21,6 @@ export default {
 
       const form = new FormData();
       form.append('file', blob);
-      form.append('method', this.method)
 
       axios.post(this.backendUrl + '/explain', form)
           .then(response => {

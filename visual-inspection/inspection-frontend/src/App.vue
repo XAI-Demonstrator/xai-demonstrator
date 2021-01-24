@@ -14,7 +14,7 @@
                :stencil-component="ExplanationStencil"
                :stencil-props="{
                  'explanationMode': currentExplanation,
-                 'explanationImg': explanation,
+                 'explanationImg': explanationImg,
                  'aspectRatio': 1.0}"/>
     </div>
     <InspectImage ref="inspector"
@@ -48,8 +48,8 @@ export default {
       this.currentExplanation = false;
       this.$refs.cropper.getResult().canvas.toBlob(this.$refs.explainer.explain)
     },
-    explanationReceived(explanation) {
-      this.explanation = explanation;
+    explanationReceived(explanationImg) {
+      this.explanationImg = explanationImg;
       this.currentExplanation = true;
     }
   },
@@ -58,7 +58,7 @@ export default {
       ExplanationStencil,
       currentPrediction: false,
       currentExplanation: false,
-      explanation: null,
+      explanationImg: null,
       backendUrl: process.env.VUE_APP_BACKEND_URL,
       img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Cute-dog-licking-lips.jpg/300px-Cute-dog-licking-lips.jpg'
     }
@@ -89,16 +89,6 @@ export default {
 
 .navigation-header {
   background-color: #77A6F7 !important;
-}
-
-.mint-indicator-wrapper {
-  background-color: #00887A !important;
-}
-
-.mint-spinner-snake {
-  border-top-color: #D3E3FC !important;
-  border-bottom-color: #D3E3FC !important;
-  border-left-color: #D3E3FC !important;
 }
 
 @media screen and (min-width: 450px) {
