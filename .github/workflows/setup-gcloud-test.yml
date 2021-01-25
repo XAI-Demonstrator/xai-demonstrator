@@ -30,8 +30,8 @@ jobs:
 
     - name: Build and Push Container
       run: |-
-        docker build gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}
-        docker push gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:latest
+        docker build -t gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }} example-app/
+        docker push gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
   
     - name: Deploy to Cloud Run
       id: deploy
