@@ -43,6 +43,7 @@ jobs:
             --set-env-vars NAME="Review-Sentiment" \
             --port 8000 \
             --memory "4Gi" \
+            --allow-unauthenticated
 
 
     - name: Show Output
