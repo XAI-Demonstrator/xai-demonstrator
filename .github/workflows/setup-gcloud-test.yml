@@ -35,13 +35,15 @@ jobs:
         docker push gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
   
     - name: Deploy to Cloud Run
-      id: deploy
-      uses: google-github-actions/deploy-cloudrun@v0.2.0
-      with:
-        service: ${{ env.SERVICE }}
-        image: gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
-        region: ${{ env.REGION }}
-        env_vars: PORT = 8000, MEMORY = 4Gi, MIN-INSTANCES = 0
+      run: |-
+          gcloud run deploy ${{ env.SERVICE }} \
+            --region ${{ env.REGION }} \
+            --image gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }} \
+            --platform managed \
+            --set-env-vars NAME="Review-Sentiment"
+            --port 8000
+            --memory "4Gi"
+
 
     - name: Show Output
       run: echo ${{ steps.deploy.outputs.url }}
