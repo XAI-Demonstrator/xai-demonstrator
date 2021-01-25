@@ -1,7 +1,7 @@
 <template>
   <div v-if="isActive">
     <mt-button type="primary" size="large" v-on:click="explanationRequested" v-if="!explanationResult"
-               class="my-button">Wie kommst du zu dieser Einschätzung?
+               class="request-button">Wie kommst du zu dieser Einschätzung?
     </mt-button>
     <div class="explanation-container" v-if="explanationResult">
       <p>Die Wörter deines Reviews tragen wie folgt zur Bewertung bei:</p>
@@ -65,7 +65,7 @@ export default {
   margin-top: 5px;
 }
 
-.my-button {
+.request-button {
   background-color: #77A6F7;
   border-radius: 0;
   font-size: 1em;
