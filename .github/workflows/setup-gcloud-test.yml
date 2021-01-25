@@ -32,6 +32,7 @@ jobs:
       run: |-
         docker pull ghcr.io/xai-demonstrator/review-sentiment-service:latest
         docker image ls
+        docker tag ghcr.io/xai-demonstrator/review-sentiment-service gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
         docker push gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
   
     - name: Deploy to Cloud Run
