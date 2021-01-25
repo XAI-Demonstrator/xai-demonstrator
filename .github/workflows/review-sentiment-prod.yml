@@ -15,15 +15,26 @@ on:
       - master
 
 jobs:
+  
+  build-and-push-to-gcr:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: RafikFarhad/push-to-gcr-github-action@v3.0.2
+        with:
+          gcloud_service_key: ${{ secrets.GCP_TEST_SA_KEY }}
+          registry: gcr.io
+          project_id: xai-demonstrator-test
+          image_name: review-sentiment
+  
   deploy:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
         
     - name: Deploy to Cloud Run
       id: deploy
       uses: google-github-actions/deploy-cloudrun@v0.2.0
       with:
-        image: ghcr.io/xai-demonstrator/review-sentiment-service:latest
+        image: gcr.io/xai-demonstrator-test/review-sentiment:latest
         service: review-sentiment
         credentials: ${{ secrets.GCP_TEST_SA_KEY }}
 
