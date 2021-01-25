@@ -42,6 +42,9 @@ jobs:
         service: ${{ env.SERVICE }}
         image: gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
         region: ${{ env.REGION }}
+        memory: 4Gi
+        port: 8000
+        min-instances: 0
 
     - name: Show Output
       run: echo ${{ steps.deploy.outputs.url }}
