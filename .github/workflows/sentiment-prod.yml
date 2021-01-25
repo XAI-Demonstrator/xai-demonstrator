@@ -46,3 +46,12 @@ jobs:
 
     - name: Show Output
       run: echo ${{ steps.deploy.outputs.url }}
+    
+    - name: Enable Public Access  
+      run: |-
+          gcloud run services add-iam-policy-binding review-sentiment \
+          --member allUsers \
+          --role roles/run.invoker \
+          --region ${{ env.REGION }} \
+          --platform managed \
+
