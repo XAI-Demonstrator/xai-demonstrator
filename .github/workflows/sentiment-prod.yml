@@ -44,10 +44,11 @@ jobs:
             --memory "4Gi" \
     
     - name: Allow Public Access
-      run: gcloud beta run services add-iam-policy-binding \
-            --region=europe-west3 \
-            --member=allUsers \
-            --role=roles/run.invoker review-sentiment \
+      run: |-
+          gcloud run services add-iam-policy-binding review-sentiment \
+            --member="allUsers" \
+            --role="roles/run.invoker"
+
 
 
     - name: Show Output
