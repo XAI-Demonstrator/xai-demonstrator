@@ -11,6 +11,7 @@ opentelemetry-api==0.17b0
 opentelemetry-sdk==0.17b0
 opentelemetry-instrumentation-fastapi==0.17b0
 opentelemetry-exporter-jaeger==0.17b0
+opentelemetry-exporter-google-cloud==0.16b1
 
 --find-links https://download.pytorch.org/whl/torch_stable.html
 torch==1.7.1+cpu

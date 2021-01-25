@@ -11,6 +11,7 @@ opentelemetry-api==0.17b0
 opentelemetry-sdk==0.17b0
 opentelemetry-instrumentation-fastapi==0.17b0
 opentelemetry-exporter-jaeger==0.17b0
+opentelemetry-exporter-google-cloud==0.16b1
 
 tensorflow-cpu==2.4.1
 Pillow==8.1.0

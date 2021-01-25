@@ -26,6 +26,14 @@ def set_up_tracing(settings: Settings):
         trace.get_tracer_provider().add_span_processor(
             SimpleExportSpanProcessor(ConsoleSpanExporter())
         )
+    elif settings.environment == "gcp":
+        from opentelemetry.exporter.cloud_trace import CloudTraceSpanExporter
+        from opentelemetry.sdk.trace.export import BatchExportSpanProcessor
+
+        cloud_trace_exporter = CloudTraceSpanExporter()
+        trace.get_tracer_provider().add_span_processor(
+            BatchExportSpanProcessor(cloud_trace_exporter)
+        )
 
 
 def traced(func: Union[Callable, None] = None,
