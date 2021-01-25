@@ -1,11 +1,19 @@
 from typing import Any, Dict, Optional
 
 from fastapi import FastAPI
+from opentelemetry import trace
+from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
+from opentelemetry.sdk.trace import TracerProvider
 from pydantic import BaseModel, validator
 
+from .config import settings
 from .explainer.explainer import EXPLAINERS, Explanation, explain
 from .model.predict import Prediction, predict
 from .routers import frontend
+from .tracing import set_up_tracing
+
+trace.set_tracer_provider(TracerProvider())
+set_up_tracing(settings)
 
 app = FastAPI()
 app.include_router(frontend.router)
@@ -23,8 +31,8 @@ class PredictionRequest(BaseModel):
 
 class ExplanationRequest(BaseModel):
     text: str
-    target: int = 4
-    method: str = "integrated_gradients"
+    target: int = settings.default_target
+    method: str = settings.default_explainer
     settings: Optional[Dict[str, Any]]
 
     @validator('text')
@@ -57,3 +65,6 @@ async def explain_sentiment(request: ExplanationRequest) -> Explanation:
                    target=request.target,
                    explainer=request.method,
                    settings=request.settings)
+
+
+FastAPIInstrumentor.instrument_app(app)

@@ -3,7 +3,7 @@ from typing import Tuple, Dict
 import numpy as np
 import torch
 from captum.attr import LayerGradientShap
-from transformers.modeling_bert import BertForSequenceClassification
+from transformers import BertForSequenceClassification
 
 
 # noinspection PyUnusedLocal
