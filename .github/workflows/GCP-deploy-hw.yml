@@ -14,7 +14,7 @@ jobs:
       id: deploy
       uses: google-github-actions/deploy-cloudrun@v0.2.0
       with:
-        image: gcr.io/cloudrun/hello
+        image: ghcr.io/xai-demonstrator/review-sentiment-service:latest
         service: hello-cloud-run
         credentials: ${{ secrets.GCP_TEST_SA_KEY }}
 
