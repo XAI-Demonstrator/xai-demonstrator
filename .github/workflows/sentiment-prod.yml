@@ -46,8 +46,9 @@ jobs:
     - name: Allow Public Access
       run: |-
           gcloud run services add-iam-policy-binding review-sentiment \
-            --member="allUsers" \
-            --role="roles/run.invoker"
+            --member allUsers \
+            --role roles/run.invoker \
+            --platform managed
 
 
 
