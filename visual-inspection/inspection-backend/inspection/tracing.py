@@ -34,7 +34,7 @@ def traced(func: Union[Callable, None] = None,
     attributes = attributes or {}
 
     def decorator_function(func_: Callable):
-        _label = label or func.__name__
+        _label = label or func_.__name__
 
         @wraps(func_)
         def with_tracer(*args, **kwargs):

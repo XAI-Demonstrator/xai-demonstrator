@@ -34,6 +34,11 @@ def preprocess(img: Image) -> np.ndarray:
 @traced
 def predict(image_file: IO[bytes],
             model_: tf.keras.Model = model) -> Prediction:
+    prediction_id = uuid.uuid4()
+
+    span = trace.get_current_span()
+    span.set_attribute("prediction.id", str(prediction_id))
+
     input_img = Image.open(image_file)
     model_input = preprocess(input_img)
 
@@ -44,6 +49,6 @@ def predict(image_file: IO[bytes],
         class_id = int(np.argmax(prediction))
         class_label = tf.keras.applications.mobilenet_v2.decode_predictions(prediction, top=1)[0][0][1]
 
-    return Prediction(prediction_id=uuid.uuid4(),
+    return Prediction(prediction_id=prediction_id,
                       class_id=class_id,
                       class_label=class_label)
