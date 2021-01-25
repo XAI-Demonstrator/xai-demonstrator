@@ -1,6 +1,6 @@
 <template>
   <div class="sentiment">
-    <mt-button type="primary" size="large" v-on:click="analysisRequested" v-if="!numOfStars" class="my-button">Wie viele
+    <mt-button type="primary" size="large" v-on:click="analysisRequested" v-if="!numOfStars" class="request-button">Wie viele
       Sterne sollte
       meine Bewertung
       erhalten?
@@ -75,7 +75,7 @@ export default {
   margin-left: 5px;
 }
 
-.my-button {
+.request-button {
   background-color: #77A6F7;
   border-radius: 0;
   font-size: 1em;
