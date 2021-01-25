@@ -11,7 +11,7 @@ jobs:
         name: Setup Gcloud Account
         runs-on: ubuntu-latest
         env:
-          IMAGE_NAME: gcr.io/${{ secrets.GCP_TEAT_PROJECT_ID }}/review-sentiment
+          IMAGE_NAME: gcr.io/${{ secrets.GCP_TEST_PROJECT_ID }}/review-sentiment
         steps:
 
         - name: Login
