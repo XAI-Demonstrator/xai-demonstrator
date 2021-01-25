@@ -16,20 +16,22 @@ on:
 
 jobs:
   
-  build-and-push-to-gcr:
+  build-image-and-push-to-gcr:
     runs-on: ubuntu-latest
     steps:
-      - uses: RafikFarhad/push-to-gcr-github-action@v3.0.2
-        with:
-          gcloud_service_key: ${{ secrets.GCP_TEST_SA_KEY }}
-          registry: gcr.io
-          project_id: xai-demonstrator-test
-          image_name: review-sentiment
-  
-  deploy:
+    - name: Build Image and Push to GCR
+      uses: raccoondev/push-docker-gcr@v1
+      with:
+        gcr_host: eu.gcr.io
+        image_name: review-sentiment
+        image_tag: latest
+      env:
+        GCLOUD_SERVICE_KEY: ${{ secrets.GCP_TEST_SA_KEY }}
+        GOOGLE_PROJECT_ID: ${{ secrets.GCP_TEST_PROJECT_ID }}
+    
+  deploy-to-cloudrun:
     runs-on: ubuntu-latest
     steps:
-        
     - name: Deploy to Cloud Run
       id: deploy
       uses: google-github-actions/deploy-cloudrun@v0.2.0
