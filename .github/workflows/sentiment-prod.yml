@@ -41,17 +41,9 @@ jobs:
             --image gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }} \
             --platform managed \
             --port 8000 \
-            --memory "4Gi" \
-            --allow-unauthenticated \
+            --memory "4Gi" 
 
     - name: Show Output
       run: echo ${{ steps.deploy.outputs.url }}
-    
-    - name: Enable Public Access  
-      run: |-
-          gcloud run services add-iam-policy-binding review-sentiment \
-          --member allUsers \
-          --role roles/run.invoker \
-          --region ${{ env.REGION }} \
-          --platform managed \
+
 
