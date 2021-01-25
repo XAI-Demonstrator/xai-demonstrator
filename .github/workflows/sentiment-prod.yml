@@ -48,7 +48,8 @@ jobs:
           gcloud run services add-iam-policy-binding review-sentiment \
             --member allUsers \
             --role roles/run.invoker \
-            --platform managed
+            --platform managed \
+            --region ${{ env.REGION }}
 
 
 
