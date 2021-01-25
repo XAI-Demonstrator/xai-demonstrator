@@ -41,7 +41,8 @@ jobs:
             --image gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }} \
             --platform managed \
             --port 8000 \
-            --memory "4Gi" 
+            --memory "4Gi" \
+            --update-env-vars ENVIRONMENT=gcp
 
     - name: Show Output
       run: echo ${{ steps.deploy.outputs.url }}
