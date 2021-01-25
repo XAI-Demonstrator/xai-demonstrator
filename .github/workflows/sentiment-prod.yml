@@ -42,16 +42,7 @@ jobs:
             --platform managed \
             --port 8000 \
             --memory "4Gi" \
-    
-    - name: Allow Public Access
-      run: |-
-          gcloud run services add-iam-policy-binding review-sentiment \
-            --member allUsers \
-            --role roles/run.invoker \
-            --platform managed \
-            --region ${{ env.REGION }}
-
-
+            --allow-unauthenticated \
 
     - name: Show Output
       run: echo ${{ steps.deploy.outputs.url }}
