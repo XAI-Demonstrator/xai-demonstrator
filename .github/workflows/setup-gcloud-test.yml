@@ -31,7 +31,6 @@ jobs:
     - name: Build and Push Container
       run: |-
         docker pull ghcr.io/xai-demonstrator/review-sentiment-service:latest
-        docker image ls
         docker tag ghcr.io/xai-demonstrator/review-sentiment-service gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
         docker push gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
   
@@ -42,9 +41,7 @@ jobs:
         service: ${{ env.SERVICE }}
         image: gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
         region: ${{ env.REGION }}
-        memory: 4Gi
-        port: 8000
-        min-instances: 0
+        env_vars: PORT = 8000, MEMORY = 4Gi, MIN-INSTANCES = 0
 
     - name: Show Output
       run: echo ${{ steps.deploy.outputs.url }}
