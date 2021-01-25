@@ -1,10 +1,16 @@
+wheel
 numpy
 
 fastapi==0.63.0
 uvicorn==0.13.3
 aiofiles==0.6.0
-transformers==4.2.1
-captum==0.3.0
+transformers==4.2.2
+captum==0.3.1
+
+opentelemetry-api==0.17b0
+opentelemetry-sdk==0.17b0
+opentelemetry-instrumentation-fastapi==0.17b0
+opentelemetry-exporter-jaeger==0.17b0
 
 --find-links https://download.pytorch.org/whl/torch_stable.html
 torch==1.7.1+cpu

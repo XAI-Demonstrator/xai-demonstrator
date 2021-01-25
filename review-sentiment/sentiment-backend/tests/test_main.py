@@ -42,7 +42,7 @@ def test_that_sentiment_is_explained_with_custom_target():
 @pytest.mark.integration
 def test_that_sentiment_is_explained_with_custom_explainer():
     test_str = "This is a very good review."
-    test_dict = {"text": test_str, "method": "random"}
+    test_dict = {"text": test_str, "method": "random_words"}
     response = client.post('/explain', json=test_dict)
     response_dict = response.json()
 

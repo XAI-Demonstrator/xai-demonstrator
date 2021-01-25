@@ -5,8 +5,11 @@ import torch
 from captum.attr import ShapleyValueSampling
 from transformers import BertForSequenceClassification
 
+from ...tracing import traced
+
 
 # noinspection PyUnusedLocal
+@traced(label="attribute", attributes={"explanation.method": "sampled_shapley_values"})
 def attribute_sampled_shapley_values(text_input_ids: torch.Tensor,
                                      target: int,
                                      model: BertForSequenceClassification,

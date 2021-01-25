@@ -23,7 +23,7 @@ def test_that_random_scores_are_generated():
 def test_random_explainer():
     text = "This movie was boring :-("
 
-    result = explainer.explain(text=text, target=4, explainer="random")
+    result = explainer.explain(text=text, target=4, explainer="random_words")
 
     assert len(result.explanation) == 7
     assert result.explanation[0][0] == "This"

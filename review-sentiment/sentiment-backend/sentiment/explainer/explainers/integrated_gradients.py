@@ -1,12 +1,15 @@
-from typing import Tuple, Dict
+from typing import Dict, Tuple
 
 import numpy as np
 import torch
 from captum.attr import LayerIntegratedGradients
 from transformers import BertForSequenceClassification
 
+from ...tracing import traced
+
 
 # noinspection PyUnusedLocal
+@traced(label="attribute", attributes={"explanation.method": "integrated_gradients"})
 def attribute_integrated_gradients(text_input_ids: torch.Tensor,
                                    ref_input_ids: torch.Tensor,
                                    target: int,

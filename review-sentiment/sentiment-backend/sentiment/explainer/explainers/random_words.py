@@ -3,8 +3,11 @@ from typing import Tuple
 import numpy as np
 import torch
 
+from ...tracing import traced
+
 
 # noinspection PyUnusedLocal
+@traced(label="attribute", attributes={"explanation.method": "random_words"})
 def attribute_random_words(text_input_ids: torch.Tensor, **kwargs) -> Tuple[np.ndarray, None]:
     num_of_tokens = text_input_ids.shape[1]
 
