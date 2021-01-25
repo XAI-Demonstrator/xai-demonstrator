@@ -20,10 +20,10 @@ class ExplanationRequest(BaseModel):
     method: str = settings.default_explainer
     settings: Dict[str, Union[StrictInt, StrictFloat, int, float, str]]
 
-    @validator('method')
+    @validator("method")
     def method_must_be_available(cls, v):
         if v not in EXPLAINERS:
-            raise ValueError(f'{v} is not an available explanation method')
+            raise ValueError(f"{v} is not an available explanation method")
         return v
 
 

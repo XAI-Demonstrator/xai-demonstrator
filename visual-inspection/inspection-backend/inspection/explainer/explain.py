@@ -20,7 +20,8 @@ EXPLAINERS = {
 
 
 @traced
-def generate_output_image(raw_image: np.ndarray, size: Tuple[int, int]) -> bytes:
+def generate_output_image(raw_image: np.ndarray,
+                          size: Tuple[int, int]) -> bytes:
     exp_image = Image.fromarray((255 * raw_image).astype(np.uint8))
     exp_image = exp_image.resize(size, Image.BICUBIC)
 
@@ -28,7 +29,7 @@ def generate_output_image(raw_image: np.ndarray, size: Tuple[int, int]) -> bytes
     exp_image.save(buffered, format="png")
     encoded_image_string = base64.b64encode(buffered.getvalue())
 
-    return bytes("data:image/png;base64,", encoding='utf-8') + encoded_image_string
+    return bytes("data:image/png;base64,", encoding="utf-8") + encoded_image_string
 
 
 class Explanation(BaseModel):
@@ -37,17 +38,21 @@ class Explanation(BaseModel):
 
 
 @traced
-def explain(image_file: IO[bytes], method: str, settings: Union[None, Dict[str, Any]] = None,
+def explain(image_file: IO[bytes],
+            method: str,
+            settings: Union[None, Dict[str, Any]] = None,
             model_: tf.keras.models.Model = model) -> Explanation:
     settings = settings or {}
+    explanation_id = uuid.uuid4()
+
+    span = trace.get_current_span()
+    span.set_attribute("explanation.id", str(explanation_id))
+    span.set_attribute("explanation.method", method)
 
     input_image = Image.open(image_file)
     explainer_input = preprocess(input_image)[0]
 
-    tracer = trace.get_tracer(__name__)
-    with tracer.start_as_current_span("compute-explanation") as span:
-        span.set_attribute('method', method)
-        raw_image = EXPLAINERS[method](explainer_input, model_, **settings)
+    raw_image = EXPLAINERS[method](explainer_input, model_, **settings)
 
-    return Explanation(explanation_id=uuid.uuid4(),
+    return Explanation(explanation_id=explanation_id,
                        image=generate_output_image(raw_image, input_image.size))
