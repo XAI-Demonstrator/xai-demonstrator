@@ -40,9 +40,9 @@ jobs:
             --region ${{ env.REGION }} \
             --image gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }} \
             --platform managed \
-            --set-env-vars NAME="Review-Sentiment"
-            --port 8000
-            --memory "4Gi"
+            --set-env-vars NAME="Review-Sentiment" \
+            --port 8000 \
+            --memory "4Gi" \
 
 
     - name: Show Output
