@@ -30,7 +30,8 @@ jobs:
 
     - name: Build and Push Container
       run: |-
-        docker build .
+        docker pull ghcr.io/xai-demonstrator/review-sentiment-service:latest
+        docker ls
         docker push gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
   
     - name: Deploy to Cloud Run
