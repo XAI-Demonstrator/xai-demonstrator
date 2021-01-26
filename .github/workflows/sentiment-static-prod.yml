@@ -1,0 +1,32 @@
+name: Build Static Frontend and Push to Cloud Storage
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code 
+        uses: actions/checkout@master
+      
+      - name: Set Up Node Environment
+        uses: actions/setup-node@master
+        
+      - name: Installing project dependencies
+        run: npm install
+        
+      - name: Building the project
+        run: |-
+            cd ./review-sentiment/sentiment-frontend/
+            npm run build
+        
+      - name: Pushing Files to Cloud Storage
+        id: upload-file
+        uses: google-github-actions/upload-cloud-storage@v0.2.0
+        with:
+          credentials: ${{ secrets.GCP_TEST_SA_KEY }}
+          path: dist
+          destination: sentiment-frontend/
