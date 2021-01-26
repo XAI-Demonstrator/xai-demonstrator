@@ -23,12 +23,6 @@ jobs:
             cd ${{ env.FRONTEND_PATH }}
             npm install
             npm run build
-            ls
-        
-      - name: Orientation
-        run: |
-          pwd
-          ls
       
       - name: Pushing Files to Cloud Storage
         id: upload-file
