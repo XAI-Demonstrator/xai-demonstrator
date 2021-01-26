@@ -82,9 +82,12 @@ def explain(text: str,
     span.set_attribute("explanation.id", str(explanation_id))
     span.set_attribute("explanation.method", explainer)
 
-    encoding = bert_.tokenizer.encode_plus(text, add_special_tokens=False)
+    encoded_text = bert_.tokenizer.encode_plus(text, add_special_tokens=False)
 
-    text_input_ids, ref_input_ids = construct_input_and_reference(encoding["input_ids"],
+    span.set_attribute("text.length", len(text))
+    span.set_attribute("text.tokens", len(encoded_text["input_ids"]))
+
+    text_input_ids, ref_input_ids = construct_input_and_reference(encoded_text["input_ids"],
                                                                   ref_token_id=bert_.tokenizer.pad_token_id)
 
     scores, meta = EXPLAINERS[explainer](
@@ -95,7 +98,7 @@ def explain(text: str,
         settings=settings)
 
     explanation = filter_attributions(align_text(text=text,
-                                                 word_ids=np.array(encoding.word_ids()),
+                                                 word_ids=np.array(encoded_text.word_ids()),
                                                  scores=scores))
 
     return Explanation(explanation_id=explanation_id,
