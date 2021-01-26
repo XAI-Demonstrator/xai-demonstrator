@@ -37,8 +37,11 @@ def predict(text: str,
     span = trace.get_current_span()
     span.set_attribute("prediction.id", str(prediction_id))
 
-    model_input = torch.tensor([bert_.tokenizer.encode(text, add_special_tokens=False)],
-                               dtype=torch.int64, device=my_device)
+    tokens = bert_.tokenizer.encode(text, add_special_tokens=False)
+    span.set_attribute("text.length", len(text))
+    span.set_attribute("text.tokens", len(tokens))
+
+    model_input = torch.tensor([tokens], dtype=torch.int64, device=my_device)
     model_output = bert_.model(model_input)
     prediction = torch.softmax(model_output[0], dim=1)
 
