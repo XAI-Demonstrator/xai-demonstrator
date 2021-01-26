@@ -21,11 +21,6 @@ on:
   schedule:
     - cron: '26 9 * * 6'
 
-
-on:
-  push:
-
-
 jobs:
   analyze:
     name: Analyze
