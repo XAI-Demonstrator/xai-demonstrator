@@ -1,9 +1,13 @@
 name: Move Sentiment Service to CloudRun
 
 on:
-  push:
+  workflow_run:
+    workflows:
+      - "Review Sentiment"
     branches:
       - master
+    types:
+      - completed
 
 
 env:
