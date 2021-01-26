@@ -1,6 +1,7 @@
 <template>
   <div class="sentiment">
-    <mt-button type="primary" size="large" v-on:click="analysisRequested" v-if="!numOfStars" class="request-button">Wie viele
+    <mt-button type="primary" size="large" v-on:click="requestAnalysis" v-if="!numOfStars" class="request-button">Wie
+      viele
       Sterne sollte
       meine Bewertung
       erhalten?
@@ -30,7 +31,7 @@ export default {
     }
   },
   methods: {
-    analysisRequested() {
+    requestAnalysis() {
       Indicator.open()
 
       this.resetComponent()

@@ -1,6 +1,6 @@
 <template>
   <div v-if="isActive">
-    <mt-button type="primary" size="large" v-on:click="explanationRequested" v-if="!explanationResult"
+    <mt-button type="primary" size="large" v-on:click="requestExplanation" v-if="!explanationResult"
                class="request-button">Wie kommst du zu dieser Einschätzung?
     </mt-button>
     <div class="explanation-container" v-if="explanationResult">
@@ -31,7 +31,7 @@ export default {
     "reviewText"
   ],
   methods: {
-    explanationRequested() {
+    requestExplanation() {
       Indicator.open()
 
       this.resetComponent()

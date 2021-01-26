@@ -93,7 +93,6 @@ jobs:
           set -e
           cd ./review-sentiment/sentiment-frontend
           echo $PWD
-          export COVERALLS_SERVICE_JOB_NUMBER="${RANDOM}${RANDOM}"
           npm install coveralls
           cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
 
