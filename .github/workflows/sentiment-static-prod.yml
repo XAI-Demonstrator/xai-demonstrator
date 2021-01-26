@@ -3,7 +3,7 @@ name: Build Static Frontend and Push to Cloud Storage
 on:
   push:
     branches:
-      - master
+      - p_branch
 
 jobs:
   deploy:
