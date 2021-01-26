@@ -20,6 +20,7 @@ jobs:
             cd ./review-sentiment/sentiment-frontend/
             npm install
             npm run build
+            ls
         
         
       - name: Pushing Files to Cloud Storage
