@@ -2,9 +2,9 @@ name: Review Sentiment
 
 on:
   push:
-    paths:
-      - 'review-sentiment/**'
-      - '!review-sentiment/**.md'
+#    paths:
+#      - 'review-sentiment/**'
+#      - '!review-sentiment/**.md'
 
 jobs:
   test-backend:
@@ -93,7 +93,7 @@ jobs:
           cd ./review-sentiment/sentiment-frontend
           echo $PWD
           npm install coveralls
-          coveralls.js < coverage/lcov.info
+          cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
 
   build:
     runs-on: ubuntu-latest
