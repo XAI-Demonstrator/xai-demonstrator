@@ -14,8 +14,17 @@ name: "CodeQL"
 on:
   push:
     branches: [ master ]
+    paths:
+      - '**.py'
+      - '**.js'
+      - '**.vue'
   schedule:
     - cron: '26 9 * * 6'
+
+
+on:
+  push:
+
 
 jobs:
   analyze:
