@@ -218,7 +218,7 @@ export default {
         @resize="onResize"
         @resize-end="onResizeEnd"
     >
-      <DraggableArea :movable="movable" @move="onMove" @move-end="onMoveEnd">
+      <DraggableArea ref="draggable" :movable="movable" @move="onMove" @move-end="onMoveEnd">
         <PreviewResult
             :img="img"
             :class="classes.preview"

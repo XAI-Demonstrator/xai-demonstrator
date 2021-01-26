@@ -8,16 +8,29 @@
         <mt-button><span style="font-size: 16px; font-weight:bold;">↻</span></mt-button>
       </a>
     </mt-header>
+    <p>Wähle einen Bildausschnitt und frage die KI nach dem Wetter:</p>
     <div id="image-container">
-      <cropper ref="cropper" :src="img" @change="imageChanged"
+      <Cropper ref="cropper" :src="img" @change="imageChanged"
                :min-width="40" :min-height="25"
                :stencil-component="ExplanationStencil"
                :stencil-props="{
                  'explanationMode': currentExplanation,
                  'explanationImg': explanationImg,
-                 'aspectRatio': 1.0}"/>
+                 'aspectRatio': 1.0,
+                 'handlers': {
+                    eastNorth: true,
+                    north: false,
+                    westNorth: true,
+                    west: false,
+                    westSouth: true,
+                    south: false,
+                    eastSouth: true,
+                    east: false
+                 }
+               }"/>
     </div>
     <InspectImage ref="inspector"
+                  :current-prediction="currentPrediction"
                   v-on:inspectionCompleted="inspectionCompleted"/>
     <ExplainInspection ref="explainer" v-show="currentPrediction"
                        v-on:explanationRequested="explanationRequested"
@@ -60,7 +73,7 @@ export default {
       currentExplanation: false,
       explanationImg: null,
       backendUrl: process.env.VUE_APP_BACKEND_URL,
-      img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Cute-dog-licking-lips.jpg/300px-Cute-dog-licking-lips.jpg'
+      img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/El_Guamache_Bay%2C_Margarita_island.jpg/300px-El_Guamache_Bay%2C_Margarita_island.jpg'
     }
   },
   created() {
@@ -82,9 +95,7 @@ export default {
 }
 
 #image-container {
-  height: 70vh;
   max-height: 400px;
-  margin-bottom: 10px;
 }
 
 .navigation-header {

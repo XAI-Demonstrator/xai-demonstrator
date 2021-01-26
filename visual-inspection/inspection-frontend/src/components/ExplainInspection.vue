@@ -1,7 +1,10 @@
 <template>
   <div class="explainer">
     <div class="explanation-request">
-      <mt-button class="request-button" v-on:click="buttonClicked">Woran erkennst du das?</mt-button>
+      <mt-button class="request-button"
+                 v-show="!waitingForExplanation"
+                 v-on:click="buttonClicked">„Woran erkennst du das?“
+      </mt-button>
       <mt-spinner v-if="waitingForExplanation" type="triple-bounce"/>
     </div>
   </div>
@@ -47,11 +50,9 @@ export default {
 }
 
 .explanation-request {
-  border: 1px solid #D3E3FC;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  height: 100%;
+  justify-content: center;
   padding: 5px 10px;
 }
 
@@ -60,7 +61,7 @@ export default {
   border-radius: 0;
   font-size: 1em;
   font-weight: normal;
-  height: auto;
-  padding: 10px;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 </style>

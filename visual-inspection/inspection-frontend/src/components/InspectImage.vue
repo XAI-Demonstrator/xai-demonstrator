@@ -1,8 +1,11 @@
 <template>
   <div class="inspector">
     <div class="inspection-result">
-      <p>Das ist ein/e {{ prediction }}</p>
-      <mt-spinner v-if="!prediction" type="triple-bounce"></mt-spinner>
+      <p>
+        <mt-spinner v-if="!prediction" type="triple-bounce"></mt-spinner>
+        <span v-show="prediction && currentPrediction">„Das ist ein/e {{ prediction }}“</span>
+      </p>
+
     </div>
   </div>
 </template>
@@ -12,6 +15,12 @@ import axios from 'axios'
 
 export default {
   name: "InspectImage",
+  props: {
+    currentPrediction: {
+      type: Boolean,
+      value: false
+    }
+  },
   methods: {
     predict(blob) {
       this.prediction = null;
@@ -36,7 +45,6 @@ export default {
 </script>
 
 <style scoped>
-
 .inspector {
   width: 100%;
   margin-top: 5px;
@@ -44,12 +52,11 @@ export default {
 }
 
 .inspection-result {
-  border: 1px solid #D3E3FC;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   height: 100%;
-  padding-left: 10px;
+  padding-left: 5px;
   padding-right: 5px;
 }
 </style>
