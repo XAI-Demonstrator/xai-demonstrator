@@ -66,7 +66,6 @@ export default {
     analysisRequested() {
       this.$refs.explainer.resetComponent()
       this.numberOfStars = null
-
     },
 
     analysisCompleted(value) {

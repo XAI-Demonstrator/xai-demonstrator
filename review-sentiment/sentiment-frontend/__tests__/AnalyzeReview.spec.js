@@ -24,8 +24,8 @@ describe('Component', () => {
         const response = {
             data: {
                 prediction: [
-                    0.5,
                     0.1,
+                    0.5,
                     0.1,
                     0.1,
                     0.2
@@ -37,7 +37,7 @@ describe('Component', () => {
         wrapper.vm.requestAnalysis()
         await flushPromises()
 
-        expect(wrapper.vm.$data.numOfStars).toBe(1)
+        expect(wrapper.vm.$data.numOfStars).toBe(2)
     })
 
 })
