@@ -15,13 +15,12 @@ jobs:
       - name: Set Up Node Environment
         uses: actions/setup-node@master
         
-      - name: Installing project dependencies
-        run: npm install
-        
-      - name: Building the project
-        run: |-
+      - name: Build Frontend
+        run: | 
             cd ./review-sentiment/sentiment-frontend/
+            npm install
             npm run build
+        
         
       - name: Pushing Files to Cloud Storage
         id: upload-file
