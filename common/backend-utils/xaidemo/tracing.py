@@ -3,13 +3,10 @@ from typing import Any, Callable, Dict, Union
 
 from fastapi import FastAPI
 from opentelemetry import trace
-from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.exporter import jaeger
 from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
+from opentelemetry.sdk.trace import TracerProvider
 from pydantic import BaseSettings
-
-
-print(__file__, type(__file__))
 
 trace.set_tracer_provider(TracerProvider())
 

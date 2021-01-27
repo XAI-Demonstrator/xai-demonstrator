@@ -3,15 +3,13 @@ import pathlib
 from fastapi import APIRouter
 from fastapi.responses import FileResponse
 
-__all__ = ["vue_frontend"]
-
 
 def vue_frontend(main___file__: str) -> APIRouter:
     router = APIRouter()
 
     @router.get("/")
     def get_frontend():
-        return FileResponse(pathlib.Path(main___file__) / "static" / "index.html")
+        return FileResponse(pathlib.Path(main___file__).parent / "static" / "index.html")
 
     @router.get("/favicon.ico")
     def get_favicon():
