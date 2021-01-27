@@ -22,7 +22,7 @@ jobs:
         run: | 
             cd ${{ env.FRONTEND_PATH }}
             npm install
-            npm run build --mode prod-deployment
+            npm run build --mode .env.prod-deployment
       
       - name: Pushing Files to Cloud Storage
         id: upload-file
