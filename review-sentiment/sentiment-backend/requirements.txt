@@ -4,7 +4,6 @@ pydantic
 
 fastapi==0.63.0
 uvicorn==0.13.3
-aiofiles==0.6.0
 transformers==4.2.2
 captum==0.3.1
 
@@ -13,4 +12,4 @@ opentelemetry-api
 --find-links https://download.pytorch.org/whl/torch_stable.html
 torch==1.7.1+cpu
 
-git+https://github.com/xai-demonstrator/xai-demonstrator.git@428ded17567c941e0ed07e5a8b386cceb17bba5a#"egg=xaidemo&subdirectory=common/backend-utils"
+git+https://github.com/xai-demonstrator/xai-demonstrator.git@58d9e4cceb0add85fbaa79341f5719e82b02b48e#"egg=xaidemo&subdirectory=common/backend-utils"
