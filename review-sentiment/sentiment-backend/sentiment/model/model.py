@@ -3,8 +3,7 @@ import pathlib
 import torch
 from transformers import AutoModelForSequenceClassification, AutoTokenizer, BertForSequenceClassification, \
     BertTokenizerFast
-
-from ..tracing import traced
+from xaidemo.tracing import traced
 
 PATH = pathlib.Path(__file__).parent
 my_device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")

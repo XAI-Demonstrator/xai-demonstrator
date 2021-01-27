@@ -5,9 +5,9 @@ from typing import List
 import torch
 from opentelemetry import trace
 from pydantic import BaseModel, validator
+from xaidemo.tracing import traced
 
 from .model import BertManager, bert
-from ..tracing import traced
 
 my_device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 

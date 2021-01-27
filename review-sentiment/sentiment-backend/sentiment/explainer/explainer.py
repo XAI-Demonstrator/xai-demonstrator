@@ -8,12 +8,12 @@ import numpy as np
 import torch
 from opentelemetry import trace
 from pydantic import BaseModel
+from xaidemo.tracing import traced
 
 from .explainers.integrated_gradients import attribute_integrated_gradients
 from .explainers.random_words import attribute_random_words
 from .explainers.shapley_value_sampling import attribute_sampled_shapley_values
 from ..model.model import BertManager, bert
-from ..tracing import traced
 
 PATH = pathlib.Path(__file__).parent
 
