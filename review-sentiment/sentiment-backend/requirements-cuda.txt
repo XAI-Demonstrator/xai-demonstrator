@@ -6,10 +6,9 @@ aiofiles==0.6.0
 transformers==4.2.2
 captum==0.3.1
 
-opentelemetry-api==0.17b0
-opentelemetry-sdk==0.17b0
-opentelemetry-instrumentation-fastapi==0.17b0
-opentelemetry-exporter-jaeger==0.17b0
+opentelemetry-api
 
 --find-links https://download.pytorch.org/whl/cu100/torch_stable.html
 torch==1.4.0
+
+git+https://github.com/xai-demonstrator/xai-demonstrator.git@428ded17567c941e0ed07e5a8b386cceb17bba5a#"egg=xaidemo&subdirectory=common/backend-utils"

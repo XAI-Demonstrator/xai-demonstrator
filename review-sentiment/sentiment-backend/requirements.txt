@@ -13,4 +13,4 @@ opentelemetry-api
 --find-links https://download.pytorch.org/whl/torch_stable.html
 torch==1.7.1+cpu
 
-git+https://github.com/xai-demonstrator/xai-demonstrator.git@9ee76a86b7866f3fbb950a572adaa5896bfb1cf0#"egg=xaidemo&subdirectory=common/backend-utils"
+git+https://github.com/xai-demonstrator/xai-demonstrator.git@428ded17567c941e0ed07e5a8b386cceb17bba5a#"egg=xaidemo&subdirectory=common/backend-utils"
