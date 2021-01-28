@@ -1,4 +1,4 @@
-name: Build Static Frontend and Push to Cloud Storage
+name: Prod Deployment sentiment-frontend
 
 on:
   push:
