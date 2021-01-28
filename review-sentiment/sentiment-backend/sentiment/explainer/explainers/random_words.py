@@ -2,8 +2,7 @@ from typing import Tuple
 
 import numpy as np
 import torch
-
-from ...tracing import traced
+from xaidemo.tracing import traced
 
 
 # noinspection PyUnusedLocal

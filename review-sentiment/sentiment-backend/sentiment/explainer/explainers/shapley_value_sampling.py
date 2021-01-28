@@ -4,8 +4,7 @@ import numpy as np
 import torch
 from captum.attr import ShapleyValueSampling
 from transformers import BertForSequenceClassification
-
-from ...tracing import traced
+from xaidemo.tracing import traced
 
 
 # noinspection PyUnusedLocal

@@ -7,14 +7,14 @@ client = TestClient(main.app)
 
 
 @pytest.mark.integration
-def test_prediction(generate_image):
+def test_that_prediction_succeeds(generate_image):
     response = client.post("/predict", files={"file": generate_image(200, 300)})
 
     assert response.status_code == 200
 
 
 @pytest.mark.integration
-def test_explanation(generate_image):
+def test_that_explanation_succeeds(generate_image):
     r = client.post("/explain", files={"file": generate_image(110, 224)})
 
     assert r.status_code == 200
@@ -46,3 +46,13 @@ def test_explanation_request_parses_numeric_values():
     assert r.settings["proper_int"] == 10
     assert isinstance(r.settings["proper_float"], float)
     assert r.settings["proper_float"] == 2.5
+
+
+def test_that_only_available_explainers_are_accepted(mocker, generate_image):
+    mocker.patch.object(main, 'EXPLAINERS', ["existing"])
+
+    response = client.post('/explain',
+                           files={"file": generate_image(110, 224)},
+                           data={"method": "unavailable"})
+
+    assert response.status_code == 422

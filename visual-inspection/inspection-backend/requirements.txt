@@ -7,10 +7,9 @@ aiofiles==0.6.0
 python-multipart==0.0.5
 lime==0.2.0.1
 
-opentelemetry-api==0.17b0
-opentelemetry-sdk==0.17b0
-opentelemetry-instrumentation-fastapi==0.17b0
-opentelemetry-exporter-jaeger==0.17b0
+opentelemetry-api
 
 tensorflow-cpu==2.4.1
 Pillow==8.1.0
+
+git+https://github.com/xai-demonstrator/xai-demonstrator.git@3e428f38f6cbdcec8321c3f78ba6755166c61b25#egg=xaidemo&subdirectory=common/backend-utils

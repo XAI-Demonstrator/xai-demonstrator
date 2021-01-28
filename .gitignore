@@ -1,11 +1,21 @@
-__pycache__
+# Python and dev tool files and folders
+__pycache__/
 .pytest_cache/
+.mypy-cache/
 .ipynb_checkpoints/
+.coverage
+htmlcov/
+node_modules/
 .idea/
 .DS_STORE
 
+# Binary files and archives
+*.tar
+*.tar.gz
+*.zip
+*.whl
+
 /experiments
-/node_modules
 
 -r /landing-page/frontend/.gitignore
 

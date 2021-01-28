@@ -3,7 +3,7 @@ import tensorflow as tf
 from lime import lime_image
 from skimage.segmentation import mark_boundaries
 
-from ...tracing import traced
+from xaidemo.tracing import traced
 
 _lime = lime_image.LimeImageExplainer()
 

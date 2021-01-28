@@ -20,16 +20,16 @@ services:
     expose:
       - 8000
     environment:
-      - ENVIRONMENT=test
-      - AGENT_HOST_NAME=jaeger
+      - TRACING_EXPORTER=jaeger
+      - JAEGER_AGENT_HOST_NAME=jaeger
 
   inspection:
     image: ghcr.io/xai-demonstrator/visual-inspection-service:latest
     expose:
       - 8000
     environment:
-      - ENVIRONMENT=test
-      - AGENT_HOST_NAME=jaeger
+      - TRACING_EXPORTER=jaeger
+      - JAEGER_AGENT_HOST_NAME=jaeger
 
   jaeger:
     image: jaegertracing/all-in-one

@@ -4,11 +4,11 @@ from typing import IO
 import numpy as np
 import tensorflow as tf
 from PIL import Image
+from opentelemetry import trace
 from pydantic import BaseModel
+from xaidemo.tracing import traced, add_span_attributes
 
 from .model import model
-from ..tracing import traced
-from opentelemetry import trace
 
 
 # TODO: Define the content of the Prediction
@@ -20,8 +20,7 @@ class Prediction(BaseModel):
 
 @traced
 def preprocess(img: Image) -> np.ndarray:
-    span = trace.get_current_span()
-    span.set_attribute("image.size", img.size)
+    add_span_attributes({"image.size": img.size})
 
     # cf. https://deeplizard.com/learn/video/OO4HD-1wRN8
     img = img.resize((224, 224), Image.BICUBIC)
@@ -35,9 +34,7 @@ def preprocess(img: Image) -> np.ndarray:
 def predict(image_file: IO[bytes],
             model_: tf.keras.Model = model) -> Prediction:
     prediction_id = uuid.uuid4()
-
-    span = trace.get_current_span()
-    span.set_attribute("prediction.id", str(prediction_id))
+    add_span_attributes({"prediction.id": str(prediction_id)})
 
     input_img = Image.open(image_file)
     model_input = preprocess(input_img)

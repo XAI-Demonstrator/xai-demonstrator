@@ -3,11 +3,10 @@ import uuid
 from typing import List
 
 import torch
-from opentelemetry import trace
 from pydantic import BaseModel, validator
+from xaidemo.tracing import add_span_attributes, traced
 
 from .model import BertManager, bert
-from ..tracing import traced
 
 my_device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
@@ -34,12 +33,13 @@ def predict(text: str,
             bert_: BertManager = bert) -> Prediction:
     prediction_id = uuid.uuid4()
 
-    span = trace.get_current_span()
-    span.set_attribute("prediction.id", str(prediction_id))
-
     tokens = bert_.tokenizer.encode(text, add_special_tokens=False)
-    span.set_attribute("text.length", len(text))
-    span.set_attribute("text.tokens", len(tokens))
+
+    add_span_attributes({
+        "prediction.id": str(prediction_id),
+        "text.chars": len(text),
+        "text.tokens": len(tokens)
+    })
 
     model_input = torch.tensor([tokens], dtype=torch.int64, device=my_device)
     model_output = bert_.model(model_input)

@@ -1,22 +1,18 @@
 from typing import Any, Dict, Optional
 
 from fastapi import FastAPI
-from opentelemetry import trace
-from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
-from opentelemetry.sdk.trace import TracerProvider
 from pydantic import BaseModel, validator
+from xaidemo import tracing
+from xaidemo.routers import vue_frontend
 
 from .config import settings
 from .explainer.explainer import EXPLAINERS, Explanation, explain
 from .model.predict import Prediction, predict
-from .routers import frontend
-from .tracing import set_up_tracing
 
-trace.set_tracer_provider(TracerProvider())
-set_up_tracing(settings)
+tracing.set_up(settings.service_name)
 
 app = FastAPI()
-app.include_router(frontend.router)
+app.include_router(vue_frontend(__file__))
 
 
 class PredictionRequest(BaseModel):
@@ -67,4 +63,4 @@ async def explain_sentiment(request: ExplanationRequest) -> Explanation:
                    settings=request.settings)
 
 
-FastAPIInstrumentor.instrument_app(app)
+tracing.instrument_app(app)

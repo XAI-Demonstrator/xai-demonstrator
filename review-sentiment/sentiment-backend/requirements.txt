@@ -1,16 +1,13 @@
 wheel
 numpy
+pydantic
 
 fastapi==0.63.0
 uvicorn==0.13.3
-aiofiles==0.6.0
 transformers==4.2.2
 captum==0.3.1
 
-opentelemetry-api==0.17b0
-opentelemetry-sdk==0.17b0
-opentelemetry-instrumentation-fastapi==0.17b0
-opentelemetry-exporter-jaeger==0.17b0
-
 --find-links https://download.pytorch.org/whl/torch_stable.html
 torch==1.7.1+cpu
+
+git+https://github.com/xai-demonstrator/xai-demonstrator.git@3e428f38f6cbdcec8321c3f78ba6755166c61b25#egg=xaidemo&subdirectory=common/backend-utils
