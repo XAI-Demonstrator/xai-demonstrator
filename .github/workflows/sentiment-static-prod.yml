@@ -3,7 +3,7 @@ name: Build Static Frontend and Push to Cloud Storage
 on:
   push:
     branches:
-      - p_branch
+      - master
 
 env:
   FRONTEND_PATH: ./review-sentiment/sentiment-frontend/
