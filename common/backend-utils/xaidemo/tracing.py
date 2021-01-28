@@ -15,7 +15,7 @@ class TracingSettings(BaseSettings):
     TRACING_EXPORTER: str = "default"
     # OpenTelemetry Jaeger exporter configuration
     JAEGER_AGENT_HOST_NAME: str = "localhost"
-    JAEGER_PORT: int = 6831
+    JAEGER_AGENT_PORT: int = 6831
 
 
 tracing_settings = TracingSettings()
@@ -37,7 +37,7 @@ def set_up(service_name: str):
         jaeger_exporter = jaeger.JaegerSpanExporter(
             service_name=service_name,
             agent_host_name=tracing_settings.JAEGER_AGENT_HOST_NAME,
-            agent_port=tracing_settings.JAEGER_PORT,
+            agent_port=tracing_settings.JAEGER_AGENT_PORT,
         )
 
         trace.get_tracer_provider().add_span_processor(
