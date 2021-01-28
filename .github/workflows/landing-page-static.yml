@@ -1,4 +1,4 @@
-name: Prod Deployment Landing-Page
+name: Prod Landing Page
 
 on:
   push:
