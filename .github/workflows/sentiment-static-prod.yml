@@ -3,7 +3,7 @@ name: Prod Deployment sentiment-frontend
 on:
   push:
     branches:
-      - master
+      - static-deployment-dev
     paths:
       - 'review-sentiment/sentiment-frontend/**'
       
@@ -35,5 +35,5 @@ jobs:
         with:
           credentials: ${{ secrets.GCP_TEST_SA_KEY }}
           path: ${{ env.FRONTEND_PATH }}/sentiment
-          destination: sentiment-frontend/
+          destination: demonstrator-static/
       
