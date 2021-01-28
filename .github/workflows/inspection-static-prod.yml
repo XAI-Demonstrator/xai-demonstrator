@@ -3,7 +3,7 @@ name: Prod Deployment inspection-frontend
 on:
   push:
     branches:
-      - static-deployment-dev
+      - master
     paths:
       - 'visual-inspection/inspection-frontend/**'
       
