@@ -5,9 +5,7 @@ uvicorn==0.13.3
 transformers==4.2.2
 captum==0.3.1
 
-opentelemetry-api
-
 --find-links https://download.pytorch.org/whl/cu100/torch_stable.html
 torch==1.4.0
 
-git+https://github.com/xai-demonstrator/xai-demonstrator.git@58d9e4cceb0add85fbaa79341f5719e82b02b48e#egg=xaidemo&subdirectory=common/backend-utils
+git+https://github.com/xai-demonstrator/xai-demonstrator.git@3e428f38f6cbdcec8321c3f78ba6755166c61b25#egg=xaidemo&subdirectory=common/backend-utils

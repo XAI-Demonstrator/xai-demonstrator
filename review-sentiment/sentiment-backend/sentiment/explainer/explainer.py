@@ -6,9 +6,8 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 import torch
-from opentelemetry import trace
 from pydantic import BaseModel
-from xaidemo.tracing import traced
+from xaidemo.tracing import add_span_attributes, traced
 
 from .explainers.integrated_gradients import attribute_integrated_gradients
 from .explainers.random_words import attribute_random_words
@@ -78,14 +77,14 @@ def explain(text: str,
 
     explanation_id = uuid.uuid4()
 
-    span = trace.get_current_span()
-    span.set_attribute("explanation.id", str(explanation_id))
-    span.set_attribute("explanation.method", explainer)
-
     encoded_text = bert_.tokenizer.encode_plus(text, add_special_tokens=False)
 
-    span.set_attribute("text.length", len(text))
-    span.set_attribute("text.tokens", len(encoded_text["input_ids"]))
+    add_span_attributes({
+        "explanation.id": str(explanation_id),
+        "explanation.method": explainer,
+        "text.chars": len(text),
+        "text.tokens": len(encoded_text["input_ids"])
+    })
 
     text_input_ids, ref_input_ids = construct_input_and_reference(encoded_text["input_ids"],
                                                                   ref_token_id=bert_.tokenizer.pad_token_id)
