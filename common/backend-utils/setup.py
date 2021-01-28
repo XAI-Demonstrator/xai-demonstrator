@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='xaidemo',
-      version='0.1.2',
+      version='0.2.0',
       description='Shared utilities for XAI Demonstrator backends',
       url='http://github.com/xai-demonstrator/xai-demonstrator',
       author='The XAI Demonstrator team',
