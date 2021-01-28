@@ -3,7 +3,7 @@ name: Prod Deployment sentiment-frontend
 on:
   push:
     branches:
-      - static-deployment-dev
+      - master
     paths:
       - 'review-sentiment/sentiment-frontend/**'
       
