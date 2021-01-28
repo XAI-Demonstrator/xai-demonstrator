@@ -1,4 +1,4 @@
-name: Prod Deployment inspection-frontend
+name: Prod Inspection Frontend
 
 on:
   push:
