@@ -6,13 +6,12 @@ from typing import Any, Dict, IO, Tuple, Union
 import numpy as np
 import tensorflow as tf
 from PIL import Image
-from opentelemetry import trace
 from pydantic import BaseModel
+from xaidemo.tracing import add_span_attributes, traced
 
 from .explainers.lime_ import lime_explanation
 from ..model.model import model
 from ..model.predict import preprocess
-from ..tracing import traced
 
 EXPLAINERS = {
     "lime": lime_explanation
@@ -45,9 +44,7 @@ def explain(image_file: IO[bytes],
     settings = settings or {}
     explanation_id = uuid.uuid4()
 
-    span = trace.get_current_span()
-    span.set_attribute("explanation.id", str(explanation_id))
-    span.set_attribute("explanation.method", method)
+    add_span_attributes({"explanation.id": str(explanation_id), "explanation.method": method})
 
     input_image = Image.open(image_file)
     explainer_input = preprocess(input_image)[0]
