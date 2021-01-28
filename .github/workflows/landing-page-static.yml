@@ -3,7 +3,7 @@ name: Prod Deployment Landing-Page
 on:
   push:
     branches:
-      - static-deployment-dev
+      - master
     paths:
       - 'landing-page/frontend/**'
       
