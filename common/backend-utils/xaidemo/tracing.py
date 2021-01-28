@@ -12,29 +12,38 @@ trace.set_tracer_provider(TracerProvider())
 
 
 class TracingSettings(BaseSettings):
-    environment: str = "local"
-    # OpenTelemetry exporter configuration
-    agent_host_name: str = "localhost"
-    agent_port: int = 6831
+    TRACING_EXPORTER: str = "default"
+    # OpenTelemetry Jaeger exporter configuration
+    JAEGER_AGENT_HOST_NAME: str = "localhost"
+    JAEGER_PORT: int = 6831
 
 
 tracing_settings = TracingSettings()
 
 
 def set_up(service_name: str):
-    if tracing_settings.environment == "test":
+    """Instantiate and configure the span exporter.
+
+    The exporter is select and configured through environment variables.
+
+    Parameters
+    ----------
+    service_name : str
+        The name under which the data is exported.
+    """
+    if tracing_settings.TRACING_EXPORTER.lower() == "jaeger":
         from opentelemetry.sdk.trace.export import BatchExportSpanProcessor
 
         jaeger_exporter = jaeger.JaegerSpanExporter(
             service_name=service_name,
-            agent_host_name=tracing_settings.agent_host_name,
-            agent_port=tracing_settings.agent_port,
+            agent_host_name=tracing_settings.JAEGER_AGENT_HOST_NAME,
+            agent_port=tracing_settings.JAEGER_PORT,
         )
 
         trace.get_tracer_provider().add_span_processor(
             BatchExportSpanProcessor(jaeger_exporter)
         )
-    elif tracing_settings.environment == "debug":
+    elif tracing_settings.TRACING_EXPORTER.lower() == "console":
         from opentelemetry.sdk.trace.export import SimpleExportSpanProcessor, ConsoleSpanExporter
 
         trace.get_tracer_provider().add_span_processor(
@@ -43,28 +52,55 @@ def set_up(service_name: str):
 
 
 def instrument_app(app: FastAPI):
-    """Has to be called after all routes have been added (?)"""
+    """Add OpenTelemetry middleware to a FastAPI app.
+
+    Following available documentation and examples,
+    this should be called after all routes have been added.
+    """
     FastAPIInstrumentor.instrument_app(app)
+
+
+def add_span_attributes(attributes: Dict[str, Any],
+                        span: Union[trace.Span, None] = None):
+    """Add attributes to a span.
+
+    Parameters
+    ----------
+    attributes : dict
+        Arbitrary number of span attributes.
+    span : opentelemetry.trace.Span
+
+    """
+    span = span or trace.get_current_span()
+    for attribute, value in attributes.items():
+        span.set_attribute(attribute, value)
 
 
 def traced(func: Union[Callable, None] = None,
            label: Union[None, str] = None,
-           attributes: Union[Dict[str, Any], None] = None):
-    """Decorator for functions.
+           attributes: Union[Dict[str, Any], None] = None) -> Callable:
+    """Decorator that adds a span around a function.
 
+    Parameters
+    ----------
+    func : Callable
+        The function to be decorated
+    label : str, optional
+        A custom label. If not specified, the function's `__name__` will be used.
+    attributes : dict, optional
+        Arbitrary number of span attributes.
 
     """
     attributes = attributes or {}
 
-    def decorator_function(func_: Callable):
+    def decorator_function(func_: Callable) -> Callable:
         _label = label or func_.__name__
 
         @wraps(func_)
         def with_tracer(*args, **kwargs):
             tracer = trace.get_tracer(__name__)
             with tracer.start_as_current_span(_label) as span:
-                for attribute, value in attributes.items():
-                    span.set_attribute(attribute, value)
+                add_span_attributes(attributes, span)
                 return func_(*args, **kwargs)
 
         return with_tracer
