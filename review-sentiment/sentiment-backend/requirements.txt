@@ -10,4 +10,4 @@ captum==0.3.1
 --find-links https://download.pytorch.org/whl/torch_stable.html
 torch==1.7.1+cpu
 
-git+https://github.com/xai-demonstrator/xai-demonstrator.git@3e428f38f6cbdcec8321c3f78ba6755166c61b25#egg=xaidemo&subdirectory=common/backend-utils
+git+https://github.com/xai-demonstrator/xai-demonstrator.git@a73f37d38cb3c531c96ebdc779cff17e7a38169d#egg=xaidemo&subdirectory=common/backend-utils
