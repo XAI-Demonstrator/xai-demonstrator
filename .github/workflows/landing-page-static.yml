@@ -1,15 +1,15 @@
-name: Prod Deployment sentiment-frontend
+name: Prod Landing Page
 
 on:
   push:
     branches:
       - master
     paths:
-      - 'review-sentiment/sentiment-frontend/**'
+      - 'landing-page/frontend/**'
       
 env:
-  FRONTEND_PATH: ./review-sentiment/sentiment-frontend/
-
+  FRONTEND_PATH: ./landing-page/frontend/
+  
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -27,13 +27,12 @@ jobs:
             cd ${{ env.FRONTEND_PATH }}
             npm install
             npm run build -- --mode prod-deployment
-            mv dist sentiment
-
+            mv dist landing_page
+            
       - name: Pushing Files to Cloud Storage
         id: upload-file
         uses: google-github-actions/upload-cloud-storage@v0.2.0
         with:
           credentials: ${{ secrets.GCP_TEST_SA_KEY }}
-          path: ${{ env.FRONTEND_PATH }}/sentiment
+          path: ${{ env.FRONTEND_PATH }}/landing_page
           destination: demonstrator-static/
-      
