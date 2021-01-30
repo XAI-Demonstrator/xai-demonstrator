@@ -1,0 +1,106 @@
+name: Prod Deployment
+
+on:
+  workflow_dispatch
+
+jobs:
+  frontends:
+    strategy:
+      matrix:
+        include:
+          - service: sentiment
+            repo_path: ./review-sentiment/sentiment-frontend/
+          - service: inspection
+            repo_path: ./visual-inspection/inspection-frontend/
+          - service: landing_page
+            repo_path: ./landing-page/frontend/
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+          - name: Set Up Node Environment
+            uses: actions/setup-node@v2
+            with:
+              node-version: '12'
+
+          - uses: actions/cache@v2
+            with:
+              path: ~/.npm
+              key: ${{ runner.os }}-node-${{ hashFiles('${{ matrix.frontend_path }}') }}
+              restore-keys: |
+                ${{ runner.os }}-node-
+
+          - name: Build Frontend
+            run: |
+              cd ${{ matrix.frontend_path }}
+              npm install
+              npm run build -- --mode prod-deployment
+              mv dist ${{ matrix.service }}
+
+          - name: Push Files to Google Cloud Storage
+            id: upload-file
+            uses: google-github-actions/upload-cloud-storage@v0.2.0
+            with:
+              credentials: ${{ secrets.GCP_PROD_SA_KEY }}
+              path: ${{ matrix.frontend_path }}/${{ matrix.service }}
+              destination: ${{ secrets.GCP_PROD_FRONTEND_BUCKET }}/
+
+  backends:
+    strategy:
+      matrix:
+        include:
+          - service: review-sentiment
+            memory: 4Gi
+          - service: visual-inspection
+            memory: 1Gi
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Cloud SDK
+        uses: google-github-actions/setup-gcloud@v0.2.0
+        with:
+          project_id: ${{ secrets.GCP_PROD_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_PROD_SA_KEY }}
+          export_default_credentials: true  # Set to true to authenticate the Cloud Run action
+
+      - name: Authorize Docker push
+        run: gcloud auth configure-docker
+
+      - name: Build and Push Container
+        run: |-
+          docker pull ghcr.io/xai-demonstrator/${{ matrix.service }}-service:latest
+          docker tag ghcr.io/xai-demonstrator/${{ matrix.service }}-service gcr.io/${{ secrets.GCP_PROD_PROJECT_ID }}/${{ matrix.service }}:${{ github.sha }}
+          docker push gcr.io/${{ secrets.GCP_PROD_PROJECT_ID }}/${{ matrix.service }}:${{ github.sha }}
+
+      - name: Deploy to Cloud Run
+        run: |-
+            gcloud run deploy ${{ matrix.service }} \
+              --region ${{ secrets.GCP_PROD_REGION }} \
+              --image gcr.io/${{ secrets.GCP_PROD_PROJECT_ID }}/${{ matrix.service }}:${{ github.sha }} \
+              --platform managed \
+              --port 8000 \
+              --memory "${{ matrix.memory }}"
+
+      - name: Show Output
+        run: echo ${{ steps.deploy.outputs.url }}
+
+
+  notify:
+    depends-on:
+      - frontends
+      - backends
+    runs-on: ubuntu-latest
+    steps:
+      - name: Slack Notification
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_CHANNEL: xai-tech
+          SLACK_MESSAGE: 'Successfully deployed a new release to https://www.xaidemo.de :rocket:'
+          SLACK_TITLE: New Prod Deployment
+          SLACK_USERNAME: Deployment Monitor
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          MSG_MINIMAL: true
