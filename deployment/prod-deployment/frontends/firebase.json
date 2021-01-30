@@ -3,14 +3,14 @@
     "public": "public",
     "rewrites": [
       {
-        "source": "/api/sentiment",
+        "source": "/api/sentiment/**",
         "run": {
           "serviceId": "review-sentiment",
           "region": "europe-west3"
         }
       },
       {
-        "source": "/api/inspection",
+        "source": "/api/inspection/**",
         "run": {
           "serviceId": "visual-inspection",
           "region": "europe-west3"
