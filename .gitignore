@@ -16,11 +16,3 @@ node_modules/
 *.whl
 
 /experiments
-
--r /landing-page/frontend/.gitignore
-
--r /review-sentiment/sentiment-frontend/.gitignore
--r /review-sentiment/sentiment-backend/.gitignore
-
--r /visual-inspection/inspection-frontend/.gitignore
--r /visual-inspection/inspection-backend/.gitignore
