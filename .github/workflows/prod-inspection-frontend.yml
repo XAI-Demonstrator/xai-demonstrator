@@ -1,14 +1,14 @@
-name: Prod Deployment sentiment-frontend
+name: Prod Inspection Frontend
 
 on:
   push:
     branches:
       - master
     paths:
-      - 'review-sentiment/sentiment-frontend/**'
+      - 'visual-inspection/inspection-frontend/**'
       
 env:
-  FRONTEND_PATH: ./review-sentiment/sentiment-frontend/
+  FRONTEND_PATH: ./visual-inspection/inspection-frontend/
 
 jobs:
   deploy:
@@ -21,19 +21,25 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '12'
+
+      - uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('./review-sentiment/sentiment-frontend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
         
       - name: Build Frontend
         run: | 
             cd ${{ env.FRONTEND_PATH }}
             npm install
             npm run build -- --mode prod-deployment
-            mv dist sentiment
-
+            mv dist inspection
+            
       - name: Pushing Files to Cloud Storage
         id: upload-file
         uses: google-github-actions/upload-cloud-storage@v0.2.0
         with:
           credentials: ${{ secrets.GCP_TEST_SA_KEY }}
-          path: ${{ env.FRONTEND_PATH }}/sentiment
+          path: ${{ env.FRONTEND_PATH }}/inspection
           destination: demonstrator-static/
-      

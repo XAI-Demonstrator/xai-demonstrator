@@ -1,4 +1,4 @@
-name: Move Sentiment Service to CloudRun
+name: Prod Backend
 
 on:
   workflow_run:
@@ -12,11 +12,14 @@ on:
 
 env:
   PROJECT_ID: ${{ secrets.GCP_TEST_PROJECT_ID }}
-  SERVICE: review-sentiment
-  REGION: europe-west3
+  REGION: ${{ secrets.GCP_TEST_REGION }}
 
 jobs:
   deploy:
+    strategy:
+      matrix:
+        service:
+          - review-sentiment
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -34,15 +37,15 @@ jobs:
 
     - name: Build and Push Container
       run: |-
-        docker pull ghcr.io/xai-demonstrator/review-sentiment-service:latest
-        docker tag ghcr.io/xai-demonstrator/review-sentiment-service gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
-        docker push gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
+        docker pull ghcr.io/xai-demonstrator/${{ matrix.service }}-service:latest
+        docker tag ghcr.io/xai-demonstrator/${{ matrix.service }}-service gcr.io/${{ env.PROJECT_ID }}/${{ matrix.service }}:${{ github.sha }}
+        docker push gcr.io/${{ env.PROJECT_ID }}/${{ matrix.service }}:${{ github.sha }}
   
     - name: Deploy to Cloud Run
       run: |-
-          gcloud run deploy ${{ env.SERVICE }} \
+          gcloud run deploy ${{ matrix.service }} \
             --region ${{ env.REGION }} \
-            --image gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }} \
+            --image gcr.io/${{ env.PROJECT_ID }}/${{ matrix.service }}:${{ github.sha }} \
             --platform managed \
             --port 8000 \
             --memory "4Gi" 
