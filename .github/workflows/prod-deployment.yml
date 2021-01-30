@@ -28,13 +28,13 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('${{ matrix.frontend_path }}') }}
+          key: ${{ runner.os }}-node-${{ hashFiles('${{ matrix.repo_path }}') }}
           restore-keys: |
             ${{ runner.os }}-node-
 
       - name: Build Frontend
         run: |
-          cd ${{ matrix.frontend_path }}
+          cd ${{ matrix.repo_path }}
           npm install
           npm run build -- --mode prod-deployment
           mv dist ${{ matrix.service }}
@@ -44,7 +44,7 @@ jobs:
         uses: google-github-actions/upload-cloud-storage@v0.2.0
         with:
           credentials: ${{ secrets.GCP_PROD_SA_KEY }}
-          path: ${{ matrix.frontend_path }}/${{ matrix.service }}
+          path: ${{ matrix.repo_path }}/${{ matrix.service }}
           destination: ${{ secrets.GCP_PROD_FRONTEND_BUCKET }}/
 
   backends:
