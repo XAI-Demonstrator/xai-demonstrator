@@ -1,24 +1,47 @@
 <template>
   <div id="app">
-    <header>
+    <header v-on:click="toMainMode">
       <h1>XAI-Demonstrator</h1>
       <h3>Entdecke Erklärbare Künstliche Intelligenz</h3>
     </header>
     <main>
-      <a v-for="useCase in useCases" :key="useCase.title" v-bind:href="useCase.route">
-        <section>
-          <img v-bind:src="useCase.logo" class="logo" :alt="useCase.title"/>
-          <div class="description">
-            <h3>{{ useCase.title }}</h3>
-            <p>{{ useCase.description }}</p>
-          </div>
-          <img class="next" src="https://upload.wikimedia.org/wikipedia/commons/7/7b/Octicons-playback-play.svg"/>
-        </section>
-      </a>
+      <transition name="fade" mode="out-in">
+        <div id="select" v-if="!infoMode" key="select">
+          <a v-for="useCase in useCases" :key="useCase.title" v-bind:href="useCase.route">
+            <section>
+              <img v-bind:src="useCase.logo" class="logo" :alt="useCase.title"/>
+              <div class="description">
+                <h3>{{ useCase.title }}</h3>
+                <p>{{ useCase.description }}</p>
+              </div>
+              <img class="next" src="https://upload.wikimedia.org/wikipedia/commons/7/7b/Octicons-playback-play.svg"/>
+            </section>
+          </a>
+        </div>
+        <div id="info" key="info">
+          <section>
+            <div class="description">
+              <h3>Der XAI-Demonstrator</h3>
+              <p>ist ein super tolles Ding!</p>
+              <p>An dieser Stelle steht ein wenig zu dem Projekt. Und sonstigen Themen.</p>
+              <a class="button" href="https://www.uni-ulm.de">Besuchen Sie unsere Website!</a>
+            </div>
+          </section>
+          <section class="tech">
+            <div class="description">
+              <h3>Technische Informationen</h3>
+              <p>Nice day, huh?</p>
+            </div>
+          </section>
+        </div>
+      </transition>
     </main>
     <footer>
       <p>Der XAI-Demonstrator ist ein Projekt der Universität Ulm.</p>
-      <a href="/">?</a>
+      <transition name="fade" mode="out-in">
+        <div v-if="!infoMode" class="icon" v-on:click="toInfoMode" key="infoButton">i</div>
+        <div v-else class="icon close" v-on:click="toMainMode" key="mainButton">&#215;</div>
+      </transition>
     </footer>
   </div>
 </template>
@@ -42,12 +65,41 @@ export default {
           title: "Visual Inspection",
           description: "Woran erkennt eine KI das Wetter? Finde es heraus!",
           route: "/inspection/"
-        }
-      ]
+        },
+        // {
+        //   logo: "https://upload.wikimedia.org/wikipedia/commons/c/c2/Android_Emoji_26c5.svg",
+        //   title: "Visual Inspection",
+        //   description: "Woran erkennt eine KI das Wetter? Finde es heraus!",
+        //   route: "/inspection/"
+        // }
+        // ,
+        // {
+        //   logo: "https://upload.wikimedia.org/wikipedia/commons/c/c2/Android_Emoji_26c5.svg",
+        //   title: "Visual Inspection",
+        //   description: "Woran erkennt eine KI das Wetter? Finde es heraus!",
+        //   route: "/inspection/"
+        // }
+        // ,
+        // {
+        //   logo: "https://upload.wikimedia.org/wikipedia/commons/c/c2/Android_Emoji_26c5.svg",
+        //   title: "Visual Inspection",
+        //   description: "Woran erkennt eine KI das Wetter? Finde es heraus!",
+        //   route: "/inspection/"
+        // }
+      ],
+      infoMode: false
     }
   },
   created() {
     document.title = "XAI Demonstrator"
+  },
+  methods: {
+    toInfoMode() {
+      this.infoMode = true;
+    },
+    toMainMode() {
+      this.infoMode = false;
+    }
   }
 }
 </script>
@@ -68,23 +120,21 @@ body {
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
   background-color: #fff;
-  padding: 15px 7px 7px;
   height: 100vh;
-  overflow: scroll;
+  width: 100vw;
   display: flex;
-  flex-direction: column;
 }
 
 header {
   padding: 15px;
-  height: auto;
-  min-height: 280px;
   background-color: #77A6F7;
   font-family: 'Calibri Light', sans-serif;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   flex: 0;
+  border-radius: 5px;
+  box-shadow: 2px 2px 5px 2px #eee;
 }
 
 header h1 {
@@ -92,7 +142,6 @@ header h1 {
   padding: 0;
   margin: 0;
   font-weight: 400;
-
 }
 
 header h3 {
@@ -103,16 +152,22 @@ header h3 {
 }
 
 main {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
+  /*border: 1px solid blue;*/
 }
 
-main a {
+#select {
+  display: flex;
+  flex-direction: column;
+  /*border: 1px solid black;*/
+}
+
+#select a {
   text-decoration: none;
-  color: inherit;
   display: block;
-  margin-top: 15px;
+}
+
+#select a:visited {
+  color: #2c3e50;
 }
 
 section {
@@ -122,6 +177,12 @@ section {
   align-items: center;
   padding: 15px 10px;
   background-color: #D3E3FC;
+  border-radius: 5px;
+  box-shadow: 2px 2px 5px 2px #eee;
+}
+
+section.tech {
+  background-color: #eee;
 }
 
 section img {
@@ -141,13 +202,25 @@ section img.next {
   width: 15px;
 }
 
+section a.button {
+  width: 100%;
+  background-color: #00887A;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 5px;
+  margin-top: 15px;
+}
+
 .description {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   align-self: stretch;
   flex-grow: 1;
-  padding: 0 15px 10px
+  padding: 0 15px;
 }
 
 .description h3 {
@@ -160,29 +233,24 @@ section img.next {
 .description p {
   margin: 0;
   font-size: 0.8em;
-  padding: 2px 0 0;
+  padding: 5px 0 0;
 }
 
 footer {
-  margin-top: 15px;
-  flex: 0;
   display: flex;
-  flex-direction: row;
   align-items: flex-end;
-  justify-content: space-between;
 }
 
 footer p {
   font-size: 0.7em;
-  padding-right: 15px;
   color: #ccc;
   font-family: 'Calibri Light', sans-serif;
 }
 
-footer a {
-  height: 70px;
-  width: 70px;
-  border-radius: 35px;
+footer div.icon {
+  height: 60px;
+  width: 60px;
+  border-radius: 30px;
   flex-shrink: 0;
   flex-grow: 0;
   display: flex;
@@ -193,9 +261,108 @@ footer a {
   color: #fff;
   font-size: 3em;
   font-weight: 400;
+  box-shadow: 2px 2px 5px 3px #eee;
 }
 
-@media screen and (min-width: 450px) {
+footer div.close {
+  background-color: #CC0000;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
+@media screen and (max-width: 450px) {
+
+  #app {
+    padding: 15px 7px 7px;
+    overflow: scroll;
+    flex-direction: column;
+  }
+
+  header {
+    height: auto;
+    min-height: 280px;
+  }
+
+  main {
+    flex: 1;
+  }
+
+  #select a {
+    margin-top: 15px;
+  }
+
+  #info section {
+    margin-top: 15px;
+  }
+
+  footer {
+    margin-top: 15px;
+    flex: 0;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+
+  footer p {
+    padding-right: 15px;
+  }
+
+}
+
+
+@media screen and (min-width: 450px) and (max-height: 650px) {
+  #app {
+    flex-direction: row;
+    padding: 10px;
+  }
+
+  header {
+    width: auto;
+    min-width: 280px;
+  }
+
+  main {
+    flex-shrink: 1;
+    flex-grow: 1;
+    overflow: scroll;
+    padding-left: 15px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  #select a {
+    margin: 0 0 15px;
+  }
+
+  #info section {
+    margin: 0 0 15px;
+  }
+
+  footer {
+    flex-shrink: 2;
+    flex-grow: 2;
+    flex-direction: column-reverse;
+    justify-content: flex-start;
+    margin: 0;
+  }
+
+  footer p {
+    padding-left: 15px;
+    padding-right: 0;
+    text-align: right;
+  }
+
+}
+
+
+@media screen and (min-width: 450px) and (min-height: 650px) {
+
   body {
     background-color: #fff;
     display: flex;
@@ -207,11 +374,37 @@ footer a {
 
   #app {
     max-width: 450px;
-    border: 5px solid #D3E3FC;
+    border: 1px solid #ddd;
+    box-shadow: 2px 2px 5px 2px #eee;
     padding: 10px;
     height: auto;
     min-height: 640px;
-    overflow: visible;
+    flex-direction: column;
+  }
+
+  header {
+    height: auto;
+    min-height: 280px;
+  }
+
+  main {
+    flex: 1;
+  }
+
+  #select a {
+    margin-top: 15px;
+  }
+
+  #info section {
+    margin-top: 15px;
+  }
+
+  footer {
+    margin-top: 15px;
+    flex: 0;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
   }
 
 }
