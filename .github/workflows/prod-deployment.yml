@@ -113,7 +113,7 @@ jobs:
   notify:
     needs:
       - deploy-frontends
-      - backends
+      - deploy-backends
     runs-on: ubuntu-latest
     steps:
       - name: Slack Notification
