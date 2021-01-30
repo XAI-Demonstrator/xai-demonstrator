@@ -9,11 +9,11 @@ jobs:
       matrix:
         include:
           - service: sentiment
-            repo_path: ./review-sentiment/sentiment-frontend/
+            repo_path: ./review-sentiment/sentiment-frontend
           - service: inspection
-            repo_path: ./visual-inspection/inspection-frontend/
+            repo_path: ./visual-inspection/inspection-frontend
           - service: landing-page
-            repo_path: ./landing-page/frontend/
+            repo_path: ./landing-page/frontend
 
     runs-on: ubuntu-latest
     steps:
@@ -28,7 +28,7 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('${{ matrix.repo_path }}') }}
+          key: ${{ runner.os }}-node-${{ hashFiles('${{ matrix.repo_path }}/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
 
