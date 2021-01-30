@@ -64,7 +64,7 @@ jobs:
         with:
           args: deploy --only hosting
         env:
-          GCP_SA_KEY: ${{ secrets.GCP_TEST_SA_KEY }}
+          GCP_SA_KEY: ${{ secrets.GCP_TEST_FIREBASE_SA_KEY }}
           PROJECT_PATH: ./deployment/prod-deployment/frontends
 
 
