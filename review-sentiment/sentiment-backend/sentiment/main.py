@@ -51,11 +51,13 @@ class ExplanationRequest(BaseModel):
 
 
 @app.post('/predict')
+@app.post('/api/sentiment/predict')
 async def predict_sentiment(request: PredictionRequest) -> Prediction:
     return predict(text=request.text)
 
 
 @app.post('/explain')
+@app.post('/api/sentiment/explain')
 async def explain_sentiment(request: ExplanationRequest) -> Explanation:
     return explain(text=request.text,
                    target=request.target,

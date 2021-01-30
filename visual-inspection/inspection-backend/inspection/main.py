@@ -29,11 +29,13 @@ app.include_router(vue_frontend(__file__))
 
 
 @app.post("/predict")
+@app.post("/api/inspection/predict")
 def predict_weather(file: UploadFile = File(...)) -> Prediction:
     return predict(file.file)
 
 
 @app.post("/explain")
+@app.post("/api/inspection/explain")
 def explain_classification(file: UploadFile = File(...),
                            method: str = Form(settings.default_explainer),
                            exp_settings: Dict[str, Any] = Form({})) -> Explanation:
