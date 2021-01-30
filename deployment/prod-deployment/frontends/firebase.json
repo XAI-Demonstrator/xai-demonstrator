@@ -11,8 +11,9 @@
         "run": {
           "serviceId": "review-sentiment",
           "region": "europe-west3"
-        },
-              {
+        }
+      },
+      {
         "source": "/inspection-api",
         "run": {
           "serviceId": "visual-inspection",
