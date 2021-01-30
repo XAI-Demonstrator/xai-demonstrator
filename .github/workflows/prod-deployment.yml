@@ -4,7 +4,7 @@ on:
   workflow_dispatch
 
 jobs:
-  frontends:
+  build-frontends:
     strategy:
       matrix:
         include:
@@ -12,7 +12,7 @@ jobs:
             repo_path: ./review-sentiment/sentiment-frontend/
           - service: inspection
             repo_path: ./visual-inspection/inspection-frontend/
-          - service: landing_page
+          - service: landing-page
             repo_path: ./landing-page/frontend/
 
     runs-on: ubuntu-latest
@@ -34,20 +34,41 @@ jobs:
 
       - name: Build Frontend
         run: |
+          set -e
           cd ${{ matrix.repo_path }}
           npm install
           npm run build -- --mode prod-deployment
           mv dist ${{ matrix.service }}
 
-      - name: Push Files to Google Cloud Storage
-        id: upload-file
-        uses: google-github-actions/upload-cloud-storage@v0.2.0
+      - name: Save build artifact
+        uses: actions/upload-artifact@v2
         with:
-          credentials: ${{ secrets.GCP_PROD_SA_KEY }}
+          name: ${{ matrix.service }}
           path: ${{ matrix.repo_path }}/${{ matrix.service }}
-          destination: ${{ secrets.GCP_PROD_FRONTEND_BUCKET }}/
+          retention-days: 3
 
-  backends:
+  deploy-frontends:
+    needs: build-frontends
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Download all frontends
+        uses: actions/download-artifact@v2
+        with:
+          path: ./deployment/prod-deployment/frontends/public
+
+      - name: Deploy to Firebase
+        uses: w9jds/firebase-action@v2.0.0
+        with:
+          args: deploy --only hosting
+        env:
+          GCP_SA_KEY: ${{ secrets.GCP_TEST_SA_KEY }}
+          PROJECT_PATH: ./deployment/prod-deployment/frontends
+
+
+  deploy-backends:
     strategy:
       matrix:
         include:
@@ -63,8 +84,8 @@ jobs:
       - name: Setup Cloud SDK
         uses: google-github-actions/setup-gcloud@v0.2.0
         with:
-          project_id: ${{ secrets.GCP_PROD_PROJECT_ID }}
-          service_account_key: ${{ secrets.GCP_PROD_SA_KEY }}
+          project_id: ${{ secrets.GCP_TEST_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_TEST_SA_KEY }}
           export_default_credentials: true  # Set to true to authenticate the Cloud Run action
 
       - name: Authorize Docker push
@@ -73,14 +94,14 @@ jobs:
       - name: Build and Push Container
         run: |-
           docker pull ghcr.io/xai-demonstrator/${{ matrix.service }}-service:latest
-          docker tag ghcr.io/xai-demonstrator/${{ matrix.service }}-service gcr.io/${{ secrets.GCP_PROD_PROJECT_ID }}/${{ matrix.service }}:${{ github.sha }}
-          docker push gcr.io/${{ secrets.GCP_PROD_PROJECT_ID }}/${{ matrix.service }}:${{ github.sha }}
+          docker tag ghcr.io/xai-demonstrator/${{ matrix.service }}-service gcr.io/${{ secrets.GCP_TEST_PROJECT_ID }}/${{ matrix.service }}:${{ github.sha }}
+          docker push gcr.io/${{ secrets.GCP_TEST_PROJECT_ID }}/${{ matrix.service }}:${{ github.sha }}
 
       - name: Deploy to Cloud Run
         run: |-
             gcloud run deploy ${{ matrix.service }} \
-              --region ${{ secrets.GCP_PROD_REGION }} \
-              --image gcr.io/${{ secrets.GCP_PROD_PROJECT_ID }}/${{ matrix.service }}:${{ github.sha }} \
+              --region ${{ secrets.GCP_TEST_REGION }} \
+              --image gcr.io/${{ secrets.GCP_TEST_PROJECT_ID }}/${{ matrix.service }}:${{ github.sha }} \
               --platform managed \
               --port 8000 \
               --memory "${{ matrix.memory }}"
@@ -90,8 +111,8 @@ jobs:
 
 
   notify:
-    depends-on:
-      - frontends
+    needs:
+      - deploy-frontends
       - backends
     runs-on: ubuntu-latest
     steps:
