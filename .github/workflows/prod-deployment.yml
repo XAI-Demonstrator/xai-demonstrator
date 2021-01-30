@@ -20,32 +20,32 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v2
 
-          - name: Set Up Node Environment
-            uses: actions/setup-node@v2
-            with:
-              node-version: '12'
+      - name: Set Up Node Environment
+        uses: actions/setup-node@v2
+        with:
+          node-version: '12'
 
-          - uses: actions/cache@v2
-            with:
-              path: ~/.npm
-              key: ${{ runner.os }}-node-${{ hashFiles('${{ matrix.frontend_path }}') }}
-              restore-keys: |
-                ${{ runner.os }}-node-
+      - uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('${{ matrix.frontend_path }}') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
-          - name: Build Frontend
-            run: |
-              cd ${{ matrix.frontend_path }}
-              npm install
-              npm run build -- --mode prod-deployment
-              mv dist ${{ matrix.service }}
+      - name: Build Frontend
+        run: |
+          cd ${{ matrix.frontend_path }}
+          npm install
+          npm run build -- --mode prod-deployment
+          mv dist ${{ matrix.service }}
 
-          - name: Push Files to Google Cloud Storage
-            id: upload-file
-            uses: google-github-actions/upload-cloud-storage@v0.2.0
-            with:
-              credentials: ${{ secrets.GCP_PROD_SA_KEY }}
-              path: ${{ matrix.frontend_path }}/${{ matrix.service }}
-              destination: ${{ secrets.GCP_PROD_FRONTEND_BUCKET }}/
+      - name: Push Files to Google Cloud Storage
+        id: upload-file
+        uses: google-github-actions/upload-cloud-storage@v0.2.0
+        with:
+          credentials: ${{ secrets.GCP_PROD_SA_KEY }}
+          path: ${{ matrix.frontend_path }}/${{ matrix.service }}
+          destination: ${{ secrets.GCP_PROD_FRONTEND_BUCKET }}/
 
   backends:
     strategy:
