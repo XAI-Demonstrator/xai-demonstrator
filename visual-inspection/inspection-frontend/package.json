@@ -14,7 +14,7 @@
     "core-js": "^3.8.3",
     "mint-ui": "^2.2.13",
     "vue": "^2.6.11",
-    "vue-advanced-cropper": "0.20.1"
+    "vue-advanced-cropper": "1.2.5"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.5.11",
