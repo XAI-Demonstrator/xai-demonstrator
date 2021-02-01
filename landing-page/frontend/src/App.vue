@@ -2,7 +2,7 @@
   <div id="app">
     <header v-on:click="toMainMode">
       <h1>XAI-Demonstrator</h1>
-      <h3>Entdecke Erklärbare Künstliche Intelligenz</h3>
+      <h3>Hinterfrage die KI und entdecke Erklärbare Künstliche Intelligenz</h3>
     </header>
     <main>
       <transition name="fade" mode="out-in">
@@ -18,19 +18,24 @@
             </section>
           </a>
         </div>
-        <div id="info" key="info">
+        <div v-else id="info" key="info">
           <section>
             <div class="description">
               <h3>Der XAI-Demonstrator</h3>
-              <p>ist ein super tolles Ding!</p>
-              <p>An dieser Stelle steht ein wenig zu dem Projekt. Und sonstigen Themen.</p>
-              <a class="button" href="https://www.uni-ulm.de">Besuchen Sie unsere Website!</a>
-            </div>
-          </section>
-          <section class="tech">
-            <div class="description">
-              <h3>Technische Informationen</h3>
-              <p>Nice day, huh?</p>
+              <p>
+                Eine KI, die sich dir gegenüber wie ein Team-Mitglied erklärt?
+                Der XAI-Demonstrator zeigt, wie das geht.
+              </p>
+              <p>
+                Anhand leicht zugänglicher Beispiele veranschautlicht die App die Möglichkeiten von
+                Explainable AI (XAI).
+                Live und interaktiv erzeugt sie Erklärungen mit modernen Methoden direkt aus der Forschung.
+              </p>
+              <p>
+                Damit wird die Vision einer Künstlichen Intelligenz, die nicht länger eine Black Box ist,
+                sondern von ihren Nutzerinnen und Nutzern verstanden und hinterfragt werden kann, Realität.
+              </p>
+              <a class="button" href="https://www.uni-ulm.de">Interesse geweckt? Besuche unsere Website!</a>
             </div>
           </section>
         </div>
@@ -151,14 +156,9 @@ header h3 {
   font-weight: 400;
 }
 
-main {
-  /*border: 1px solid blue;*/
-}
-
 #select {
   display: flex;
   flex-direction: column;
-  /*border: 1px solid black;*/
 }
 
 #select a {
@@ -178,11 +178,7 @@ section {
   padding: 15px 10px;
   background-color: #D3E3FC;
   border-radius: 5px;
-  box-shadow: 2px 2px 5px 2px #eee;
-}
-
-section.tech {
-  background-color: #eee;
+  box-shadow: 2px 2px 5px 0 #eee;
 }
 
 section img {
@@ -234,6 +230,7 @@ section a.button {
   margin: 0;
   font-size: 0.8em;
   padding: 5px 0 0;
+  text-align: justify;
 }
 
 footer {
@@ -245,6 +242,8 @@ footer p {
   font-size: 0.7em;
   color: #ccc;
   font-family: 'Calibri Light', sans-serif;
+  padding: 0;
+  margin: 0;
 }
 
 footer div.icon {
@@ -331,9 +330,7 @@ footer div.close {
     flex-shrink: 1;
     flex-grow: 1;
     overflow: scroll;
-    padding-left: 15px;
-    padding-top: 0;
-    padding-bottom: 0;
+    padding: 0 5px 0 15px;
   }
 
   #select a {
@@ -353,6 +350,7 @@ footer div.close {
   }
 
   footer p {
+    display: none;
     padding-left: 15px;
     padding-right: 0;
     text-align: right;
