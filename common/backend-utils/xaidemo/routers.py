@@ -16,7 +16,7 @@ def vue_frontend(main___file__: str) -> APIRouter:
         return FileResponse(pathlib.Path(main___file__).parent / "static" / "favicon.ico")
 
     @router.get("/{folder}/{fname}")
-    def get_static(folder, fname):
+    def get_static(folder: str, fname: str):
         return FileResponse(pathlib.Path(main___file__).parent / "static" / folder / fname)
 
     return router
