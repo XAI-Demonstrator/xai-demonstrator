@@ -51,6 +51,28 @@ def test_console_exporter_tracing_setup(mocker):
     assert len(provider.processors) == 1
 
 
+def test_gcp_exporter_tracing_setup(mocker):
+    auth_mock = mocker.patch("google.auth.default")
+    auth_mock.return_value = ("password12345", None)
+
+    provider = FakeProvider()
+    spy = mocker.spy(provider, 'add_span_processor')
+
+    def get_tracer_provider():
+        return provider
+
+    mocker.patch.object(tracing.trace, 'get_tracer_provider', get_tracer_provider)
+
+    settings = tracing.TracingSettings()
+    settings.TRACING_EXPORTER = "gcp"
+    mocker.patch.object(tracing, 'tracing_settings', settings)
+
+    tracing.set_up("test-service")
+
+    spy.assert_called_once()
+    assert len(provider.processors) == 1
+
+
 def test_default_exporter_tracing_setup(mocker):
     provider = FakeProvider()
     spy = mocker.spy(provider, 'add_span_processor')
