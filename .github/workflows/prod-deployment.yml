@@ -106,8 +106,9 @@ jobs:
               --image gcr.io/${{ secrets.GCP_TEST_PROJECT_ID }}/${{ matrix.service }}:${{ github.sha }} \
               --platform managed \
               --port 8000 \
-              --memory "${{ matrix.memory }}"
-              --set-env-vars "PATH_PREFIX=/api/${{ matrix.prefix }}"
+              --memory "${{ matrix.memory }}" \
+              --update-env-vars "PATH_PREFIX=/api/${{ matrix.prefix }}" \
+              --update-env-vars "TRACING_EXPORTER=gcp"
 
       - name: Show Output
         run: echo ${{ steps.deploy.outputs.url }}
