@@ -69,20 +69,8 @@ def test_that_custom_explanation_targets_outside_range_are_not_accepted():
 
 
 def test_that_only_available_explainers_are_accepted(mocker):
-    mocker.patch.object(main, 'EXPLAINERS', ["existing"])
+    mocker.patch("sentiment.api.EXPLAINERS", ["existing"])
 
     response = client.post('/explain', json={"text": "This is a stellar review.",
                                              "target": 4, "method": "unavailable"})
     assert response.status_code == 422
-
-
-def test_that_the_explainer_availability_check_works(mocker):
-    mocker.patch.object(main, 'EXPLAINERS', ["existing"])
-
-    good_exp_req = main.ExplanationRequest(text="some text",
-                                           target=3,
-                                           method="existing")
-    with pytest.raises(ValueError):
-        bad_exp_req = main.ExplanationRequest(text="some text",
-                                              target=3,
-                                              method="unavailable")
