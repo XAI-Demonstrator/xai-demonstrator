@@ -49,6 +49,18 @@ def set_up(service_name: str):
         trace.get_tracer_provider().add_span_processor(
             SimpleExportSpanProcessor(ConsoleSpanExporter())
         )
+    elif tracing_settings.TRACING_EXPORTER == "gcp":
+        from opentelemetry.exporter.cloud_trace import CloudTraceSpanExporter
+        from opentelemetry.tools.cloud_trace_propagator import CloudTraceFormatPropagator
+        from opentelemetry.sdk.trace.export import BatchExportSpanProcessor
+        from opentelemetry.propagators import set_global_textmap
+
+        cloud_trace_exporter = CloudTraceSpanExporter()
+        trace.get_tracer_provider().add_span_processor(
+            BatchExportSpanProcessor(cloud_trace_exporter)
+        )
+
+        set_global_textmap(CloudTraceFormatPropagator())
 
 
 def instrument_app(app: FastAPI):
