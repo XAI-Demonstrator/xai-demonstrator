@@ -73,8 +73,10 @@ jobs:
       matrix:
         include:
           - service: review-sentiment
+            prefix: sentiment
             memory: 4Gi
           - service: visual-inspection
+            prefix: inspection
             memory: 1Gi
     runs-on: ubuntu-latest
     steps:
@@ -88,10 +90,10 @@ jobs:
           service_account_key: ${{ secrets.GCP_TEST_SA_KEY }}
           export_default_credentials: true  # Set to true to authenticate the Cloud Run action
 
-      - name: Authorize Docker push
+      - name: Authorize Docker
         run: gcloud auth configure-docker
 
-      - name: Build and Push Container
+      - name: Pull, Tag, and Push Container
         run: |-
           docker pull ghcr.io/xai-demonstrator/${{ matrix.service }}-service:latest
           docker tag ghcr.io/xai-demonstrator/${{ matrix.service }}-service gcr.io/${{ secrets.GCP_TEST_PROJECT_ID }}/${{ matrix.service }}:${{ github.sha }}
@@ -105,6 +107,7 @@ jobs:
               --platform managed \
               --port 8000 \
               --memory "${{ matrix.memory }}"
+              --set-env-vars "PATH_PREFIX=/api/${{ matrix.prefix }}"
 
       - name: Show Output
         run: echo ${{ steps.deploy.outputs.url }}

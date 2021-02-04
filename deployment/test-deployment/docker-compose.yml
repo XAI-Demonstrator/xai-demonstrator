@@ -20,6 +20,7 @@ services:
     expose:
       - 8000
     environment:
+      - ROOT_PATH=/api/sentiment
       - TRACING_EXPORTER=jaeger
       - JAEGER_AGENT_HOST_NAME=jaeger
 
@@ -28,6 +29,7 @@ services:
     expose:
       - 8000
     environment:
+      - ROOT_PATH=/api/inspection
       - TRACING_EXPORTER=jaeger
       - JAEGER_AGENT_HOST_NAME=jaeger
 
