@@ -24,8 +24,8 @@ jobs:
       - name: Setup Cloud SDK
         uses: google-github-actions/setup-gcloud@v0.2.0
         with:
-          project_id: ${{ secrets.GCP_TEST_PROJECT_ID }}
-          service_account_key: ${{ secrets.GCP_TEST_SA_KEY }}
+          project_id: ${{ secrets.GCP_PROD_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_PROD_SA_KEY }}
           export_default_credentials: true  # Set to true to authenticate the Cloud Run action
 
       - name: Authorize Docker
@@ -34,13 +34,13 @@ jobs:
       - name: Pull, Tag, and Push Container
         run: |-
           docker pull ghcr.io/xai-demonstrator/${{ matrix.service }}-service:latest
-          docker tag ghcr.io/xai-demonstrator/${{ matrix.service }}-service gcr.io/${{ secrets.GCP_TEST_PROJECT_ID }}/${{ matrix.service }}:${{ github.sha }}
-          docker push gcr.io/${{ secrets.GCP_TEST_PROJECT_ID }}/${{ matrix.service }}:${{ github.sha }}
+          docker tag ghcr.io/xai-demonstrator/${{ matrix.service }}-service gcr.io/${{ secrets.GCP_PROD_PROJECT_ID }}/${{ matrix.service }}:${{ github.sha }}
+          docker push gcr.io/${{ secrets.GCP_PROD_PROJECT_ID }}/${{ matrix.service }}:${{ github.sha }}
       - name: Deploy to Cloud Run
         run: |-
             gcloud run deploy ${{ matrix.service }} \
-              --region ${{ secrets.GCP_TEST_REGION }} \
-              --image gcr.io/${{ secrets.GCP_TEST_PROJECT_ID }}/${{ matrix.service }}:${{ github.sha }} \
+              --region ${{ secrets.GCP_PROD_REGION }} \
+              --image gcr.io/${{ secrets.GCP_PROD_PROJECT_ID }}/${{ matrix.service }}:${{ github.sha }} \
               --platform managed \
               --port 8000 \
               --memory "${{ matrix.memory }}" \
