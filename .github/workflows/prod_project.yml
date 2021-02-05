@@ -2,71 +2,10 @@ name: Prod Deployment
 
 on:
   push:
-    prod_project
+    branches: 
+      prod_project
 
 jobs:
-  build-frontends:
-    strategy:
-      matrix:
-        include:
-          - service: sentiment
-            repo_path: ./review-sentiment/sentiment-frontend
-          - service: inspection
-            repo_path: ./visual-inspection/inspection-frontend
-          - service: landing-page
-            repo_path: ./landing-page/frontend
-
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
-
-      - name: Set Up Node Environment
-        uses: actions/setup-node@v2
-        with:
-          node-version: '12'
-
-      - uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('${{ matrix.repo_path }}/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-      - name: Build Frontend
-        run: |
-          set -e
-          cd ${{ matrix.repo_path }}
-          npm install
-          npm run build -- --mode prod-deployment
-          mv dist ${{ matrix.service }}
-      - name: Save build artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: ${{ matrix.service }}
-          path: ${{ matrix.repo_path }}/${{ matrix.service }}
-          retention-days: 3
-
-  deploy-frontends:
-    needs: build-frontends
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Download all frontends
-        uses: actions/download-artifact@v2
-        with:
-          path: ./deployment/prod-deployment/frontends/public
-
-      - name: Deploy to Firebase
-        uses: w9jds/firebase-action@v2.0.0
-        with:
-          args: deploy --only hosting
-        env:
-          FIREBASE_TOKEN: ${{ secrets.TEST_FIREBASE_TOKEN }}
-          PROJECT_PATH: ./deployment/prod-deployment/frontends
-
-
   deploy-backends:
     strategy:
       matrix:
@@ -109,20 +48,3 @@ jobs:
               --update-env-vars "TRACING_EXPORTER=gcp"
       - name: Show Output
         run: echo ${{ steps.deploy.outputs.url }}
-
-
-  notify:
-    needs:
-      - deploy-frontends
-      - deploy-backends
-    runs-on: ubuntu-latest
-    steps:
-      - name: Slack Notification
-        uses: rtCamp/action-slack-notify@master
-        env:
-          SLACK_CHANNEL: xai-tech
-          SLACK_MESSAGE: 'Successfully deployed a new release to https://www.xaidemo.de :rocket:'
-          SLACK_TITLE: New Prod Deployment
-          SLACK_USERNAME: Deployment Monitor
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          MSG_MINIMAL: true
