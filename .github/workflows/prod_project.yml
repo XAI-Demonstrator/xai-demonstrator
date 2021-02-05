@@ -34,6 +34,7 @@ jobs:
       - name: Pull, Tag, and Push Container
         run: |-
           docker pull ghcr.io/xai-demonstrator/${{ matrix.service }}-service:latest
+          echo ghcr.io/xai-demonstrator/${{ matrix.service }}-service gcr.io/our-project-id/${{ matrix.service }}:${{ github.sha }}
           docker tag ghcr.io/xai-demonstrator/${{ matrix.service }}-service gcr.io/${{ secrets.GCP_PROD_PROJECT_ID }}/${{ matrix.service }}:${{ github.sha }}
           docker push gcr.io/${{ secrets.GCP_PROD_PROJECT_ID }}/${{ matrix.service }}:${{ github.sha }}
       - name: Deploy to Cloud Run
