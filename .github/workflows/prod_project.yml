@@ -33,7 +33,7 @@ jobs:
 
       - name: Pull, Tag, and Push Container
         run: |-
-          echo check
+          echo check check
           docker pull ghcr.io/xai-demonstrator/${{ matrix.service }}-service:latest
           docker tag ghcr.io/xai-demonstrator/${{ matrix.service }}-service gcr.io/${{ secrets.GCP_PROD_PROJECT_ID }}/${{ matrix.service }}:${{ github.sha }}
           docker push gcr.io/${{ secrets.GCP_PROD_PROJECT_ID }}/${{ matrix.service }}:${{ github.sha }}
