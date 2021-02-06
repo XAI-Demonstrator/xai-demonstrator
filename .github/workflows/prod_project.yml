@@ -1,9 +1,7 @@
 name: Prod Deployment
 
 on:
-  push:
-    branches: 
-      prod_project
+  workflow_dispatch
 
 jobs:
   deploy-backends:
