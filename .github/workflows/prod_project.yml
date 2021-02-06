@@ -38,7 +38,7 @@ jobs:
           docker push gcr.io/${{ secrets.GCP_PROD_PROJECT_ID }}/${{ matrix.service }}:${{ github.sha }}
       - name: Deploy to Cloud Run
         run: |-
-            echo check
+            echo check check
             gcloud run deploy ${{ matrix.service }} \
               --region ${{ secrets.GCP_PROD_REGION }} \
               --image gcr.io/${{ secrets.GCP_PROD_PROJECT_ID }}/${{ matrix.service }}:${{ github.sha }} \
