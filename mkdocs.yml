@@ -1,0 +1,25 @@
+site_name: XAI Demonstrator
+repo_url: https://github.com/xai-demonstrator/xai-demonstrator
+copyright: © 2021 The XAI Demonstrator Team
+
+theme: material
+
+nav:
+  - Home: 'index.md'
+  - 'User Guide':
+      - 'user-guide/getting-started.md'
+      - 'user-guide/use-cases.md'
+      - 'user-guide/deployment.md'
+  - 'Use Cases':
+      - 'use-cases/review-sentiment.md'
+      - 'use-cases/visual-inspection.md'
+  - 'Tech Notes':
+      - 'tech-notes/monorepo.md'
+      - 'tech-notes/tech-stack.md'
+      - 'tech-notes/gcp.md'
+  - 'about.md'
+
+markdown_extensions:
+  - toc:
+      permalink: "#"
+  - admonition
