@@ -9,6 +9,7 @@ import torch
 from pydantic import BaseModel
 from xaidemo.tracing import add_span_attributes, traced
 
+from .explainers.gradient_shap import attribute_gradient_shap
 from .explainers.integrated_gradients import attribute_integrated_gradients
 from .explainers.random_words import attribute_random_words
 from .explainers.shapley_value_sampling import attribute_sampled_shapley_values
@@ -22,6 +23,7 @@ with open(PATH / "small_words_to_filter.txt", "rt", encoding="utf-8") as f:
     STOPWORDS = [word.strip() for word in f]
 
 EXPLAINERS = {
+    "gradient_shap": attribute_gradient_shap,
     "integrated_gradients": attribute_integrated_gradients,
     "random_words": attribute_random_words,
     "shapley_value_sampling": attribute_sampled_shapley_values
@@ -34,7 +36,6 @@ class Explanation(BaseModel):
     meta: Optional[Dict[str, Any]]
 
 
-@traced(attributes={"torch.device": str(my_device), "torch.device.type": my_device.type})
 def construct_input_and_reference(text_input_ids: List[int],
                                   ref_token_id: int) -> Tuple[torch.Tensor, torch.Tensor]:
     ref_input_ids = [ref_token_id] * len(text_input_ids)
@@ -42,7 +43,6 @@ def construct_input_and_reference(text_input_ids: List[int],
     return torch.tensor([text_input_ids], device=my_device), torch.tensor([ref_input_ids], device=my_device)
 
 
-@traced
 def align_text(text: str,
                word_ids: np.ndarray,
                scores: np.ndarray) -> List[Tuple[str, float]]:
@@ -52,7 +52,6 @@ def align_text(text: str,
             for idx, word in enumerate(split_text)]
 
 
-@traced
 def filter_attributions(attributions: List[Tuple[str, float]],
                         remove_stopwords: bool = True,
                         remove_punctuation: bool = True) -> List[Tuple[str, float]]:

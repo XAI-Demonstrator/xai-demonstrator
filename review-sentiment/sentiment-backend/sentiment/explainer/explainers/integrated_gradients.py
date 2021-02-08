@@ -3,7 +3,7 @@ from typing import Dict, Tuple
 import numpy as np
 import torch
 from captum.attr import LayerIntegratedGradients
-from transformers import BertForSequenceClassification
+from transformers.models.bert.modeling_bert import BertForSequenceClassification
 from xaidemo.tracing import traced
 
 
@@ -18,7 +18,6 @@ def attribute_integrated_gradients(text_input_ids: torch.Tensor,
         pred = model(model_input)
         return torch.softmax(pred[0], dim=1)
 
-    # TODO: Investigate whether instantiating the LIG is expensive
     lig = LayerIntegratedGradients(forward,
                                    model.bert.embeddings)
 
