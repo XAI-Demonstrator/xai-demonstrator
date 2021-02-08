@@ -2,13 +2,19 @@ import {createLocalVue, shallowMount} from '@vue/test-utils'
 import AnalyzeReview from "@/components/AnalyzeReview";
 import axios from 'axios';
 import flushPromises from 'flush-promises';
+import BarChart from "@/components/BarChart";
 
 jest.mock('axios');
 
 describe('Component', () => {
 
     const localVue = createLocalVue()
-    const wrapper = shallowMount(AnalyzeReview, localVue);
+    let wrapper = shallowMount(AnalyzeReview, localVue);
+
+    beforeEach(() => {
+            wrapper = shallowMount(AnalyzeReview, localVue);
+        }
+    )
 
     it('component reset', () => {
         wrapper.setData({numOfStars: 5})
