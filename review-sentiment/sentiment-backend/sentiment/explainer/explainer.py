@@ -36,7 +36,6 @@ class Explanation(BaseModel):
     meta: Optional[Dict[str, Any]]
 
 
-@traced(attributes={"torch.device": str(my_device), "torch.device.type": my_device.type})
 def construct_input_and_reference(text_input_ids: List[int],
                                   ref_token_id: int) -> Tuple[torch.Tensor, torch.Tensor]:
     ref_input_ids = [ref_token_id] * len(text_input_ids)
@@ -44,7 +43,6 @@ def construct_input_and_reference(text_input_ids: List[int],
     return torch.tensor([text_input_ids], device=my_device), torch.tensor([ref_input_ids], device=my_device)
 
 
-@traced
 def align_text(text: str,
                word_ids: np.ndarray,
                scores: np.ndarray) -> List[Tuple[str, float]]:
@@ -54,7 +52,6 @@ def align_text(text: str,
             for idx, word in enumerate(split_text)]
 
 
-@traced
 def filter_attributions(attributions: List[Tuple[str, float]],
                         remove_stopwords: bool = True,
                         remove_punctuation: bool = True) -> List[Tuple[str, float]]:
