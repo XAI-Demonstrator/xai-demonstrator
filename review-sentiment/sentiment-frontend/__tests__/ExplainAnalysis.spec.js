@@ -31,6 +31,8 @@ describe('Component', () => {
     it('explanation is requested with default method', async () => {
         await wrapper.setProps({
             reviewText: "Boring food...",
+        })
+        await wrapper.setData({
             backendUrl: ""
         })
 
@@ -73,7 +75,10 @@ describe('Component', () => {
         });
 
         await wrapper.setProps({
-            reviewText: "Boring food...",
+            reviewText: "Boring food..."
+        })
+
+        await wrapper.setData({
             backendUrl: ""
         })
 
