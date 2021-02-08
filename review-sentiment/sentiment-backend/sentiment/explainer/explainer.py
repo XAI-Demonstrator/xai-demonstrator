@@ -9,6 +9,7 @@ import torch
 from pydantic import BaseModel
 from xaidemo.tracing import add_span_attributes, traced
 
+from .explainers.gradient_shap import attribute_gradient_shap
 from .explainers.integrated_gradients import attribute_integrated_gradients
 from .explainers.random_words import attribute_random_words
 from .explainers.shapley_value_sampling import attribute_sampled_shapley_values
@@ -22,6 +23,7 @@ with open(PATH / "small_words_to_filter.txt", "rt", encoding="utf-8") as f:
     STOPWORDS = [word.strip() for word in f]
 
 EXPLAINERS = {
+    "gradient_shap": attribute_gradient_shap,
     "integrated_gradients": attribute_integrated_gradients,
     "random_words": attribute_random_words,
     "shapley_value_sampling": attribute_sampled_shapley_values

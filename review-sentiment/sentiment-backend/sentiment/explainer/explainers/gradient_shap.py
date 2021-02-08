@@ -1,9 +1,20 @@
-from typing import Tuple, Dict
+from typing import Dict, Tuple
 
 import numpy as np
 import torch
 from captum.attr import LayerGradientShap
-from transformers import BertForSequenceClassification
+from transformers.models.bert.modeling_bert import BertForSequenceClassification
+
+
+def create_partial_model(model: BertForSequenceClassification):
+
+    def forward(embedded_input):
+        encoder_output = model.bert.encoder(embedded_input)
+        pooled = model.bert.pooler(encoder_output[0])
+        model_output = model.classifier(pooled)
+        return torch.softmax(model_output, dim=1)
+
+    return forward, model.bert.encoder
 
 
 # noinspection PyUnusedLocal
@@ -13,25 +24,21 @@ def attribute_gradient_shap(text_input_ids: torch.Tensor,
                             model: BertForSequenceClassification,
                             **kwargs) -> Tuple[np.ndarray, Dict[str, float]]:
 
-    # TODO: We need to start attribution at the input of the layer after the embedding
-    #       because LGS uses a Gaussian distribution to disturb the layer's input:
-    #       (1) Calculate the embedding outputs for input and ref
-    #       (2) Create a new model that goes from "after embedding" to "output"
+    embedded_text_inputs = model.bert.embeddings(text_input_ids)
+    embedded_ref_inputs = model.bert.embeddings(ref_input_ids)
 
-    def forward(model_input):
-        pred = model(model_input)
-        return torch.softmax(pred[0], dim=1)
+    forward, attribution_layer = create_partial_model(model)
 
     lgs = LayerGradientShap(forward,
-                            model.bert.embeddings)
+                            attribution_layer)
 
-    attributions, delta = lgs.attribute(inputs=text_input_ids,
+    attributions, delta = lgs.attribute(inputs=embedded_text_inputs,
                                         target=target,
-                                        baselines=ref_input_ids,
+                                        baselines=embedded_ref_inputs,
                                         return_convergence_delta=True,
                                         attribute_to_layer_input=True)
 
     scores = attributions.sum(dim=-1).squeeze(0)
     scores = scores.cpu().detach().numpy()
 
-    return scores, {"delta": delta.item()}
+    return scores, {"delta": delta.cpu().detach().numpy().tolist()}
