@@ -33,11 +33,18 @@ export default {
   methods: {
     requestExplanation() {
       Indicator.open()
-
       this.resetComponent()
 
+      let data = {"text": this.reviewText}
+
+      let params = new URLSearchParams(window.location.search.substring(1));
+      let method = params.get('method');
+      if (method) {
+        data.method = method;
+      }
+
       axios
-          .post(this.backendUrl + '/explain', {"text": this.reviewText})
+          .post(this.backendUrl + '/explain', data)
           .then(response => {
                 this.explanationResult = response.data.explanation.map(function (pair) {
                   return {

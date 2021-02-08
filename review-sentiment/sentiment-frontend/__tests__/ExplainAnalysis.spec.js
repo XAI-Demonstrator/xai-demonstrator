@@ -8,10 +8,15 @@ jest.mock('axios');
 describe('Component', () => {
 
     const localVue = createLocalVue()
-    const wrapper = shallowMount(ExplainAnalysis, localVue);
+    let wrapper = shallowMount(ExplainAnalysis, localVue);
 
-    it('component reset', () => {
-        wrapper.setData({
+    beforeEach(() => {
+            wrapper = shallowMount(ExplainAnalysis, localVue);
+        }
+    )
+
+    it('component reset', async () => {
+        await wrapper.setData({
             explanationResult: [
                 {word: "Nice", score: 0.5},
                 {word: "movie", score: "-0.1"}
@@ -23,8 +28,11 @@ describe('Component', () => {
         expect(wrapper.vm.$data.explanationResult).toBeNull()
     })
 
-    it('explanation is requested', async () => {
-        wrapper.setProps({reviewText: "Boring food..."})
+    it('explanation is requested with default method', async () => {
+        await wrapper.setProps({
+            reviewText: "Boring food...",
+            backendUrl: ""
+        })
 
         const response = {
             data: {
@@ -37,7 +45,7 @@ describe('Component', () => {
                 ]
             }
         }
-        axios.post.mockImplementationOnce(() => Promise.resolve(response))
+        const mockPost = axios.post.mockImplementationOnce(() => Promise.resolve(response))
 
         wrapper.vm.requestExplanation()
         await flushPromises()
@@ -51,6 +59,53 @@ describe('Component', () => {
                 {word: ".", score: 0.0}
             ]
         )
+        expect(mockPost).toBeCalledWith("/explain", {"text": "Boring food..."})
+
+    })
+
+    it('explanation is requested with specified method', async () => {
+        global.window = Object.create(window)
+        Object.defineProperty(window, 'location', {
+            value: {
+                href: "",
+                search: "?method=random"
+            }
+        });
+
+        await wrapper.setProps({
+            reviewText: "Boring food...",
+            backendUrl: ""
+        })
+
+        const response = {
+            data: {
+                explanation: [
+                    ["Boring", 0.7],
+                    ["food", 0.3],
+                    [".", 0.0],
+                    [".", 0.0],
+                    [".", 0.0]
+                ]
+            }
+        }
+        const mockPost = axios.post.mockImplementationOnce(() => Promise.resolve(response))
+
+        wrapper.vm.requestExplanation()
+        await flushPromises()
+
+        expect(wrapper.vm.$data.explanationResult).toStrictEqual(
+            [
+                {word: "Boring", score: 0.7},
+                {word: "food", score: 0.3},
+                {word: ".", score: 0.0},
+                {word: ".", score: 0.0},
+                {word: ".", score: 0.0}
+            ]
+        )
+        expect(mockPost).toBeCalledWith("/explain", {
+            "text": "Boring food...",
+            "method": "random"
+        })
 
     })
 
