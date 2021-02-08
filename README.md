@@ -1,7 +1,7 @@
 # XAI Demonstrator
 The XAI Demonstrator is a modular platform that lets users interact with production-grade Explainable AI (XAI) systems.
 
-**For general information and user guides, see our project website at [xai-demonstrator.github.io](https://xai-demonstrator.github.io/).**
+**For general information, see our project website at [xai-demonstrator.github.io](https://xai-demonstrator.github.io/).**
 
 ## Getting Started
 If you just want to try the XAI Demonstrator, have a look at the [list of publicly accessible deployments](#deployments) below.
@@ -20,6 +20,11 @@ Then, you can reach the app at [localhost:8000](http://localhost:8000/).
 To start a local instance of the XAI Demonstrator built from source,
 run `docker-compose up` in the top-level directory, wait for all builds to complete,
 and access the app at [localhost:8000](http://localhost:8000/).
+
+## Documentation
+![Documentation](https://github.com/XAI-Demonstrator/xai-demonstrator/workflows/Documentation/badge.svg?branch=master)
+
+A technical documentation with user guides is taking shape at [xai-demonstrator.github.io/xai-demonstrator/](https://xai-demonstrator.github.io/xai-demonstrator/).
 
 ## Use Cases
 Each use case illustrates a particular application of user-centric XAI methods.
