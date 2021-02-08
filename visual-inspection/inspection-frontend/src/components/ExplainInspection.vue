@@ -3,7 +3,8 @@
     <div class="explanation-request">
       <mt-button class="request-button"
                  v-show="!waitingForExplanation"
-                 v-on:click="buttonClicked">„Woran erkennst du das?“
+                 v-on:click="buttonClicked">
+        Woran erkennst du das?
       </mt-button>
       <mt-spinner v-if="waitingForExplanation" type="triple-bounce"/>
     </div>

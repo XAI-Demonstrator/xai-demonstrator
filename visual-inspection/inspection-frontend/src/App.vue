@@ -11,7 +11,7 @@
     <p>Wähle einen Bildausschnitt und frage die KI nach dem Wetter:</p>
     <div id="image-container">
       <Cropper ref="cropper" :src="img" @change="imageChanged"
-               :min-width="40" :min-height="25"
+               :min-width="30" :min-height="20"
                :stencil-component="ExplanationStencil"
                :stencil-props="{
                  'explanationMode': currentExplanation,
