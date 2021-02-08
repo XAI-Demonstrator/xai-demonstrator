@@ -5,10 +5,14 @@ import TextHighlight from "@/components/TextHighlight";
 describe('Component', () => {
 
     const localVue = createLocalVue()
-    const wrapper = shallowMount(TextHighlight, localVue);
+    let wrapper = shallowMount(TextHighlight, localVue);
 
-    it('HSL is calculated', () => {
-        wrapper.setProps({preScaler: 1.0})
+    beforeEach(() => {
+        wrapper = shallowMount(TextHighlight, localVue)
+    })
+
+    it('HSL is calculated', async () => {
+        await wrapper.setProps({preScaler: 1.0})
         expect(wrapper.vm.calcHSL(1.0)).toBe('hsl(' + 174 + ',100%,' + 27 + '%)')
         expect(wrapper.vm.calcHSL(0.5)).toBe('hsl(' + 174 + ',100%,' + 13.5 + '%)')
         expect(wrapper.vm.calcHSL(-0.5)).toBe('hsl(' + 0 + ',100%,' + 20 + '%)')
@@ -25,8 +29,8 @@ describe('Component', () => {
         expect(wrapper.vm.whitespace("great")).toBe(" ")
     })
 
-    it('explanations are scaled', () => {
-        wrapper.setProps({maxScore: 0.5})
+    it('explanations are scaled', async () => {
+        await wrapper.setProps({maxScore: 0.5})
         const explanation = [{"word": "the", "score": -0.25}, {"word": "world", "score": 0.1}]
         expect(wrapper.vm.rescaleScores(explanation)).toStrictEqual(
             [{"word": "the", "score": -0.50}, {"word": "world", "score": 0.2}])
@@ -37,26 +41,32 @@ describe('Component', () => {
         expect(wrapper.vm.getScalingFactor(explanation)).toBeCloseTo(1.0)
     })
 
-    it('explanations with scores above minLength are not scaled', () => {
-        wrapper.setProps({maxScore: 0.8})
+    it('scaling factor depends on maxScore', async () => {
+        await wrapper.setProps({maxScore: 0.5})
+        const explanation = [{"word": "the", "score": -0.25}]
+        expect(wrapper.vm.getScalingFactor(explanation)).toBeCloseTo(2.0)
+    })
+
+    it('explanations with scores above minLength are not scaled', async () => {
+        await wrapper.setProps({maxScore: 0.8})
         const explanation = [{"word": "the", "score": 0.9}, {"word": "world", "score": 0.7}]
         expect(wrapper.vm.getScalingFactor(explanation)).toBeCloseTo(1.0)
     })
 
-    it('explanations with scores below minLength are scaled', () => {
-        wrapper.setProps({maxScore: 0.8})
+    it('explanations with scores below minLength are scaled', async () => {
+        await wrapper.setProps({maxScore: 0.8})
         const explanation = [{"word": "the", "score": 0.3}, {"word": "world", "score": 0.4}]
         expect(wrapper.vm.getScalingFactor(explanation)).toBeCloseTo(2.0)
     })
 
-    it('explanations with negative scores above minLength are scaled', () => {
-        wrapper.setProps({maxScore: 0.8})
+    it('explanations with negative scores above minLength are scaled', async () => {
+        await wrapper.setProps({maxScore: 0.8})
         const explanation = [{"word": "the", "score": -0.2}, {"word": "world", "score": 0.1}]
         expect(wrapper.vm.getScalingFactor(explanation)).toBeCloseTo(4.0)
     })
 
-    it('explanations with negative scores below minLength are scaled', () => {
-        wrapper.setProps({maxScore: 0.8})
+    it('explanations with negative scores below minLength are scaled', async () => {
+        await wrapper.setProps({maxScore: 0.8})
         const explanation = [{"word": "the", "score": 0.5}, {"word": "world", "score": -0.9}]
         expect(wrapper.vm.getScalingFactor(explanation)).toBeCloseTo(1.0)
     })
