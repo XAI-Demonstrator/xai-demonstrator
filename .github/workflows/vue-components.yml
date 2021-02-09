@@ -1,0 +1,27 @@
+name: Vue Components
+
+on:
+  push:
+    paths:
+      - 'common/vue-components/**'
+      - '!common/vue-components/**.md'
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Node 12
+        uses: actions/setup-node@v2
+        with:
+          node-version: '12'
+      - name: do everything
+        run: |
+          set -e
+          cd ./common/vue-components/xaidemo-ui
+          npm install
+          npm run build-lib
+      - uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          registry: https://npm.pkg.github.com/xai-demonstrator
+          package: ./common/vue-components/xaidemo-ui/package.json
