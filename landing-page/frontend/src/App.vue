@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import {FloatingInfoButton} from '@xai-demonstrator/xaidemo-ui';
+import { FloatingInfoButton } from '@xai-demonstrator/xaidemo-ui';
 
 export default {
   name: 'App',
@@ -281,6 +281,7 @@ section img.next {
     height: auto;
     min-height: 640px;
     flex-direction: column;
+    overflow: auto;
   }
 
   .blank-header {
