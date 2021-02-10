@@ -12,7 +12,7 @@ export default {
   props: {
     standalone: {
       type: Boolean,
-      default: false
+      default: true
     },
     title: {
       type: String,
@@ -31,12 +31,6 @@ export default {
 .navigation-header {
   background-color: #77A6F7;
   height: 50px;
-
-  top: 0;
-  right: 0;
-  left: 0;
-  position: fixed;
-  z-index: 1;
 
   display: flex;
   flex-direction: row;
@@ -77,4 +71,31 @@ export default {
   font-size: 18px;
   font-weight: 400;
 }
+
+@media screen and (max-width: 450px) {
+  .navigation-header {
+    top: 0;
+    right: 0;
+    left: 0;
+    position: fixed;
+    z-index: 1;
+  }
+}
+
+@media screen and (min-width: 450px) and (max-height: 650px) {
+  .navigation-header {
+    top: 0;
+    right: 0;
+    left: 0;
+    position: fixed;
+    z-index: 1;
+  }
+}
+
+@media screen and (min-width: 450px) and (min-height: 650px) {
+  .navigation-header {
+    margin-bottom: 10px;
+  }
+}
+
 </style>
