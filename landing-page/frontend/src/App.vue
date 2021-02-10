@@ -1,61 +1,39 @@
 <template>
   <div id="app">
-    <header v-on:click="toMainMode">
-      <h1>XAI-Demonstrator</h1>
+    <div class="blank-header"><h1>XAI Demonstrator</h1></div>
+    <header>
       <h3>Hinterfrage die KI und entdecke Erklärbare Künstliche Intelligenz</h3>
     </header>
     <main>
-      <transition name="fade" mode="out-in">
-        <div id="select" v-if="!infoMode" key="select">
-          <a v-for="useCase in useCases" :key="useCase.title" v-bind:href="useCase.route">
-            <section>
-              <img v-bind:src="useCase.logo" class="logo" :alt="useCase.title"/>
-              <div class="description">
-                <h3>{{ useCase.title }}</h3>
-                <p>{{ useCase.description }}</p>
-              </div>
-              <img class="next" src="https://upload.wikimedia.org/wikipedia/commons/7/7b/Octicons-playback-play.svg"/>
-            </section>
-          </a>
-        </div>
-        <div v-else id="info" key="info">
+      <div id="select">
+        <a v-for="useCase in useCases" :key="useCase.title" v-bind:href="useCase.route">
           <section>
+            <img v-bind:src="useCase.logo" class="logo" :alt="useCase.title"/>
             <div class="description">
-              <h3>Der XAI-Demonstrator</h3>
-              <p>
-                Eine KI, die sich dir gegenüber wie ein Team-Mitglied erklärt?
-                Der XAI-Demonstrator zeigt, wie das geht.
-              </p>
-              <p>
-                Anhand leicht zugänglicher Beispiele veranschautlicht die App die Möglichkeiten von
-                Explainable AI (XAI).
-                Live und interaktiv erzeugt sie Erklärungen mit modernen Methoden direkt aus der Forschung.
-              </p>
-              <p>
-                Damit wird die Vision einer Künstlichen Intelligenz, die nicht länger eine Black Box ist,
-                sondern von ihren Nutzerinnen und Nutzern verstanden und hinterfragt werden kann, Realität.
-              </p>
-              <a class="button" href="https://www.uni-ulm.de">Interesse geweckt? Besuche unsere Website!</a>
+              <h3>{{ useCase.title }}</h3>
+              <p>{{ useCase.description }}</p>
             </div>
+            <img class="next" src="https://upload.wikimedia.org/wikipedia/commons/7/7b/Octicons-playback-play.svg"/>
           </section>
-        </div>
-      </transition>
+        </a>
+      </div>
+          <FloatingInfoButton
+        v-bind:info-text="infoText"
+        v-bind:info-url="infoUrl"
+        v-bind:link-label="linkLabel"/>
     </main>
-    <footer>
-      <p>Der XAI-Demonstrator ist ein Projekt der Universität Ulm.</p>
-      <transition name="fade" mode="out-in">
-        <div v-if="!infoMode" class="icon" v-on:click="toInfoMode" key="infoButton">i</div>
-        <div v-else class="icon close" v-on:click="toMainMode" key="mainButton">&#215;</div>
-      </transition>
-    </footer>
+
   </div>
 </template>
 
 <script>
+import {FloatingInfoButton} from '@xai-demonstrator/xaidemo-ui';
 
 export default {
   name: 'App',
-  components: {},
+  components: {
+    FloatingInfoButton
+  },
   data() {
     return {
       useCases: [
@@ -70,41 +48,26 @@ export default {
           title: "Visual Inspection",
           description: "Woran erkennt eine KI das Wetter? Finde es heraus!",
           route: "/inspection/"
-        },
-        // {
-        //   logo: "https://upload.wikimedia.org/wikipedia/commons/c/c2/Android_Emoji_26c5.svg",
-        //   title: "Visual Inspection",
-        //   description: "Woran erkennt eine KI das Wetter? Finde es heraus!",
-        //   route: "/inspection/"
-        // }
-        // ,
-        // {
-        //   logo: "https://upload.wikimedia.org/wikipedia/commons/c/c2/Android_Emoji_26c5.svg",
-        //   title: "Visual Inspection",
-        //   description: "Woran erkennt eine KI das Wetter? Finde es heraus!",
-        //   route: "/inspection/"
-        // }
-        // ,
-        // {
-        //   logo: "https://upload.wikimedia.org/wikipedia/commons/c/c2/Android_Emoji_26c5.svg",
-        //   title: "Visual Inspection",
-        //   description: "Woran erkennt eine KI das Wetter? Finde es heraus!",
-        //   route: "/inspection/"
-        // }
+        }
       ],
-      infoMode: false
+      infoText: [
+        {
+          headline: "Der XAI-Demonstrator",
+          paragraphs: [
+            "Eine KI, die sich dir gegenüber wie ein Team-Mitglied erklärt? Der XAI-Demonstrator zeigt, wie das geht.",
+            "Anhand leicht zugänglicher Beispiele veranschautlicht die App die Möglichkeiten von Explainable AI (XAI). " +
+            "Live und interaktiv erzeugt sie Erklärungen mit modernen Methoden direkt aus der Forschung.",
+            "Damit wird die Vision einer Künstlichen Intelligenz, die nicht länger eine Black Box ist, " +
+            "sondern von ihren Nutzerinnen und Nutzern verstanden und hinterfragt werden kann, Realität."
+          ]
+        }
+      ],
+      infoUrl: "https://www.uni-ulm.de",
+      linkLabel: "Interesse geweckt? Besuche unsere Website!"
     }
   },
   created() {
     document.title = "XAI Demonstrator"
-  },
-  methods: {
-    toInfoMode() {
-      this.infoMode = true;
-    },
-    toMainMode() {
-      this.infoMode = false;
-    }
   }
 }
 </script>
@@ -130,23 +93,36 @@ body {
   display: flex;
 }
 
+.blank-header {
+  background-color: #77A6F7;
+  height: 50px;
+
+  padding-left: 10px;
+  display: flex;
+  align-items: center;
+
+  font-family: 'Calibri Light', sans-serif;
+}
+
 header {
   padding: 15px;
   background-color: #77A6F7;
   font-family: 'Calibri Light', sans-serif;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-end;
+  align-items: center;
   flex: 0;
   border-radius: 5px;
   box-shadow: 2px 2px 5px 2px #eee;
 }
 
-header h1 {
+header h1, .blank-header h1 {
   color: #fff;
   padding: 0;
   margin: 0;
   font-weight: 400;
+  font-size: 25px;
 }
 
 header h3 {
@@ -170,7 +146,7 @@ header h3 {
   color: #2c3e50;
 }
 
-section {
+#select section {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -198,18 +174,6 @@ section img.next {
   width: 15px;
 }
 
-section a.button {
-  width: 100%;
-  background-color: #00887A;
-  border: none;
-  color: white;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  border-radius: 5px;
-  margin-top: 15px;
-}
-
 .description {
   display: flex;
   flex-direction: column;
@@ -233,54 +197,20 @@ section a.button {
   text-align: justify;
 }
 
-footer {
-  display: flex;
-  align-items: flex-end;
-}
-
-footer p {
-  font-size: 0.7em;
-  color: #ccc;
-  font-family: 'Calibri Light', sans-serif;
-  padding: 0;
-  margin: 0;
-}
-
-footer div.icon {
-  height: 60px;
-  width: 60px;
-  border-radius: 30px;
-  flex-shrink: 0;
-  flex-grow: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #77A6F7;
-  text-decoration: none;
-  color: #fff;
-  font-size: 3em;
-  font-weight: 400;
-  box-shadow: 2px 2px 5px 3px #eee;
-}
-
-footer div.close {
-  background-color: #CC0000;
-}
-
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
-}
-
-.fade-enter, .fade-leave-to {
-  opacity: 0;
-}
-
 @media screen and (max-width: 450px) {
 
   #app {
-    padding: 15px 7px 7px;
+    padding: 60px 7px 7px;
     overflow: scroll;
     flex-direction: column;
+  }
+
+  .blank-header {
+    top: 0;
+    right: 0;
+    left: 0;
+    position: fixed;
+    z-index: 1;
   }
 
   header {
@@ -296,29 +226,21 @@ footer div.close {
     margin-top: 15px;
   }
 
-  #info section {
-    margin-top: 15px;
-  }
-
-  footer {
-    margin-top: 15px;
-    flex: 0;
-    flex-direction: row;
-    align-items: flex-end;
-    justify-content: space-between;
-  }
-
-  footer p {
-    padding-right: 15px;
-  }
-
 }
 
 
 @media screen and (min-width: 450px) and (max-height: 650px) {
   #app {
     flex-direction: row;
-    padding: 10px;
+    padding: 60px 7px 7px;
+  }
+
+  .blank-header {
+    top: 0;
+    right: 0;
+    left: 0;
+    position: fixed;
+    z-index: 1;
   }
 
   header {
@@ -335,25 +257,6 @@ footer div.close {
 
   #select a {
     margin: 0 0 15px;
-  }
-
-  #info section {
-    margin: 0 0 15px;
-  }
-
-  footer {
-    flex-shrink: 2;
-    flex-grow: 2;
-    flex-direction: column-reverse;
-    justify-content: flex-start;
-    margin: 0;
-  }
-
-  footer p {
-    display: none;
-    padding-left: 15px;
-    padding-right: 0;
-    text-align: right;
   }
 
 }
@@ -374,10 +277,14 @@ footer div.close {
     max-width: 450px;
     border: 1px solid #ddd;
     box-shadow: 2px 2px 5px 2px #eee;
-    padding: 10px;
+    padding: 7px;
     height: auto;
     min-height: 640px;
     flex-direction: column;
+  }
+
+  .blank-header {
+    margin-bottom: 10px;
   }
 
   header {
@@ -391,18 +298,6 @@ footer div.close {
 
   #select a {
     margin-top: 15px;
-  }
-
-  #info section {
-    margin-top: 15px;
-  }
-
-  footer {
-    margin-top: 15px;
-    flex: 0;
-    flex-direction: row;
-    align-items: flex-end;
-    justify-content: space-between;
   }
 
 }
