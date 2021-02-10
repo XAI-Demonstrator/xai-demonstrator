@@ -9,7 +9,7 @@
     "test": "jest --collect-coverage"
   },
   "dependencies": {
-    "@xai-demonstrator/xaidemo-ui": "^0.1.2",
+    "@xai-demonstrator/xaidemo-ui": "^0.1.3",
     "core-js": "^3.8.3",
     "mint-ui": "^2.2.13",
     "vue": "^2.6.11"
