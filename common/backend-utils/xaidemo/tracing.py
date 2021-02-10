@@ -1,3 +1,4 @@
+"""OpenTelemetry tracing utilities"""
 from functools import wraps
 from typing import Any, Callable, Dict, Union
 
@@ -7,6 +8,8 @@ from opentelemetry.exporter import jaeger
 from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
 from opentelemetry.sdk.trace import TracerProvider
 from pydantic import BaseSettings
+
+__all__ = ["set_up", "instrument_app", "add_span_attributes", "traced"]
 
 trace.set_tracer_provider(TracerProvider())
 
@@ -102,6 +105,24 @@ def traced(func: Union[Callable, None] = None,
     attributes : dict, optional
         Arbitrary number of span attributes.
 
+    Examples
+    --------
+
+    To simply trace a single function:
+
+        @traced
+        def my_function():
+            ...
+
+    This results in a span with name `my_function`.
+
+    To add custom labels and span attributes, use the keyword arguments:
+
+        @traced(label="custom_span_label", attributes={"num_of_samples": 12})
+        def my_function():
+            ...
+
+    This results in a span with name `custom_span_label` with attribute `num_of_samples` set to 12.
     """
     attributes = attributes or {}
 
