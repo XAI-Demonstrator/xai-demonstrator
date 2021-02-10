@@ -4,7 +4,7 @@ on:
   push:
     paths:
       - 'common/vue-components/**'
-      - '!common/vue-components/**.md'
+      - '!common/vue-components/*.md'
 jobs:
   publish:
     runs-on: ubuntu-latest
