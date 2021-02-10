@@ -1,19 +1,21 @@
 <template>
   <div id="app">
-    <UseCaseHeader v-bind:standalone="!Boolean(backendUrl)"/>
-    <ComposeReview ref="composer"
-                   v-bind:introduction-text="introductionTexts[reviewTopic]"
-                   v-bind:default-review="defaultReviews[reviewTopic]"
-                   v-bind:show-intro="!numberOfStars"
-                   v-on:reviewChanged="reviewTextChanged"/>
-    <AnalyzeReview ref="analyzer"
-                   v-bind:review-text="reviewTextToAnalyze"
-                   v-bind:num-of-stars="numberOfStars"
-                   v-on:analysisRequested="analysisRequested"
-                   v-on:analysisCompleted="analysisCompleted"/>
-    <ExplainAnalysis ref="explainer"
-                     v-bind:is-active="numberOfStars"
-                     v-bind:review-text="reviewTextToAnalyze"/>
+    <UseCaseHeader v-bind:standalone="!Boolean(backendUrl)"
+                   v-bind:title="useCaseTitle"/>
+    <main>
+      <ComposeReview ref="composer"
+                     v-bind:introduction-text="introductionTexts[reviewTopic]"
+                     v-bind:default-review="defaultReviews[reviewTopic]"
+                     v-bind:show-intro="!numberOfStars"
+                     v-on:reviewChanged="reviewTextChanged"/>
+      <AnalyzeReview ref="analyzer"
+                     v-bind:review-text="reviewTextToAnalyze"
+                     v-on:analysisRequested="analysisRequested"
+                     v-on:analysisCompleted="analysisCompleted"/>
+      <ExplainAnalysis ref="explainer"
+                       v-bind:is-active="numberOfStars"
+                       v-bind:review-text="reviewTextToAnalyze"/>
+    </main>
     <FloatingInfoButton v-bind:info-text="infoText"
                         v-bind:info-url="infoUrl"
                         v-bind:link-label="infoLinkLabel"/>
@@ -38,6 +40,7 @@ export default {
   },
   data() {
     return {
+      useCaseTitle: "Review Sentiment",
       introductionTexts: {
         'movie': 'Wie war der Film, den du zuletzt gesehen hast?',
         'restaurant': 'Wie war dein letzter Restaurant-Besuch?',
@@ -101,12 +104,24 @@ export default {
   box-sizing: border-box;
 }
 
+body {
+  padding: 0;
+  margin: 0;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  margin-top: 60px;
+  background-color: #fff;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+}
+
+main {
+  flex-grow: 1;
 }
 
 .mint-indicator-wrapper {
@@ -119,16 +134,46 @@ export default {
   border-left-color: #D3E3FC !important;
 }
 
-@media screen and (min-width: 450px) {
+@media screen and (max-width: 450px) {
+
+  #app {
+    padding: 60px 7px 7px;
+    overflow: scroll;
+    flex-direction: column;
+  }
+
+}
+
+@media screen and (min-width: 450px) and (max-height: 650px) {
+
+  #app {
+    flex-direction: row;
+    padding: 60px 7px 7px;
+  }
+
+}
+
+@media screen and (min-width: 450px) and (min-height: 650px) {
+
   body {
-    background-color: #FFFFFF;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
   }
 
   #app {
-    margin: 40px auto auto;
-    max-width: 425px;
-    border: 1px solid #D3E3FC;
-    padding: 1em 5px 5px;
+    max-width: 450px;
+    border: 1px solid #ddd;
+    box-shadow: 2px 2px 5px 2px #eee;
+    padding: 8px;
+    height: auto;
+    min-height: 640px;
+    flex-direction: column;
+    overflow: auto;
   }
+
 }
 </style>
