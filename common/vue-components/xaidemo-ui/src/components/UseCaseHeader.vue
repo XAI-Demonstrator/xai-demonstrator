@@ -77,11 +77,4 @@ export default {
   font-size: 18px;
   font-weight: 400;
 }
-
-@media screen and (min-width: 450px) {
-  .navigation-header {
-    margin: auto;
-    max-width: 437px;
-  }
-}
 </style>
