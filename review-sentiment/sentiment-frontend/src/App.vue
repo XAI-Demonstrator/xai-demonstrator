@@ -1,13 +1,6 @@
 <template>
   <div id="app">
-    <mt-header fixed title="Review Sentiment" class="navigation-header">
-      <a href="/" slot="left" v-if="backendUrl">
-        <mt-button icon="back"></mt-button>
-      </a>
-      <a href="./" slot="right">
-        <mt-button><span style="font-size: 16px; font-weight:bold;">↻</span></mt-button>
-      </a>
-    </mt-header>
+    <UseCaseHeader v-bind:standalone="!Boolean(backendUrl)"/>
     <ComposeReview ref="composer"
                    v-bind:introduction-text="introductionTexts[reviewTopic]"
                    v-bind:default-review="defaultReviews[reviewTopic]"
@@ -21,6 +14,9 @@
     <ExplainAnalysis ref="explainer"
                      v-bind:is-active="numberOfStars"
                      v-bind:review-text="reviewTextToAnalyze"/>
+    <FloatingInfoButton v-bind:info-text="infoText"
+                        v-bind:info-url="infoUrl"
+                        v-bind:link-label="infoLinkLabel"/>
   </div>
 </template>
 
@@ -28,6 +24,7 @@
 import ComposeReview from "@/components/ComposeReview";
 import AnalyzeReview from "@/components/AnalyzeReview";
 import ExplainAnalysis from "@/components/ExplainAnalysis";
+import {FloatingInfoButton, UseCaseHeader} from "@xai-demonstrator/xaidemo-ui";
 
 
 export default {
@@ -35,7 +32,9 @@ export default {
   components: {
     ComposeReview,
     AnalyzeReview,
-    ExplainAnalysis
+    ExplainAnalysis,
+    FloatingInfoButton,
+    UseCaseHeader
   },
   data() {
     return {
@@ -49,6 +48,20 @@ export default {
         'restaurant': 'Super Pizza und schneller Service - gerne bald wieder!!',
         'travel': 'Der Zug kam natürlich zu spät, aber die Aussicht war einmalig!'
       },
+      infoText: [
+        {
+          headline: "Review Sentiment",
+          paragraphs: ["Kunden-Reviews sind sehr populär im Internet."]
+        },
+        {
+          headline: "Hinter den Kulissen",
+          paragraphs: ["Die Reviews werden von einem modernen NLP-Modell analysiert.",
+            "Es kann auch mit anderen Sprachen als Deutsch umgehen, z.B. Französisch oder Englisch."
+          ]
+        }
+      ],
+      infoUrl: "/",
+      infoLinkLabel: "More Information",
       reviewText: '',
       numberOfStars: null,
       reviewTopic: ['movie', 'restaurant', 'travel'][Math.floor(Math.random() * 3)],
@@ -84,16 +97,16 @@ export default {
 </script>
 
 <style>
+* {
+  box-sizing: border-box;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
   margin-top: 60px;
-}
-
-.navigation-header {
-  background-color: #77A6F7 !important;
 }
 
 .mint-indicator-wrapper {
@@ -116,11 +129,6 @@ export default {
     max-width: 425px;
     border: 1px solid #D3E3FC;
     padding: 1em 5px 5px;
-  }
-
-  .navigation-header {
-    margin: auto;
-    max-width: 437px;
   }
 }
 </style>
