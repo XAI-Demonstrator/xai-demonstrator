@@ -1,7 +1,10 @@
 <template>
   <div id="app">
-  <UseCaseHeader/>
-  <FloatingInfoButton/>
+    <UseCaseHeader/>
+    <div class="the-content">
+      <p>So much content!</p>
+    </div>
+    <FloatingInfoButton/>
   </div>
 </template>
 
@@ -20,15 +23,29 @@ export default {
   box-sizing: border-box;
 }
 
+body {
+  padding: 0;
+  margin: 0;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  margin-top: 60px;
+  background-color: #fff;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: space-between;
 }
 
-@media screen and (min-width: 450px) {
+.the-content {
+  flex-grow: 1;
+  background-color: #888888;
+}
+
+@media screen and (max-width: 450px) {
   #app {
     padding: 60px 7px 7px;
     overflow: scroll;
@@ -58,10 +75,11 @@ export default {
     max-width: 450px;
     border: 1px solid #ddd;
     box-shadow: 2px 2px 5px 2px #eee;
-    padding: 7px;
+    padding: 8px;
     height: auto;
     min-height: 640px;
     flex-direction: column;
+    overflow: auto;
   }
 }
 

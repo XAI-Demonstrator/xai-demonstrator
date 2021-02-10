@@ -1,16 +1,18 @@
 <template>
   <div id="info-button">
-    <Popup class="info-popup" position="right" v-model="popupVisible" v-bind:modal="false">
-      <div class="info-content">
-        <section v-for="part in infoText" v-bind:key="part.header">
-          <h3>{{ part.headline }}</h3>
-          <p v-for="paragraph in part.paragraphs" v-bind:key="paragraph">{{ paragraph }}</p>
-        </section>
-        <a v-if="infoUrl" v-bind:href="infoUrl" class="button">
-          {{ linkLabel }}
-        </a>
+    <transition name="slide">
+      <div class="info-popup popup" v-if="popupVisible">
+        <div class="info-content">
+          <section v-for="part in infoText" v-bind:key="part.header">
+            <h3>{{ part.headline }}</h3>
+            <p v-for="paragraph in part.paragraphs" v-bind:key="paragraph">{{ paragraph }}</p>
+          </section>
+          <a v-if="infoUrl" v-bind:href="infoUrl" class="button">
+            {{ linkLabel }}
+          </a>
+        </div>
       </div>
-    </Popup>
+    </transition>
     <div class="icon-container">
       <transition name="fade" mode="out-in">
         <div class="icon close" v-if="popupVisible" v-on:click="closePopup" key="close">
@@ -25,13 +27,8 @@
 </template>
 
 <script>
-import {Popup} from 'mint-ui';
-
 export default {
   name: "FloatingInfoButton",
-  components: {
-    Popup
-  },
   props: {
     infoText: {
       type: Array,
@@ -78,14 +75,31 @@ export default {
 <style scoped>
 #info-button {
   min-height: 70px;
+  flex-grow: 0;
 }
 
 .info-popup {
-  margin-top: 25px;
+  margin-top: 50px;
   height: calc(100% - 50px);
   width: 100%;
   background-color: #fff;
   padding: 10px;
+}
+
+.popup {
+  top: 0;
+  right: 0;
+  bottom: auto;
+  left: auto;
+  position: fixed;
+  backface-visibility: hidden;
+  transition: .3s ease-out;
+  z-index: 99;
+}
+
+.slide-enter,
+.slide-leave-active {
+  transform: translate3d(100%, 0, 0);
 }
 
 .info-content {
@@ -144,6 +158,7 @@ export default {
   border-radius: 100%;
 
   box-shadow: 0 4px 8px #ccc;
+  z-index: 9999;
 }
 
 .open {
@@ -165,10 +180,54 @@ export default {
 }
 
 .fade-enter-active, .fade-leave-active {
-  transition: opacity 0.5s ease;
+  transition: opacity 0.3s ease;
 }
+
 .fade-enter, .fade-leave-to {
   opacity: 0;
+}
+
+@media screen and (min-width: 450px) and (min-height: 650px) {
+
+  .popup {
+    max-width: 432px;
+    top: calc(50% - 291px);
+    right: auto;
+    left: auto;
+    bottom: auto;
+  }
+
+  .slide-enter-active,
+  .slide-leave-active {
+    transform: none;
+    transition: opacity 0.6s ease-out;
+  }
+
+  .slide-enter,
+  .slide-leave-to {
+    transform: none;
+    opacity: 0;
+  }
+
+  .info-popup {
+    height: auto;
+    min-height: 574px;
+    margin-top: 29px;
+    overflow: hidden;
+  }
+  
+  .info-content {
+    overflow: auto;
+  }
+
+  .icon-container {
+    position: inherit;
+    min-height: 70px;
+    margin: 0;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
 }
 
 </style>
