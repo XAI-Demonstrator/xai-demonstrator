@@ -138,7 +138,7 @@ export default {
   width: 100%;
   background-color: #00887A;
   border: none;
-  color: white;
+  color: #fff;
   padding: 15px 32px;
   text-align: center;
   text-decoration: none;
@@ -191,7 +191,7 @@ export default {
 
   .popup {
     max-width: 432px;
-    top: calc(50% - 291px);
+    top: calc(50% - 290px);
     right: auto;
     left: auto;
     bottom: auto;
@@ -215,7 +215,7 @@ export default {
     margin-top: 29px;
     overflow: hidden;
   }
-  
+
   .info-content {
     overflow: auto;
   }
