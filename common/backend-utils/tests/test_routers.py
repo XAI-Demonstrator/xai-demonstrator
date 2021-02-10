@@ -1,47 +1,56 @@
+import fastapi
+from fastapi.testclient import TestClient
+
 from xaidemo import routers
+
+import pytest
+
+
+@pytest.fixture
+def client_with_static_files(tmp_path):
+    app = fastapi.FastAPI()
+    app.include_router(routers.vue_frontend(str(tmp_path / "main.py")))
+
+    client = TestClient(app)
+
+    static_dir = tmp_path / "static"
+    static_dir.mkdir()
+
+    index_html = static_dir / "index.html"
+    index_html.write_text("INDEX PAGE")
+
+    favicon_ico = static_dir / "favicon.ico"
+    favicon_ico.write_text("FAVICON")
+
+    js_dir = static_dir / "js"
+    js_dir.mkdir()
+
+    app_js = js_dir / "app.js"
+    app_js.write_text("JS FOR TEST")
+
+    return client
 
 
 def test_that_vue_frontend_has_three_routes():
     f = routers.vue_frontend(__file__)
-
     assert len(f.routes) == 3
 
 
-def test_main_page():
-    f = routers.vue_frontend(__file__)
-
-    for route in f.routes:
-        if route.name == "get_frontend":
-            r = route.endpoint()
-            assert r.path.name == "index.html"
-            assert r.path.parent.name == "static"
-            break
-    else:
-        raise Exception("Missing route 'get_frontend'")
+def test_that_main_page_is_returned(client_with_static_files):
+    r = client_with_static_files.get("/")
+    assert r.status_code == 200
 
 
-def test_favicon():
-    f = routers.vue_frontend(__file__)
-
-    for route in f.routes:
-        if route.name == "get_favicon":
-            r = route.endpoint()
-            assert r.path.name == "favicon.ico"
-            assert r.path.parent.name == "static"
-            break
-    else:
-        raise Exception("Missing route 'get_favicon'")
+def test_that_favicon_is_returned(client_with_static_files):
+    r = client_with_static_files.get("/favicon.ico")
+    assert r.status_code == 200
 
 
-def test_static():
-    f = routers.vue_frontend(__file__)
+def test_that_static_files_are_returned(client_with_static_files):
+    r = client_with_static_files.get("/js/app.js")
+    assert r.status_code == 200
 
-    for route in f.routes:
-        if route.name == "get_static":
-            r = route.endpoint("folder", "file")
-            assert r.path.name == "file"
-            assert r.path.parent.name == "folder"
-            assert r.path.parent.parent.name == "static"
-            break
-    else:
-        raise Exception("Missing route 'get_static'")
+
+def test_that_missing_static_files_yield_404(client_with_static_files):
+    r = client_with_static_files.get("/js/missing.js")
+    assert r.status_code == 404
