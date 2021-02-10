@@ -9,11 +9,20 @@ Production deployment of the XAI demonstrator on [Google Cloud Platform](https:/
 The frontend is served through [Firebase Hosting](https://firebase.google.com/docs/hosting/)
 with the backends deployed on [Google Cloud Run](https://cloud.google.com/run/).
 
-## Set Up [WIP]
+## Set Up
+To set up the XAI demonstrator on the Google Cloud Platform follow these steps:
+1. [Create a GCP project](https://cloud.google.com/resource-manager/docs/creating-managing-projects?hl=en) and [enable billing](https://cloud.google.com/billing/docs/how-to/modify-project?hl=en).
+2. [Activate Google's Cloud SDK](https://cloud.google.com/sdk/docs/authorizing?hl=en).
+3. [Create a service account](https://cloud.google.com/iam/docs/creating-managing-service-accounts?hl=en) for the GitHub workflows and assign the following roles to it: Service Account User, Cloud Run Admin and Cloud Storage Admin.
+4. [Create a key](https://cloud.google.com/iam/docs/creating-managing-service-account-keys?hl=en) for your workflow service account.
+5. Create the following [GitHub secrets](https://docs.github.com/en/actions/reference/encrypted-secrets): 
+     - GCP_PROD_EMAIL - the email adress of your workflow service account
+     - GCP_PROD_PROJECT_ID - your project ID
+     - GCP_PROD_REGION - the region you want your project to be hosted in
+     - GCP_PROD_SA_KEY - the key your created in step 4
+6. For the frontends, an associated Firebase Hosting project has to be created
 
-Requires a GCP project with enabled Cloud Run, which in turn requires Google Container Registry (GCR).
-A service account that can push to GCR and deploy to Cloud Run has to be configured.
-For the frontends, an associated Firebase Hosting project has to be created.
+Be careful to insert the exact identifiers when creating the GitHub secrets. Common problems are extra spaces, inserting the computing zone (e.g. us-west1-a) instead of the region (us-west1) and copying only parts of the key json.
 
-Everything else is taken care of by the [Prod Deployment workflow](../../.github/workflows/prod-deployment.yml).
-This workflow requires the access tokens and some GCP configuration to be provided as secrets.
+Now the XAI demonstrator is ready to be deployed by the [Prod Deployment workflow](../../.github/workflows/prod-deployment.yml)!
+
