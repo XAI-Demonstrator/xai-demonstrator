@@ -41,8 +41,9 @@ Then, the use case is available at [localhost:8000](http://localhost:8000/).
 
 Package | Description | Build | Test
 --------|-------------|-------|------
-[common/backend-utils](/common/backend-utils) | Python package providing common functionality for backend services | ![Backend Utils](https://github.com/XAI-Demonstrator/xai-demonstrator/workflows/Backend%20Utils/badge.svg?branch=master) | [![Coverage Status](https://coveralls.io/repos/github/XAI-Demonstrator/xai-demonstrator/badge.svg?branch=x-cov-backend-utils)](https://coveralls.io/github/XAI-Demonstrator/xai-demonstrator?branch=x-cov-backend-utils)
-[landing-page](/landing-page) | Frontend that serves as a common entry point to all use cases. | ![Landing Page](https://github.com/XAI-Demonstrator/xai-demonstrator/workflows/Landing%20Page/badge.svg?branch=master)
+[common/backend-utils](/common/backend-utils) | Python package providing common functionality for FastAPI backend services | ![Backend Utils](https://github.com/XAI-Demonstrator/xai-demonstrator/workflows/Backend%20Utils/badge.svg?branch=master) | [![Coverage Status](https://coveralls.io/repos/github/XAI-Demonstrator/xai-demonstrator/badge.svg?branch=x-cov-backend-utils)](https://coveralls.io/github/XAI-Demonstrator/xai-demonstrator?branch=x-cov-backend-utils)
+[common/vue-components](/common/vue-components) | NPM package providing common VueJS components for frontends | ![Vue Components](https://github.com/XAI-Demonstrator/xai-demonstrator/workflows/Vue%20Components/badge.svg?branch=master) |
+[landing-page](/landing-page) | Frontend that serves as a common entry point to all use cases. | ![Landing Page](https://github.com/XAI-Demonstrator/xai-demonstrator/workflows/Landing%20Page/badge.svg?branch=master) | 
 
 ## Deployments
  ![Monitor Deployment(s)](https://github.com/XAI-Demonstrator/xai-demonstrator/workflows/Monitor%20Deployment(s)/badge.svg)
