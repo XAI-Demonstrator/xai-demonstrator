@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isActive">
+  <section v-if="isActive">
     <mt-button type="primary" size="large" v-on:click="requestExplanation" v-if="!explanationResult"
                class="request-button">Wie kommst du zu dieser Einschätzung?
     </mt-button>
@@ -8,7 +8,7 @@
       <BarChart v-if="explanationResult" v-bind:explanation="explanationResult"></BarChart>
       <TextHighlight v-if="explanationResult != null" v-bind:explanation="explanationResult"></TextHighlight>
     </div>
-  </div>
+  </section>
 </template>
 <script>
 import axios from 'axios'
@@ -63,11 +63,6 @@ export default {
 }
 </script>
 <style scoped>
-.explanation-container {
-  border: 1px solid #D3E3FC;
-  padding: 0px 5px 5px;
-}
-
 .explanation-container div {
   margin-top: 5px;
 }

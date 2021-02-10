@@ -1,5 +1,5 @@
 <template>
-  <div class="sentiment">
+  <section>
     <mt-button type="primary" size="large" v-on:click="requestAnalysis" v-if="!numOfStars" class="request-button">Wie
       viele
       Sterne sollte
@@ -13,7 +13,7 @@
         <img class="my-star" src="@/assets/star_blank.svg" v-for="star in (5 - numOfStars)" :key="'neg-' + star"/>
       </div>
     </div>
-  </div>
+  </section>
 </template>
 <script>
 import axios from 'axios';
@@ -51,20 +51,12 @@ export default {
 }
 </script>
 <style scoped>
-.sentiment {
-  width: 100%;
-  margin-top: 5px;
-  margin-bottom: 5px;
-}
 
 .the-sentiment {
-  border: 1px solid #D3E3FC;
   display: flex;
   align-items: center;
   justify-content: space-between;
   height: 100%;
-  padding-left: 5px;
-  padding-right: 5px;
 }
 
 .sentiment-stars {

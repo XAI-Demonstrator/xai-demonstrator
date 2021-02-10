@@ -124,6 +124,15 @@ main {
   flex-grow: 1;
 }
 
+main section {
+  width: 100%;
+  border-radius: 3px;
+  box-shadow: 2px 2px 5px 0 #eee;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #D3E3FC;
+}
+
 .mint-indicator-wrapper {
   background-color: #00887A !important;
 }
@@ -147,8 +156,14 @@ main {
 @media screen and (min-width: 450px) and (max-height: 650px) {
 
   #app {
-    flex-direction: row;
+    flex-direction: column;
     padding: 60px 7px 7px;
+    align-items: center;
+  }
+
+  main {
+    width: 450px;
+    padding-bottom: 70px;
   }
 
 }

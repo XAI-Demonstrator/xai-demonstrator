@@ -67,7 +67,7 @@ export default {
 }
 
 .barchart {
-  background-color: #D3E3FC;
+  background-color: #fff;
   padding: 5px 10px;
 }
 
