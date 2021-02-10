@@ -69,7 +69,7 @@ export default {
 
 .request-button {
   background-color: #77A6F7;
-  border-radius: 0;
+  border-radius: 3px;
   font-size: 1em;
   font-weight: normal;
   height: auto;

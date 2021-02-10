@@ -99,6 +99,7 @@ export default {
   width: max(calc(var(--importance) * 50%), calc(var(--importance) * -50%));
   height: 12px;
   margin-left: min(calc(50% + var(--importance) * 50%), 50%);
+  border-radius: 2px;
 }
 
 .positive {
