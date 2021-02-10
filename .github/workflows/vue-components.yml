@@ -9,19 +9,22 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Check out code
+        uses: actions/checkout@v2
       - name: Set up Node 12
         uses: actions/setup-node@v2
         with:
           node-version: '12'
-      - name: do everything
+      - name: Build xaidemo-ui library
         run: |
           set -e
           cd ./common/vue-components/xaidemo-ui
           npm install
           npm run build-lib
-      - uses: JS-DevTools/npm-publish@v1
+      - name: Publish package
+        uses: JS-DevTools/npm-publish@v1
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          registry: https://npm.pkg.github.com/xai-demonstrator
+          token: ${{ secrets.NPM_TOKEN }}
           package: ./common/vue-components/xaidemo-ui/package.json
+          check-version: true
+          dry-run: github.ref != 'refs/heads/master'

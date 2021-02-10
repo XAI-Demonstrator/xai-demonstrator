@@ -4,22 +4,22 @@
       <div class="info-content">
         <section v-for="part in infoText" v-bind:key="part.header">
           <h3>{{ part.headline }}</h3>
-          <p>{{ part.text }}</p>
+          <p v-for="paragraph in part.paragraphs" v-bind:key="paragraph">{{ paragraph }}</p>
         </section>
         <a v-if="infoUrl" v-bind:href="infoUrl" class="button">
           {{ linkLabel }}
         </a>
       </div>
-      <div class="icon-container">
-        <div class="icon close" v-on:click="closePopup">
-          <span>X</span>
-        </div>
-      </div>
     </mt-popup>
     <div class="icon-container">
-      <div class="icon open" v-on:click="openPopup">
-        <span>?</span>
-      </div>
+      <transition name="fade" mode="out-in">
+        <div class="icon close" v-if="popupVisible" v-on:click="closePopup" key="close">
+          <span>X</span>
+        </div>
+        <div class="icon open" v-else v-on:click="openPopup" key="open">
+          <span>?</span>
+        </div>
+      </transition>
     </div>
   </div>
 </template>
@@ -39,11 +39,13 @@ export default {
         return [
           {
             headline: "Headline 1",
-            text: "Some general information... With more lines, but never with another paragraph."
+            paragraphs:
+                ["Some general information... With more lines, and many, many more.",
+                  "We can also have another paragraph if needed."]
           },
           {
             headline: "Headline 2",
-            text: "More detailed stuff"
+            paragraphs: ["More detailed stuff."]
           }
         ]
       }
@@ -79,16 +81,16 @@ export default {
 }
 
 .info-popup {
-  margin-top: 20px;
-  height: calc(100% - 40px);
+  margin-top: 25px;
+  height: calc(100% - 50px);
   width: 100%;
-  background-color: #eee;
+  background-color: #fff;
   padding: 10px;
 }
 
 .info-content {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   flex-direction: column;
   max-height: 100%;
   overflow: scroll;
@@ -99,7 +101,7 @@ export default {
   margin-bottom: 10px;
   padding: 15px 10px;
   background-color: #D3E3FC;
-  border-radius: 5px;
+  border-radius: 3px;
   box-shadow: 2px 2px 5px 0 #eee;
 }
 
@@ -125,14 +127,14 @@ export default {
   padding: 15px 32px;
   text-align: center;
   text-decoration: none;
-  border-radius: 5px;
+  border-radius: 3px;
 }
 
 .icon-container {
   position: fixed;
   bottom: 15px;
   right: 15px;
-  z-index: 99;
+  z-index: 9999;
 }
 
 .icon {
@@ -148,7 +150,7 @@ export default {
 }
 
 .close {
-  background-color: darkred;
+  background-color: #CC0000;
 }
 
 .icon span {
@@ -160,4 +162,12 @@ export default {
   font-size: 25px;
   color: #ffffff;
 }
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
 </style>
