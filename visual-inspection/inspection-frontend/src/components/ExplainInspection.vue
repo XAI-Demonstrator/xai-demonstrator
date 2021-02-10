@@ -1,14 +1,15 @@
 <template>
-  <div class="explainer">
+  <section>
     <div class="explanation-request">
       <mt-button class="request-button"
                  v-show="!waitingForExplanation"
+                 v-bind:disabled="!predictionReady"
                  v-on:click="buttonClicked">
         Woran erkennst du das?
       </mt-button>
       <mt-spinner v-if="waitingForExplanation" type="triple-bounce"/>
     </div>
-  </div>
+  </section>
 </template>
 
 <script>
@@ -16,6 +17,12 @@ import axios from "axios";
 
 export default {
   name: "ExplainInspection",
+  props: {
+    predictionReady: {
+      type: Boolean,
+      default: false
+    }
+  },
   methods: {
     buttonClicked() {
       this.$emit('explanationRequested')
@@ -44,25 +51,21 @@ export default {
 </script>
 
 <style scoped>
-.explainer {
-  width: 100%;
-  margin-top: 5px;
-  margin-bottom: 5px;
-}
-
 .explanation-request {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 5px 10px;
+  height: 40px;
 }
 
 .request-button {
   background-color: #77A6F7;
-  border-radius: 0;
+  border-radius: 3px;
   font-size: 1em;
   font-weight: normal;
-  padding-left: 5px;
-  padding-right: 5px;
+  height: 100%;
+  padding: 10px;
+  color: white;
+  width: 100%;
 }
 </style>

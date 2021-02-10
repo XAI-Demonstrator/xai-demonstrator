@@ -1,13 +1,8 @@
 <template>
-  <div class="inspector">
-    <div class="inspection-result">
-      <p>
-        <mt-spinner v-if="!prediction" type="triple-bounce"></mt-spinner>
-        <span v-show="prediction && currentPrediction">„Das ist ein/e {{ prediction }}“</span>
-      </p>
-
-    </div>
-  </div>
+  <section>
+    <mt-spinner v-show="!prediction" type="triple-bounce"></mt-spinner>
+    <span v-show="prediction && currentPrediction">„Das ist ein/e {{ prediction }}“</span>
+  </section>
 </template>
 
 <script>
@@ -45,18 +40,5 @@ export default {
 </script>
 
 <style scoped>
-.inspector {
-  width: 100%;
-  margin-top: 5px;
-  margin-bottom: 5px;
-}
 
-.inspection-result {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  padding-left: 5px;
-  padding-right: 5px;
-}
 </style>
