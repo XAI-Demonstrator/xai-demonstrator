@@ -1,6 +1,6 @@
 <template>
   <div id="info-button">
-    <mt-popup class="info-popup" position="right" v-model="popupVisible" v-bind:modal="false">
+    <Popup class="info-popup" position="right" v-model="popupVisible" v-bind:modal="false">
       <div class="info-content">
         <section v-for="part in infoText" v-bind:key="part.header">
           <h3>{{ part.headline }}</h3>
@@ -10,7 +10,7 @@
           {{ linkLabel }}
         </a>
       </div>
-    </mt-popup>
+    </Popup>
     <div class="icon-container">
       <transition name="fade" mode="out-in">
         <div class="icon close" v-if="popupVisible" v-on:click="closePopup" key="close">
@@ -29,9 +29,9 @@ import {Popup} from 'mint-ui';
 
 export default {
   name: "FloatingInfoButton",
-  components: [
+  components: {
     Popup
-  ],
+  },
   props: {
     infoText: {
       type: Array,

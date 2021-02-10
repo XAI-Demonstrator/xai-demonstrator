@@ -28,4 +28,4 @@ jobs:
           package: ./common/vue-components/xaidemo-ui/package.json
           access: public
           check-version: true
-          dry-run: github.ref != 'refs/heads/master'
+          dry-run: ${{ github.ref != 'refs/heads/master' }}
