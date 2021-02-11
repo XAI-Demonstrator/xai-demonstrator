@@ -4,7 +4,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "test:unit": "vue-cli-service test:unit",
+    "test:unit": "vue-cli-service test:unit --collect-coverage",
     "lint": "vue-cli-service lint",
     "build-lib": "vue-cli-service build --target lib --dest lib src/index.js"
   },
