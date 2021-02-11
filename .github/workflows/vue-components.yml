@@ -5,8 +5,9 @@ on:
     paths:
       - 'common/vue-components/**'
       - '!common/vue-components/*.md'
+
 jobs:
-  publish:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
@@ -15,13 +16,40 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '12'
-      - name: Build xaidemo-ui library
+      - uses: actions/cache@v2.1.4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('./common/vue-components/xaidemo-ui/package-lock.json') }}
+          restore-keys: |
+           ${{ runner.os }}-node-
+      - name: Install dependecies
         run: |
           set -e
           cd ./common/vue-components/xaidemo-ui
           npm install
+      - name: Run tests
+        run: |
+          set -e
+          cd ./common/vue-components/xaidemo-ui
+          npm run test:unit
+      - name: Report coverage
+        if: github.ref == 'refs/heads/master'
+        env:
+          COVERALLS_SERVICE_NAME: github
+          COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COVERALLS_FLAG_NAME: vue-components-unit
+          COVERALLS_GIT_BRANCH: x-cov-vue-components
+        run: |
+          set -e
+          cd ./common/vue-components/xaidemo-ui
+          npm install coveralls
+          cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
+      - name: Build xaidemo-ui library
+        run: |
+          set -e
+          cd ./common/vue-components/xaidemo-ui
           npm run build-lib
-      - name: Publish package
+      - name: Publish xaidemo-ui package
         uses: JS-DevTools/npm-publish@v1
         with:
           token: ${{ secrets.NPM_TOKEN }}
