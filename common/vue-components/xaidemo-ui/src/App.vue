@@ -1,9 +1,21 @@
 <template>
-  <div id="app">
-    <UseCaseHeader/>
-    <div class="the-content">
-      <p>So much content!</p>
-    </div>
+  <div id="app" class="xd-app">
+    <UseCaseHeader title="UI Demo Use Case" v-bind:standalone="standalone"/>
+    <main>
+      <section class="xd-section xd-light">
+        <p>So much content!</p>
+      </section>
+      <section class="xd-section xd-light">
+        <button class="xd-button xd-secondary" v-on:click="standalone = !standalone">
+          <label>Toggle Standalone</label>
+        </button>
+      </section>
+      <section class="xd-section xd-border-primary">
+        <button class="xd-button xd-primary" v-on:click="standalone = !standalone">
+          <label>Toggle Standalone</label>
+        </button>
+      </section>
+    </main>
     <FloatingInfoButton/>
   </div>
 </template>
@@ -14,7 +26,12 @@ import FloatingInfoButton from "@/components/FloatingInfoButton";
 
 export default {
   name: "App",
-  components: {FloatingInfoButton, UseCaseHeader}
+  components: {FloatingInfoButton, UseCaseHeader},
+  data: function () {
+    return {
+      standalone: true
+    }
+  }
 }
 </script>
 
@@ -29,26 +46,16 @@ body {
 }
 
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
-  background-color: #fff;
-  height: 100vh;
-  width: 100vw;
   display: flex;
   justify-content: space-between;
 }
 
-.the-content {
+main {
   flex-grow: 1;
-  background-color: #888888;
 }
 
 @media screen and (max-width: 450px) {
   #app {
-    padding: 60px 7px 7px;
-    overflow: scroll;
     flex-direction: column;
   }
 }
@@ -56,31 +63,12 @@ body {
 @media screen and (min-width: 450px) and (max-height: 650px) {
   #app {
     flex-direction: row;
-    padding: 60px 7px 7px;
   }
 }
 
 @media screen and (min-width: 450px) and (min-height: 650px) {
-
-  body {
-    background-color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100vw;
-    height: 100vh;
-  }
-
   #app {
-    max-width: 450px;
-    border: 1px solid #ddd;
-    box-shadow: 2px 2px 5px 2px #eee;
-    padding: 8px;
-    height: auto;
-    min-height: 640px;
     flex-direction: column;
-    overflow: auto;
   }
 }
-
 </style>
