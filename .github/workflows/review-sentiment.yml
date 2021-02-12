@@ -81,7 +81,7 @@ jobs:
           set -e
           cd ./review-sentiment/sentiment-frontend
           echo $PWD
-          npm test
+          npm run test:unit
       - name: Report coverage
         if: github.ref == 'refs/heads/master'
         env:
