@@ -141,14 +141,6 @@ export default {
   z-index: 9999;
 }
 
-.open {
-  background-color: #77A6F7;
-}
-
-.close {
-  background-color: #CC0000;
-}
-
 .icon span {
   display: flex;
   align-items: center;

@@ -6,15 +6,15 @@
         <p>So much content!</p>
       </section>
       <section class="xd-section xd-light">
-      <button class="xd-button xd-secondary" v-on:click="standalone = !standalone">
-        <label>Toggle Standalone</label>
-      </button>
+        <button class="xd-button xd-secondary" v-on:click="standalone = !standalone">
+          <label>Toggle Standalone</label>
+        </button>
       </section>
       <section class="xd-section xd-border-primary">
-      <button class="xd-button xd-primary" v-on:click="standalone = !standalone">
-        <label>Toggle Standalone</label>
-      </button>
-        </section>
+        <button class="xd-button xd-primary" v-on:click="standalone = !standalone">
+          <label>Toggle Standalone</label>
+        </button>
+      </section>
     </main>
     <FloatingInfoButton/>
   </div>
@@ -67,11 +67,8 @@ main {
 }
 
 @media screen and (min-width: 450px) and (min-height: 650px) {
-
   #app {
     flex-direction: column;
   }
-
 }
-
 </style>
