@@ -2,7 +2,9 @@
   <transition name="indicator">
     <div class="wrapper" v-if="visible">
       <div class="spinner" v-bind:class="backgroundClass">
-        <div class="circle" v-bind:class="circleClass"></div>
+        <div class="circle circle-smooth" v-bind:class="circleClass"></div>
+        <div class="circle circle-fast" v-bind:class="circleClass"></div>
+        <div class="circle circle-trace" v-bind:class="circleClass"></div>
       </div>
     </div>
   </transition>
@@ -33,10 +35,10 @@ export default {
   position: fixed;
   top: 50%;
   left: 50%;
+  transform: translate(-50%, -50%);
   bottom: auto;
   right: auto;
   border-radius: 5px;
-  transform: translate(-50%, -50%);
   transition: opacity 0.3s ease-in;
   box-shadow: 4px 4px 4px #eee;
 }
@@ -51,12 +53,28 @@ export default {
 }
 
 .circle {
+  border: 8px solid;
+  border-radius: 100%;
+  position: absolute;
+
   width: 80%;
   height: 80%;
-  border-radius: 50%;
-  border: 8px solid;
-  animation: spinner-rotate 1.0s infinite linear;
+}
+
+.circle-smooth {
   border-bottom-color: transparent;
+  border-right-color: transparent;
+  animation: spinner-rotate-smooth 1.2s infinite linear;
+}
+
+.circle-fast {
+  border-bottom-color: transparent;
+  border-left-color: transparent;
+  animation: spinner-rotate 1.2s infinite linear;
+}
+
+.circle-trace {
+  opacity: 0.3;
 }
 
 .indicator-enter,
@@ -64,10 +82,33 @@ export default {
   opacity: 0;
 }
 
+@keyframes spinner-rotate-smooth {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  50% {
+    transform: rotate(180deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 @keyframes spinner-rotate {
   0% {
     transform: rotate(0deg);
   }
+
+  30% {
+    transform: rotate(180deg);
+  }
+
+  80% {
+    transform: rotate(270deg);
+  }
+
   100% {
     transform: rotate(360deg);
   }
