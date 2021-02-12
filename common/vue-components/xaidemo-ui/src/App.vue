@@ -11,25 +11,32 @@
         </button>
       </section>
       <section class="xd-section xd-border-primary">
-        <button class="xd-button xd-primary" v-on:click="standalone = !standalone">
-          <label>Toggle Standalone</label>
+        <button class="xd-button xd-primary" v-on:click="waiting = !waiting">
+          <label>Toggle Indicator</label>
         </button>
+      </section>
+      <section class="xd-section xd-border-secondary">
+        <MultiBounce dots="3" dot-class="xd-secondary" />
       </section>
     </main>
     <FloatingInfoButton/>
+    <SpinningIndicator v-bind:visible="waiting" />
   </div>
 </template>
 
 <script>
 import UseCaseHeader from "@/components/UseCaseHeader";
 import FloatingInfoButton from "@/components/FloatingInfoButton";
+import SpinningIndicator from "@/components/SpinningIndicator";
+import MultiBounce from "@/components/MultiBounce";
 
 export default {
   name: "App",
-  components: {FloatingInfoButton, UseCaseHeader},
+  components: {MultiBounce, FloatingInfoButton, UseCaseHeader, SpinningIndicator},
   data: function () {
     return {
-      standalone: true
+      standalone: true,
+      waiting: false
     }
   }
 }
