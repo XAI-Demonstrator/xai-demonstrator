@@ -3,18 +3,21 @@
     <UseCaseHeader v-bind:standalone="!Boolean(backendUrl)"
                    v-bind:title="useCaseTitle"/>
     <main>
-      <ComposeReview ref="composer"
-                     v-bind:introduction-text="introductionTexts[reviewTopic]"
-                     v-bind:default-review="defaultReviews[reviewTopic]"
-                     v-bind:show-intro="!numberOfStars"
-                     v-on:reviewChanged="reviewTextChanged"/>
-      <AnalyzeReview ref="analyzer"
-                     v-bind:review-text="reviewTextToAnalyze"
-                     v-on:analysisRequested="analysisRequested"
-                     v-on:analysisCompleted="analysisCompleted"/>
-      <ExplainAnalysis ref="explainer"
-                       v-bind:is-active="numberOfStars"
-                       v-bind:review-text="reviewTextToAnalyze"/>
+      <section>
+        <ComposeReview ref="composer"
+                       v-bind:introduction-text="introductionTexts[reviewTopic]"
+                       v-bind:default-review="defaultReviews[reviewTopic]"
+                       v-bind:show-intro="!numberOfStars"
+                       v-on:review-changed="reviewTextChanged"/>
+        <AnalyzeReview ref="analyzer"
+                       v-bind:review-text="reviewTextToAnalyze"
+                       v-on:analysisRequested="analysisRequested"
+                       v-on:analysisCompleted="analysisCompleted"/>
+      </section>
+      <section v-show="numberOfStars">
+        <ExplainAnalysis ref="explainer"
+                         v-bind:review-text="reviewTextToAnalyze"/>
+      </section>
     </main>
     <FloatingInfoButton v-bind:info-text="infoText"
                         v-bind:info-url="infoUrl"
@@ -129,8 +132,12 @@ main section {
   border-radius: 3px;
   box-shadow: 2px 2px 5px 0 #eee;
   padding: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   background-color: #D3E3FC;
+}
+
+main section:last-child {
+  margin-bottom: 0;
 }
 
 .mint-indicator-wrapper {
@@ -146,7 +153,7 @@ main section {
 @media screen and (max-width: 450px) {
 
   #app {
-    padding: 60px 7px 7px;
+    padding: 60px 8px 8px;
     overflow: scroll;
     flex-direction: column;
   }

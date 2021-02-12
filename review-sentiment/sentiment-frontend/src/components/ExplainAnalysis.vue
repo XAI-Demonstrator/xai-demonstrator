@@ -1,5 +1,5 @@
 <template>
-  <section v-if="isActive">
+  <div>
     <mt-button type="primary" size="large" v-on:click="requestExplanation" v-if="!explanationResult"
                class="request-button">Wie kommst du zu dieser Einschätzung?
     </mt-button>
@@ -8,7 +8,7 @@
       <BarChart v-if="explanationResult" v-bind:explanation="explanationResult"></BarChart>
       <TextHighlight v-if="explanationResult != null" v-bind:explanation="explanationResult"></TextHighlight>
     </div>
-  </section>
+  </div>
 </template>
 <script>
 import axios from 'axios'
@@ -27,7 +27,6 @@ export default {
     }
   },
   props: [
-    "isActive",
     "reviewText"
   ],
   methods: {

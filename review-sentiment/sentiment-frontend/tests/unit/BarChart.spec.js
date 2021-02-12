@@ -1,7 +1,7 @@
 import {createLocalVue, shallowMount} from '@vue/test-utils'
 import BarChart from '@/components/BarChart.vue'
 
-describe('Component', () => {
+describe('BarChart.vue', () => {
 
     const localVue = createLocalVue()
     let wrapper = shallowMount(BarChart, localVue);
