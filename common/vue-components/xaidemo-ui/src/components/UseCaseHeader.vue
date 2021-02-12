@@ -1,5 +1,5 @@
 <template>
-  <div class="navigation-header">
+  <div id="navigation-header" class="xd-primary">
     <div class="header-icon"><a href="/" v-if="!standalone">❮</a></div>
     <div class="header-title">{{ title }}</div>
     <div class="header-icon"><a v-bind:href="reloadUrl">↻</a></div>
@@ -16,7 +16,7 @@ export default {
     },
     title: {
       type: String,
-      default: "Use Case"
+      default: ""
     }
   },
   computed: {
@@ -28,22 +28,18 @@ export default {
 </script>
 
 <style scoped>
-.navigation-header {
-  background-color: #77A6F7;
-  height: 50px;
+#navigation-header {
+  height: 42px;
 
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-
-  padding-left: 5px;
-  padding-right: 5px;
 }
 
 .header-icon {
-  width: 50px;
-  height: 50px;
+  width: 42px;
+  height: 42px;
   flex-grow: 0;
   flex-shrink: 0;
 
@@ -73,7 +69,7 @@ export default {
 }
 
 @media screen and (max-width: 450px) {
-  .navigation-header {
+  #navigation-header {
     top: 0;
     right: 0;
     left: 0;
@@ -83,7 +79,7 @@ export default {
 }
 
 @media screen and (min-width: 450px) and (max-height: 650px) {
-  .navigation-header {
+  #navigation-header {
     top: 0;
     right: 0;
     left: 0;
@@ -93,8 +89,8 @@ export default {
 }
 
 @media screen and (min-width: 450px) and (min-height: 650px) {
-  .navigation-header {
-    margin-bottom: 10px;
+  #navigation-header {
+    margin-bottom: 8px;
   }
 }
 

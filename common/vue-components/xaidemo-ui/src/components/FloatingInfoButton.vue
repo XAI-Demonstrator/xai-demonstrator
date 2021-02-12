@@ -1,24 +1,24 @@
 <template>
   <div id="info-button">
     <transition name="slide">
-      <div class="info-popup popup" v-if="popupVisible">
-        <div class="info-content">
-          <section v-for="part in infoText" v-bind:key="part.header">
+      <div id="info-popup" class="popup" v-if="popupVisible">
+        <div id="info-content">
+          <section v-for="part in infoText" v-bind:key="part.header" class="xd-section xd-light">
             <h3>{{ part.headline }}</h3>
             <p v-for="paragraph in part.paragraphs" v-bind:key="paragraph">{{ paragraph }}</p>
           </section>
-          <a v-if="infoUrl" v-bind:href="infoUrl" class="button">
+          <a v-if="infoUrl" v-bind:href="infoUrl" class="xd-button xd-secondary">
             {{ linkLabel }}
           </a>
         </div>
       </div>
     </transition>
-    <div class="icon-container">
+    <div id="icon-container">
       <transition name="fade" mode="out-in">
-        <div class="icon close" v-if="popupVisible" v-on:click="closePopup" key="close">
+        <div class="icon xd-red" v-if="popupVisible" v-on:click="closePopup" key="close">
           <span>X</span>
         </div>
-        <div class="icon open" v-else v-on:click="openPopup" key="open">
+        <div class="icon xd-primary" v-else v-on:click="openPopup" key="open">
           <span>?</span>
         </div>
       </transition>
@@ -78,12 +78,12 @@ export default {
   flex-grow: 0;
 }
 
-.info-popup {
-  margin-top: 50px;
-  height: calc(100% - 50px);
+#info-popup {
+  margin-top: 42px;
+  padding: 8px;
+  height: calc(100% - 42px);
   width: 100%;
   background-color: #fff;
-  padding: 10px;
 }
 
 .popup {
@@ -102,7 +102,7 @@ export default {
   transform: translate3d(100%, 0, 0);
 }
 
-.info-content {
+#info-content {
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -111,44 +111,24 @@ export default {
   padding-bottom: 70px;
 }
 
-.info-content section {
-  width: 100%;
-  margin-bottom: 10px;
-  padding: 15px 10px;
-  background-color: #D3E3FC;
-  border-radius: 3px;
-  box-shadow: 2px 2px 5px 0 #eee;
-}
-
-.info-content section h3 {
+#info-content section h3 {
   margin: 0;
   padding: 0;
   font-size: 1em;
   font-weight: 600;
 }
 
-.info-content section p {
+#info-content section p {
   margin: 0;
-  font-size: 0.8em;
+  font-size: 0.9em;
   padding: 5px 0 0;
   text-align: justify;
 }
 
-.info-content a.button {
-  width: 100%;
-  background-color: #00887A;
-  border: none;
-  color: #fff;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  border-radius: 3px;
-}
-
-.icon-container {
+#icon-container {
   position: fixed;
-  bottom: 15px;
-  right: 15px;
+  bottom: 8px;
+  right: 8px;
   z-index: 9999;
 }
 
@@ -189,9 +169,10 @@ export default {
 
 @media screen and (min-width: 450px) and (min-height: 650px) {
 
-  .popup {
+  #info-popup {
     max-width: 432px;
-    top: calc(50% - 290px);
+    top: calc(50% - 286px);
+    padding: 8px 0 0;
     right: auto;
     left: auto;
     bottom: auto;
@@ -209,24 +190,24 @@ export default {
     opacity: 0;
   }
 
-  .info-popup {
+  #info-popup {
     height: auto;
     min-height: 574px;
-    margin-top: 29px;
+    margin-top: 18px;
     overflow: hidden;
   }
 
-  .info-content {
+  #info-content {
     overflow: auto;
   }
 
-  .icon-container {
+  #icon-container {
     position: inherit;
     min-height: 70px;
     margin: 0;
     display: flex;
     justify-content: flex-end;
-    align-items: center;
+    align-items: flex-end;
   }
 }
 
