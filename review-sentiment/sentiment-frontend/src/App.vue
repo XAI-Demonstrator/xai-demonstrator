@@ -1,9 +1,9 @@
 <template>
-  <div id="app">
+  <div id="app" class="xd-app">
     <UseCaseHeader v-bind:standalone="!Boolean(backendUrl)"
                    v-bind:title="useCaseTitle"/>
     <main>
-      <section>
+      <section class="xd-section xd-light">
         <ComposeReview ref="composer"
                        v-bind:introduction-text="introductionTexts[reviewTopic]"
                        v-bind:default-review="defaultReviews[reviewTopic]"
@@ -14,7 +14,7 @@
                        v-on:analysisRequested="analysisRequested"
                        v-on:analysisCompleted="analysisCompleted"/>
       </section>
-      <section v-show="numberOfStars">
+      <section v-show="numberOfStars" class="xd-section xd-light">
         <ExplainAnalysis ref="explainer"
                          v-bind:review-text="reviewTextToAnalyze"/>
       </section>
@@ -67,7 +67,7 @@ export default {
         }
       ],
       infoUrl: "/",
-      infoLinkLabel: "More Information",
+      infoLinkLabel: "Weitere Informationen",
       reviewText: '',
       numberOfStars: null,
       reviewTopic: ['movie', 'restaurant', 'travel'][Math.floor(Math.random() * 3)],
@@ -113,13 +113,6 @@ body {
 }
 
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
-  background-color: #fff;
-  height: 100vh;
-  width: 100vw;
   display: flex;
 }
 
@@ -127,18 +120,6 @@ main {
   flex-grow: 1;
 }
 
-main section {
-  width: 100%;
-  border-radius: 3px;
-  box-shadow: 2px 2px 5px 0 #eee;
-  padding: 10px;
-  margin-bottom: 8px;
-  background-color: #D3E3FC;
-}
-
-main section:last-child {
-  margin-bottom: 0;
-}
 
 .mint-indicator-wrapper {
   background-color: #00887A !important;
@@ -153,8 +134,6 @@ main section:last-child {
 @media screen and (max-width: 450px) {
 
   #app {
-    padding: 60px 8px 8px;
-    overflow: scroll;
     flex-direction: column;
   }
 
@@ -164,37 +143,19 @@ main section:last-child {
 
   #app {
     flex-direction: column;
-    padding: 60px 7px 7px;
     align-items: center;
   }
 
   main {
     width: 450px;
-    padding-bottom: 70px;
   }
 
 }
 
 @media screen and (min-width: 450px) and (min-height: 650px) {
 
-  body {
-    background-color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100vw;
-    height: 100vh;
-  }
-
   #app {
-    max-width: 450px;
-    border: 1px solid #ddd;
-    box-shadow: 2px 2px 5px 2px #eee;
-    padding: 8px;
-    height: auto;
-    min-height: 640px;
     flex-direction: column;
-    overflow: auto;
   }
 
 }

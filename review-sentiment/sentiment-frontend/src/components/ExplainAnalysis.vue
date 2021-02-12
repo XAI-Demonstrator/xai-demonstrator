@@ -1,8 +1,8 @@
 <template>
   <div>
-    <mt-button type="primary" size="large" v-on:click="requestExplanation" v-if="!explanationResult"
-               class="request-button">Wie kommst du zu dieser Einschätzung?
-    </mt-button>
+    <button v-on:click="requestExplanation" v-if="!explanationResult" class="xd-button xd-primary">
+      <label>Wie kommst du zu dieser Einschätzung?</label>
+    </button>
     <div class="explanation-container" v-if="explanationResult">
       <p>Die Wörter deines Reviews tragen wie folgt zur Bewertung bei:</p>
       <BarChart v-if="explanationResult" v-bind:explanation="explanationResult"></BarChart>
@@ -62,16 +62,17 @@ export default {
 }
 </script>
 <style scoped>
-.explanation-container div {
-  margin-top: 5px;
+.explanation-container {
+  display: flex;
+  flex-direction: column;
 }
 
-.request-button {
-  background-color: #77A6F7;
+.explanation-container div {
+  margin-bottom: 8px;
   border-radius: 3px;
-  font-size: 1em;
-  font-weight: normal;
-  height: auto;
-  padding: 10px;
+}
+
+.explanation-container div:last-child {
+  margin-bottom: 0;
 }
 </style>

@@ -44,7 +44,10 @@ p {
 .text-input {
   width: 100%;
   outline: none;
-  border: 1px solid #77A6F7;
+  border: none;
+  border-radius: 5px;
+  padding: 8px;
+  margin-bottom: 8px;
 }
 
 .text-input:focus {

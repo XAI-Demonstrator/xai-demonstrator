@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button v-on:click="requestAnalysis" v-if="!numOfStars" class="xaidemo-button primary">
+    <button v-on:click="requestAnalysis" v-if="!numOfStars" class="xd-button xd-primary">
       <label>Wie viele Sterne sollte meine Bewertung erhalten?</label>
     </button>
     <div class="the-sentiment" v-if="numOfStars">
@@ -60,46 +60,17 @@ export default {
 }
 
 .sentiment-stars {
-  min-width: 151px;
+  background-color: white;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  padding: 3px;
 }
 
 .my-star {
-  width: 25px;
-  margin-left: 5px;
-}
-
-.primary {
-    background-color: #77A6F7;
-}
-
-.xaidemo-button {
-  border-radius: 3px;
-  font-size: 1em;
-  font-weight: normal;
-  height: auto;
-  padding: 10px;
-  display: block;
-  width: 100%;
-  color: #fff;
-  border: 0;
-  outline: 0;
-  overflow: hidden;
-  text-align: center;
-  position: relative;
-}
-
-.xaidemo-button::after {
-  background-color: #000;
-  content: " ";
-  opacity: 0;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
-
-.xaidemo-button:active::after {
-  opacity: .4;
+  width: 24px;
+  margin-left: 3px;
+  margin-right: 3px;
 }
 </style>

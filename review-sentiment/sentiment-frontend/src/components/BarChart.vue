@@ -3,7 +3,7 @@
     <div class="line" v-for="pair in processedExplanation.slice(0,maxNumOfBars)" :key="pair.word + Math.random()">
       <div class="bar">
         <div class="progress" v-bind:style="{'--importance': pair.score}"
-             v-bind:class="{'positive': pair.score > 0}">
+             v-bind:class="{'xd-green': pair.score > 0, 'xd-red': pair.score < 0}">
         </div>
       </div>
       <div class="word">{{ pair.word }}</div>
@@ -73,6 +73,8 @@ export default {
   display: flex;
   flex-direction: column;
   background-color: #fff;
+  padding-top: 8px;
+  padding-bottom: 8px;
 }
 
 .line {
@@ -92,18 +94,28 @@ export default {
 
 .word {
   flex: 1;
+  overflow: hidden;
+  position: relative;
+  display: block;
+}
+
+.word::after {
+    position: absolute;
+    content: " ";
+
+    background: linear-gradient(to right, transparent 70%, white 95%);
+
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
 }
 
 .progress {
-  background-color: #CC0000;
   width: max(calc(var(--importance) * 50%), calc(var(--importance) * -50%));
   height: 12px;
   margin-left: min(calc(50% + var(--importance) * 50%), 50%);
   border-radius: 2px;
-}
-
-.positive {
-  background-color: #00887A;
 }
 
 .legend {

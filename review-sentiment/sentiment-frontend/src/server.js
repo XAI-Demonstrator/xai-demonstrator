@@ -17,7 +17,7 @@ export function makeServer({environment = "development"} = {}) {
                         ["Super", 0.7],
                         ["Pizza", 0.3],
                         ["und", null],
-                        ["schneller", 0.2],
+                        ["schnellerganzlangeswortachtung", 0.2],
                         ["Service", -0.4],
                         ["-", null],
                         ["gerne", 0.3],
