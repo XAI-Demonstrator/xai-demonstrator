@@ -97,21 +97,12 @@ export default {
     }
   },
   created() {
-    document.title = "Review Sentiment – XAI Demonstrator"
+    document.title = this.useCaseTitle + " – XAI Demonstrator"
   }
 }
 </script>
 
 <style>
-* {
-  box-sizing: border-box;
-}
-
-body {
-  padding: 0;
-  margin: 0;
-}
-
 #app {
   display: flex;
 }
@@ -119,7 +110,6 @@ body {
 main {
   flex-grow: 1;
 }
-
 
 .mint-indicator-wrapper {
   background-color: #00887A !important;
