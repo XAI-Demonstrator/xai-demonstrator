@@ -1,15 +1,19 @@
 <template>
-  <section>
-    <mt-spinner v-show="!prediction" type="triple-bounce"></mt-spinner>
-    <span v-show="prediction && currentPrediction">„Das ist ein/e {{ prediction }}“</span>
-  </section>
+  <div class="inspector">
+    <MultiBounce v-if="!prediction" numberOfDots="3" />
+    <p v-show="prediction && currentPrediction">„Das ist ein/e {{ prediction }}“</p>
+  </div>
 </template>
 
 <script>
 import axios from 'axios'
+import {MultiBounce} from '@xai-demonstrator/xaidemo-ui'
 
 export default {
   name: "InspectImage",
+  components: {
+    MultiBounce
+  },
   props: {
     currentPrediction: {
       type: Boolean,
@@ -40,5 +44,12 @@ export default {
 </script>
 
 <style scoped>
-
+.inspector {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  min-height: 30px;
+}
 </style>

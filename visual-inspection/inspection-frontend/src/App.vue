@@ -1,17 +1,21 @@
 <template>
-  <div id="app">
+  <div id="app" class="xd-app">
     <UseCaseHeader
         v-bind:standalone="!Boolean(backendUrl)"
         v-bind:title="title"/>
     <main>
       <section>
-        <p>Wähle einen Bildausschnitt und frage die KI nach dem Wetter:</p>
+        <div class="xd-section xd-light">
+          <p>Wähle einen Bildausschnitt und frage die KI nach dem Wetter:</p>
+        </div>
       </section>
-      <div id="image-container">
-        <Cropper ref="cropper" class="cropper" :src="img" @change="imageChanged"
-                 :min-width="30" :min-height="20"
-                 :stencil-component="ExplanationStencil"
-                 :stencil-props="{
+      <div id="inspection-wrapper">
+        <div id="image-container">
+          <Cropper ref="cropper" class="cropper" :src="img" @change="imageChanged"
+                   :min-width="30" :min-height="20"
+                   :default-boundaries="fit"
+                   :stencil-component="ExplanationStencil"
+                   :stencil-props="{
                  'explanationMode': currentExplanation,
                  'explanationImg': explanationImg,
                  'aspectRatio': 1.0,
@@ -26,13 +30,20 @@
                     east: false
                  }
                }"/>
+        </div>
+
+        <section>
+          <div class="xd-section xd-light">
+            <InspectImage ref="inspector"
+                          :current-prediction="currentPrediction"
+                          v-on:inspectionCompleted="inspectionCompleted"/>
+            <ExplainInspection ref="explainer" v-bind:prediction-ready="currentPrediction"
+                               v-on:explanationRequested="explanationRequested"
+                               v-on:explanationReceived="explanationReceived"/>
+          </div>
+        </section>
+
       </div>
-      <InspectImage ref="inspector"
-                    :current-prediction="currentPrediction"
-                    v-on:inspectionCompleted="inspectionCompleted"/>
-      <ExplainInspection ref="explainer" v-bind:prediction-ready="currentPrediction"
-                         v-on:explanationRequested="explanationRequested"
-                         v-on:explanationReceived="explanationReceived"/>
     </main>
     <FloatingInfoButton v-bind:info-url="infoUrl"
                         v-bind:info-text="infoText"
@@ -107,22 +118,6 @@ export default {
 </script>
 
 <style>
-* {
-  box-sizing: border-box;
-}
-
-body {
-  padding: 0;
-  margin: 0;
-}
-
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
-}
-
 main {
   display: flex;
   flex-direction: column;
@@ -131,73 +126,130 @@ main {
 
 main section {
   width: 100%;
-  min-height: 40px;
-  padding-left: 5px;
-  padding-right: 5px;
+  margin: 0;
+  padding: 0 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#inspection-wrapper {
+  display: flex;
+}
+
+#image-container {
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-#image-container {
-  width: 100%;
-  background-color: #000000;
-  display: flex;
-  align-items: center;
-}
-
-.cropper {
-  flex: 1;
-  display: block;
+.cropper * {
+  border-radius: 3px;
 }
 
 @media screen and (max-width: 450px) {
   #app {
-    padding: 60px 0 0;
-    overflow: scroll;
     flex-direction: column;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  #inspection-wrapper {
+    flex-direction: column;
+  }
+
+  #image-container {
+    width: 100%;
+    max-width: 100vw;
+    padding: 12px 0;
+  }
+
+  .cropper {
+    max-width: 100vw;
+  }
+
+  .cropper * {
+    border-radius: 0;
   }
 }
 
 @media screen and (min-width: 450px) and (max-height: 650px) {
+
   #app {
-    padding: 60px 0 0;
-    max-width: 450px;
-    overflow: scroll;
     flex-direction: column;
-    flex-wrap: wrap;
+    overflow: hidden;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  main {
+    flex: 1;
+  }
+
+  main section {
+    width: 100%;
+  }
+
+  #inspection-wrapper {
+    width: 100%;
+    flex-direction: row;
+    align-content: stretch;
+    justify-content: stretch;
   }
 
   #image-container {
-    max-width: 100%;
-    height: 50vh;
+    height: calc(100vh - 54px - 46px);
+    padding: 0 0 0 8px;
   }
+
+  #inspection-wrapper section {
+    max-width: 40%;
+    flex-grow: 0;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .cropper {
+    height: 100%;
+    max-height: calc(100vh - 54px - 56px);
+  }
+
 }
 
 @media screen and (min-width: 450px) and (min-height: 650px) {
 
-  body {
-    background-color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100vw;
-    height: 100vh;
-  }
-
   #app {
-    max-width: 450px;
-    border: 1px solid #ddd;
-    box-shadow: 2px 2px 5px 2px #eee;
-    padding: 8px;
-    height: auto;
-    min-height: 640px;
     flex-direction: column;
     overflow: auto;
   }
 
   main {
     flex: 1;
+    width: 100%;
+    padding: 0 !important;
   }
+
+  main section {
+    padding: 0;
+  }
+
+  #inspection-wrapper {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  #image-container {
+    margin-top: 8px;
+    margin-bottom: 8px;
+    width: 100%;
+    max-width: 450px;
+  }
+
+  .cropper {
+    max-width: calc(450px - 16px);
+  }
+
 }
 </style>

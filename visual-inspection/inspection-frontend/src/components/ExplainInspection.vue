@@ -1,22 +1,26 @@
 <template>
-  <section>
+  <div>
     <div class="explanation-request">
-      <mt-button class="request-button"
-                 v-show="!waitingForExplanation"
-                 v-bind:disabled="!predictionReady"
-                 v-on:click="buttonClicked">
+      <button class="xd-button xd-primary"
+              v-show="!waitingForExplanation"
+              v-bind:disabled="!predictionReady"
+              v-on:click="buttonClicked">
         Woran erkennst du das?
-      </mt-button>
-      <mt-spinner v-if="waitingForExplanation" type="triple-bounce"/>
+      </button>
+      <MultiBounce v-if="waitingForExplanation"/>
     </div>
-  </section>
+  </div>
 </template>
 
 <script>
 import axios from "axios";
+import {MultiBounce} from '@xai-demonstrator/xaidemo-ui'
 
 export default {
   name: "ExplainInspection",
+  components: {
+    MultiBounce
+  },
   props: {
     predictionReady: {
       type: Boolean,
@@ -55,17 +59,8 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 40px;
+  width: 100%;
+  min-height: 40px;
 }
 
-.request-button {
-  background-color: #77A6F7;
-  border-radius: 3px;
-  font-size: 1em;
-  font-weight: normal;
-  height: 100%;
-  padding: 10px;
-  color: white;
-  width: 100%;
-}
 </style>
