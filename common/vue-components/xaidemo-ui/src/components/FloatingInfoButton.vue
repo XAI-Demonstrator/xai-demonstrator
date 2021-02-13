@@ -7,7 +7,7 @@
             <h3>{{ part.headline }}</h3>
             <p v-for="paragraph in part.paragraphs" v-bind:key="paragraph">{{ paragraph }}</p>
           </section>
-          <a v-if="infoUrl" v-bind:href="infoUrl" class="xd-button xd-secondary">
+          <a v-if="infoUrl" v-bind:href="infoUrl" class="xd-button xd-secondary xd-section">
             {{ linkLabel }}
           </a>
         </div>
@@ -79,11 +79,13 @@ export default {
 }
 
 #info-popup {
+  /*background-color: #CC0000;*/
   margin-top: 42px;
-  padding: 8px;
+  padding: 12px 8px 8px;
   height: calc(100% - 42px);
   width: 100%;
   background-color: #fff;
+  box-shadow: inset 0 4px 12px rgba(120, 120, 120, 0.4);
 }
 
 .popup {
@@ -92,7 +94,6 @@ export default {
   bottom: auto;
   left: auto;
   position: fixed;
-  backface-visibility: hidden;
   transition: .3s ease-out;
   z-index: 99;
 }
@@ -111,17 +112,8 @@ export default {
   padding-bottom: 70px;
 }
 
-#info-content section h3 {
-  margin: 0;
-  padding: 0;
-  font-size: 1em;
-  font-weight: 600;
-}
-
 #info-content section p {
-  margin: 0;
   font-size: 0.9em;
-  padding: 5px 0 0;
   text-align: justify;
 }
 
@@ -137,7 +129,7 @@ export default {
   height: 50px;
   border-radius: 100%;
 
-  box-shadow: 0 4px 8px #ccc;
+  box-shadow: 2px 4px 8px rgba(120, 120, 120, 0.4);
   z-index: 9999;
 }
 
@@ -163,11 +155,15 @@ export default {
 
   #info-popup {
     max-width: 432px;
-    top: calc(50% - 286px);
-    padding: 8px 0 0;
+    top: calc(50% - 312px + 42px + 12px);
     right: auto;
     left: auto;
     bottom: auto;
+    box-shadow: none;
+    height: calc(624px - 42px - 12px);
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
   }
 
   .slide-enter-active,
@@ -182,14 +178,8 @@ export default {
     opacity: 0;
   }
 
-  #info-popup {
-    height: auto;
-    min-height: 574px;
-    margin-top: 18px;
-    overflow: hidden;
-  }
-
   #info-content {
+    padding: 0 4px 4px;
     overflow: auto;
   }
 
