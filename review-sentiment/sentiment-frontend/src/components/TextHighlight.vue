@@ -75,7 +75,6 @@ export default {
 <style scoped>
 .highlight-box {
   background-color: #fff;
-  border: 1px solid #D3E3FC;
-  padding: 5px;
+  padding: 8px;
 }
 </style>

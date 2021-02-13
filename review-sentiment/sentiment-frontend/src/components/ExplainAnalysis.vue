@@ -1,39 +1,44 @@
 <template>
-  <div v-if="isActive">
-    <mt-button type="primary" size="large" v-on:click="requestExplanation" v-if="!explanationResult"
-               class="request-button">Wie kommst du zu dieser Einschätzung?
-    </mt-button>
+  <div>
+    <button v-on:click="requestExplanation" v-if="!explanationResult" class="xd-button xd-primary">
+      <label>Wie kommst du zu dieser Einschätzung?</label>
+    </button>
     <div class="explanation-container" v-if="explanationResult">
       <p>Die Wörter deines Reviews tragen wie folgt zur Bewertung bei:</p>
       <BarChart v-if="explanationResult" v-bind:explanation="explanationResult"></BarChart>
       <TextHighlight v-if="explanationResult != null" v-bind:explanation="explanationResult"></TextHighlight>
     </div>
+    <SpinningIndicator v-bind:visible="waitingForExplanation"/>
   </div>
 </template>
 <script>
 import axios from 'axios'
-import {Indicator} from "mint-ui";
+import {SpinningIndicator} from '@xai-demonstrator/xaidemo-ui';
 
 import TextHighlight from "@/components/TextHighlight";
 import BarChart from "@/components/BarChart";
 
 export default {
   name: 'ExplainAnalysis',
-  components: {BarChart, TextHighlight},
+  components: {
+    BarChart,
+    TextHighlight,
+    SpinningIndicator
+  },
   data() {
     return {
       explanationResult: null,
+      waitingForExplanation: false,
       backendUrl: process.env.VUE_APP_BACKEND_URL
     }
   },
   props: [
-    "isActive",
     "reviewText"
   ],
   methods: {
     requestExplanation() {
-      Indicator.open()
       this.resetComponent()
+      this.waitingForExplanation = true
 
       let data = {"text": this.reviewText}
 
@@ -52,7 +57,7 @@ export default {
                     score: pair[1]
                   }
                 })
-                Indicator.close()
+                this.waitingForExplanation = false
               }
           )
     },
@@ -64,20 +69,16 @@ export default {
 </script>
 <style scoped>
 .explanation-container {
-  border: 1px solid #D3E3FC;
-  padding: 0px 5px 5px;
+  display: flex;
+  flex-direction: column;
 }
 
 .explanation-container div {
-  margin-top: 5px;
+  margin-bottom: 8px;
+  border-radius: 3px;
 }
 
-.request-button {
-  background-color: #77A6F7;
-  border-radius: 0;
-  font-size: 1em;
-  font-weight: normal;
-  height: auto;
-  padding: 10px;
+.explanation-container div:last-child {
+  margin-bottom: 0;
 }
 </style>

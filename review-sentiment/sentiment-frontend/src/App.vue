@@ -1,19 +1,24 @@
 <template>
-  <div id="app">
-    <UseCaseHeader v-bind:standalone="!Boolean(backendUrl)"/>
-    <ComposeReview ref="composer"
-                   v-bind:introduction-text="introductionTexts[reviewTopic]"
-                   v-bind:default-review="defaultReviews[reviewTopic]"
-                   v-bind:show-intro="!numberOfStars"
-                   v-on:reviewChanged="reviewTextChanged"/>
-    <AnalyzeReview ref="analyzer"
-                   v-bind:review-text="reviewTextToAnalyze"
-                   v-bind:num-of-stars="numberOfStars"
-                   v-on:analysisRequested="analysisRequested"
-                   v-on:analysisCompleted="analysisCompleted"/>
-    <ExplainAnalysis ref="explainer"
-                     v-bind:is-active="numberOfStars"
-                     v-bind:review-text="reviewTextToAnalyze"/>
+  <div id="app" class="xd-app">
+    <UseCaseHeader v-bind:standalone="!Boolean(backendUrl)"
+                   v-bind:title="useCaseTitle"/>
+    <main>
+      <section class="xd-section xd-light">
+        <ComposeReview ref="composer"
+                       v-bind:introduction-text="introductionTexts[reviewTopic]"
+                       v-bind:default-review="defaultReviews[reviewTopic]"
+                       v-bind:show-intro="!numberOfStars"
+                       v-on:review-changed="reviewTextChanged"/>
+        <AnalyzeReview ref="analyzer"
+                       v-bind:review-text="reviewTextToAnalyze"
+                       v-on:analysisRequested="analysisRequested"
+                       v-on:analysisCompleted="analysisCompleted"/>
+      </section>
+      <section v-show="numberOfStars" class="xd-section xd-light">
+        <ExplainAnalysis ref="explainer"
+                         v-bind:review-text="reviewTextToAnalyze"/>
+      </section>
+    </main>
     <FloatingInfoButton v-bind:info-text="infoText"
                         v-bind:info-url="infoUrl"
                         v-bind:link-label="infoLinkLabel"/>
@@ -38,6 +43,7 @@ export default {
   },
   data() {
     return {
+      useCaseTitle: "Review Sentiment",
       introductionTexts: {
         'movie': 'Wie war der Film, den du zuletzt gesehen hast?',
         'restaurant': 'Wie war dein letzter Restaurant-Besuch?',
@@ -61,7 +67,7 @@ export default {
         }
       ],
       infoUrl: "/",
-      infoLinkLabel: "More Information",
+      infoLinkLabel: "Weitere Informationen",
       reviewText: '',
       numberOfStars: null,
       reviewTopic: ['movie', 'restaurant', 'travel'][Math.floor(Math.random() * 3)],
@@ -91,22 +97,18 @@ export default {
     }
   },
   created() {
-    document.title = "Review Sentiment – XAI Demonstrator"
+    document.title = this.useCaseTitle + " – XAI Demonstrator"
   }
 }
 </script>
 
 <style>
-* {
-  box-sizing: border-box;
+#app {
+  display: flex;
 }
 
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
-  margin-top: 60px;
+main {
+  flex-grow: 1;
 }
 
 .mint-indicator-wrapper {
@@ -119,16 +121,32 @@ export default {
   border-left-color: #D3E3FC !important;
 }
 
-@media screen and (min-width: 450px) {
-  body {
-    background-color: #FFFFFF;
-  }
+@media screen and (max-width: 450px) {
 
   #app {
-    margin: 40px auto auto;
-    max-width: 425px;
-    border: 1px solid #D3E3FC;
-    padding: 1em 5px 5px;
+    flex-direction: column;
   }
+
+}
+
+@media screen and (min-width: 450px) and (max-height: 650px) {
+
+  #app {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  main {
+    width: 450px;
+  }
+
+}
+
+@media screen and (min-width: 450px) and (min-height: 650px) {
+
+  #app {
+    flex-direction: column;
+  }
+
 }
 </style>

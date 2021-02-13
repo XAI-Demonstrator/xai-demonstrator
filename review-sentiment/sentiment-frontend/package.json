@@ -5,13 +5,12 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
-    "test": "jest --collect-coverage"
+    "test:unit": "vue-cli-service test:unit --collect-coverage",
+    "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@xai-demonstrator/xaidemo-ui": "^0.1.1",
+    "@xai-demonstrator/xaidemo-ui": "^0.2.0",
     "core-js": "^3.8.3",
-    "mint-ui": "^2.2.13",
     "vue": "^2.6.11"
   },
   "devDependencies": {
@@ -22,8 +21,7 @@
     "@vue/test-utils": "^1.1.3",
     "axios": "^0.21.1",
     "babel-eslint": "^10.1.0",
-    "coveralls": "^3.1.0",
-    "eslint": "^7.19.0",
+    "eslint": "^7.20.0",
     "eslint-plugin-vue": "^7.5.0",
     "flush-promises": "^1.0.2",
     "miragejs": "^0.1.41",
@@ -41,7 +39,18 @@
     "parserOptions": {
       "parser": "babel-eslint"
     },
-    "rules": {}
+    "rules": {},
+    "overrides": [
+      {
+        "files": [
+          "**/__tests__/*.{j,t}s?(x)",
+          "**/tests/unit/**/*.spec.{j,t}s?(x)"
+        ],
+        "env": {
+          "jest": true
+        }
+      }
+    ]
   },
   "browserslist": [
     "> 1%",

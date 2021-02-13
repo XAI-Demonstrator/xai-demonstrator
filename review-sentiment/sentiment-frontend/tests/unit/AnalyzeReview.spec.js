@@ -2,11 +2,10 @@ import {createLocalVue, shallowMount} from '@vue/test-utils'
 import AnalyzeReview from "@/components/AnalyzeReview";
 import axios from 'axios';
 import flushPromises from 'flush-promises';
-import BarChart from "@/components/BarChart";
 
 jest.mock('axios');
 
-describe('Component', () => {
+describe('AnalyzeReview.vue', () => {
 
     const localVue = createLocalVue()
     let wrapper = shallowMount(AnalyzeReview, localVue);
@@ -16,16 +15,18 @@ describe('Component', () => {
         }
     )
 
-    it('component reset', () => {
-        wrapper.setData({numOfStars: 5})
+    it('component reset', async () => {
+        await wrapper.setData({numOfStars: 5})
 
-        wrapper.vm.resetComponent()
+        await wrapper.vm.resetComponent()
 
         expect(wrapper.vm.$data.numOfStars).toBeNull()
+        expect(wrapper.find('.the-sentiment').exists()).toBe(false)
+        expect(wrapper.find('button').exists()).toBe(true)
     })
 
-    it('prediction is requested', async () => {
-        wrapper.setProps({reviewText: "Boring food..."})
+    it('prediction is requested from backend', async () => {
+        await wrapper.setProps({reviewText: "Boring food..."})
 
         const response = {
             data: {
@@ -40,10 +41,14 @@ describe('Component', () => {
         }
         axios.post.mockImplementationOnce(() => Promise.resolve(response))
 
-        wrapper.vm.requestAnalysis()
+        const button = wrapper.find('button')
+        await button.trigger('click')
+
         await flushPromises()
 
         expect(wrapper.vm.$data.numOfStars).toBe(2)
+        expect(wrapper.find('.sentiment-stars').findAll('img.my-star').length).toEqual(5)
+
     })
 
 })

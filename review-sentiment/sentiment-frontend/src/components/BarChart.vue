@@ -1,8 +1,10 @@
 <template>
   <div class="barchart">
-    <div class="bar" v-for="pair in processedExplanation.slice(0,maxNumOfBars)" :key="pair.word + Math.random()">
-      <div class="progress" v-bind:style="{'--importance': pair.score,
-         'background-color': pair.score < 0 ? '#CC0000' : '#00887A'}">
+    <div class="line" v-for="pair in processedExplanation.slice(0,maxNumOfBars)" :key="pair.word + Math.random()">
+      <div class="bar">
+        <div class="progress" v-bind:style="{'--importance': pair.score}"
+             v-bind:class="{'xd-green': pair.score > 0, 'xd-red': pair.score < 0}">
+        </div>
       </div>
       <div class="word">{{ pair.word }}</div>
     </div>
@@ -10,9 +12,10 @@
       <div class="legend-element">
         &#9668; negativ
       </div>
-      <div class="legend-element positive">
+      <div class="legend-element legend-right">
         positiv &#9658;
       </div>
+      <div class="legend-element">&nbsp;</div>
     </div>
   </div>
 </template>
@@ -67,46 +70,71 @@ export default {
 }
 
 .barchart {
-  background-color: #D3E3FC;
-  padding: 5px 10px;
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.line {
+  width: 100%;
+  height: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .bar {
-  width: 100%;
-  position: relative;
-  height: 20px;
-}
-
-.legend {
-  position: relative;
-  width: 100%;
-  height: 20px;
-}
-
-.legend-element {
-  width: 35%;
-  position: absolute;
-  font-size: small;
-}
-
-.positive {
-  margin-left: 35%;
-  text-align: right;
-}
-
-.progress {
-  position: absolute;
-  background-color: #77A6F7;
-  width: max(calc(var(--importance) * 35%), calc(var(--importance) * -35%));
-  height: 12px;
-  margin-left: min(calc(35% + var(--importance) * 35%), 35%);;
-  margin-top: 4px;
+  height: 100%;
+  flex: 2;
+  display: flex;
+  align-items: center;
 }
 
 .word {
-  position: absolute;
-  margin-left: 72%;
-  margin-right: 0;
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  display: block;
 }
 
+.word::after {
+    position: absolute;
+    content: " ";
+
+    background: linear-gradient(to right, transparent 70%, white 95%);
+
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.progress {
+  width: max(calc(var(--importance) * 50%), calc(var(--importance) * -50%));
+  height: 12px;
+  margin-left: min(calc(50% + var(--importance) * 50%), 50%);
+  border-radius: 2px;
+}
+
+.legend {
+  width: 100%;
+  height: 20px;
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: row;
+  align-items: center;
+}
+
+.legend-element {
+  font-size: small;
+  flex: 1;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.legend-right {
+  text-align: right;
+}
 </style>

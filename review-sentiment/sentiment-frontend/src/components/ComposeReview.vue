@@ -1,11 +1,14 @@
 <template>
   <div>
-    <p v-if="showIntro" class="intro-text">{{ introductionText }} Gebe deine Bewertung ein oder nutze das Beispiel:</p>
-    <mt-field label=""
-              v-bind:placeholder="defaultReview"
-              type="textarea" rows="3" v-model="text"
-              v-on:input="reviewChanged"
-              class="text-input" id="review-input-field"></mt-field>
+    <p v-if="showIntro && !text" class="intro-text">{{ introductionText }}</p>
+    <p v-if="showIntro && !text" class="intro-text">Gebe deine Bewertung ein oder nutze das Beispiel:</p>
+    <textarea
+        v-bind:placeholder="defaultReview"
+        v-model="text"
+        rows="4"
+        class="text-input"
+        id="review-input-field">
+    </textarea>
   </div>
 </template>
 <script>
@@ -21,25 +24,30 @@ export default {
     "defaultReview",
     "showIntro"
   ],
-  methods: {
-    reviewChanged() {
-      this.$emit('reviewChanged', this.text)
+  watch: {
+    text: function () {
+      this.$emit('review-changed', this.text)
     }
   }
 }
 </script>
 <style scoped>
-p {
-  margin-block-start: 0;
-}
 .intro-text {
   text-align: left;
-  padding-left: 5px;
-  padding-right: 5px;
-  font-size: 1em;
 }
 
 .text-input {
-  border: 1px solid #D3E3FC;
+  width: 100%;
+  outline: none;
+  border: none;
+  border-radius: 5px;
+  padding: 8px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  font-size: 1em;
+}
+
+.text-input:focus {
+  border-color: #00887a;
 }
 </style>

@@ -1,7 +1,7 @@
 import {createLocalVue, shallowMount} from '@vue/test-utils'
 import App from "@/App";
 
-describe('Component', () => {
+describe('App.vue', () => {
 
     const localVue = createLocalVue()
     const wrapper = shallowMount(App, localVue)
