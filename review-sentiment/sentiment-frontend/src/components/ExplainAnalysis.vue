@@ -8,21 +8,27 @@
       <BarChart v-if="explanationResult" v-bind:explanation="explanationResult"></BarChart>
       <TextHighlight v-if="explanationResult != null" v-bind:explanation="explanationResult"></TextHighlight>
     </div>
+    <SpinningIndicator v-bind:visible="waitingForExplanation"/>
   </div>
 </template>
 <script>
 import axios from 'axios'
-import {Indicator} from "mint-ui";
+import {SpinningIndicator} from '@xai-demonstrator/xaidemo-ui';
 
 import TextHighlight from "@/components/TextHighlight";
 import BarChart from "@/components/BarChart";
 
 export default {
   name: 'ExplainAnalysis',
-  components: {BarChart, TextHighlight},
+  components: {
+    BarChart,
+    TextHighlight,
+    SpinningIndicator
+  },
   data() {
     return {
       explanationResult: null,
+      waitingForExplanation: false,
       backendUrl: process.env.VUE_APP_BACKEND_URL
     }
   },
@@ -31,8 +37,8 @@ export default {
   ],
   methods: {
     requestExplanation() {
-      Indicator.open()
       this.resetComponent()
+      this.waitingForExplanation = true
 
       let data = {"text": this.reviewText}
 
@@ -51,7 +57,7 @@ export default {
                     score: pair[1]
                   }
                 })
-                Indicator.close()
+                this.waitingForExplanation = false
               }
           )
     },

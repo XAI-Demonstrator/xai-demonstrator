@@ -10,35 +10,39 @@
         <img class="my-star" src="@/assets/star_blank.svg" v-for="star in (5 - numOfStars)" :key="'neg-' + star"/>
       </div>
     </div>
+    <SpinningIndicator v-bind:visible="waitingForPrediction" />
   </div>
 </template>
 <script>
 import axios from 'axios';
-import {Indicator} from 'mint-ui';
+import { SpinningIndicator } from '@xai-demonstrator/xaidemo-ui';
 
 export default {
   name: 'AnalyzeReview',
+  components: {
+    SpinningIndicator
+  },
   props: [
     "reviewText"
   ],
   data() {
     return {
       numOfStars: null,
+      waitingForPrediction: false,
       backendUrl: process.env.VUE_APP_BACKEND_URL
     }
   },
   methods: {
     requestAnalysis() {
-      Indicator.open()
-
       this.resetComponent()
+      this.waitingForPrediction = true
       this.$emit('analysisRequested')
 
       axios.post(this.backendUrl + '/predict', {"text": this.reviewText})
           .then(response => {
             this.numOfStars = response.data.prediction.map((x, i) => [x, i]).reduce((r, a) => (a[0] > r[0] ? a : r))[1] + 1
             this.$emit('analysisCompleted', this.numOfStars)
-            Indicator.close()
+            this.waitingForPrediction = false
           })
     },
     resetComponent() {
@@ -48,10 +52,6 @@ export default {
 }
 </script>
 <style scoped>
-* {
-  box-sizing: border-box;
-}
-
 .the-sentiment {
   display: flex;
   align-items: center;

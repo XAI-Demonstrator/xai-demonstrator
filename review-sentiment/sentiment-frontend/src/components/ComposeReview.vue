@@ -1,6 +1,7 @@
 <template>
   <div>
-    <p v-if="showIntro && !text" class="intro-text">{{ introductionText }} Gebe deine Bewertung ein oder nutze das Beispiel:</p>
+    <p v-if="showIntro && !text" class="intro-text">{{ introductionText }}</p>
+    <p v-if="showIntro && !text" class="intro-text">Gebe deine Bewertung ein oder nutze das Beispiel:</p>
     <textarea
         v-bind:placeholder="defaultReview"
         v-model="text"
@@ -31,14 +32,8 @@ export default {
 }
 </script>
 <style scoped>
-
-p {
-  margin-block-start: 0;
-}
-
 .intro-text {
   text-align: left;
-  font-size: 1em;
 }
 
 .text-input {
@@ -47,7 +42,9 @@ p {
   border: none;
   border-radius: 5px;
   padding: 8px;
+  margin-top: 8px;
   margin-bottom: 8px;
+  font-size: 1em;
 }
 
 .text-input:focus {
