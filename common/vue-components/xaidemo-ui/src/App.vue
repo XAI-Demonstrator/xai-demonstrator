@@ -16,11 +16,23 @@
         </button>
       </section>
       <section class="xd-section xd-border-secondary">
-        <MultiBounce dots="3" dot-class="xd-secondary" />
+        <p>Sometimes, we are just waiting...</p>
+        <MultiBounce numberOfDots="3" dot-class="xd-secondary"/>
+      </section>
+      <section class="xd-section xd-light">
+        <h3>Section Headline</h3>
+        <p>
+          We also like to have a multi-paragraph text.
+          It should be long.
+        </p>
+        <p>
+          We need this to see how our scrolling behavior is.
+          Otherwise, it is too difficult to test.
+        </p>
       </section>
     </main>
     <FloatingInfoButton/>
-    <SpinningIndicator v-bind:visible="waiting" />
+    <SpinningIndicator v-bind:visible="waiting"/>
   </div>
 </template>
 
@@ -69,7 +81,7 @@ main {
 
 @media screen and (min-width: 450px) and (max-height: 650px) {
   #app {
-    flex-direction: row;
+    flex-direction: column;
   }
 }
 
