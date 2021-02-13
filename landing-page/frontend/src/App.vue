@@ -1,14 +1,14 @@
 <template>
-  <div id="app">
-    <div class="blank-header"><h1>XAI Demonstrator</h1></div>
-    <header>
+  <div id="app" class="xd-app">
+    <div class="blank-header xd-primary"><h1>XAI Demonstrator</h1></div>
+    <header class="xd-primary">
       <h3>Hinterfrage die KI und entdecke Erklärbare Künstliche Intelligenz</h3>
     </header>
     <main>
       <div id="select">
         <a v-for="useCase in useCases" :key="useCase.title" v-bind:href="useCase.route">
-          <section>
-            <img v-bind:src="useCase.logo" class="logo" :alt="useCase.title"/>
+          <section class="xd-section xd-light">
+            <img v-bind:src="useCase.logo" class="logo xd-secondary" :alt="useCase.title"/>
             <div class="description">
               <h3>{{ useCase.title }}</h3>
               <p>{{ useCase.description }}</p>
@@ -17,17 +17,17 @@
           </section>
         </a>
       </div>
-          <FloatingInfoButton
+
+    </main>
+    <FloatingInfoButton
         v-bind:info-text="infoText"
         v-bind:info-url="infoUrl"
         v-bind:link-label="linkLabel"/>
-    </main>
-
   </div>
 </template>
 
 <script>
-import { FloatingInfoButton } from '@xai-demonstrator/xaidemo-ui';
+import {FloatingInfoButton} from '@xai-demonstrator/xaidemo-ui';
 
 export default {
   name: 'App',
@@ -55,7 +55,7 @@ export default {
           headline: "Der XAI-Demonstrator",
           paragraphs: [
             "Eine KI, die sich dir gegenüber wie ein Team-Mitglied erklärt? Der XAI-Demonstrator zeigt, wie das geht.",
-            "Anhand leicht zugänglicher Beispiele veranschautlicht die App die Möglichkeiten von Explainable AI (XAI). " +
+            "Anhand leicht zugänglicher Beispiele veranschaulicht die App die Möglichkeiten von Explainable AI (XAI). " +
             "Live und interaktiv erzeugt sie Erklärungen mit modernen Methoden direkt aus der Forschung.",
             "Damit wird die Vision einer Künstlichen Intelligenz, die nicht länger eine Black Box ist, " +
             "sondern von ihren Nutzerinnen und Nutzern verstanden und hinterfragt werden kann, Realität."
@@ -73,48 +73,32 @@ export default {
 </script>
 
 <style>
-* {
-  box-sizing: border-box;
-}
-
-body {
-  padding: 0;
-  margin: 0;
-}
 
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
-  background-color: #fff;
-  height: 100vh;
-  width: 100vw;
   display: flex;
 }
 
 .blank-header {
-  background-color: #77A6F7;
-  height: 50px;
+  height: 42px;
 
-  padding-left: 10px;
+  padding-left: 12px;
   display: flex;
   align-items: center;
 
   font-family: 'Calibri Light', sans-serif;
+  box-shadow: 0 4px 12px rgba(120, 120, 120, 0.4);
 }
 
 header {
-  padding: 15px;
-  background-color: #77A6F7;
+  padding: 10px;
   font-family: 'Calibri Light', sans-serif;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   align-items: center;
   flex: 0;
-  border-radius: 5px;
-  box-shadow: 2px 2px 5px 2px #eee;
+  border-radius: 3px;
+  box-shadow: 2px 2px 4px rgba(180, 180, 180, 0.5);
 }
 
 header h1, .blank-header h1 {
@@ -138,6 +122,7 @@ header h3 {
 }
 
 #select a {
+  color: #2c3e50;
   text-decoration: none;
   display: block;
 }
@@ -151,10 +136,6 @@ header h3 {
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
-  padding: 15px 10px;
-  background-color: #D3E3FC;
-  border-radius: 5px;
-  box-shadow: 2px 2px 5px 0 #eee;
 }
 
 section img {
@@ -165,8 +146,7 @@ section img {
 section img.logo {
   height: 60px;
   width: 60px;
-  background-color: #00887A;
-  border-radius: 30px;
+  border-radius: 100%;
 }
 
 section img.next {
@@ -200,7 +180,6 @@ section img.next {
 @media screen and (max-width: 450px) {
 
   #app {
-    padding: 60px 7px 7px;
     overflow: scroll;
     flex-direction: column;
   }
@@ -223,7 +202,7 @@ section img.next {
   }
 
   #select a {
-    margin-top: 15px;
+    margin-top: 12px;
   }
 
 }
@@ -232,7 +211,7 @@ section img.next {
 @media screen and (min-width: 450px) and (max-height: 650px) {
   #app {
     flex-direction: row;
-    padding: 60px 7px 7px;
+    padding-right: 0;
   }
 
   .blank-header {
@@ -252,11 +231,12 @@ section img.next {
     flex-shrink: 1;
     flex-grow: 1;
     overflow: scroll;
-    padding: 0 5px 0 15px;
+    padding-left: 8px;
+    padding-right: 8px;
   }
 
   #select a {
-    margin: 0 0 15px;
+    margin: 0 0 12px;
   }
 
 }
@@ -264,41 +244,29 @@ section img.next {
 
 @media screen and (min-width: 450px) and (min-height: 650px) {
 
-  body {
-    background-color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100vw;
-    height: 100vh;
-  }
-
   #app {
-    max-width: 450px;
-    border: 1px solid #ddd;
-    box-shadow: 2px 2px 5px 2px #eee;
-    padding: 7px;
-    height: auto;
-    min-height: 640px;
     flex-direction: column;
-    overflow: auto;
   }
 
   .blank-header {
-    margin-bottom: 10px;
+    margin-bottom: 12px;
   }
 
   header {
     height: auto;
     min-height: 280px;
+    margin-left: 4px;
+    margin-right: 4px;
   }
 
   main {
     flex: 1;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
   }
 
   #select a {
-    margin-top: 15px;
+    margin-top: 12px;
   }
 
 }
