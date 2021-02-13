@@ -1,9 +1,9 @@
 <template>
   <div class="multi-bounce">
-    <div v-for="dot in parseInt(dots)" v-bind:key="dot"
+    <div v-for="dot in parseInt(numberOfDots)" v-bind:key="dot"
          class="bouncing-dot"
          v-bind:class="dotClass"
-         v-bind:style="{'animation-delay': dot * period + 's',
+         v-bind:style="{'animation-delay': (dot-1) * period + 's',
                         'animation-duration': duration}"></div>
   </div>
 </template>
@@ -18,11 +18,11 @@ export default {
   },
   computed: {
     duration() {
-      return this.dots * this.period + 's'
+      return this.numberOfDots * this.period + 's'
     }
   },
   props: {
-    dots: {
+    numberOfDots: {
       type: Number,
       default: 3
     },
@@ -40,19 +40,21 @@ export default {
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  min-height: 16px;
+  min-height: 1em;
+  padding: 4px 0;
 }
 
 .bouncing-dot {
   border-radius: 100%;
-  height: 12px;
-  width: 12px;
+  height: 10px;
+  width: 10px;
   margin-left: 3px;
   margin-right: 3px;
   animation-name: bounce;
   animation-fill-mode: both;
   animation-iteration-count: infinite;
   animation-timing-function: ease-in;
+  box-shadow: 2px 2px 4px rgba(180, 180, 180, 0.5);
 }
 
 @keyframes bounce {
