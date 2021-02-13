@@ -1,20 +1,32 @@
 <template>
-  <div class="explainer">
+  <div>
     <div class="explanation-request">
-      <mt-button class="request-button"
-                 v-show="!waitingForExplanation"
-                 v-on:click="buttonClicked">„Woran erkennst du das?“
-      </mt-button>
-      <mt-spinner v-if="waitingForExplanation" type="triple-bounce"/>
+      <button class="xd-button xd-primary"
+              v-show="!waitingForExplanation"
+              v-bind:disabled="!predictionReady"
+              v-on:click="buttonClicked">
+        Woran erkennst du das?
+      </button>
+      <MultiBounce v-if="waitingForExplanation"/>
     </div>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import {MultiBounce} from '@xai-demonstrator/xaidemo-ui'
 
 export default {
   name: "ExplainInspection",
+  components: {
+    MultiBounce
+  },
+  props: {
+    predictionReady: {
+      type: Boolean,
+      default: false
+    }
+  },
   methods: {
     buttonClicked() {
       this.$emit('explanationRequested')
@@ -43,25 +55,12 @@ export default {
 </script>
 
 <style scoped>
-.explainer {
-  width: 100%;
-  margin-top: 5px;
-  margin-bottom: 5px;
-}
-
 .explanation-request {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 5px 10px;
+  width: 100%;
+  min-height: 40px;
 }
 
-.request-button {
-  background-color: #77A6F7;
-  border-radius: 0;
-  font-size: 1em;
-  font-weight: normal;
-  padding-left: 5px;
-  padding-right: 5px;
-}
 </style>

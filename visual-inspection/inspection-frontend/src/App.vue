@@ -1,19 +1,21 @@
 <template>
-  <div id="app">
-    <mt-header fixed title="Visual Inspection" class="navigation-header">
-      <a href="/" slot="left" v-if="backendUrl">
-        <mt-button icon="back"></mt-button>
-      </a>
-      <a href="./" slot="right">
-        <mt-button><span style="font-size: 16px; font-weight:bold;">↻</span></mt-button>
-      </a>
-    </mt-header>
-    <p>Wähle einen Bildausschnitt und frage die KI nach dem Wetter:</p>
-    <div id="image-container">
-      <Cropper ref="cropper" :src="img" @change="imageChanged"
-               :min-width="40" :min-height="25"
-               :stencil-component="ExplanationStencil"
-               :stencil-props="{
+  <div id="app" class="xd-app">
+    <UseCaseHeader
+        v-bind:standalone="!Boolean(backendUrl)"
+        v-bind:title="title"/>
+    <main>
+      <section>
+        <div class="xd-section xd-light">
+          <p>Wähle einen Bildausschnitt und frage die KI nach dem Wetter:</p>
+        </div>
+      </section>
+      <div id="inspection-wrapper">
+        <div id="image-container">
+          <Cropper ref="cropper" class="cropper" :src="img" @change="imageChanged"
+                   :min-width="30" :min-height="20"
+                   :default-boundaries="fit"
+                   :stencil-component="ExplanationStencil"
+                   :stencil-props="{
                  'explanationMode': currentExplanation,
                  'explanationImg': explanationImg,
                  'aspectRatio': 1.0,
@@ -28,13 +30,24 @@
                     east: false
                  }
                }"/>
-    </div>
-    <InspectImage ref="inspector"
-                  :current-prediction="currentPrediction"
-                  v-on:inspectionCompleted="inspectionCompleted"/>
-    <ExplainInspection ref="explainer" v-show="currentPrediction"
-                       v-on:explanationRequested="explanationRequested"
-                       v-on:explanationReceived="explanationReceived"/>
+        </div>
+
+        <section>
+          <div class="xd-section xd-light">
+            <InspectImage ref="inspector"
+                          :current-prediction="currentPrediction"
+                          v-on:inspectionCompleted="inspectionCompleted"/>
+            <ExplainInspection ref="explainer" v-bind:prediction-ready="currentPrediction"
+                               v-on:explanationRequested="explanationRequested"
+                               v-on:explanationReceived="explanationReceived"/>
+          </div>
+        </section>
+
+      </div>
+    </main>
+    <FloatingInfoButton v-bind:info-url="infoUrl"
+                        v-bind:info-text="infoText"
+                        v-bind:link-label="infoLinkLabel"/>
   </div>
 </template>
 
@@ -44,10 +57,17 @@ import 'vue-advanced-cropper/dist/style.css'
 import InspectImage from "@/components/InspectImage";
 import ExplainInspection from "@/components/ExplainInspection";
 import ExplanationStencil from "@/components/ExplanationStencil";
+import {FloatingInfoButton, UseCaseHeader} from '@xai-demonstrator/xaidemo-ui';
 
 export default {
   name: 'App',
-  components: {Cropper, InspectImage, ExplainInspection},
+  components: {
+    Cropper,
+    InspectImage,
+    ExplainInspection,
+    UseCaseHeader,
+    FloatingInfoButton
+  },
   methods: {
     imageChanged({canvas}) {
       this.currentPrediction = false;
@@ -72,8 +92,20 @@ export default {
       currentPrediction: false,
       currentExplanation: false,
       explanationImg: null,
+      title: "Visual Inspection",
+      infoUrl: "/",
+      infoLinkLabel: "Erfahre viel mehr!",
+      infoText: [
+        {
+          headline: "Visual Inspection",
+          paragraphs: [
+            "Sehr oft muss man das Wetter vorhersagen.",
+            "Eine KI ist darin manchmal sehr gut, manchmal sehr schlecht."
+          ]
+        }
+      ],
       backendUrl: process.env.VUE_APP_BACKEND_URL,
-      img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/El_Guamache_Bay%2C_Margarita_island.jpg/300px-El_Guamache_Bay%2C_Margarita_island.jpg'
+      img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/El_Guamache_Bay%2C_Margarita_island.jpg/800px-El_Guamache_Bay%2C_Margarita_island.jpg'
     }
   },
   created() {
@@ -86,37 +118,138 @@ export default {
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
-  margin-top: 50px;
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+main section {
+  width: 100%;
+  margin: 0;
+  padding: 0 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#inspection-wrapper {
+  display: flex;
 }
 
 #image-container {
-  max-height: 400px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.navigation-header {
-  background-color: #77A6F7 !important;
+.cropper * {
+  border-radius: 3px;
 }
 
-@media screen and (min-width: 450px) {
-  body {
-    background-color: #FFFFFF;
+@media screen and (max-width: 450px) {
+  #app {
+    flex-direction: column;
+    padding-left: 0;
+    padding-right: 0;
   }
+
+  #inspection-wrapper {
+    flex-direction: column;
+  }
+
+  #image-container {
+    width: 100%;
+    max-width: 100vw;
+    padding: 12px 0;
+  }
+
+  .cropper {
+    max-width: 100vw;
+  }
+
+  .cropper * {
+    border-radius: 0;
+  }
+}
+
+@media screen and (min-width: 450px) and (max-height: 650px) {
 
   #app {
-    margin: 40px auto auto;
-    max-width: 425px;
-    border: 1px solid #D3E3FC;
-    padding: 5px;
+    flex-direction: column;
+    overflow: hidden;
+    padding-left: 0;
+    padding-right: 0;
   }
 
-  .navigation-header {
-    margin: auto;
-    max-width: 437px;
+  main {
+    flex: 1;
   }
+
+  main section {
+    width: 100%;
+  }
+
+  #inspection-wrapper {
+    width: 100%;
+    flex-direction: row;
+    align-content: stretch;
+    justify-content: stretch;
+  }
+
+  #image-container {
+    height: calc(100vh - 54px - 46px);
+    padding: 0 0 0 8px;
+  }
+
+  #inspection-wrapper section {
+    max-width: 40%;
+    flex-grow: 0;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .cropper {
+    height: 100%;
+    max-height: calc(100vh - 54px - 56px);
+  }
+
+}
+
+@media screen and (min-width: 450px) and (min-height: 650px) {
+
+  #app {
+    flex-direction: column;
+    overflow: auto;
+  }
+
+  main {
+    flex: 1;
+    width: 100%;
+    padding: 0 !important;
+  }
+
+  main section {
+    padding: 0;
+  }
+
+  #inspection-wrapper {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  #image-container {
+    margin-top: 8px;
+    margin-bottom: 8px;
+    width: 100%;
+    max-width: 450px;
+  }
+
+  .cropper {
+    max-width: calc(450px - 16px);
+  }
+
 }
 </style>
