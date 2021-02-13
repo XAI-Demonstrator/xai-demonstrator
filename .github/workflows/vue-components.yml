@@ -48,7 +48,7 @@ jobs:
         run: |
           set -e
           cd ./common/vue-components/xaidemo-ui
-          npm run build-lib
+          npm run build:lib
       - name: Publish xaidemo-ui package
         uses: JS-DevTools/npm-publish@v1
         with:

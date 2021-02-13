@@ -35,6 +35,8 @@ export default {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+
+  box-shadow: 0 4px 12px rgba(120, 120, 120, 0.4);
 }
 
 .header-icon {

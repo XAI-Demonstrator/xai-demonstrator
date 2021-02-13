@@ -11,25 +11,44 @@
         </button>
       </section>
       <section class="xd-section xd-border-primary">
-        <button class="xd-button xd-primary" v-on:click="standalone = !standalone">
-          <label>Toggle Standalone</label>
+        <button class="xd-button xd-primary" v-on:click="waiting = !waiting">
+          <label>Toggle Indicator</label>
         </button>
+      </section>
+      <section class="xd-section xd-border-secondary">
+        <p>Sometimes, we are just waiting...</p>
+        <MultiBounce numberOfDots="3" dot-class="xd-secondary"/>
+      </section>
+      <section class="xd-section xd-light">
+        <h3>Section Headline</h3>
+        <p>
+          We also like to have a multi-paragraph text.
+          It should be long.
+        </p>
+        <p>
+          We need this to see how our scrolling behavior is.
+          Otherwise, it is too difficult to test.
+        </p>
       </section>
     </main>
     <FloatingInfoButton/>
+    <SpinningIndicator v-bind:visible="waiting"/>
   </div>
 </template>
 
 <script>
 import UseCaseHeader from "@/components/UseCaseHeader";
 import FloatingInfoButton from "@/components/FloatingInfoButton";
+import SpinningIndicator from "@/components/SpinningIndicator";
+import MultiBounce from "@/components/MultiBounce";
 
 export default {
   name: "App",
-  components: {FloatingInfoButton, UseCaseHeader},
+  components: {MultiBounce, FloatingInfoButton, UseCaseHeader, SpinningIndicator},
   data: function () {
     return {
-      standalone: true
+      standalone: true,
+      waiting: false
     }
   }
 }
@@ -62,7 +81,7 @@ main {
 
 @media screen and (min-width: 450px) and (max-height: 650px) {
   #app {
-    flex-direction: row;
+    flex-direction: column;
   }
 }
 

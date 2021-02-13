@@ -1,12 +1,12 @@
 {
   "name": "@xai-demonstrator/xaidemo-ui",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build:app": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit --collect-coverage",
     "lint": "vue-cli-service lint",
-    "build-lib": "vue-cli-service build --target lib --dest lib src/index.js"
+    "build:lib": "vue-cli-service build --target lib --dest lib src/index.js"
   },
   "main": "./lib/xaidemo-ui.common.js",
   "dependencies": {
