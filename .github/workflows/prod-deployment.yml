@@ -65,7 +65,7 @@ jobs:
         with:
           args: deploy --only hosting
         env:
-          FIREBASE_TOKEN: ${{ secrets.TEST_FIREBASE_TOKEN }}
+          FIREBASE_TOKEN: ${{ secrets.GCP_PROD_FIREBASE_TOKEN }}
           PROJECT_PATH: ./deployment/prod-deployment/frontends
 
 
