@@ -2,7 +2,7 @@
 ![Prod Deployment](https://github.com/XAI-Demonstrator/xai-demonstrator/workflows/Prod%20Deployment/badge.svg)
 ![Monitor Deployment(s)](https://github.com/XAI-Demonstrator/template-service/workflows/Monitor%20Deployment(s)/badge.svg)
 
-_This is the deployment currently at [xai-demonstrator-test.web.app](http://xai-demonstrator-test.web.app/) 
+_This is the deployment currently at [xai-demonstrator-prod.web.app](http://xai-demonstrator-prod.web.app/) 
 that will soon move to its final home at [https://www.xaidemo.de](https://www.xaidemo.de)._
 
 Production deployment of the XAI demonstrator on [Google Cloud Platform](https://cloud.google.com).
