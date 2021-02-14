@@ -1,5 +1,5 @@
-# test-deployment
-![Test Deployment](https://github.com/XAI-Demonstrator/xai-demonstrator/workflows/Prod%20Deployment/badge.svg)
+# prod-deployment
+![Prod Deployment](https://github.com/XAI-Demonstrator/xai-demonstrator/workflows/Prod%20Deployment/badge.svg)
 ![Monitor Deployment(s)](https://github.com/XAI-Demonstrator/template-service/workflows/Monitor%20Deployment(s)/badge.svg)
 
 _This is the deployment currently at [xai-demonstrator-test.web.app](http://xai-demonstrator-test.web.app/) 
@@ -20,7 +20,9 @@ To set up the XAI demonstrator on the Google Cloud Platform follow these steps:
      - GCP_PROD_PROJECT_ID - your project ID
      - GCP_PROD_REGION - the region you want your project to be hosted in
      - GCP_PROD_SA_KEY - the key your created in step 4
-6. For the frontends, an associated Firebase Hosting project has to be created
+6. Activate [Firebase Hosting](https://console.cloud.google.com/marketplace/details/google-cloud-platform/firebase-hosting) for your GCP project (without Google Analytics)
+7. To generate the Firebase token, install the [Firebase CLI](https://firebase.google.com/docs/cli) and log in using your Google account associated with your GCP project with `firebase login:ci`. Store the token as `GCP_PROD_FIREBASE_TOKEN`.
+8. Set the project name in [.firebaserc](./frontends/.firebaserc) to the name of your GCP/Firebase project.
 
 Be careful to insert the exact identifiers when creating the GitHub secrets. Common problems are extra spaces, inserting the computing zone (e.g. us-west1-a) instead of the region (us-west1) and copying only parts of the key json.
 
