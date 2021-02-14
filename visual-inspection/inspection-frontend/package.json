@@ -5,6 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "test:unit": "vue-cli-service test:unit --collect-coverage",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -19,10 +20,13 @@
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.5.11",
     "@vue/cli-plugin-eslint": "^4.5.11",
+    "@vue/cli-plugin-unit-jest": "^4.5.11",
     "@vue/cli-service": "^4.5.11",
+    "@vue/test-utils": "^1.0.3",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.19.0",
     "eslint-plugin-vue": "^7.5.0",
+    "flush-promises": "^1.0.2",
     "miragejs": "^0.1.41",
     "sass": "^1.32.6",
     "sass-loader": "^10.1.1",
@@ -40,7 +44,18 @@
     "parserOptions": {
       "parser": "babel-eslint"
     },
-    "rules": {}
+    "rules": {},
+    "overrides": [
+      {
+        "files": [
+          "**/__tests__/*.{j,t}s?(x)",
+          "**/tests/unit/**/*.spec.{j,t}s?(x)"
+        ],
+        "env": {
+          "jest": true
+        }
+      }
+    ]
   },
   "browserslist": [
     "> 1%",
