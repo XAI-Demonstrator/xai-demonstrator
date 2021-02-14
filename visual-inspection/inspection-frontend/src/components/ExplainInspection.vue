@@ -60,7 +60,7 @@ export default {
   align-items: center;
   justify-content: center;
   width: 100%;
-  min-height: 40px;
+  min-height: 60px;
 }
 
 </style>

@@ -9,13 +9,12 @@
           <p>Wähle einen Bildausschnitt und frage die KI nach dem Wetter:</p>
         </div>
       </section>
-      <div id="inspection-wrapper">
-        <div id="image-container">
-          <Cropper ref="cropper" class="cropper" :src="img" @change="imageChanged"
-                   :min-width="30" :min-height="20"
-                   :default-boundaries="fit"
-                   :stencil-component="ExplanationStencil"
-                   :stencil-props="{
+      <div id="image-container">
+        <Cropper ref="cropper" class="cropper" :src="img" @change="imageChanged"
+                 :min-width="30" :min-height="20"
+                 :default-boundaries="fit"
+                 :stencil-component="ExplanationStencil"
+                 :stencil-props="{
                  'explanationMode': currentExplanation,
                  'explanationImg': explanationImg,
                  'aspectRatio': 1.0,
@@ -30,22 +29,23 @@
                     east: false
                  }
                }"/>
-        </div>
-
-        <section>
-          <div class="xd-section xd-light">
-            <InspectImage ref="inspector"
-                          :current-prediction="currentPrediction"
-                          v-on:inspectionCompleted="inspectionCompleted"/>
-            <ExplainInspection ref="explainer" v-bind:prediction-ready="currentPrediction"
-                               v-on:explanationRequested="explanationRequested"
-                               v-on:explanationReceived="explanationReceived"/>
-          </div>
-        </section>
-
       </div>
+
+      <section>
+        <div class="xd-section xd-light">
+          <InspectImage ref="inspector"
+                        v-bind:current-prediction="currentPrediction"
+                        v-on:inspectionCompleted="inspectionCompleted"/>
+          <ExplainInspection ref="explainer"
+                             v-bind:prediction-ready="currentPrediction"
+                             v-on:explanationRequested="explanationRequested"
+                             v-on:explanationReceived="explanationReceived"/>
+        </div>
+      </section>
+
     </main>
-    <FloatingInfoButton v-bind:info-url="infoUrl"
+    <FloatingInfoButton class="info-button"
+                        v-bind:info-url="infoUrl"
                         v-bind:info-text="infoText"
                         v-bind:link-label="infoLinkLabel"/>
   </div>
@@ -118,6 +118,10 @@ export default {
 </script>
 
 <style>
+#app {
+  display: flex;
+}
+
 main {
   display: flex;
   flex-direction: column;
@@ -132,10 +136,6 @@ main section {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-}
-
-#inspection-wrapper {
-  display: flex;
 }
 
 #image-container {
@@ -154,10 +154,6 @@ main section {
     flex-direction: column;
     padding-left: 0;
     padding-right: 0;
-  }
-
-  #inspection-wrapper {
-    flex-direction: column;
   }
 
   #image-container {
@@ -179,41 +175,47 @@ main section {
 
   #app {
     flex-direction: column;
-    overflow: hidden;
     padding-left: 0;
     padding-right: 0;
+    overflow: auto;
+    height: 100vh;
+    width: 100vw;
   }
 
   main {
     flex: 1;
+    max-height: calc(100vh - 54px);
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: flex-start;
+    flex-wrap: wrap;
   }
 
   main section {
-    width: 100%;
+    width: 40%;
+    order: 2;
+    margin-bottom: 12px;
   }
 
-  #inspection-wrapper {
-    width: 100%;
-    flex-direction: row;
-    align-content: stretch;
-    justify-content: stretch;
+  main section:last-of-type {
+    margin-bottom: 0;
   }
 
   #image-container {
-    height: calc(100vh - 54px - 46px);
-    padding: 0 0 0 8px;
-  }
+    max-height: calc(100vh - 54px);
+    width: 60%;
 
-  #inspection-wrapper section {
-    max-width: 40%;
-    flex-grow: 0;
-    flex-direction: column;
+    align-self: flex-start;
+    order: 1;
+
     justify-content: center;
+    align-items: flex-start;
   }
 
   .cropper {
-    height: 100%;
-    max-height: calc(100vh - 54px - 56px);
+    max-height: calc(100vh - 54px);
   }
 
 }
@@ -222,22 +224,14 @@ main section {
 
   #app {
     flex-direction: column;
-    overflow: auto;
   }
 
   main {
-    flex: 1;
-    width: 100%;
-    padding: 0 !important;
+    flex-grow: 1;
   }
 
   main section {
     padding: 0;
-  }
-
-  #inspection-wrapper {
-    flex-direction: column;
-    width: 100%;
   }
 
   #image-container {
