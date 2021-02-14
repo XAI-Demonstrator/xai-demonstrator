@@ -105,6 +105,7 @@ jobs:
               --region ${{ secrets.GCP_PROD_REGION }} \
               --image gcr.io/${{ secrets.GCP_PROD_PROJECT_ID }}/${{ matrix.service }}:${{ github.sha }} \
               --platform managed \
+              --allow-unauthenticated \
               --port 8000 \
               --memory "${{ matrix.memory }}" \
               --update-env-vars "PATH_PREFIX=/api/${{ matrix.prefix }}" \
