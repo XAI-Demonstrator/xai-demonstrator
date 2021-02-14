@@ -127,4 +127,5 @@ jobs:
           SLACK_TITLE: New Prod Deployment
           SLACK_USERNAME: Deployment Monitor
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          MSG_MINIMAL: true
+          MSG_MINIMAL: true 
+  
