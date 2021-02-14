@@ -1,5 +1,5 @@
 {
   "projects": {
-    "default": "xai-demonstrator-test"
+    "default": "xai-demonstrator-prod"
   }
 }
