@@ -172,6 +172,10 @@ p {
     opacity: .4;
 }
 
+.xd-button:disabled {
+    opacity: .6;
+}
+
 a.xd-button {
     text-decoration: none;
 }
