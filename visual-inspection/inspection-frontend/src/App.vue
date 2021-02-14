@@ -12,7 +12,6 @@
       <div id="image-container">
         <Cropper ref="cropper" class="cropper" :src="img" @change="imageChanged"
                  :min-width="30" :min-height="20"
-                 :default-boundaries="fit"
                  :stencil-component="ExplanationStencil"
                  :stencil-props="{
                  'explanationMode': currentExplanation,
@@ -35,11 +34,11 @@
         <div class="xd-section xd-light">
           <InspectImage ref="inspector"
                         v-bind:current-prediction="currentPrediction"
-                        v-on:inspectionCompleted="inspectionCompleted"/>
+                        v-on:inspection-completed="inspectionCompleted"/>
           <ExplainInspection ref="explainer"
                              v-bind:prediction-ready="currentPrediction"
-                             v-on:explanationRequested="explanationRequested"
-                             v-on:explanationReceived="explanationReceived"/>
+                             v-on:explanation-requested="explanationRequested"
+                             v-on:explanation-received="explanationReceived"/>
         </div>
       </section>
 

@@ -7,7 +7,8 @@
               v-on:click="buttonClicked">
         Woran erkennst du das?
       </button>
-      <MultiBounce v-if="waitingForExplanation"/>
+      <MultiBounce v-if="waitingForExplanation"
+                   v-bind:numberOfDots="3"/>
     </div>
   </div>
 </template>
@@ -29,7 +30,7 @@ export default {
   },
   methods: {
     buttonClicked() {
-      this.$emit('explanationRequested')
+      this.$emit('explanation-requested')
     },
     explain(blob) {
       this.waitingForExplanation = true;
@@ -39,7 +40,7 @@ export default {
 
       axios.post(this.backendUrl + '/explain', form)
           .then(response => {
-            this.$emit('explanationReceived', response.data.image)
+            this.$emit('explanation-received', response.data.image)
             this.waitingForExplanation = false;
           })
     }
