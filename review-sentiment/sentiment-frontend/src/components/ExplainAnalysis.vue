@@ -8,7 +8,7 @@
       <BarChart v-if="explanationResult" v-bind:explanation="explanationResult"></BarChart>
       <TextHighlight v-if="explanationResult != null" v-bind:explanation="explanationResult"></TextHighlight>
     </div>
-    <SpinningIndicator v-bind:visible="waitingForExplanation"/>
+    <SpinningIndicator class="indicator" v-bind:visible="waitingForExplanation"/>
   </div>
 </template>
 <script>
@@ -80,5 +80,9 @@ export default {
 
 .explanation-container div:last-child {
   margin-bottom: 0;
+}
+
+.indicator {
+  z-index: 9;
 }
 </style>

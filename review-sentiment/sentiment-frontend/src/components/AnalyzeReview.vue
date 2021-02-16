@@ -10,7 +10,7 @@
         <img class="my-star" src="@/assets/star_blank.svg" v-for="star in (5 - numOfStars)" :key="'neg-' + star"/>
       </div>
     </div>
-    <SpinningIndicator v-bind:visible="waitingForPrediction" />
+    <SpinningIndicator class="indicator" v-bind:visible="waitingForPrediction" />
   </div>
 </template>
 <script>
@@ -72,5 +72,9 @@ export default {
   width: 24px;
   margin-left: 3px;
   margin-right: 3px;
+}
+
+.indicator {
+  z-index: 9;
 }
 </style>
