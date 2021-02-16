@@ -11,9 +11,10 @@
       </section>
       <div id="image-container">
         <Cropper ref="cropper" class="cropper" :src="img" @change="imageChanged"
-                 :min-width="30" :min-height="20"
+                 :min-width="20" :min-height="20"
                  :stencil-component="ExplanationStencil"
                  :debounce="false"
+                 :size-restrictions-algorithm="sizeRestrictions"
                  :stencil-props="{
                  'explanationMode': currentExplanation,
                  'explanationImg': explanationImg,
@@ -60,7 +61,7 @@ import InspectImage from "@/components/InspectImage";
 import ExplainInspection from "@/components/ExplainInspection";
 import ExplanationStencil from "@/components/ExplanationStencil";
 import {FloatingInfoButton, UseCaseHeader} from '@xai-demonstrator/xaidemo-ui';
-import { debounce } from "debounce";
+import {debounce} from "debounce";
 
 export default {
   name: 'App',
@@ -94,6 +95,15 @@ export default {
       this.explanationImg = explanationImg;
       this.currentExplanation = true;
       this.waitingForExplanation = false;
+    },
+    sizeRestrictions({minWidth, minHeight, maxWidth, maxHeight, imageSize}) {
+      console.log(minWidth, minHeight)
+      return {
+        minWidth: Math.max(this.minExplanationImgSize.width, (minWidth / 100) * imageSize.width),
+        minHeight: Math.max(this.minExplanationImgSize.height, (minHeight / 100) * imageSize.height),
+        maxWidth: maxWidth,
+        maxHeight: maxHeight,
+      };
     }
   },
   data() {
@@ -103,6 +113,10 @@ export default {
       currentExplanation: false,
       waitingForExplanation: false,
       explanationImg: null,
+      minExplanationImgSize: {
+        width: 100,
+        height: 100
+      },
       title: "Visual Inspection",
       infoUrl: "/",
       infoLinkLabel: "Erfahre viel mehr!",
@@ -116,12 +130,12 @@ export default {
         }
       ],
       backendUrl: process.env.VUE_APP_BACKEND_URL,
-      img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/El_Guamache_Bay%2C_Margarita_island.jpg/800px-El_Guamache_Bay%2C_Margarita_island.jpg'
+      img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/El_Guamache_Bay%2C_Margarita_island.jpg/450px-El_Guamache_Bay%2C_Margarita_island.jpg'
     }
   },
   created() {
     document.title = "Visual Inspection – XAI Demonstrator";
-    this.debouncedRequestInspection = debounce(this.requestInspection,500)
+    this.debouncedRequestInspection = debounce(this.requestInspection, 500)
   },
   mounted() {
     this.$refs.cropper.refresh()
