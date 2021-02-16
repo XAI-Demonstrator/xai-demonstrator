@@ -17,6 +17,7 @@
                  'explanationMode': currentExplanation,
                  'explanationImg': explanationImg,
                  'aspectRatio': 1.0,
+                 'movable': currentExplanation,
                  'handlers': {
                     eastNorth: true,
                     north: false,
