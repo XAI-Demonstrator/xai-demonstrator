@@ -18,6 +18,7 @@
                  'explanationImg': explanationImg,
                  'aspectRatio': 1.0,
                  'movable': !waitingForExplanation,
+                 'scalable': !waitingForExplanation,
                  'handlers': {
                     eastNorth: true,
                     north: false,
@@ -70,9 +71,11 @@ export default {
   },
   methods: {
     imageChanged({canvas}) {
-      this.currentPrediction = false;
-      this.currentExplanation = false;
-      canvas.toBlob(this.$refs.inspector.predict)
+      if (!this.waitingForExplanation) {
+        this.currentPrediction = false;
+        this.currentExplanation = false;
+        canvas.toBlob(this.$refs.inspector.predict)
+      }
     },
     inspectionCompleted() {
       this.currentPrediction = true;
