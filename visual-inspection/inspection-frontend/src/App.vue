@@ -17,7 +17,7 @@
                  'explanationMode': currentExplanation,
                  'explanationImg': explanationImg,
                  'aspectRatio': 1.0,
-                 'movable': currentExplanation,
+                 'movable': !waitingForExplanation,
                  'handlers': {
                     eastNorth: true,
                     north: false,
@@ -79,11 +79,13 @@ export default {
     },
     explanationRequested() {
       this.currentExplanation = false;
+      this.waitingForExplanation = true;
       this.$refs.cropper.getResult().canvas.toBlob(this.$refs.explainer.explain)
     },
     explanationReceived(explanationImg) {
       this.explanationImg = explanationImg;
       this.currentExplanation = true;
+      this.waitingForExplanation = false;
     }
   },
   data() {
@@ -91,6 +93,7 @@ export default {
       ExplanationStencil,
       currentPrediction: false,
       currentExplanation: false,
+      waitingForExplanation: false,
       explanationImg: null,
       title: "Visual Inspection",
       infoUrl: "/",
