@@ -11,10 +11,11 @@ _lime = lime_image.LimeImageExplainer()
 @traced(label="compute_explanation", attributes={"explanation.method": "lime"})
 def lime_explanation(input_img: np.ndarray,
                      model_: tf.keras.models.Model,
-                     top_labels=5, hide_color=None, num_samples=100) -> np.ndarray:
+                     top_labels=5, hide_color=None, num_samples=100, num_features=100000) -> np.ndarray:
     explanation = _lime.explain_instance(input_img.astype("double"), model_.predict,
                                          top_labels=top_labels,
                                          hide_color=hide_color,
+                                         num_features=num_features,
                                          num_samples=num_samples)
 
     return render_explanation(explanation)
