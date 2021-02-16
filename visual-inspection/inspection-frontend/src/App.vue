@@ -13,6 +13,7 @@
         <Cropper ref="cropper" class="cropper" :src="img" @change="imageChanged"
                  :min-width="30" :min-height="20"
                  :stencil-component="ExplanationStencil"
+                 :debounce="false"
                  :stencil-props="{
                  'explanationMode': currentExplanation,
                  'explanationImg': explanationImg,
@@ -59,6 +60,7 @@ import InspectImage from "@/components/InspectImage";
 import ExplainInspection from "@/components/ExplainInspection";
 import ExplanationStencil from "@/components/ExplanationStencil";
 import {FloatingInfoButton, UseCaseHeader} from '@xai-demonstrator/xaidemo-ui';
+import { debounce } from "debounce";
 
 export default {
   name: 'App',
@@ -74,8 +76,11 @@ export default {
       if (!this.waitingForExplanation) {
         this.currentPrediction = false;
         this.currentExplanation = false;
-        canvas.toBlob(await this.$refs.inspector.predict)
+        await this.debouncedRequestInspection(canvas)
       }
+    },
+    async requestInspection(canvas) {
+      canvas.toBlob(await this.$refs.inspector.predict)
     },
     inspectionCompleted() {
       this.currentPrediction = true;
@@ -116,6 +121,7 @@ export default {
   },
   created() {
     document.title = "Visual Inspection – XAI Demonstrator";
+    this.debouncedRequestInspection = debounce(this.requestInspection,500)
   },
   mounted() {
     this.$refs.cropper.refresh()
