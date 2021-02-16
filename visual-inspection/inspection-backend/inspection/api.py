@@ -36,7 +36,7 @@ class ExplanationRequest(BaseModel):
 @api.post("/explain")
 def explain_classification(file: UploadFile = File(...),
                            method: str = Form(_settings.default_explainer),
-                           settings: str = Form("{{}}")) -> Explanation:
+                           settings: str = Form("{}")) -> Explanation:
 
     try:
         parsed_settings = ExplanationSettings.parse_raw('{"settings":' + settings + '}')
