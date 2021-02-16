@@ -100,15 +100,17 @@ export default {
 }
 
 .word::after {
-    position: absolute;
-    content: " ";
+  position: absolute;
+  content: " ";
 
-    background: linear-gradient(to right, transparent 70%, white 95%);
+  background: linear-gradient(to right, rgba(255, 255, 255, 0) 70%, rgba(255, 255, 255, 255) 95%);
+  background: -webkit-linear-gradient(left, rgba(255, 255, 255, 0) 70%, rgba(255, 255, 255, 255) 95%);
+  background: -moz-linear-gradient(left, rgba(255, 255, 255, 0) 70%, rgba(255, 255, 255, 255) 95%);
 
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 
 .progress {
