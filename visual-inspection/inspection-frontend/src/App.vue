@@ -70,21 +70,20 @@ export default {
     FloatingInfoButton
   },
   methods: {
-    imageChanged({canvas}) {
-      console.log("CHANGED", this.waitingForExplanation)
+    async imageChanged({canvas}) {
       if (!this.waitingForExplanation) {
         this.currentPrediction = false;
         this.currentExplanation = false;
-        canvas.toBlob(this.$refs.inspector.predict)
+        canvas.toBlob(await this.$refs.inspector.predict)
       }
     },
     inspectionCompleted() {
       this.currentPrediction = true;
     },
-    explanationRequested() {
+    async explanationRequested() {
       this.currentExplanation = false;
       this.waitingForExplanation = true;
-      this.$refs.cropper.getResult().canvas.toBlob(this.$refs.explainer.explain)
+      this.$refs.cropper.getResult().canvas.toBlob(await this.$refs.explainer.explain)
     },
     explanationReceived(explanationImg) {
       this.explanationImg = explanationImg;
