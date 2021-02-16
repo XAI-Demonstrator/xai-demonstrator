@@ -32,13 +32,13 @@ export default {
     buttonClicked() {
       this.$emit('explanation-requested')
     },
-    explain(blob) {
+    async explain(blob) {
       this.waitingForExplanation = true;
 
       const form = new FormData();
       form.append('file', blob);
 
-      axios.post(this.backendUrl + '/explain', form)
+      await axios.post(this.backendUrl + '/explain', form)
           .then(response => {
             this.$emit('explanation-received', response.data.image)
             this.waitingForExplanation = false;
