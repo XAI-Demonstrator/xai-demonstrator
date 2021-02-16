@@ -16,6 +16,7 @@
 <script>
 import axios from "axios";
 import {MultiBounce} from '@xai-demonstrator/xaidemo-ui'
+import {unflatten} from 'flat';
 
 export default {
   name: "ExplainInspection",
@@ -37,6 +38,27 @@ export default {
 
       const form = new FormData();
       form.append('file', blob);
+
+      const rawParams = Object.fromEntries(new URLSearchParams(window.location.search.substring(1)))
+      const allParams = unflatten(rawParams)
+
+      const method = allParams['method'];
+      if (method) {
+        form.append('method', method);
+      }
+
+      const settings = Object
+          .keys(allParams)
+          .filter((key) => {
+            return key !== 'method'
+          })
+          .reduce((obj, key) => {
+            obj[key] = allParams[key];
+            return obj;
+          }, {})
+      if (settings) {
+        form.append('settings', JSON.stringify(settings));
+      }
 
       await axios.post(this.backendUrl + '/explain', form)
           .then(response => {
