@@ -111,16 +111,6 @@ main {
   flex-grow: 1;
 }
 
-.mint-indicator-wrapper {
-  background-color: #00887A !important;
-}
-
-.mint-spinner-snake {
-  border-top-color: #D3E3FC !important;
-  border-bottom-color: #D3E3FC !important;
-  border-left-color: #D3E3FC !important;
-}
-
 @media screen and (max-width: 450px) {
 
   #app {
