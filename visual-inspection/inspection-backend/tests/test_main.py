@@ -24,7 +24,7 @@ def test_that_explanation_succeeds(generate_image):
 def test_that_explanation_request_is_accepted(generate_image):
     r = client.post("/explain", files={"file": generate_image(110, 224)},
                     data={"method": "lime",
-                          "settings": {"num_samples": 50}})
+                          "settings": '{"explainer": {"num_samples": 50}}'})
 
     assert r.status_code == 200
 

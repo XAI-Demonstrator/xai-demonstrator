@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 cd ./inspection-frontend/ || exit 1
+npm run test:unit
 npm run build
 cd ..
 
