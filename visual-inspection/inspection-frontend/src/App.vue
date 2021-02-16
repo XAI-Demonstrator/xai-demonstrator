@@ -18,7 +18,7 @@
                  'explanationImg': explanationImg,
                  'aspectRatio': 1.0,
                  'movable': !waitingForExplanation,
-                 'scalable': !waitingForExplanation,
+                 'resizable': !waitingForExplanation,
                  'handlers': {
                     eastNorth: true,
                     north: false,
@@ -71,6 +71,7 @@ export default {
   },
   methods: {
     imageChanged({canvas}) {
+      console.log("CHANGED", this.waitingForExplanation)
       if (!this.waitingForExplanation) {
         this.currentPrediction = false;
         this.currentExplanation = false;

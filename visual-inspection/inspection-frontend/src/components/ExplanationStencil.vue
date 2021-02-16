@@ -1,7 +1,9 @@
 <!--
 MIT License
 
-Copyright (c) 2019-2020 Norserium
+The MIT License
+
+Copyright (c) Norserium, https://github.com/Norserium
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -10,32 +12,32 @@ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
 -->
 <script>
 import classnames from 'classnames';
 import bem from 'easy-bem';
-import {BoundingBox, DraggableArea, PreviewResult, SimpleHandler, SimpleLine} from 'vue-advanced-cropper';
+import {BoundingBox, DraggableArea, StencilPreview, SimpleHandler, SimpleLine} from 'vue-advanced-cropper';
 
 const cn = bem('vue-explanation-stencil');
 export default {
   name: 'ExplanationStencil',
   components: {
-    PreviewResult,
+    StencilPreview,
     BoundingBox,
     DraggableArea,
   },
   props: {
-    img: {
+    image: {
       type: Object,
     },
     explanationImg: {
@@ -45,7 +47,7 @@ export default {
       type: Boolean,
       default: false
     },
-    resultCoordinates: {
+    coordinates: {
       type: Object,
     },
     stencilCoordinates: {
@@ -54,7 +56,7 @@ export default {
     handlers: {
       type: Object,
     },
-    handlerComponent: {
+    handlersComponent: {
       type: [Object, String],
       default() {
         return SimpleHandler;
@@ -63,7 +65,7 @@ export default {
     lines: {
       type: Object,
     },
-    lineComponent: {
+    linesComponent: {
       type: [Object, String],
       default() {
         return SimpleLine;
@@ -82,14 +84,17 @@ export default {
       type: Boolean,
       default: true,
     },
-    scalable: {
+    resizable: {
       type: Boolean,
       default: true,
     },
     transitions: {
       type: Object,
     },
-    draggingClass: {
+    movingClass: {
+      type: String,
+    },
+    resizingClass: {
       type: String,
     },
     previewClass: {
@@ -121,12 +126,13 @@ export default {
       default() {
         return {};
       },
-    }
+    },
   },
   data() {
     return {
-      dragging: false,
-      internalExplanationMode: false,
+      moving: false,
+      resizing: false,
+      internalExplanationMode: false
     };
   },
   watch: {
@@ -140,12 +146,12 @@ export default {
     classes() {
       return {
         stencil: classnames(
-            cn({movable: this.movable, dragging: this.dragging}),
-            this.classname,
-            this.dragging && this.draggingClass,
+            cn({movable: this.movable, moving: this.moving, resizing: this.resizing}),
+            this.moving && this.movingClass,
+            this.resizing && this.resizingClass,
         ),
-        preview: classnames(cn('preview'), this.previewClass || this.previewClassname),
-        boundingBox: classnames(cn('bounding-box'), this.boundingBoxClass || this.boundingBoxClassname),
+        preview: classnames(cn('preview'), this.previewClass),
+        boundingBox: classnames(cn('bounding-box'), this.boundingBoxClass),
       };
     },
     style() {
@@ -153,8 +159,7 @@ export default {
       const style = {
         width: `${width}px`,
         height: `${height}px`,
-        left: `${left}px`,
-        top: `${top}px`,
+        transform: `translate(${left}px, ${top}px)`,
       };
       if (this.transitions && this.transitions.enabled) {
         style.transition = `${this.transitions.time}ms ${this.transitions.timingFunction}`;
@@ -172,64 +177,67 @@ export default {
         'background-size': 'cover'
       }
     }
-  },
-  methods: {
-    onMove(moveEvent) {
-      this.$emit('move', moveEvent);
-      this.dragging = true;
-      this.internalExplanationMode = false;
     },
-    onMoveEnd() {
-      this.$emit('move-end');
-      this.dragging = false;
+    methods: {
+      onMove(moveEvent) {
+        this.$emit('move', moveEvent);
+        this.moving = true;
+        this.internalExplanationMode = false;
+      },
+      onMoveEnd() {
+        this.$emit('move-end');
+        this.moving = false;
+      },
+      onResize(resizeEvent) {
+        this.$emit('resize', resizeEvent);
+        this.resizing = true;
+        this.internalExplanationMode = false;
+      },
+      onResizeEnd() {
+        this.$emit('resize-end');
+        this.resizing = false;
+      },
+      aspectRatios() {
+        return {
+          minimum: this.aspectRatio || this.minAspectRatio,
+          maximum: this.aspectRatio || this.maxAspectRatio,
+        };
+      },
     },
-    onResize(resizeEvent) {
-      this.$emit('resize', resizeEvent);
-      this.dragging = true;
-      this.internalExplanationMode = false;
-    },
-    onResizeEnd() {
-      this.$emit('resize-end');
-      this.dragging = false;
-    },
-    aspectRatios() {
-      return {
-        minimum: this.aspectRatio || this.minAspectRatio,
-        maximum: this.aspectRatio || this.maxAspectRatio,
-      };
-    },
-  },
-};
+  };
 </script>
 
 <template>
   <div :class="classes.stencil" :style="style">
-    <BoundingBox
+    <bounding-box
+        :width="stencilCoordinates.width"
+        :height="stencilCoordinates.height"
+        :transitions="transitions"
         :class="classes.boundingBox"
         :handlers="handlers"
-        :handler-component="handlerComponent"
+        :handlers-component="handlersComponent"
         :handlers-classes="handlersClasses"
         :handlers-wrappers-classes="handlersWrappersClasses"
         :lines="lines"
-        :line-component="lineComponent"
+        :lines-component="linesComponent"
         :lines-classes="linesClasses"
         :lines-wrappers-classes="linesWrappersClasses"
-        :scalable="scalable"
+        :resizable="resizable"
         @resize="onResize"
         @resize-end="onResizeEnd"
     >
-      <DraggableArea ref="draggable" :movable="movable" @move="onMove" @move-end="onMoveEnd">
-        <PreviewResult
-            :img="img"
+      <draggable-area :movable="movable" @move="onMove" @move-end="onMoveEnd">
+        <stencil-preview
+            :image="image"
+            :coordinates="coordinates"
+            :width="stencilCoordinates.width"
+            :height="stencilCoordinates.height"
             :class="classes.preview"
             :transitions="transitions"
-            :stencil-coordinates="stencilCoordinates"
         />
-        <div v-show="internalExplanationMode" v-bind:style="explanationStyle">&nbsp;
-        </div>
-      </DraggableArea>
-
-    </BoundingBox>
+        <div v-show="internalExplanationMode" v-bind:style="explanationStyle">&nbsp;</div>
+      </draggable-area>
+    </bounding-box>
   </div>
 </template>
 
@@ -239,6 +247,12 @@ export default {
   height: 100%;
   width: 100%;
   box-sizing: border-box;
+
+  &__preview {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
 
   &--movable {
     cursor: move;
