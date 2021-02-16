@@ -43,6 +43,10 @@ export default {
             this.$emit('explanation-received', response.data.image)
             this.waitingForExplanation = false;
           })
+          .catch(error => {
+            console.log(error)
+            this.waitingForExplanation = false;
+          })
     }
   },
   data() {

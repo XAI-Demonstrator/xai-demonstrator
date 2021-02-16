@@ -63,4 +63,14 @@ describe('ExplainInspection.vue', () => {
         expect(wrapper.emitted('explanation-received')[0][0]).toStrictEqual('data:image/png;base64,')
     })
 
+    it('handles unavailable backend gracefully', async () => {
+        axios.post.mockImplementationOnce(() => Promise.reject('some-error'))
+
+        await wrapper.vm.explain('fake-blob')
+        await flushPromises()
+
+        expect(wrapper.emitted('explanation-received')).toBeFalsy()
+        expect(wrapper.vm.$data.waitingForExplanation).toBe(false)
+    })
+
 })

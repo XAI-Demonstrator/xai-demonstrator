@@ -1,4 +1,4 @@
-import {shallowMount, createLocalVue} from "@vue/test-utils";
+import {createLocalVue, shallowMount} from "@vue/test-utils";
 import InspectImage from "@/components/InspectImage";
 import {MultiBounce} from "@xai-demonstrator/xaidemo-ui";
 import axios from 'axios';
@@ -54,13 +54,23 @@ describe('InspectImage.vue', () => {
                 class_label: 'foggy'
             }
         }
-        axios.post.mockImplementationOnce( () => Promise.resolve(response))
+        axios.post.mockImplementationOnce(() => Promise.resolve(response))
 
         await wrapper.vm.predict('fake-blob')
         await flushPromises()
 
         expect(wrapper.vm.$data.prediction).toStrictEqual('foggy')
         expect(wrapper.emitted('inspection-completed')).toBeTruthy()
+    })
+
+    it('handles unavailable backend gracefully', async () => {
+        axios.post.mockImplementationOnce(() => Promise.reject('some-error'))
+
+        await wrapper.vm.predict('fake-blob')
+        await flushPromises()
+
+        expect(wrapper.vm.$data.prediction).toBeNull()
+        expect(wrapper.emitted('inspection-completed')).toBeFalsy()
     })
 
 })

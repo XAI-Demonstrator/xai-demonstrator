@@ -1,7 +1,7 @@
 <template>
   <div class="inspector">
     <MultiBounce v-if="!prediction"
-                 v-bind:numberOfDots="3" />
+                 v-bind:numberOfDots="3"/>
     <p v-show="prediction && currentPrediction">„Das ist ein/e {{ prediction }}“</p>
   </div>
 </template>
@@ -22,16 +22,19 @@ export default {
     }
   },
   methods: {
-    predict(blob) {
+    async predict(blob) {
       this.prediction = null;
 
       const form = new FormData();
       form.append('file', blob);
 
-      axios.post(this.backendUrl + '/predict', form)
+      await axios.post(this.backendUrl + '/predict', form)
           .then(response => {
             this.prediction = response.data.class_label
             this.$emit('inspection-completed')
+          })
+          .catch(error => {
+            console.log(error)
           })
     }
   },
