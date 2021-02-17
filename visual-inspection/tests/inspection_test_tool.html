@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>XAI Demonstrator Test Tool</title>
+    <script
+            src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+            integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs="
+            crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        let config = {}
+
+        function changeConfig(key, value) {
+            config[key] = value
+            console.log(config)
+            configureInspection(config)
+        }
+
+        function configureInspection(config) {
+            const value = Object.keys(config).reduce((str, key) => str + key + "=" + config[key] + "&", "")
+            const url = 'https://test.xaidemo.de/inspection/?' + value;
+            const iframe = $('#xaidemo');
+            iframe.attr('src', url)
+            console.log("Selected '" + value[-1] + "'")
+            const debug_url = $('#debug_url');
+            debug_url.text(url);
+        }
+
+    </script>
+    <style type="text/css">
+        body {
+            background-color: #ddd;
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: row;
+        }
+
+        div p {
+            font-size: small;
+            color: #aaa;
+        }
+
+        iframe {
+            background-color: white;
+            margin-top: 50px;
+            margin-left: 20px;
+            margin-right: 20px;
+            border: 1px solid black;
+            border-radius: 10px;
+            box-shadow: 3px 3px 10px black;
+        }
+
+        form {
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+<div style="max-width: 300px;">
+    <h1>XAI-Demonstrator-<br/>Test-Tool</h1>
+    <h3>Konfiguration</h3>
+    <ul>
+        <li>explainer.top_labels:<br/>
+            <input type="number" id="explainer_top_labels" name="explainer_top_labels"
+                   onchange="changeConfig('explainer.top_labels', value)"
+                   value="5"/>
+        </li>
+        <li>explainer.num_samples:<br/>
+            <input type="number" id="explainer_num_samples" name="explainer_num_samples"
+                   onchange="changeConfig('explainer.num_samples', value)"
+                   value="100"/>
+        </li>
+        <li>explainer.num_features:<br/>
+            <input type="number" id="explainer_num_features" name="explainer_num_features"
+                   onchange="changeConfig('explainer.num_features', value)"
+                   value="10000"/>
+        </li>
+        <li>
+            <a href="https://github.com/marcotcr/lime/blob/master/lime/lime_image.py#L144">=> Doku</a>
+        </li>
+    </ul>
+    <br /><br/>
+    <ul>
+        <li> renderer.num_features:<br/>
+            <input type="number" id="renderer_num_features" name="renderer_num_features"
+                   onchange="changeConfig('renderer.num_features', value)"
+                   value="5"/>
+        </li>
+        <li> renderer.min_weight:<br/>
+            <input type="number" id="renderer_min_weight" name="renderer_min_weight"
+                   onchange="changeConfig('renderer.min_weight', value)" step="0.0001"
+                   value="0.0"/>
+        </li>
+        <li> renderer.positive_only:<br/>
+            <select id="renderer_positive_only" name="renderer_positive_only"
+                    onchange="changeConfig('renderer.positive_only', value)">
+                <option value="false">false</option>
+                <option value="true">true</option>
+            </select>
+        </li>
+        <li>
+            <a href="https://github.com/marcotcr/lime/blob/master/lime/lime_image.py#L37">=> Doku</a>
+        </li>
+    </ul>
+
+
+    <p>Wenn der Demonstrator nicht lädt, kann man
+        <a href="https://github.com/XAI-Demonstrator/xai-demonstrator/actions?query=workflow%3A%22Test+Deployment%22">hier</a>
+        schauen, ob es daran liegt, dass gerade eine neue Version in die Testumgebung geladen wird.</p>
+    <p>DEBUG: <span id="debug_url"></span></p>
+</div>
+
+<iframe id="xaidemo" src="https://test.xaidemo.de/inspection/" width="414px" height="736px"></iframe>
+
+</body>
+</html>

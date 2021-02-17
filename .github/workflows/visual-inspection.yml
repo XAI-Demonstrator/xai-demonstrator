@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'visual-inspection/**'
+      - '!visual-inspections/tests/**'
       - '!visual-inspection/**.md'
 
 jobs:

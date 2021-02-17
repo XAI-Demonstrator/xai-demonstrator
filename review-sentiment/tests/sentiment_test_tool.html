@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>XAI Demonstrator Test Tool</title>
+    <script
+            src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+            integrity="sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs="
+            crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        function configureSentiment(value) {
+            const url = 'https://test.xaidemo.de/sentiment/?method=' + value;
+            const iframe = $('#xaidemo');
+            iframe.attr('src', url)
+            console.log("Selected '" + value + "'")
+        }
+    </script>
+    <style type="text/css">
+        body {
+            background-color: #ddd;
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: row;
+        }
+
+        div p {
+            font-size: small;
+            color: #aaa;
+        }
+
+        iframe {
+            background-color: white;
+            margin-top: 50px;
+            margin-left: 20px;
+            margin-right: 20px;
+            border: 1px solid black;
+            border-radius: 10px;
+            box-shadow: 3px 3px 10px black;
+        }
+
+        form {
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+<div style="max-width: 300px;">
+    <h1>XAI-Demonstrator-<br/>Test-Tool</h1>
+    <form>
+        <h3>Konfiguration</h3>
+        Methode:
+        <select id="explainer" name="explainer" onchange="configureSentiment(value)">
+            <option value="">(Standard)</option>
+            <option value="gradient_shap">GradientSHAP</option>
+            <option value="integrated_gradients">Integrated Gradients</option>
+            <option value="random_words">Zufällige Erklärung</option>
+            <option value="shapley_value_sampling">Shapley Value sampling</option>
+        </select>
+    </form>
+    <p>Wenn der Demonstrator nicht lädt, kann man
+        <a href="https://github.com/XAI-Demonstrator/xai-demonstrator/actions?query=workflow%3A%22Test+Deployment%22">hier</a>
+    schauen, ob es daran liegt, dass gerade eine neue Version in die Testumgebung geladen wird.</p>
+</div>
+<iframe id="xaidemo" src="https://test.xaidemo.de/sentiment/" width="414px" height="736px"></iframe>
+
+</body>
+</html>
