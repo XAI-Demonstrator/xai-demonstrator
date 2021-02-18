@@ -1,8 +1,8 @@
-from typing import Any, Dict, Union
+from typing import Dict, Union, Optional
 
 from fastapi import APIRouter, File, Form, HTTPException, UploadFile
-from pydantic import BaseModel, StrictFloat, StrictInt, StrictBool, ValidationError, validator
-from starlette.status import HTTP_422_UNPROCESSABLE_ENTITY
+from pydantic import BaseModel, StrictBool, StrictFloat, StrictInt, ValidationError, validator
+from starlette.status import HTTP_400_BAD_REQUEST, HTTP_422_UNPROCESSABLE_ENTITY
 
 from .config import settings as _settings
 from .explainer.explain import EXPLAINERS, Explanation, explain
@@ -16,15 +16,17 @@ def predict_weather(file: UploadFile = File(...)) -> Prediction:
     return predict(file.file)
 
 
-class ExplanationSettings(BaseModel):
+# TODO: Allow non-nested settings
+class ExplanationRequest(BaseModel):
+    method: str = _settings.default_explainer
     settings: Dict[str, Dict[str, Union[StrictInt, StrictFloat, StrictBool,
                                         int, float, bool,
                                         str]]]
 
-
-class ExplanationRequest(BaseModel):
-    method: str = _settings.default_explainer
-    settings: Dict[str, Dict[str, Union[int, float, bool, str]]]
+    class Config:
+        extra = 'forbid'
+        validate_all = True
+        validate_assignment = True
 
     @validator("method")
     def method_must_be_available(cls, v):
@@ -35,19 +37,20 @@ class ExplanationRequest(BaseModel):
 
 @api.post("/explain")
 def explain_classification(file: UploadFile = File(...),
-                           method: str = Form(_settings.default_explainer),
-                           settings: str = Form("{}")) -> Explanation:
+                           method: Optional[str] = Form(None),
+                           settings: Optional[str] = Form(None)) -> Explanation:
+    if settings is not None:
+        if method is None:
+            raise HTTPException(
+                status_code=HTTP_400_BAD_REQUEST, detail="If settings are given, method must be specified."
+            )
+
+    settings = settings or "{}"
+    method = method or _settings.default_explainer
 
     try:
-        parsed_settings = ExplanationSettings.parse_raw('{"settings":' + settings + '}')
-    except ValidationError as errors_out:
-        raise HTTPException(
-            status_code=HTTP_422_UNPROCESSABLE_ENTITY, detail=errors_out.errors()
-        )
-
-    try:
-        request = ExplanationRequest(method=method,
-                                     settings=parsed_settings.settings)
+        request = ExplanationRequest.parse_raw('{"settings":' + settings + '}')
+        request.method = method
     except ValidationError as errors_out:
         raise HTTPException(
             status_code=HTTP_422_UNPROCESSABLE_ENTITY, detail=errors_out.errors()

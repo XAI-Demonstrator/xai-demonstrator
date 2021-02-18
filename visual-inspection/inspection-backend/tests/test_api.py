@@ -10,8 +10,8 @@ FULL_TYPED_SETTINGS = '''{"settings": {"explainer": {
                                          "proper_float": 2.5}}}'''
 
 
-def test_explanation_settings_parses_typed_values():
-    s = api.ExplanationSettings.parse_raw(FULL_TYPED_SETTINGS)
+def test_explanation_request_parses_typed_values():
+    s = api.ExplanationRequest.parse_raw(FULL_TYPED_SETTINGS)
 
     explainer = s.settings["explainer"]
     assert isinstance(explainer["int_compatible"], int)
@@ -28,9 +28,3 @@ def test_explanation_settings_parses_typed_values():
     assert explainer["proper_bool"]
     assert isinstance(explainer["bool_compatible"], bool)
     assert not explainer["bool_compatible"]
-
-
-def test_that_parsed_explanation_settings_are_compatible_to_explanation_request():
-    s = api.ExplanationSettings.parse_raw(FULL_TYPED_SETTINGS)
-
-    _ = api.ExplanationRequest(settings=s.settings)
