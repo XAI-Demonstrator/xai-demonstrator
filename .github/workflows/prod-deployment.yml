@@ -108,6 +108,9 @@ jobs:
               --allow-unauthenticated \
               --port 8000 \
               --memory "${{ matrix.memory }}" \
+              --min-instances 0 \
+              --max-instances 10 \
+              --concurrency 20 \
               --update-env-vars "PATH_PREFIX=/api/${{ matrix.prefix }}" \
               --update-env-vars "TRACING_EXPORTER=gcp"
 
