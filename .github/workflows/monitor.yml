@@ -16,11 +16,34 @@ jobs:
           retry-delay: 30s
       - name: Notify Slack
         if: ${{ failure() }}
-        uses: rtCamp/action-slack-notify@master
+        uses: rtCamp/action-slack-notify@v2.1.2
         env:
-          SLACK_CHANNEL: xai-tech
+          SLACK_CHANNEL: xai-demonstrator-monitor
           SLACK_MESSAGE: 'Cannot reach test deployment at https://test.xaidemo.de :disappointed:'
           SLACK_TITLE: Test Deployment Is Down
+          SLACK_USERNAME: Deployment Monitor
+          SLACK_COLOR: danger
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          MSG_MINIMAL: true
+
+
+  prod:
+    name: Check Prod Deployment
+    runs-on: ubuntu-latest
+    steps:
+      - name: URL Health Check
+        uses: Jtalk/url-health-check-action@v1.4
+        with:
+          url: https://xai-demonstrator-prod.web.app/
+          max-attempts: 3
+          retry-delay: 30s
+      - name: Notify Slack
+        if: ${{ failure() }}
+        uses: rtCamp/action-slack-notify@v2.1.2
+        env:
+          SLACK_CHANNEL: xai-demonstrator-monitor
+          SLACK_MESSAGE: 'Cannot reach prod deployment at https://xai-demonstrator-prod.web.app/ :rotating_light:'
+          SLACK_TITLE: Prod Deployment Is Down
           SLACK_USERNAME: Deployment Monitor
           SLACK_COLOR: danger
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}

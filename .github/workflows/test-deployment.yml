@@ -61,9 +61,9 @@ jobs:
              sudo docker-compose up -d
              sleep 10 && rm ~/.test-deployment-lock
        - name: Slack Notification
-         uses: rtCamp/action-slack-notify@master
+         uses: rtCamp/action-slack-notify@v2.1.2
          env:
-            SLACK_CHANNEL: xai-tech
+            SLACK_CHANNEL: xai-demonstrator-monitor
             SLACK_MESSAGE: 'Successfully deployed a new version to https://test.xaidemo.de :rocket:'
             SLACK_TITLE: New Test Deployment
             SLACK_USERNAME: Deployment Monitor

@@ -57,3 +57,13 @@ jobs:
           access: public
           check-version: true
           dry-run: ${{ github.ref != 'refs/heads/master' }}
+      - name: Slack Notification
+        if: github.ref == 'refs/heads/master'
+        uses: rtCamp/action-slack-notify@v2.1.2
+        env:
+          SLACK_CHANNEL: xai-demonstrator-monitor
+          SLACK_MESSAGE: 'Released a new version of @xai-demonstrator/xaidemo-ui :bricks: at https://www.npmjs.com/package/@xai-demonstrator/xaidemo-ui'
+          SLACK_TITLE: New xaidemo-ui Release
+          SLACK_USERNAME: Deployment Monitor
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          MSG_MINIMAL: true
