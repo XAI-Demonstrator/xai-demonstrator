@@ -2,7 +2,7 @@
   <div class="inspector">
     <MultiBounce v-if="!prediction"
                  v-bind:numberOfDots="3"/>
-    <p v-show="prediction && currentPrediction">„Das ist ein/e {{ prediction }}“</p>
+    <p v-show="prediction && currentPrediction">„Das ist {{ prediction }}“</p>
   </div>
 </template>
 

@@ -2,11 +2,11 @@
   <div id="app" class="xd-app">
     <UseCaseHeader
         v-bind:standalone="!Boolean(backendUrl)"
-        v-bind:title="title"/>
+        v-bind:title="useCaseTitle"/>
     <main>
       <section>
         <div class="xd-section xd-light">
-          <p>Wähle einen Bildausschnitt und frage die KI nach dem Wetter:</p>
+          <p>Wähle einen Bildausschnitt und frage die KI, was sie erkennt.</p>
         </div>
       </section>
       <div id="image-container">
@@ -117,7 +117,7 @@ export default {
         width: 100,
         height: 100
       },
-      title: "Visual Inspection",
+      useCaseTitle: "Visual Inspection",
       infoUrl: "/",
       infoLinkLabel: "Erfahre viel mehr!",
       infoText: [
@@ -130,11 +130,11 @@ export default {
         }
       ],
       backendUrl: process.env.VUE_APP_BACKEND_URL,
-      img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/El_Guamache_Bay%2C_Margarita_island.jpg/450px-El_Guamache_Bay%2C_Margarita_island.jpg'
+      img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Camera_keys_notebook_coffee_%28Unsplash%29.jpg/1000px-Camera_keys_notebook_coffee_%28Unsplash%29.jpg'
     }
   },
   created() {
-    document.title = "Visual Inspection – XAI Demonstrator";
+    document.title = this.useCaseTitle + " – XAI Demonstrator";
     this.debouncedRequestInspection = debounce(this.requestInspection, 500)
   },
   mounted() {
