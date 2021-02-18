@@ -8,7 +8,7 @@ from opentelemetry import trace
 from pydantic import BaseModel
 from xaidemo.tracing import traced, add_span_attributes
 
-from .model import model
+from .model import model, decode_label
 
 
 # TODO: Define the content of the Prediction
@@ -44,7 +44,7 @@ def predict(image_file: IO[bytes],
         prediction = model_.predict(model_input)
 
         class_id = int(np.argmax(prediction))
-        class_label = tf.keras.applications.mobilenet_v2.decode_predictions(prediction, top=1)[0][0][1]
+        class_label = decode_label(prediction)
 
     return Prediction(prediction_id=prediction_id,
                       class_id=class_id,
