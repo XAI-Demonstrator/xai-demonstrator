@@ -127,8 +127,13 @@ export default {
             "Sehr oft muss man das Wetter vorhersagen.",
             "Eine KI ist darin manchmal sehr gut, manchmal sehr schlecht."
           ]
-        }
-      ],
+        }, {
+          headline: "Credits",
+          paragraphs: [
+            "Modell: <a href='https://www.tensorflow.org/api_docs/python/tf/keras/applications/mobilenet_v2'>MobileNetV2 for Keras</a>",
+            "Bild: Melinda Pack (Unsplash), <a href='https://creativecommons.org/publicdomain/zero/1.0/deed.en'>CC0</a> 1.0, via <a href='https://commons.wikimedia.org/wiki/File:Camera_keys_notebook_coffee_(Unsplash).jpg'>Wikimedia Commons</a>"
+          ]
+        }],
       backendUrl: process.env.VUE_APP_BACKEND_URL,
       img: require('./assets/table.jpg')
     }
@@ -136,7 +141,8 @@ export default {
   created() {
     document.title = this.useCaseTitle + " – XAI Demonstrator";
     this.debouncedRequestInspection = debounce(this.requestInspection, 500)
-  },
+  }
+  ,
   mounted() {
     this.$refs.cropper.refresh()
   }
