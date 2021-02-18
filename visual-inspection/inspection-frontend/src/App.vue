@@ -130,7 +130,7 @@ export default {
         }
       ],
       backendUrl: process.env.VUE_APP_BACKEND_URL,
-      img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Camera_keys_notebook_coffee_%28Unsplash%29.jpg/1000px-Camera_keys_notebook_coffee_%28Unsplash%29.jpg'
+      img: require('./assets/table.jpg')
     }
   },
   created() {

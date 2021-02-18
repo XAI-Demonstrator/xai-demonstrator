@@ -2,7 +2,7 @@ import {Server} from 'miragejs'
 
 export function makeServer({environment = "development"} = {}) {
 
-    const labels = ["Hund", "Katze", "Ziege"]
+    const labels = ["kein Hund", "keine Katze", "keine Ziege"]
 
     let server = new Server({
         environment,

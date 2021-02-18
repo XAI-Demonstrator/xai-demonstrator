@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "serve": "node download_assets.js && vue-cli-service serve",
+    "build": "node download_assets.js && vue-cli-service build",
     "test:unit": "vue-cli-service test:unit --collect-coverage",
     "lint": "vue-cli-service lint"
   },
@@ -30,6 +30,7 @@
     "eslint-plugin-vue": "^7.6.0",
     "flush-promises": "^1.0.2",
     "miragejs": "^0.1.41",
+    "request": "^2.88.2",
     "sass": "^1.32.7",
     "sass-loader": "^10.1.1",
     "vue-template-compiler": "^2.6.11"

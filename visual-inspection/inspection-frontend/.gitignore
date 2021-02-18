@@ -2,6 +2,7 @@
 node_modules
 /dist
 /coverage
+/src/assets/
 
 # local env files
 .env.local
