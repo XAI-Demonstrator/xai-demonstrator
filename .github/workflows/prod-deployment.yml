@@ -112,8 +112,6 @@ jobs:
               --concurrency 20 \
               --update-env-vars "PATH_PREFIX=/api/${{ matrix.prefix }}" \
               --update-env-vars "TRACING_EXPORTER=gcp"
-            gcloud beta run update ${{ matrix.service }} \
-              --min-instances 0
 
       - name: Show Output
         run: echo ${{ steps.deploy.outputs.url }}
