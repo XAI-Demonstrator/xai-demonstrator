@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="xd-app">
-    <div class="blank-header xd-primary"><h1>XAI Demonstrator</h1></div>
+    <div class="blank-header xd-primary"><h1>XAI-Demonstrator <span class="beta-label">Beta</span></h1></div>
     <header class="xd-primary">
       <h3>Hinterfrage die KI und entdecke Erklärbare Künstliche Intelligenz</h3>
     </header>
@@ -87,6 +87,12 @@ export default {
 
   font-family: 'Calibri Light', sans-serif;
   box-shadow: 0 4px 12px rgba(120, 120, 120, 0.4);
+}
+
+.beta-label {
+  font-weight: 400;
+  font-size: 18px;
+  font-variant: all-small-caps;
 }
 
 header {
