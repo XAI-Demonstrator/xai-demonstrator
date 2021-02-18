@@ -5,7 +5,7 @@
         <div id="info-content">
           <section v-for="part in infoText" v-bind:key="part.header" class="xd-section xd-light">
             <h3>{{ part.headline }}</h3>
-            <p v-for="paragraph in part.paragraphs" v-bind:key="paragraph">{{ paragraph }}</p>
+            <p v-for="paragraph in part.paragraphs" v-bind:key="paragraph" v-html="paragraph"></p>
           </section>
           <a v-if="infoUrl" v-bind:href="infoUrl" class="xd-button xd-secondary xd-section">
             {{ linkLabel }}
@@ -42,7 +42,10 @@ export default {
           },
           {
             headline: "Headline 2",
-            paragraphs: ["More detailed stuff."]
+            paragraphs: [
+              "More detailed stuff.",
+              "Some stuff <a href='/'>with links</a>."
+            ]
           }
         ]
       }
