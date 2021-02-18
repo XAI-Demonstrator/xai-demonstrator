@@ -1,0 +1,45 @@
+name: Clean Up
+on:
+  schedule:
+    - cron: "37 * * * *"
+
+
+jobs:
+  gcp-test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@master
+
+    - name: Setup Cloud SDK
+      uses: google-github-actions/setup-gcloud@v0.2.0
+      with:
+        project_id: ${{ secrets.GCP_TEST_PROJECT_ID }}
+        service_account_key: ${{ secrets.GCP_TEST_SA_KEY }}
+
+    - name: Remove old images
+      run: |
+        cd ./deployment/prod-deployment/
+        chmod +x clean_gcr.sh
+        ./clean_gcr.sh ${{ secrets.GCP_TEST_PROJECT_ID }} review-sentiment 3
+        ./clean_gcr.sh ${{ secrets.GCP_TEST_PROJECT_ID }} visual-inspection 3
+
+
+  gcp-prod:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@master
+
+    - name: Setup Cloud SDK
+      uses: google-github-actions/setup-gcloud@v0.2.0
+      with:
+        project_id: ${{ secrets.GCP_PROD_PROJECT_ID }}
+        service_account_key: ${{ secrets.GCP_PROD_SA_KEY }}
+
+    - name: Remove old images
+      run: |
+        cd ./deployment/prod-deployment/
+        chmod +x clean_gcr.sh
+        ./clean_gcr.sh ${{ secrets.GCP_PROD_PROJECT_ID }} review-sentiment 3
+        ./clean_gcr.sh ${{ secrets.GCP_PROD_PROJECT_ID }} visual-inspection 3
