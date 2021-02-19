@@ -14,6 +14,8 @@
                  :min-width="20" :min-height="20"
                  :stencil-component="ExplanationStencil"
                  :debounce="false"
+                 :resizeImage="{wheel: false, touch: false}"
+                 :moveImage="{mouse: false, touch: false}"
                  :size-restrictions-algorithm="sizeRestrictions"
                  :stencil-props="{
                  'explanationMode': currentExplanation,
