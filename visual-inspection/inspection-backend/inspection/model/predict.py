@@ -1,20 +1,17 @@
 import uuid
-from typing import IO
+from typing import IO, Tuple, Callable
 
 import numpy as np
 import tensorflow as tf
 from PIL import Image
-from opentelemetry import trace
 from pydantic import BaseModel
 from xaidemo.tracing import traced, add_span_attributes
 
 from .model import model, decode_label
 
 
-# TODO: Define the content of the Prediction
 class Prediction(BaseModel):
     prediction_id: uuid.UUID
-    class_id: int
     class_label: str
 
 
@@ -31,21 +28,26 @@ def preprocess(img: Image) -> np.ndarray:
 
 
 @traced
+def predict_class(model_input: np.ndarray,
+                  model_: tf.keras.Model = model,
+                  decode_label_: Callable[[np.ndarray], str] = decode_label) -> str:
+    prediction = model_.predict(model_input)
+
+    class_label = decode_label_(prediction)
+
+    return class_label
+
+
+@traced
 def predict(image_file: IO[bytes],
-            model_: tf.keras.Model = model) -> Prediction:
+            ) -> Prediction:
     prediction_id = uuid.uuid4()
     add_span_attributes({"prediction.id": str(prediction_id)})
 
     input_img = Image.open(image_file)
     model_input = preprocess(input_img)
 
-    tracer = trace.get_tracer(__name__)
-    with tracer.start_as_current_span("predict_class"):
-        prediction = model_.predict(model_input)
-
-        class_id = int(np.argmax(prediction))
-        class_label = decode_label(prediction)
+    class_label = predict_class(model_input)
 
     return Prediction(prediction_id=prediction_id,
-                      class_id=class_id,
                       class_label=class_label)
