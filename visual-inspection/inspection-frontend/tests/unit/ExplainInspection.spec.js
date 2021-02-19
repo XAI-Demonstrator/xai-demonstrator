@@ -121,6 +121,39 @@ describe('ExplainInspection.vue', () => {
             expect(payload.get(pair[0])).toEqual(pair[1])
         }
 
+        for (const pair of payload.entries()) {
+            console.log(pair, payload.get(pair[0]))
+            expect(expected.has(pair[0])).toBe(true)
+            expect(expected.get(pair[0])).toEqual(pair[1])
+        }
+
+    })
+
+    it('only adds settings if specified', async () => {
+        window.location.search = "?method=lime"
+
+        const response = {
+            data: {
+                image: 'data:image/png;base64,'
+            }
+        }
+
+        const expected = new FormData();
+        expected.append("method", "lime")
+
+        const mockPost = axios.post.mockImplementationOnce(() => Promise.resolve(response))
+
+        await wrapper.vm.explain('fake-blob')
+        await flushPromises()
+
+        expect(mockPost).toHaveBeenCalled()
+        expect(mockPost.mock.calls[0][0]).toStrictEqual('/explain')
+
+        const payload = mockPost.mock.calls[0][1]
+
+        expect(payload.has('method')).toBe(true)
+        expect(payload.has('settings')).toBe(false)
+
     })
 
 })

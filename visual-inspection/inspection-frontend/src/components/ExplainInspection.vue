@@ -56,7 +56,7 @@ export default {
             obj[key] = allParams[key];
             return obj;
           }, {})
-      if (settings) {
+      if (settings && Object.keys(settings).length !== 0) {
         form.append('settings', JSON.stringify(settings));
       }
 
