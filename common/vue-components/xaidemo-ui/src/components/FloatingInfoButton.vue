@@ -82,7 +82,6 @@ export default {
 }
 
 #info-popup {
-  /*background-color: #CC0000;*/
   margin-top: 42px;
   padding: 12px 8px 8px;
   height: calc(100% - 42px);
