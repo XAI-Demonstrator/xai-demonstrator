@@ -9,6 +9,8 @@ from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
 from opentelemetry.sdk.trace import TracerProvider
 from pydantic import BaseSettings
 
+from . import __version__
+
 __all__ = ["set_up", "instrument_app", "add_span_attributes", "traced"]
 
 trace.set_tracer_provider(TracerProvider())
@@ -131,7 +133,8 @@ def traced(func: Union[Callable, None] = None,
 
         @wraps(func_)
         def with_tracer(*args, **kwargs):
-            tracer = trace.get_tracer(__name__)
+            tracer = trace.get_tracer(instrumenting_module_name=__name__,
+                                      instrumenting_library_version=__version__)
             with tracer.start_as_current_span(_label) as span:
                 add_span_attributes(attributes, span)
                 return func_(*args, **kwargs)
