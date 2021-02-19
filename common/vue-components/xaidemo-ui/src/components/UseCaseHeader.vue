@@ -1,8 +1,16 @@
 <template>
   <div id="navigation-header" class="xd-primary">
-    <div class="header-icon"><a href="/" v-if="!standalone">❮</a></div>
+    <div class="header-icon">
+      <a href="/" v-if="!standalone">
+        <img v-bind:src="require('@/assets/arrow-left.svg')"/>
+      </a>
+    </div>
     <div class="header-title">{{ title }}</div>
-    <div class="header-icon"><a v-bind:href="reloadUrl">↻</a></div>
+    <div class="header-icon">
+      <a v-bind:href="reloadUrl">
+        <img v-bind:src="require('@/assets/reload.svg')"/>
+      </a>
+    </div>
   </div>
 </template>
 
@@ -40,20 +48,39 @@ export default {
 }
 
 .header-icon {
-  width: 42px;
   height: 42px;
+  width: 50px;
   flex-grow: 0;
   flex-shrink: 0;
 
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: center;
+}
+
+.header-icon:first-child {
+  padding-left: 8px;
+}
+
+.header-icon:last-child {
+  padding-right: 8px;
 }
 
 .header-icon a {
-  text-decoration: none;
+  height: 100%;
+  width: 100%;
   color: white;
-  font-size: 25px;
+
+  display: flex;
+  align-items: center;
+}
+
+.header-icon:first-child a {
+  justify-content: flex-start;
+}
+
+.header-icon:last-child a {
+  justify-content: flex-end;
 }
 
 .header-icon a:visited {
@@ -62,6 +89,11 @@ export default {
 
 .header-icon a:hover {
   color: white;
+}
+
+.header-icon img {
+  max-height: 28px;
+  max-width: 28px;
 }
 
 .header-title {

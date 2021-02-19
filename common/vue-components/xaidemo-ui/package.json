@@ -1,6 +1,6 @@
 {
   "name": "@xai-demonstrator/xaidemo-ui",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build:app": "vue-cli-service build",
