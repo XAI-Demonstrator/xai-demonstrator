@@ -6,6 +6,15 @@ import flushPromises from "flush-promises";
 
 jest.mock('axios');
 
+
+function firstMatchesSecond(first, second) {
+    for (const pair of first.entries()) {
+        console.log(pair, first.get(pair[0]))
+        expect(second.has(pair[0])).toBe(true)
+        expect(second.get(pair[0])).toEqual(pair[1])
+    }
+}
+
 describe('ExplainInspection.vue', () => {
 
     const {location} = window
@@ -116,18 +125,8 @@ describe('ExplainInspection.vue', () => {
 
         const payload = mockPost.mock.calls[0][1]
 
-        for (const pair of expected.entries()) {
-            console.log(pair, payload.get(pair[0]))
-            expect(payload.has(pair[0])).toBe(true)
-            expect(payload.get(pair[0])).toEqual(pair[1])
-        }
-
-        for (const pair of payload.entries()) {
-            console.log(pair, payload.get(pair[0]))
-            expect(expected.has(pair[0])).toBe(true)
-            expect(expected.get(pair[0])).toEqual(pair[1])
-        }
-
+        firstMatchesSecond(expected, payload)
+        firstMatchesSecond(payload, expected);
     })
 
     it('only adds settings if specified', async () => {
@@ -154,7 +153,6 @@ describe('ExplainInspection.vue', () => {
 
         expect(payload.has('method')).toBe(true)
         expect(payload.has('settings')).toBe(false)
-
     })
 
 })

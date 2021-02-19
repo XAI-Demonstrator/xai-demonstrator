@@ -11,5 +11,3 @@ Frontend | [![Coverage Status](https://coveralls.io/repos/github/XAI-Demonstrato
   pre-trained on ImageNet
 - Backend microservice built with [FastAPI](https://fastapi.tiangolo.com/)
 - Frontend created with [VueJS](https://vuejs.org/)
-
-
