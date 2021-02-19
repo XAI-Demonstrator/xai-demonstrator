@@ -8,12 +8,12 @@
       <div id="select">
         <a v-for="useCase in useCases" :key="useCase.title" v-bind:href="useCase.route">
           <section class="xd-section xd-light">
-            <img v-bind:src="useCase.logo" class="logo xd-secondary" :alt="useCase.title"/>
+            <img v-bind:src="useCase.logo" class="logo xd-primary" :alt="useCase.title"/>
             <div class="description">
               <h3>{{ useCase.title }}</h3>
               <p>{{ useCase.description }}</p>
             </div>
-            <img class="next" src="https://upload.wikimedia.org/wikipedia/commons/7/7b/Octicons-playback-play.svg"/>
+            <img class="next" v-bind:src="require('@/assets/arrow-right.svg')"/>
           </section>
         </a>
       </div>
@@ -38,13 +38,13 @@ export default {
     return {
       useCases: [
         {
-          logo: "https://upload.wikimedia.org/wikipedia/commons/1/11/Bon_article.svg",
+          logo: require('@/assets/sentiment-stars.svg'),
           title: "Review Sentiment",
           description: "Wie bestimmt eine KI, wie viele Sterne eine Bewertung verdient?",
           route: "/sentiment/"
         },
         {
-          logo: "https://upload.wikimedia.org/wikipedia/commons/c/c2/Android_Emoji_26c5.svg",
+          logo: require('@/assets/inspection-eye.svg'),
           title: "Visual Inspection",
           description: "Woran erkennt eine KI das Wetter? Finde es heraus!",
           route: "/inspection/"
