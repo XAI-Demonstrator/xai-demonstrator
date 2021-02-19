@@ -20,6 +20,7 @@ on:
 jobs:
   deploy:
      runs-on: ubuntu-latest
+     if: ${{ github.event_name == 'push' || github.event.workflow_run.conclusion == 'success' }}
      steps:
        - uses: actions/checkout@master
        - name: Wait for lock to release and place lock
