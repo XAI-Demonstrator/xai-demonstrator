@@ -15,6 +15,11 @@
           <label>Toggle Indicator</label>
         </button>
       </section>
+      <section class="xd-section xd-light">
+        <button class="xd-button xd-primary" v-on:click="extraSections += 1">
+          <label>Add another section</label>
+        </button>
+      </section>
       <section class="xd-section xd-border-secondary">
         <p>Sometimes, we are just waiting...</p>
         <MultiBounce numberOfDots="3" dot-class="xd-secondary"/>
@@ -29,6 +34,10 @@
           We need this to see how our scrolling behavior is.
           Otherwise, it is too difficult to test.
         </p>
+      </section>
+      <section v-for="sec in parseInt(extraSections)"
+               class="xd-section xd-light" v-bind:key="sec">
+        <p>This is section {{ sec }}!</p>
       </section>
     </main>
     <FloatingInfoButton/>
@@ -48,7 +57,8 @@ export default {
   data: function () {
     return {
       standalone: true,
-      waiting: false
+      waiting: false,
+      extraSections: 0
     }
   }
 }
