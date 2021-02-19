@@ -1,5 +1,3 @@
-import pathlib
-
 import tensorflow as tf
 
 # TODO: Replace with custom model variant
@@ -44,7 +42,53 @@ GERMAN_LABELS = {
     "thimble": "ein Fingerhut",
     "hook": "ein Haken",
     "whistle": "eine Pfeife",
-    "paper_towel": "ein Papierhandtuch"
+    "paper_towel": "ein Papierhandtuch",
+    "band_aid": "ein Pflaster",
+    "beaker": "ein Messbecher",
+    "bolo_tie": "eine Westernkrawatte",
+    "can_opener": "ein Dosenöffner",
+    "cassette": "eine Kassette",
+    "cleaver": "ein Hackmesser",
+    "cocktail_shaker": "ein Cocktail-Shaker",
+    "envelope": "ein Umschlag",
+    "harmonica": "eine Harmonika",
+    "pick": "ein Zahnstocher",
+    "purse": "eine Handtasche",
+    "racket": "ein Schläger",
+    "revolver": "ein Revolver",
+    "rule": "ein Lineal",
+    "safety_pin": "eine Sicherheitsnadel",
+    "shower_curtain": "ein Duschvorhang",
+    "spotlight": "ein Scheinwerfer",
+    "stopwatch": "eine Stoppuhr",
+    "sunglass": "ein Brennglas",
+    "toaster": "ein Toaster",
+    "toilet_seat": "eine Klobrille",
+    "velvet": "Samt",
+    "wall_clock": "eine Wanduhr",
+    "windsor_tie": "eine Windsor-Krawatte",
+    "notebook": "ein Notizbuch",
+    "hand-held_computer": "ein Taschencomputer",
+    "radio": "ein Radio",
+    "shower_cap": "eine Badehaube",
+    "diaper": "eine Windel",
+    "studio_couch": "eine Couch",
+    "polaroid_camera": "eine Polaroid-Kamera",
+    "analog_clock": "eine Analoguhr",
+    "sunglasses": "eine Sonnenbrille",
+    "hard_disc": "eine Festplatte",
+    "corkscrew": "eine Korkenzieher",
+    "digital_watch": "eine Digitaluhr",
+    "washer": "eine Waschmaschine",
+    "pencil_sharpener": "ein Anspitzer",
+    "tape_player": "ein Kassettenspieler",
+    "barometer": "ein Barometer",
+    "coffee_mug": "ein Kaffeebecher",
+    "nematode": "ein Fadenwurm",
+    "quill": "ein Federkiel",
+    "hair_slide": "eine Haarspange",
+    "nipple": "ein Babyflaschen-Aufsatz",
+    "petri_dish": "eine Petrischale"
 }
 
 
