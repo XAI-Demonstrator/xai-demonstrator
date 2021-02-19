@@ -102,6 +102,7 @@ describe('ExplainInspection.vue', () => {
         }
 
         const expected = new FormData();
+        expected.append("file", "fake-blob")
         expected.append("method", "lime")
         expected.append("settings", JSON.stringify({"explainer": {"num_samples": "20"}}))
 
