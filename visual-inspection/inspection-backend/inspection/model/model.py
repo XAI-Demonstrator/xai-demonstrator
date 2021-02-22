@@ -88,7 +88,13 @@ GERMAN_LABELS = {
     "quill": "ein Federkiel",
     "hair_slide": "eine Haarspange",
     "nipple": "ein Babyflaschen-Aufsatz",
-    "petri_dish": "eine Petrischale"
+    "petri_dish": "eine Petrischale",
+    "plate_rack": "ein Geschirr-Abtropfgitter",
+    "vase": "eine Vase",
+    "bubble": "eine Blase",
+    "plastic_bag": "eine Plastiktüte",
+    "lipstick": "ein Lippenstift",
+    "hand_blower": "ein Handbläser"
 }
 
 
