@@ -39,14 +39,14 @@ export default {
       useCases: [
         {
           logo: require('@/assets/sentiment-stars.svg'),
-          title: "Review Sentiment",
-          description: "Wie bestimmt eine KI, wie viele Sterne eine Bewertung verdient?",
+          title: "Stimmung erkennen",
+          description: "Entdecke, wie die KI die Stimmung in einem Text bestimmt!",
           route: "/sentiment/"
         },
         {
           logo: require('@/assets/inspection-eye.svg'),
-          title: "Visual Inspection",
-          description: "Woran erkennt eine KI das Wetter? Finde es heraus!",
+          title: "Gegenstände erkennen",
+          description: "Finde heraus, woran die KI Gegenstände auf Bildern erkennt!",
           route: "/inspection/"
         }
       ],
@@ -62,8 +62,8 @@ export default {
           ]
         }
       ],
-      infoUrl: "https://www.uni-ulm.de",
-      linkLabel: "Interesse geweckt? Besuche unsere Website!"
+      infoUrl: "https://www.uni-ulm.de/mawi/iba/forschung/forschungsthemen/explainable-artificial-intelligence/xai-demonstrator/",
+      linkLabel: "Interesse geweckt? Besuche unsere Website! "
     }
   },
   created() {
