@@ -23,6 +23,7 @@ describe('AnalyzeReview.vue', () => {
         expect(wrapper.vm.$data.numOfStars).toBeNull()
         expect(wrapper.find('.the-sentiment').exists()).toBe(false)
         expect(wrapper.find('button').exists()).toBe(true)
+        expect(wrapper.find('button').attributes('disabled')).toBeUndefined()
     })
 
     it('prediction is requested from backend', async () => {
@@ -43,6 +44,8 @@ describe('AnalyzeReview.vue', () => {
 
         const button = wrapper.find('button')
         await button.trigger('click')
+
+        expect(button.attributes('disabled')).toBe('disabled')
 
         await flushPromises()
 

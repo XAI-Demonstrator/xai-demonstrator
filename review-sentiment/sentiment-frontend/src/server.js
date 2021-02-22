@@ -27,7 +27,7 @@ export function makeServer({environment = "development"} = {}) {
                         ["!", null]
                     ]
                 }
-            ))
+            ), {timing: 2000} )
 
 
         },

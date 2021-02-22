@@ -5,7 +5,7 @@ import flushPromises from 'flush-promises';
 
 jest.mock('axios');
 
-describe('Component', () => {
+describe('ExplainAnalysis.vue', () => {
 
     const localVue = createLocalVue()
     let wrapper = shallowMount(ExplainAnalysis, localVue);
@@ -49,7 +49,11 @@ describe('Component', () => {
         }
         const mockPost = axios.post.mockImplementationOnce(() => Promise.resolve(response))
 
-        wrapper.vm.requestExplanation()
+        const button = wrapper.find('button')
+        await button.trigger('click')
+
+        expect(button.attributes('disabled')).toBe('disabled')
+
         await flushPromises()
 
         expect(wrapper.vm.$data.explanationResult).toStrictEqual(
@@ -95,7 +99,11 @@ describe('Component', () => {
         }
         const mockPost = axios.post.mockImplementationOnce(() => Promise.resolve(response))
 
-        wrapper.vm.requestExplanation()
+        const button = wrapper.find('button')
+        await button.trigger('click')
+
+        expect(button.attributes('disabled')).toBe('disabled')
+
         await flushPromises()
 
         expect(wrapper.vm.$data.explanationResult).toStrictEqual(

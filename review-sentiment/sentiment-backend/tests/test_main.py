@@ -60,6 +60,16 @@ def test_that_empty_text_is_not_explained():
     assert response.status_code == 422
 
 
+def test_that_blank_text_is_not_predicted():
+    response = client.post('/predict', json={"text": "  \n \t"})
+    assert response.status_code == 422
+
+
+def test_that_blank_text_is_not_explained():
+    response = client.post('/explain', json={"text": "\t\t \n \t"})
+    assert response.status_code == 422
+
+
 def test_that_custom_explanation_targets_outside_range_are_not_accepted():
     response = client.post('/explain', json={"text": "This is a review.", "target": 10})
     assert response.status_code == 422
