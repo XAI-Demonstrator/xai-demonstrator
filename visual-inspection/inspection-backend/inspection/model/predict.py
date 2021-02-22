@@ -1,13 +1,13 @@
 import uuid
-from typing import IO, Tuple, Callable
+from typing import Callable, IO
 
 import numpy as np
 import tensorflow as tf
 from PIL import Image
 from pydantic import BaseModel
-from xaidemo.tracing import traced, add_span_attributes
+from xaidemo.tracing import add_span_attributes, traced
 
-from .model import model, decode_label
+from .model import decode_label, model
 
 
 class Prediction(BaseModel):
