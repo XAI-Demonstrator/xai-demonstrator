@@ -1,13 +1,16 @@
 <template>
   <div>
-    <button v-on:click="requestAnalysis" v-if="!numOfStars" class="xd-button xd-primary">
+    <button v-on:click="requestAnalysis"
+            v-if="!numOfStars"
+            class="xd-button xd-primary"
+            v-bind:disabled="waitingForPrediction">
       <label>Wie viele Sterne sollte meine Bewertung erhalten?</label>
     </button>
     <div class="the-sentiment" v-if="numOfStars">
       <p>Ich denke, dein Review entspricht</p>
       <div class="sentiment-stars">
-        <img class="my-star" src="@/assets/star_filled.svg" v-for="star in numOfStars" :key="'pos-' + star"/>
-        <img class="my-star" src="@/assets/star_blank.svg" v-for="star in (5 - numOfStars)" :key="'neg-' + star"/>
+        <img class="my-star" src="@/assets/star_filled.svg" v-for="star in numOfStars" :key="'pos-' + star" alt="Filled star"/>
+        <img class="my-star" src="@/assets/star_blank.svg" v-for="star in (5 - numOfStars)" :key="'neg-' + star" alt="Unfilled star"/>
       </div>
     </div>
     <SpinningIndicator class="indicator" v-bind:visible="waitingForPrediction" />
@@ -47,6 +50,7 @@ export default {
     },
     resetComponent() {
       this.numOfStars = null
+      this.waitingForPrediction = false
     }
   }
 }

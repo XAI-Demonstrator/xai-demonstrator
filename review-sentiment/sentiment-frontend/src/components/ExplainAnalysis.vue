@@ -1,6 +1,9 @@
 <template>
   <div>
-    <button v-on:click="requestExplanation" v-if="!explanationResult" class="xd-button xd-primary">
+    <button v-on:click="requestExplanation"
+            v-if="!explanationResult"
+            class="xd-button xd-primary"
+            v-bind:disabled="waitingForExplanation">
       <label>Wie kommst du zu dieser Einschätzung?</label>
     </button>
     <div class="explanation-container" v-if="explanationResult">
@@ -63,6 +66,7 @@ export default {
     },
     resetComponent() {
       this.explanationResult = null
+      this.waitingForExplanation = false
     }
   }
 }
