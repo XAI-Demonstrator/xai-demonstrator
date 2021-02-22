@@ -74,10 +74,12 @@ jobs:
         include:
           - service: review-sentiment
             prefix: sentiment
-            memory: 4Gi
+            memory: 8Gi
+            cpu: 2
           - service: visual-inspection
             prefix: inspection
-            memory: 1Gi
+            memory: 2Gi
+            cpu: 2
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -107,6 +109,7 @@ jobs:
               --platform managed \
               --allow-unauthenticated \
               --port 8000 \
+              --cpu "${{ matrix.cpu }}" \
               --memory "${{ matrix.memory }}" \
               --max-instances 10 \
               --concurrency 20 \
