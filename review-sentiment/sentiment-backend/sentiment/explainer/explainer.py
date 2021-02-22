@@ -1,6 +1,7 @@
 import pathlib
 import re
 import string
+import threading
 import uuid
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -18,6 +19,8 @@ from ..model.model import BertManager, bert
 PATH = pathlib.Path(__file__).parent
 
 my_device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+
+explanation_lock = threading.Lock()
 
 with open(PATH / "small_words_to_filter.txt", "rt", encoding="utf-8") as f:
     STOPWORDS = [word.strip() for word in f]
@@ -73,10 +76,11 @@ def explain(text: str,
             settings: Optional[Dict[str, Any]] = None,
             bert_: BertManager = bert) -> Explanation:
     settings = settings or {}
+    tokenizer = bert_.tokenizer
 
     explanation_id = uuid.uuid4()
 
-    encoded_text = bert_.tokenizer.encode_plus(text, add_special_tokens=False)
+    encoded_text = tokenizer.encode_plus(text, add_special_tokens=False)
 
     add_span_attributes({
         "explanation.id": str(explanation_id),
@@ -86,14 +90,16 @@ def explain(text: str,
     })
 
     text_input_ids, ref_input_ids = construct_input_and_reference(encoded_text["input_ids"],
-                                                                  ref_token_id=bert_.tokenizer.pad_token_id)
+                                                                  ref_token_id=tokenizer.pad_token_id)
 
-    scores, meta = EXPLAINERS[explainer](
-        text_input_ids=text_input_ids,
-        ref_input_ids=ref_input_ids,
-        target=target,
-        model=bert_.model,
-        settings=settings)
+    # Captum explainers (at least integrated_gradients) are apparently not thread-safe
+    with explanation_lock:
+        scores, meta = EXPLAINERS[explainer](
+            text_input_ids=text_input_ids,
+            ref_input_ids=ref_input_ids,
+            target=target,
+            model=bert_.model,
+            settings=settings)
 
     explanation = filter_attributions(align_text(text=text,
                                                  word_ids=np.array(encoded_text.word_ids()),
