@@ -1,3 +1,5 @@
+import uuid
+
 import pytest
 from transformers import BertForSequenceClassification, BertTokenizerFast
 
@@ -28,7 +30,12 @@ def test_that_model_is_loaded_on_first_get_only(mocker):
 
 def test_that_tokenizer_is_loaded_on_first_get_only(mocker):
     class MyTokenizer:
-        pass
+
+        def __init__(self):
+            self.my_id = str(uuid.uuid4())
+
+        def __eq__(self, other):
+            return self.my_id == other.my_id
 
     bert = BertManager()
     loading_patch = mocker.patch.object(bert, 'load_tokenizer')
@@ -40,12 +47,12 @@ def test_that_tokenizer_is_loaded_on_first_get_only(mocker):
 
     assert loading_patch.call_count == 1
     assert bert._tokenizer is loading_patch.return_value
-    assert tokenizer_1 is loading_patch.return_value
+    assert tokenizer_1 == loading_patch.return_value
 
     tokenizer_2 = bert.tokenizer
 
     assert loading_patch.call_count == 1
-    assert tokenizer_2 is loading_patch.return_value
+    assert tokenizer_2 == loading_patch.return_value
 
 
 @pytest.mark.integration
