@@ -3,7 +3,7 @@ numpy
 pydantic
 
 fastapi==0.63.0
-uvicorn==0.13.3
+uvicorn==0.13.4
 transformers==4.3.2
 captum==0.3.1
 

@@ -43,7 +43,7 @@ export default {
   },
   data() {
     return {
-      useCaseTitle: "Review Sentiment",
+      useCaseTitle: "Stimmung erkennen",
       introductionTexts: {
         'movie': 'Wie war der Film, den du zuletzt gesehen hast?',
         'restaurant': 'Wie war dein letzter Restaurant-Besuch?',
@@ -56,18 +56,22 @@ export default {
       },
       infoText: [
         {
-          headline: "Review Sentiment",
-          paragraphs: ["Kunden-Reviews sind sehr populär im Internet."]
+          headline: "Stimmung erkennen",
+          paragraphs: [
+            "Du interagierst mit einer KI, die anhand eines Bewertungstexts vorhersagt, wie viele Sterne das bewertete Produkt erhält. Aber eine KI ist nie perfekt!",
+            "XAI hilft dir, die Einschätzung der KI und ihre Zuverlässigkeit besser zu bewerten."
+          ]
         },
         {
-          headline: "Hinter den Kulissen",
-          paragraphs: ["Die Reviews werden von einem modernen NLP-Modell analysiert.",
-            "Es kann auch mit anderen Sprachen als Deutsch umgehen, z.B. Französisch oder Englisch."
+          headline: "Was steckt dahinter?",
+          paragraphs: [
+            "Die KI baut auf dem von Google entwickelten BERT-Modell auf und ordnet einem Text einem bis fünf Sterne zu, je nachdem, wie negativ bzw. positiv die Bewertung ausfällt.",
+            "Die Erklärungen werden mit Hilfe der XAI-Methode ... erzeugt. ..."
           ]
         }
       ],
-      infoUrl: "/",
-      infoLinkLabel: "Weitere Informationen",
+      infoUrl: "https://xai-demonstrator.github.io/#use-case-i",
+      infoLinkLabel: "Interesse geweckt? Hier gibt’s mehr Infos",
       reviewText: '',
       numberOfStars: null,
       reviewTopic: ['movie', 'restaurant', 'travel'][Math.floor(Math.random() * 3)],
