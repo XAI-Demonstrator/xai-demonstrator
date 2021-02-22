@@ -12,7 +12,7 @@
     "@xai-demonstrator/xaidemo-ui": "^0.2.2",
     "axios": "^0.21.1",
     "classnames": "^2.2.6",
-    "core-js": "^3.8.3",
+    "core-js": "^3.9.0",
     "debounce": "^1.2.0",
     "easy-bem": "^1.0.2",
     "flat": "^5.0.2",
@@ -31,7 +31,7 @@
     "flush-promises": "^1.0.2",
     "miragejs": "^0.1.41",
     "request": "^2.88.2",
-    "sass": "^1.32.7",
+    "sass": "^1.32.8",
     "sass-loader": "^10.1.1",
     "vue-template-compiler": "^2.6.11"
   },

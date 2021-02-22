@@ -6,7 +6,7 @@
     <main>
       <section>
         <div class="xd-section xd-light">
-          <p>Wähle einen Bildausschnitt und frage die KI, was sie erkennt.</p>
+          <p>Wähle einen Bildausschnitt und die KI bestimmt den Gegenstand.</p>
         </div>
       </section>
       <div id="image-container">
@@ -119,21 +119,24 @@ export default {
         width: 100,
         height: 100
       },
-      useCaseTitle: "Visual Inspection",
-      infoUrl: "/",
-      infoLinkLabel: "Erfahre viel mehr!",
+      useCaseTitle: "Gegenstände erkennen",
+      infoUrl: "https://xai-demonstrator.github.io/#use-case-ii",
+      infoLinkLabel: "Interesse geweckt? Hier gibt’s mehr Infos!",
       infoText: [
         {
-          headline: "Visual Inspection",
+          headline: "Gegenstände erkennen",
           paragraphs: [
-            "Sehr oft muss man das Wetter vorhersagen.",
-            "Eine KI ist darin manchmal sehr gut, manchmal sehr schlecht."
+            "Du interagierst mit einer KI, die einen Gegenstand in einem Bildausschnitt erkennen kann. Aber eine KI ist nie perfekt!",
+            "Durch die Wahl verschiedener Bildausschnitte entdeckst du, für welche Bereiche die KI zuverlässig ist, aber insbesondere auch, wo sie an ihre Grenzen stößt.",
+            "Die automatisch erzeugten Erklärungen helfen dir, zu verstehen, wie die KI vorgeht und warum sie manchmal falsche Schlüsse zieht."
+
           ]
         }, {
-          headline: "Credits",
+          headline: "Was steckt dahinter?",
           paragraphs: [
-            "<small>Modell: <a href='https://www.tensorflow.org/api_docs/python/tf/keras/applications/mobilenet_v2'>MobileNetV2 for Keras</a></small>",
-            "<small>Bild: Melinda Pack (Unsplash), <a href='https://creativecommons.org/publicdomain/zero/1.0/deed.en'>CC0</a> 1.0, via <a href='https://commons.wikimedia.org/wiki/File:Camera_keys_notebook_coffee_(Unsplash).jpg'>Wikimedia Commons</a></small>"
+            "Die KI ist ein tiefes neuronales Netz, das 1000 verschiedene Objekte erkennen kann.",
+            "Die Erklärungen werden mit der XAI-Methode <em><abbr>LIME</abbr></em> (<strong>L</strong>ocal <strong>I</strong>nterpretable <strong>M</strong>odel-Agnostic <strong>E</strong>xplanations) generiert. Die Erklärung entspricht einer graphischen Hervorhebung von Bildbereichen, die für die Entscheidung der KI besonders relevant sind.",
+            "<small>Modell: <a href='https://www.tensorflow.org/api_docs/python/tf/keras/applications/mobilenet_v2'>MobileNetV2 for Keras</a>, Erklärungen: <a href='https://github.com/marcotcr/lime'>LIME</a><br />Bild: Melinda Pack (Unsplash), <a href='https://creativecommons.org/publicdomain/zero/1.0/deed.en'>CC0</a> 1.0, via <a href='https://commons.wikimedia.org/wiki/File:Camera_keys_notebook_coffee_(Unsplash).jpg'>Wikimedia Commons</a></small>"
           ]
         }],
       backendUrl: process.env.VUE_APP_BACKEND_URL,

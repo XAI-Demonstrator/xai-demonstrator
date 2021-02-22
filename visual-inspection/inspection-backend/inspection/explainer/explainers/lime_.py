@@ -1,9 +1,8 @@
 import numpy as np
 import tensorflow as tf
 from lime import lime_image
-from skimage.segmentation import mark_boundaries
 from pydantic import BaseModel
-
+from skimage.segmentation import mark_boundaries
 from xaidemo.tracing import traced
 
 _lime = lime_image.LimeImageExplainer()
@@ -39,7 +38,6 @@ class LIMEConfiguration(BaseModel):
 def lime_explanation(input_img: np.ndarray,
                      model_: tf.keras.models.Model,
                      **settings) -> np.ndarray:
-
     config = LIMEConfiguration(**settings)
 
     explanation = _lime.explain_instance(input_img.astype("double"), model_.predict,
@@ -53,8 +51,7 @@ def lime_explanation(input_img: np.ndarray,
 @traced
 def render_explanation(explanation: lime_image.ImageExplanation,
                        config: RendererConfiguration):
-
-    temp, mask = explanation.get_image_and_mask(
+    image, mask = explanation.get_image_and_mask(
         explanation.top_labels[0],
         positive_only=config.positive_only,
         negative_only=False,
@@ -63,4 +60,4 @@ def render_explanation(explanation: lime_image.ImageExplanation,
         hide_rest=False
     )
 
-    return mark_boundaries(temp / 2 + 0.5, mask)
+    return mark_boundaries(image / 2 + 0.5, mask)
