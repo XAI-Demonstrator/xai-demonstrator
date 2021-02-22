@@ -76,10 +76,12 @@ jobs:
             prefix: sentiment
             memory: 8Gi
             cpu: 2
+            concurrent: 10
           - service: visual-inspection
             prefix: inspection
             memory: 2Gi
             cpu: 2
+            concurrent: 20
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -111,8 +113,8 @@ jobs:
               --port 8000 \
               --cpu "${{ matrix.cpu }}" \
               --memory "${{ matrix.memory }}" \
-              --max-instances 10 \
-              --concurrency 20 \
+              --max-instances 25 \
+              --concurrency "${{ matrix.concurrent }}" \
               --update-env-vars "PATH_PREFIX=/api/${{ matrix.prefix }}" \
               --update-env-vars "TRACING_EXPORTER=gcp"
 
