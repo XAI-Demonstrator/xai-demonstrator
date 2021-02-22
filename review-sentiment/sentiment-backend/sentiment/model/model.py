@@ -1,4 +1,7 @@
 import pathlib
+import threading
+import copy
+import logging
 
 import torch
 from transformers import AutoModelForSequenceClassification, AutoTokenizer, BertForSequenceClassification, \
@@ -20,18 +23,34 @@ class BertManager:
     def __init__(self):
         self._model = None
         self._tokenizer = None
+        self._loading_lock = threading.Lock()
+
+        self.logger = logging.getLogger(__name__)
 
     @property
     def model(self) -> BertForSequenceClassification:
         if self._model is None:
-            self._model = self.load_model()
+            with self._loading_lock:
+                self.logger.info("Acquired loading lock for model loading")
+                if self._model is None:
+                    self.logger.info("Loading model from disk...")
+                    self._model = self.load_model()
+                else:
+                    self.logger.info("Model was loaded in the meantime")
         return self._model
 
     @property
     def tokenizer(self) -> BertTokenizerFast:
         if self._tokenizer is None:
-            self._tokenizer = self.load_tokenizer()
-        return self._tokenizer
+            with self._loading_lock:
+                self.logger.info("Acquired loading lock for tokenizer loading")
+                if self._tokenizer is None:
+                    self.logger.info("Loading tokenizer from disk...")
+                    self._tokenizer = self.load_tokenizer()
+                else:
+                    self.logger.info("Tokenizer was loaded in the meantime")
+        # Workaround for https://github.com/huggingface/tokenizers/issues/537
+        return copy.deepcopy(self._tokenizer)
 
     @staticmethod
     @traced(attributes={"torch.device": str(my_device), "torch.device.type": my_device.type})
