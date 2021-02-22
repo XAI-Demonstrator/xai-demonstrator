@@ -13,7 +13,7 @@
 </template>
 <script>
 import axios from 'axios'
-import {SpinningIndicator} from '@xai-demonstrator/xaidemo-ui';
+import { SpinningIndicator } from '@xai-demonstrator/xaidemo-ui';
 
 import TextHighlight from "@/components/TextHighlight";
 import BarChart from "@/components/BarChart";
