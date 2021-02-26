@@ -82,7 +82,6 @@ export default {
 }
 
 #info-popup {
-  /*background-color: #CC0000;*/
   margin-top: 42px;
   padding: 12px 8px 8px;
   height: calc(100% - 42px);
@@ -158,7 +157,7 @@ export default {
 
   #info-popup {
     max-width: 432px;
-    top: calc(50% - 312px + 42px + 12px);
+    top: calc(50% - 310px + 42px + 12px);
     right: auto;
     left: auto;
     bottom: auto;
