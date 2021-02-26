@@ -69,7 +69,6 @@ export default {
 .header-icon a {
   height: 100%;
   width: 100%;
-  color: white;
 
   display: flex;
   align-items: center;
@@ -83,21 +82,12 @@ export default {
   justify-content: flex-end;
 }
 
-.header-icon a:visited {
-  color: white;
-}
-
-.header-icon a:hover {
-  color: white;
-}
-
 .header-icon img {
   max-height: 28px;
   max-width: 28px;
 }
 
 .header-title {
-  color: white;
   font-size: 18px;
   font-weight: 400;
 }

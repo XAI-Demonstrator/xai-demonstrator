@@ -24,8 +24,7 @@ p {
     font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    color: #2c3e50;
-    background-color: #fff;
+    color: #000;
     height: 100vh;
     width: 100vw;
 }
@@ -72,17 +71,24 @@ p {
 }
 
 /* COLORS */
+/* selected from https://www.schemecolor.com/professional-blue-and-grey-color-scheme.php */
+
 .xd-primary {
-    background-color: #77A6F7;
-    color: #fff;
+    background-color: #323232;
+    color: #EBEBEB;
 }
 
 .xd-light {
-    background-color: #D3E3FC;
-    color: #2c3e50;
+    background-color: #EBEBEB;
+    color: #323232;
 }
 
-.xd-green, .xd-secondary {
+.xd-secondary {
+    background-color: #20368F;
+    color: #EBEBEB;
+}
+
+.xd-green {
     background-color: #00887a;
     color: #fff;
 }
@@ -95,15 +101,15 @@ p {
 /* BORDERS */
 
 .xd-border-primary {
-    border: 1px solid #77A6F7;
+    border: 1px solid #323232;
 }
 
 .xd-border-light {
-    border: 1px solid #D3E3FC;
+    border: 1px solid #EBEBEB;
 }
 
 .xd-border-secondary {
-    border: 1px solid #00887a;
+    border: 1px solid #20368F;
 }
 
 /* SECTION */
