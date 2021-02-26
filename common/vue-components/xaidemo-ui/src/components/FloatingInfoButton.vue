@@ -19,7 +19,7 @@
           <img svg-inline src="../assets/close.svg" alt="Close"/>
         </div>
         <div class="icon xd-primary" v-else v-on:click="openPopup" key="open">
-          <span>?</span>
+          <img svg-inline src="../assets/info.svg" alt="Info"/>
         </div>
       </transition>
     </div>
