@@ -2,7 +2,7 @@
   <div>
     <button v-on:click="requestAnalysis"
             v-if="!numOfStars"
-            class="xd-button xd-primary"
+            class="xd-button xd-secondary"
             v-bind:disabled="waitingForPrediction">
       <label>Wie viele Sterne sollte meine Bewertung erhalten?</label>
     </button>
@@ -64,12 +64,11 @@ export default {
 }
 
 .sentiment-stars {
-  background-color: white;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
-  padding: 3px;
+  padding: 5px;
 }
 
 .my-star {
