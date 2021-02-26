@@ -132,7 +132,7 @@ jobs:
         uses: rtCamp/action-slack-notify@v2.1.2
         env:
           SLACK_CHANNEL: xai-demonstrator-monitor
-          SLACK_MESSAGE: 'Successfully deployed a new release to https://xai-demonstrator-prod.web.app/ :rocket:'
+          SLACK_MESSAGE: 'Successfully deployed a new release to https://www.xaidemo.de/ :rocket:'
           SLACK_TITLE: New Prod Deployment
           SLACK_USERNAME: Deployment Monitor
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}

@@ -42,7 +42,7 @@ jobs:
         uses: rtCamp/action-slack-notify@v2.1.2
         env:
           SLACK_CHANNEL: xai-demonstrator-monitor
-          SLACK_MESSAGE: 'Cannot reach prod deployment at https://xai-demonstrator-prod.web.app/ :rotating_light:'
+          SLACK_MESSAGE: 'Cannot reach prod deployment at https://www.xaidemo.de/ :rotating_light:'
           SLACK_TITLE: Prod Deployment Is Down
           SLACK_USERNAME: Deployment Monitor
           SLACK_COLOR: danger

@@ -2,8 +2,7 @@
 ![Prod Deployment](https://github.com/XAI-Demonstrator/xai-demonstrator/workflows/Prod%20Deployment/badge.svg)
 ![Monitor Deployment(s)](https://github.com/XAI-Demonstrator/template-service/workflows/Monitor%20Deployment(s)/badge.svg)
 
-_This is the deployment currently at [xai-demonstrator-prod.web.app](http://xai-demonstrator-prod.web.app/) 
-that will soon move to its final home at [https://www.xaidemo.de](https://www.xaidemo.de)._
+_This is the deployment at [https://www.xaidemo.de](https://www.xaidemo.de)._
 
 Production deployment of the XAI demonstrator on [Google Cloud Platform](https://cloud.google.com).
 The frontend is served through [Firebase Hosting](https://firebase.google.com/docs/hosting/)
@@ -27,4 +26,3 @@ To set up the XAI demonstrator on the Google Cloud Platform follow these steps:
 Be careful to insert the exact identifiers when creating the GitHub secrets. Common problems are extra spaces, inserting the computing zone (e.g. us-west1-a) instead of the region (us-west1) and copying only parts of the key json.
 
 Now the XAI demonstrator is ready to be deployed to your GCP project by the [Prod Deployment workflow](../../.github/workflows/prod-deployment.yml)!
-
