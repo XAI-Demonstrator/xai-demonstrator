@@ -42,3 +42,18 @@ jobs:
         chmod +x clean_gcr.sh
         ./clean_gcr.sh ${{ secrets.GCP_PROD_PROJECT_ID }} review-sentiment 3
         ./clean_gcr.sh ${{ secrets.GCP_PROD_PROJECT_ID }} visual-inspection 3
+
+
+  bwcloud-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Remove stale Docker images
+        uses: appleboy/ssh-action@v0.1.4
+        with:
+          host: ${{ secrets.TEST_HOST }}
+          username: ${{ secrets.TEST_USER }}
+          key: ${{ secrets.TEST_KEY }}
+          script: |
+            set -e
+            sudo docker image prune -a --force --filter "until=48h"
+            
