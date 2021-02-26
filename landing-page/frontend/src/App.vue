@@ -1,14 +1,14 @@
 <template>
   <div id="app" class="xd-app">
     <div class="blank-header xd-primary"><h1>XAI-Demonstrator <span class="beta-label">Beta</span></h1></div>
-    <header class="xd-primary">
+    <header class="xd-secondary">
       <h3>Hinterfrage die KI und entdecke Erklärbare Künstliche Intelligenz</h3>
     </header>
     <main>
       <div id="select">
         <a v-for="useCase in useCases" :key="useCase.title" v-bind:href="useCase.route">
           <section class="xd-section xd-light">
-            <img v-bind:src="useCase.logo" class="logo xd-primary" :alt="useCase.title"/>
+            <img v-bind:src="useCase.logo" class="logo xd-secondary" :alt="useCase.title"/>
             <div class="description">
               <h3>{{ useCase.title }}</h3>
               <p>{{ useCase.description }}</p>
@@ -108,7 +108,7 @@ header {
 }
 
 header h1, .blank-header h1 {
-  color: #fff;
+  color: #EBEBEB;
   padding: 0;
   margin: 0;
   font-weight: 400;
@@ -116,7 +116,7 @@ header h1, .blank-header h1 {
 }
 
 header h3 {
-  color: #fff;
+  color: #EBEBEB;
   padding: 0;
   margin: 0;
   font-weight: 400;
@@ -128,13 +128,13 @@ header h3 {
 }
 
 #select a {
-  color: #2c3e50;
+  color: #323232;
   text-decoration: none;
   display: block;
 }
 
 #select a:visited {
-  color: #2c3e50;
+  color: #323232;
 }
 
 #select section {
