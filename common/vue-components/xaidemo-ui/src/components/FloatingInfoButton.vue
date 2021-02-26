@@ -142,7 +142,7 @@ export default {
 
   height: 100%;
   font-size: 25px;
-  color: #ffffff;
+  color: #EBEBEB;
 }
 
 .fade-enter-active, .fade-leave-active {
