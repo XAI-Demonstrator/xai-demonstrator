@@ -140,8 +140,8 @@ export default {
 }
 
 .icon svg {
-  height: 70%;
-  width: 70%;
+  height: 55%;
+  width: 55%;
 }
 
 .icon span {

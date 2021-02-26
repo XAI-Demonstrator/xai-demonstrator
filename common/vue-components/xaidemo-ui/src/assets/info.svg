@@ -49,14 +49,14 @@
     </rdf:RDF>
   </metadata>
   <path
-     style="fill:none;stroke:#ebebeb;stroke-width:3.99999976;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="m 13.229166,11.590144 v 10.55498"
+     style="fill:none;stroke:#ebebeb;stroke-width:2.99999976;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M 13.229166,11.65393 V 22.20891"
      id="path830"
      inkscape:connector-curvature="0" />
   <circle
-     style="fill:#ebebeb;fill-opacity:1;stroke:none;stroke-width:2.61268997;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
+     style="fill:#ebebeb;fill-opacity:1;stroke:none;stroke-width:2.1772418;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
      id="path4532"
      cx="13.229166"
-     cy="4.2517724"
-     r="2.3812499" />
+     cy="4.7124333"
+     r="1.9843749" />
 </svg>
