@@ -255,7 +255,7 @@ section img.next {
   }
 
   .blank-header {
-    margin-bottom: 12px;
+    margin-bottom: 14px;
   }
 
   header {
