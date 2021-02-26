@@ -157,7 +157,7 @@ export default {
 
   #info-popup {
     max-width: 432px;
-    top: calc(50% - 312px + 42px + 12px);
+    top: calc(50% - 310px + 42px + 12px);
     right: auto;
     left: auto;
     bottom: auto;
