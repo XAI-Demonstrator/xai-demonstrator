@@ -18,6 +18,14 @@ p {
     font-size: 1em;
 }
 
+*:active {
+    outline: none;
+}
+
+*:focus {
+    outline: none;
+}
+
 /* APP CONTAINER */
 
 .xd-app {
