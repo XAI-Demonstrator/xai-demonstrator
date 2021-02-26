@@ -1,0 +1,15 @@
+{
+  "name": "maintenance",
+  "version": "0.1.0",
+  "description": "GitHub maintenance",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@octokit/core": "^3.2.5"
+  },
+  "type": "module"
+}
