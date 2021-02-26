@@ -66,7 +66,8 @@ export default {
           headline: "Was steckt dahinter?",
           paragraphs: [
             "Die KI baut auf dem von Google entwickelten BERT-Modell auf und ordnet einem Text einem bis fünf Sterne zu, je nachdem, wie negativ bzw. positiv die Bewertung ausfällt.",
-            "Die Erklärungen werden mit Hilfe der XAI-Methode ... erzeugt. ..."
+            "Die Erklärungen werden mit Hilfe von gradientenbasierten XAI-Methoden erzeugt, die den Einfluss einzelner Silben und Wörter auf das Endresultat ermitteln.",
+              "<small>Modell: <a href='https://huggingface.co/nlptown/bert-base-multilingual-uncased-sentiment'>NLPTown bert-base-multilingual-uncased-sentiment</a> via <a href='https://huggingface.co/models'>Hugging Face Model Hub</a>, Erklärungen: <a href='https://captum.ai/'>Captum</a></small>"
           ]
         }
       ],
