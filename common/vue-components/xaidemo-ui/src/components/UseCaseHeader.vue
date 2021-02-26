@@ -2,13 +2,13 @@
   <div id="navigation-header" class="xd-primary">
     <div class="header-icon">
       <a href="/" v-if="!standalone">
-        <img v-bind:src="require('@/assets/arrow-left.svg')"/>
+        <img svg-inline src="../assets/arrow-left.svg" alt="Back"/>
       </a>
     </div>
     <div class="header-title">{{ title }}</div>
     <div class="header-icon">
       <a v-bind:href="reloadUrl">
-        <img v-bind:src="require('@/assets/reload.svg')"/>
+        <img svg-inline src="../assets/reload.svg" alt="Reload"/>
       </a>
     </div>
   </div>
@@ -82,7 +82,7 @@ export default {
   justify-content: flex-end;
 }
 
-.header-icon img {
+.header-icon svg {
   max-height: 28px;
   max-width: 28px;
 }

@@ -8,7 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@xai-demonstrator/xaidemo-ui": "^0.2.2",
+    "@xai-demonstrator/xaidemo-ui": "^0.3.0",
     "core-js": "^3.9.0",
     "vue": "^2.6.11"
   },
