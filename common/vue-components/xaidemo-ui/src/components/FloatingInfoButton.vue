@@ -16,7 +16,7 @@
     <div id="icon-container">
       <transition name="fade" mode="out-in">
         <div class="icon xd-red" v-if="popupVisible" v-on:click="closePopup" key="close">
-          <span>X</span>
+          <img svg-inline src="../assets/close.svg" alt="Close"/>
         </div>
         <div class="icon xd-primary" v-else v-on:click="openPopup" key="open">
           <span>?</span>
@@ -133,6 +133,15 @@ export default {
 
   box-shadow: 2px 4px 8px rgba(120, 120, 120, 0.4);
   z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon svg {
+  height: 70%;
+  width: 70%;
 }
 
 .icon span {
