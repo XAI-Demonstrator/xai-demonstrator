@@ -2,7 +2,7 @@
   <div>
     <button v-on:click="requestExplanation"
             v-if="!explanationResult"
-            class="xd-button xd-primary"
+            class="xd-button xd-secondary"
             v-bind:disabled="waitingForExplanation">
       <label>Wie kommst du zu dieser Einschätzung?</label>
     </button>
