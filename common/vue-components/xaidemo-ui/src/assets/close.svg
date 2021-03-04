@@ -7,9 +7,9 @@
    xmlns="http://www.w3.org/2000/svg"
    id="svg8"
    version="1.1"
-   viewBox="0 0 13.229166 26.458332"
+   viewBox="0 0 26.458332 26.458332"
    height="100"
-   width="50">
+   width="100">
   <defs
      id="defs2" />
   <metadata
@@ -27,9 +27,17 @@
   <g
      transform="translate(-8.3540525,-270.828)"
      id="layer1">
-    <path
-       id="path4518"
-       d="m 18.651831,291.92054 -7.37526,-7.86338 7.37526,-7.86337"
-       style="fill:none;stroke:#ebebeb;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal" />
+    <g
+       transform="translate(-0.98539083,0.28348667)"
+       id="g839">
+      <path
+         style="fill:none;stroke:#ebebeb;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
+         d="m 29.94387,291.63705 -7.37526,-7.86337 7.37526,-7.86337"
+         id="path4518" />
+      <path
+         style="fill:none;stroke:#ebebeb;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
+         d="m 15.19335,291.63705 7.37526,-7.86337 -7.37526,-7.86337"
+         id="path4518-8" />
+    </g>
   </g>
 </svg>
