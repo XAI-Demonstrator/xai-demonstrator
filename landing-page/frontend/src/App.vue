@@ -67,7 +67,7 @@ export default {
     }
   },
   created() {
-    document.title = "XAI Demonstrator"
+    document.title = "XAI-Demonstrator"
   }
 }
 </script>
