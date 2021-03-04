@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="explanation-request">
-      <button class="xd-button xd-secondary"
+      <button class="xd-button xd-primary"
               v-show="!waitingForExplanation"
               v-bind:disabled="!predictionReady"
               v-on:click="buttonClicked">
