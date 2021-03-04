@@ -8,8 +8,8 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@xai-demonstrator/xaidemo-ui": "^0.3.1",
-    "core-js": "^3.9.0",
+    "@xai-demonstrator/xaidemo-ui": "^0.3.2",
+    "core-js": "^3.9.1",
     "vue": "^2.6.11"
   },
   "devDependencies": {
@@ -17,8 +17,8 @@
     "@vue/cli-plugin-eslint": "^4.5.11",
     "@vue/cli-service": "^4.5.11",
     "babel-eslint": "^10.1.0",
-    "eslint": "^7.20.0",
-    "eslint-plugin-vue": "^7.6.0",
+    "eslint": "^7.21.0",
+    "eslint-plugin-vue": "^7.7.0",
     "vue-template-compiler": "^2.6.11"
   },
   "eslintConfig": {
