@@ -25,10 +25,19 @@ export default {
     async predict(blob) {
       this.prediction = null;
 
+      while (this.cancelTokens.length > 0) {
+        this.cancelTokens.pop().cancel()
+      }
+
+      const source = axios.CancelToken.source();
+      this.cancelTokens.push(source);
+
       const form = new FormData();
       form.append('file', blob);
 
-      await axios.post(this.backendUrl + '/predict', form)
+      await axios.post(this.backendUrl + '/predict', form,{
+        cancelToken: source.token
+      })
           .then(response => {
             this.prediction = response.data.class_label
             this.$emit('inspection-completed')
@@ -41,7 +50,8 @@ export default {
   data() {
     return {
       prediction: null,
-      backendUrl: process.env.VUE_APP_BACKEND_URL
+      backendUrl: process.env.VUE_APP_BACKEND_URL,
+      cancelTokens: []
     }
   }
 }
