@@ -13,7 +13,9 @@ describe('InspectImage.vue', () => {
 
     beforeEach(() => {
             wrapper = shallowMount(InspectImage, localVue);
-            axios.CancelToken.source.mockImplementation(() => {return {token: "abcde"}})
+            axios.CancelToken.source.mockImplementation(() => {
+                return {token: 'abcde'}
+            })
         }
     )
 
@@ -72,6 +74,47 @@ describe('InspectImage.vue', () => {
 
         expect(wrapper.vm.$data.prediction).toBeNull()
         expect(wrapper.emitted('inspection-completed')).toBeFalsy()
+    })
+
+    it('CancelToken is added to cancelArray upon each request', async () => {
+        const response = {
+            data: {
+                class_label: 'foggy'
+            }
+        }
+        axios.post.mockImplementationOnce(() => Promise.resolve(response))
+        axios.CancelToken.source.mockImplementationOnce(() => {
+            return {token: 'abcde'}
+        })
+
+        await wrapper.vm.predict('fake-blob')
+
+        expect(wrapper.vm.$data.cancelArray.length).toBe(1)
+        expect(wrapper.vm.$data.cancelArray[0]).toBe('abcde')
+    })
+
+    it('all pending requests are canceled before a new request is made', async () => {
+        const firstToken = {cancel: jest.fn()}
+        const secondToken = {cancel: jest.fn()}
+        await wrapper.setData({cancelArray: [firstToken, secondToken]})
+
+        axios.CancelToken.source.mockImplementationOnce(() => {
+            return {token: 'abcde'}
+        })
+
+        const response = {
+            data: {
+                class_label: 'windy'
+            }
+        }
+        axios.post.mockImplementation(() => Promise.resolve(response))
+
+        await wrapper.vm.predict('fake-blob')
+
+        expect(firstToken.cancel.mock.calls.length).toBe(1)
+        expect(secondToken.cancel.mock.calls.length).toBe(1)
+        expect(wrapper.vm.$data.cancelArray.length).toBe(1)
+        expect(wrapper.vm.$data.cancelArray[0]).toBe('abcde')
     })
 
 })
