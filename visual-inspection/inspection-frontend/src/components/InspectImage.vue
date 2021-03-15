@@ -25,8 +25,9 @@ export default {
     async predict(blob) {
       this.prediction = null;
 
-      this.cancelTokens.map( (source) => source.cancel() )
-      this.cancelTokens = [];
+      while (this.cancelTokens.length > 0) {
+        this.cancelTokens.pop().cancel()
+      }
 
       const source = axios.CancelToken.source();
       this.cancelTokens.push(source);
