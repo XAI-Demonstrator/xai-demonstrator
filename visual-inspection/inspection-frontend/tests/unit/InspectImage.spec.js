@@ -90,7 +90,7 @@ describe('InspectImage.vue', () => {
         await wrapper.vm.predict('fake-blob')
 
         expect(wrapper.vm.$data.cancelArray.length).toBe(1)
-        expect(wrapper.vm.$data.cancelArray[0]).toBe('abcde')
+        expect(wrapper.vm.$data.cancelArray[0].token).toBe('abcde')
     })
 
     it('all pending requests are canceled before a new request is made', async () => {
@@ -107,14 +107,14 @@ describe('InspectImage.vue', () => {
                 class_label: 'windy'
             }
         }
-        axios.post.mockImplementation(() => Promise.resolve(response))
+        axios.post.mockImplementationOnce(() => Promise.resolve(response))
 
         await wrapper.vm.predict('fake-blob')
 
         expect(firstToken.cancel.mock.calls.length).toBe(1)
         expect(secondToken.cancel.mock.calls.length).toBe(1)
         expect(wrapper.vm.$data.cancelArray.length).toBe(1)
-        expect(wrapper.vm.$data.cancelArray[0]).toBe('abcde')
+        expect(wrapper.vm.$data.cancelArray[0].token).toBe('abcde')
     })
 
 })

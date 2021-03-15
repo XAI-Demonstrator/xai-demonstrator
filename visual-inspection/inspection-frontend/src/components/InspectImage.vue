@@ -25,14 +25,10 @@ export default {
     async predict(blob) {
       this.prediction = null;
 
-      for (let i = this.cancelArray.length - 1; i >= 0; i--) {
-        const source = this.cancelArray[i];
-        source.cancel();
-        this.cancelArray.splice(i, 1);
-      }
+      this.cancelArray.map( (source) => source.cancel() )
+      this.cancelArray = [];
 
-      const CancelToken = axios.CancelToken;
-      const source = CancelToken.source();
+      const source = axios.CancelToken.source();
       this.cancelArray.push(source);
 
       const form = new FormData();
