@@ -76,7 +76,7 @@ describe('InspectImage.vue', () => {
         expect(wrapper.emitted('inspection-completed')).toBeFalsy()
     })
 
-    it('CancelToken is added to cancelArray upon each request', async () => {
+    it('CancelTokens are recorded upon each request', async () => {
         const response = {
             data: {
                 class_label: 'foggy'
@@ -89,14 +89,14 @@ describe('InspectImage.vue', () => {
 
         await wrapper.vm.predict('fake-blob')
 
-        expect(wrapper.vm.$data.cancelArray.length).toBe(1)
-        expect(wrapper.vm.$data.cancelArray[0].token).toBe('abcde')
+        expect(wrapper.vm.$data.cancelTokens.length).toBe(1)
+        expect(wrapper.vm.$data.cancelTokens[0].token).toBe('abcde')
     })
 
     it('all pending requests are canceled before a new request is made', async () => {
         const firstToken = {cancel: jest.fn()}
         const secondToken = {cancel: jest.fn()}
-        await wrapper.setData({cancelArray: [firstToken, secondToken]})
+        await wrapper.setData({cancelTokens: [firstToken, secondToken]})
 
         axios.CancelToken.source.mockImplementationOnce(() => {
             return {token: 'abcde'}
@@ -113,8 +113,8 @@ describe('InspectImage.vue', () => {
 
         expect(firstToken.cancel.mock.calls.length).toBe(1)
         expect(secondToken.cancel.mock.calls.length).toBe(1)
-        expect(wrapper.vm.$data.cancelArray.length).toBe(1)
-        expect(wrapper.vm.$data.cancelArray[0].token).toBe('abcde')
+        expect(wrapper.vm.$data.cancelTokens.length).toBe(1)
+        expect(wrapper.vm.$data.cancelTokens[0].token).toBe('abcde')
     })
 
 })
