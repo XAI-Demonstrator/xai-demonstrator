@@ -26,18 +26,21 @@ export default {
       this.prediction = null;
 
       for (let i = this.cancelArray.length - 1; i >= 0; i--) {
-        const source = this.cancelArray[i].source();
+        const source = this.cancelArray[i];
         source.cancel();
         this.cancelArray.splice(i, 1);
       }
 
       const CancelToken = axios.CancelToken;
-      this.cancelArray.push(CancelToken);
+      const source = CancelToken.source();
+      this.cancelArray.push(source);
 
       const form = new FormData();
       form.append('file', blob);
 
-      await axios.post(this.backendUrl + '/predict', form)
+      await axios.post(this.backendUrl + '/predict', form,{
+        cancelToken: source.token
+      })
           .then(response => {
             this.prediction = response.data.class_label
             this.$emit('inspection-completed')
