@@ -25,6 +25,15 @@ export default {
     async predict(blob) {
       this.prediction = null;
 
+      for (let i = this.cancelArray.length - 1; i >= 0; i--) {
+        const source = this.cancelArray[i].source();
+        source.cancel();
+        this.cancelArray.splice(i, 1);
+      }
+
+      const CancelToken = axios.CancelToken;
+      this.cancelArray.push(CancelToken);
+
       const form = new FormData();
       form.append('file', blob);
 
@@ -41,7 +50,8 @@ export default {
   data() {
     return {
       prediction: null,
-      backendUrl: process.env.VUE_APP_BACKEND_URL
+      backendUrl: process.env.VUE_APP_BACKEND_URL,
+      cancelArray: []
     }
   }
 }
