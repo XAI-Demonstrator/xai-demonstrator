@@ -13,6 +13,7 @@ describe('InspectImage.vue', () => {
 
     beforeEach(() => {
             wrapper = shallowMount(InspectImage, localVue);
+            axios.CancelToken.source.mockImplementation(() => {return {token: "abcde"}})
         }
     )
 
