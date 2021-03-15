@@ -19,7 +19,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Slack Notification
-      uses: rtCamp/action-slack-notify@v2.1.2
+      uses: rtCamp/action-slack-notify@v2.1.3
       env:
         SLACK_CHANNEL: xai-demonstrator-monitor
         SLACK_MESSAGE: 'Deployed a new version of the docs :book: at https://xai-demonstrator.github.io/xai-demonstrator/ :nerd_face:'
