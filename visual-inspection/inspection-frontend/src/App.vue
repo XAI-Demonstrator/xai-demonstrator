@@ -99,7 +99,6 @@ export default {
       this.waitingForExplanation = false;
     },
     sizeRestrictions({minWidth, minHeight, maxWidth, maxHeight, imageSize}) {
-      console.log(minWidth, minHeight)
       return {
         minWidth: Math.max(this.minExplanationImgSize.width, (minWidth / 100) * imageSize.width),
         minHeight: Math.max(this.minExplanationImgSize.height, (minHeight / 100) * imageSize.height),
