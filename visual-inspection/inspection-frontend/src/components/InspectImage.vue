@@ -35,7 +35,7 @@ export default {
       const form = new FormData();
       form.append('file', blob);
 
-      await axios.post(this.backendUrl + '/predict', form,{
+      await axios.post(this.backendUrl + '/predict', form, {
         cancelToken: source.token
       })
           .then(response => {
