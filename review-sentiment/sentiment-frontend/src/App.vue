@@ -30,8 +30,7 @@ import ComposeReview from "@/components/ComposeReview";
 import AnalyzeReview from "@/components/AnalyzeReview";
 import ExplainAnalysis from "@/components/ExplainAnalysis";
 import {FloatingInfoButton, UseCaseHeader} from "@xai-demonstrator/xaidemo-ui";
-
-
+import axios from "axios";
 export default {
   name: 'App',
   components: {
@@ -86,12 +85,10 @@ export default {
       this.$refs.explainer.resetComponent()
       this.numberOfStars = null
     },
-
     analysisRequested() {
       this.$refs.explainer.resetComponent()
       this.numberOfStars = null
     },
-
     analysisCompleted(value) {
       this.numberOfStars = value
     }
@@ -103,6 +100,13 @@ export default {
   },
   created() {
     document.title = this.useCaseTitle + " – XAI Demonstrator"
+  },
+  mounted(){
+    axios.post(this.backendUrl + '/load')
+      .then()
+      .catch(error => {
+        console.log(error)
+      })
   }
 }
 </script>
@@ -111,37 +115,26 @@ export default {
 #app {
   display: flex;
 }
-
 main {
   flex-grow: 1;
 }
-
 @media screen and (max-width: 450px) {
-
   #app {
     flex-direction: column;
   }
-
 }
-
 @media screen and (min-width: 450px) and (max-height: 650px) {
-
   #app {
     flex-direction: column;
     align-items: center;
   }
-
   main {
     width: 450px;
   }
-
 }
-
 @media screen and (min-width: 450px) and (min-height: 650px) {
-
   #app {
     flex-direction: column;
   }
-
 }
 </style>
