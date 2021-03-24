@@ -31,6 +31,7 @@ import AnalyzeReview from "@/components/AnalyzeReview";
 import ExplainAnalysis from "@/components/ExplainAnalysis";
 import {FloatingInfoButton, UseCaseHeader} from "@xai-demonstrator/xaidemo-ui";
 import axios from "axios";
+
 export default {
   name: 'App',
   components: {
@@ -66,7 +67,7 @@ export default {
           paragraphs: [
             "Die KI baut auf dem von Google entwickelten BERT-Modell auf und ordnet einem Text einem bis fünf Sterne zu, je nachdem, wie negativ bzw. positiv die Bewertung ausfällt.",
             "Die Erklärungen werden mit Hilfe von gradientenbasierten XAI-Methoden erzeugt, die den Einfluss einzelner Silben und Wörter auf das Endresultat ermitteln.",
-              "<small>Modell: <a href='https://huggingface.co/nlptown/bert-base-multilingual-uncased-sentiment'>NLPTown bert-base-multilingual-uncased-sentiment</a> via <a href='https://huggingface.co/models'>Hugging Face Model Hub</a>, Erklärungen: <a href='https://captum.ai/'>Captum</a></small>"
+            "<small>Modell: <a href='https://huggingface.co/nlptown/bert-base-multilingual-uncased-sentiment'>NLPTown bert-base-multilingual-uncased-sentiment</a> via <a href='https://huggingface.co/models'>Hugging Face Model Hub</a>, Erklärungen: <a href='https://captum.ai/'>Captum</a></small>"
           ]
         }
       ],
@@ -101,12 +102,12 @@ export default {
   created() {
     document.title = this.useCaseTitle + " – XAI Demonstrator"
   },
-  mounted(){
-    axios.post(this.backendUrl + '/load')
-      .then()
-      .catch(error => {
-        console.log(error)
-      })
+  mounted() {
+    axios.get(this.backendUrl + '/load')
+        .then()
+        .catch(error => {
+          console.log(error)
+        })
   }
 }
 </script>
@@ -115,23 +116,28 @@ export default {
 #app {
   display: flex;
 }
+
 main {
   flex-grow: 1;
 }
+
 @media screen and (max-width: 450px) {
   #app {
     flex-direction: column;
   }
 }
+
 @media screen and (min-width: 450px) and (max-height: 650px) {
   #app {
     flex-direction: column;
     align-items: center;
   }
+
   main {
     width: 450px;
   }
 }
+
 @media screen and (min-width: 450px) and (min-height: 650px) {
   #app {
     flex-direction: column;
