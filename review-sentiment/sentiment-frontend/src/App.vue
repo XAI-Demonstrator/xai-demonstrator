@@ -102,8 +102,8 @@ export default {
   created() {
     document.title = this.useCaseTitle + " – XAI Demonstrator"
   },
-  mounted() {
-    axios.get(this.backendUrl + '/load')
+  async mounted() {
+    await axios.get(this.backendUrl + '/load')
         .then()
         .catch(error => {
           console.log(error)
