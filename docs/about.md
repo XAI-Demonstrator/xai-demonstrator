@@ -11,7 +11,8 @@ at the University of Ulm.
 - Maximilian Förster
 - Philipp Hühn  
 - Kilian Kluge
-- Lars Mostue  
+- Lars Mostue
+- Mike Rothenhäusler  
 - Isabel Schöberl
 - Philipp Schröppel
 - Irina Sigler
