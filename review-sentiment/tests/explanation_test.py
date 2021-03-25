@@ -68,7 +68,7 @@ def evaluate(review: str, nof_requests: int):
 #---------------------------------------------------------------------------------------
 # SET GLOBAL VARIABLES
 
-nof_requests = 20
+nof_requests = 2
 
 predict_link = "https://test.xaidemo.de/api/sentiment/predict"
 explain_link = "https://test.xaidemo.de/api/sentiment/explain"

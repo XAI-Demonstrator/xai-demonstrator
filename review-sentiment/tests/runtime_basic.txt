@@ -1,0 +1,79 @@
+RUNNING TESTS WITH 20 REQUESTS PER REVIEW
+------------------------------------------------------------
+evaluation of review: 
+Top Lage, ausgezeichnetes Frühstücksbuffet, super Wellnessbereich, super freundliches Personal
+prediction time (BW Cloud) - mean: 0.7536717894736842, std: 0.10779013055815988
+explanation time (BW Cloud) - mean: 6.482139315789474, std: 0.5662724723788989
+prediction time (BW Cloud) - first request: 0.775162
+explanation time (BW Cloud) - first request: 7.701516
+prediction time (Google Cloud) - mean: 1.022580684210526, std: 0.2069246770893502
+explanation time (Google Cloud) - mean: 6.833627105263157, std: 0.24282995319248113
+prediction time (Google Cloud) - first request: 19.148893
+explanation time (Google Cloud) - first request: 7.852896
+------------------------------------------------------------
+evaluation of review: 
+Das Hotel ist wirklich sehr schön. Die Speisen im Restaurant und zum Frühstück hervorragend. Das Personal ist schlecht organisiert.
+prediction time (BW Cloud) - mean: 0.5594970526315789, std: 0.07732780594563415
+explanation time (BW Cloud) - mean: 7.719093421052632, std: 0.9109002373731464
+prediction time (BW Cloud) - first request: 0.689525
+explanation time (BW Cloud) - first request: 7.072301
+prediction time (Google Cloud) - mean: 1.0089816842105266, std: 0.2303994878372991
+explanation time (Google Cloud) - mean: 9.347633, std: 0.32021133756745235
+prediction time (Google Cloud) - first request: 1.180695
+explanation time (Google Cloud) - first request: 9.665202
+------------------------------------------------------------
+evaluation of review: 
+Keine Sonnenschirme am Außenpool. Extrem lange Wartezeiten beim Essen, auch beim Frühstück. Mangelhaft abgestimmte Arbeitsprozesse im Service.
+prediction time (BW Cloud) - mean: 0.4529362105263157, std: 0.07576222655996918
+explanation time (BW Cloud) - mean: 8.318670842105263, std: 0.9577230151973269
+prediction time (BW Cloud) - first request: 0.530463
+explanation time (BW Cloud) - first request: 7.991869
+prediction time (Google Cloud) - mean: 1.0239196842105263, std: 0.23085156158063144
+explanation time (Google Cloud) - mean: 11.218256684210525, std: 0.36392697687369463
+prediction time (Google Cloud) - first request: 1.210003
+explanation time (Google Cloud) - first request: 11.471126
+------------------------------------------------------------
+evaluation of review: 
+Manche Tage verlangen nach Soulfood und genau das war es - super lecker, top Qualität und toll angerichtet. Bei dem Wetter finde ich eine Stunde Wartezeit auch ok. Preis-Leisung passt.
+prediction time (BW Cloud) - mean: 0.47903284210526315, std: 0.10138741641750802
+explanation time (BW Cloud) - mean: 10.47382857894737, std: 0.9893401636056712
+prediction time (BW Cloud) - first request: 0.636515
+explanation time (BW Cloud) - first request: 10.188998
+prediction time (Google Cloud) - mean: 1.1393137368421054, std: 0.2248727239971049
+explanation time (Google Cloud) - mean: 13.985715368421053, std: 0.2496033661143236
+prediction time (Google Cloud) - first request: 1.21423
+explanation time (Google Cloud) - first request: 15.572106
+------------------------------------------------------------
+evaluation of review: 
+Pizza war echt labberig und nicht mehr ganz warm. Der Lieferant kam nicht pünktlich. Das Tiramisu ist auch eher mäßig.
+prediction time (BW Cloud) - mean: 0.5090684736842105, std: 0.037503976091480755
+explanation time (BW Cloud) - mean: 7.673510684210527, std: 0.7923844415917294
+prediction time (BW Cloud) - first request: 0.583879
+explanation time (BW Cloud) - first request: 8.431812
+prediction time (Google Cloud) - mean: 1.0716236315789474, std: 0.23289621445257105
+explanation time (Google Cloud) - mean: 9.695202736842107, std: 0.26444837961208423
+prediction time (Google Cloud) - first request: 1.187293
+explanation time (Google Cloud) - first request: 9.922534
+------------------------------------------------------------
+evaluation of review: 
+Outstanding food, nicely packaged, but additional sauces and cutlery was missing.
+prediction time (BW Cloud) - mean: 0.8392237368421053, std: 0.1143003430969857
+explanation time (BW Cloud) - mean: 6.043273052631578, std: 0.39869450528410094
+prediction time (BW Cloud) - first request: 0.836159
+explanation time (BW Cloud) - first request: 5.358194
+prediction time (Google Cloud) - mean: 0.9412083157894736, std: 0.23948708519470974
+explanation time (Google Cloud) - mean: 6.441214210526317, std: 0.2567390597272645
+prediction time (Google Cloud) - first request: 1.174276
+explanation time (Google Cloud) - first request: 6.686435
+------------------------------------------------------------
+evaluation of review: 
+Leider war die Pizza viel zu lange im Ofen gewesen, daher sehr trocken und teilweise verkokelte Zwiebeln. Mir wurde noch nie so offensichtlich Essensabfall als Salat verkauft.
+prediction time (BW Cloud) - mean: 0.438191052631579, std: 0.07180695186948617
+explanation time (BW Cloud) - mean: 9.263805263157893, std: 0.6631393147660638
+prediction time (BW Cloud) - first request: 0.386727
+explanation time (BW Cloud) - first request: 8.788627
+prediction time (Google Cloud) - mean: 1.0186839473684213, std: 0.22825244104130196
+explanation time (Google Cloud) - mean: 13.055673526315788, std: 0.24482764700334927
+prediction time (Google Cloud) - first request: 1.188191
+explanation time (Google Cloud) - first request: 13.620823
+------------------------------------------------------------
