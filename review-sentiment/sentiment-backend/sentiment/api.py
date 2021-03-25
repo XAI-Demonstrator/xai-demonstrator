@@ -6,6 +6,7 @@ from pydantic import BaseModel, validator
 from .config import settings
 from .explainer.explainer import EXPLAINERS, Explanation, explain
 from .model.predict import Prediction, predict
+from sentiment.model.model import bert
 
 api = APIRouter()
 
