@@ -24,6 +24,11 @@ class PredictionRequest(BaseModel):
 def predict_sentiment(request: PredictionRequest) -> Prediction:
     return predict(text=request.text)
 
+@api.post("/load")
+def load_model():
+    model = bert.model
+    tokenizer = bert.tokenizer
+
 
 class ExplanationRequest(BaseModel):
     text: str
