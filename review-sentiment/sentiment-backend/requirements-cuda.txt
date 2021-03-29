@@ -6,6 +6,6 @@ transformers==4.2.2
 captum==0.3.1
 
 --find-links https://download.pytorch.org/whl/cu100/torch_stable.html
-torch==1.4.0
+torch==1.8.1
 
 git+https://github.com/xai-demonstrator/xai-demonstrator.git@a2e9b54a75ccaab9d77da420fd8d85b3001b9c24#egg=xaidemo&subdirectory=common/backend-utils
