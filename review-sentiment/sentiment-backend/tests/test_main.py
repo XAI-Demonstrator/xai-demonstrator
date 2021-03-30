@@ -27,6 +27,11 @@ def test_that_sentiment_is_explained():
     assert response.status_code == 200
     assert "explanation" in response_dict
 
+@pytest.mark.integration
+def test_that_model_is_loaded():
+    response = client.post('/load')
+    assert response.status_code == 200
+
 
 @pytest.mark.integration
 def test_that_sentiment_is_explained_with_custom_target():
