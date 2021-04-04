@@ -5,8 +5,8 @@ from pydantic import BaseModel, validator
 
 from .config import settings
 from .explainer.explainer import EXPLAINERS, Explanation, explain
+from .model.model import bert
 from .model.predict import Prediction, predict
-from sentiment.model.model import bert
 
 api = APIRouter()
 
@@ -25,10 +25,10 @@ class PredictionRequest(BaseModel):
 def predict_sentiment(request: PredictionRequest) -> Prediction:
     return predict(text=request.text)
 
-@api.post("/load")
-def load_model():
-    model = bert.model
-    tokenizer = bert.tokenizer
+
+@api.get("/load")
+def load():
+    bert.load()
 
 
 class ExplanationRequest(BaseModel):
