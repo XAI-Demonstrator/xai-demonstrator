@@ -30,27 +30,37 @@ class BertManager:
     @property
     def model(self) -> BertForSequenceClassification:
         if self._model is None:
-            with self._loading_lock:
-                self.logger.info("Acquired loading lock for model loading")
-                if self._model is None:
-                    self.logger.info("Loading model from disk...")
-                    self._model = self.load_model()
-                else:
-                    self.logger.info("Model was loaded in the meantime")
+            self._load_model()
         return self._model
+
+    def _load_model(self):
+        with self._loading_lock:
+            self.logger.info("Acquired loading lock for model loading")
+            if self._model is None:
+                self.logger.info("Loading model from disk...")
+                self._model = self.load_model()
+            else:
+                self.logger.info("Model was loaded in the meantime")
 
     @property
     def tokenizer(self) -> BertTokenizerFast:
         if self._tokenizer is None:
-            with self._loading_lock:
-                self.logger.info("Acquired loading lock for tokenizer loading")
-                if self._tokenizer is None:
-                    self.logger.info("Loading tokenizer from disk...")
-                    self._tokenizer = self.load_tokenizer()
-                else:
-                    self.logger.info("Tokenizer was loaded in the meantime")
+            self._load_tokenizer()
         # Workaround for https://github.com/huggingface/tokenizers/issues/537
         return copy.deepcopy(self._tokenizer)
+
+    def _load_tokenizer(self):
+        with self._loading_lock:
+            self.logger.info("Acquired loading lock for tokenizer loading")
+            if self._tokenizer is None:
+                self.logger.info("Loading tokenizer from disk...")
+                self._tokenizer = self.load_tokenizer()
+            else:
+                self.logger.info("Tokenizer was loaded in the meantime")
+
+    def load(self):
+        self._load_tokenizer()
+        self._load_model()
 
     @staticmethod
     @traced(attributes={"torch.device": str(my_device), "torch.device.type": my_device.type})
