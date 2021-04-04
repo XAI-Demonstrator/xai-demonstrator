@@ -27,7 +27,11 @@ export function makeServer({environment = "development"} = {}) {
                         ["!", null]
                     ]
                 }
-            ), {timing: 2000} )
+            ), {timing: 2000})
+
+            this.get("/load", () => ({
+                status: 'loaded'
+            }), {timing: 500})
 
 
         },
