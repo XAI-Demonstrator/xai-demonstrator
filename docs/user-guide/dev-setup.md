@@ -1,4 +1,4 @@
-# Installation
+# Set Up Your Development Environment
 
 The purpose of this short instruction is to set up an environment to clone the repository and run it locally on the users computer. 
 
@@ -55,21 +55,12 @@ While the different components and use cases each have their own set of requirem
 - **Linux**: We recommend using [PyEnv](https://github.com/pyenv/pyenv) to obtain the correct Python version and set up the virtual environment.
 - **macOS and Windows**: We recommend using the [Anaconda distribution](https://www.anaconda.com/products/individual).
 
-To be able to retrieve data from our repository hosted on GitHub we use pycharm professional. Pycharm professional can be 
-downloaded under following link: 
+
+## Tools
+
+PyCharm Professional can be downloaded under following link: 
 
 - https://www.jetbrains.com/de-de/pycharm/download/
-
-### Clone repository
-
-Open the repository on Github: 
-
-- https://github.com/XAI-Demonstrator/xai-demonstrator
-
-Copy link under code button and navigate in terminal to desired folder to save the project. Then run: 
-
-- git clone „fill in github link“
-
 
 
 ### Set up local server 

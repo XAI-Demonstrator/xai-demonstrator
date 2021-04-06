@@ -8,8 +8,8 @@ nav:
   - Home: 'index.md'
   - 'User Guide':
       - 'user-guide/getting-started.md'
+      - 'user-guide/dev-setup.md'
       - 'user-guide/use-cases.md'
-      - 'user-guide/installation.md'
       - 'user-guide/deployment.md'
   - 'Use Cases':
       - 'use-cases/review-sentiment.md'

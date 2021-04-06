@@ -16,7 +16,7 @@ In this tutorial, we'll show you all the commands you need in detail.
 
 !!! note "Installing Git"
 
-    To install *Git*... 
+    To install *Git*, see the instructions [here](/user-guide/dev-setup.md#Install_Git)
 
 !!! note "Downloading without Git"
 
@@ -39,7 +39,6 @@ After a couple of seconds, you'll find  the entire _XAI Demonstrator_ source
 code in a new folder called `xai-demonstrator`.
 
 ## Install Docker
-
 
 
 ## Run your very own XAI Demonstrator instance
