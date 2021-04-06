@@ -16,7 +16,7 @@ In this tutorial, we'll show you all the commands you need in detail.
 
 !!! note "Installing Git"
 
-    To install *Git*, see the instructions [here](/user-guide/dev-setup.md#Install_Git)
+    To install *Git*, see the instructions [here](/user-guide/dev-setup/#install-git)
 
 !!! note "Downloading without Git"
 

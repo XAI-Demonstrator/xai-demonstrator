@@ -4,7 +4,7 @@ The purpose of this short instruction is to set up an environment to clone the r
 
 ## Quick Start
 
-If you've developed with (parts of) the XAI Demonstrator's [tech stack](/tech-notes/tech-stack.md) before,
+If you've developed with (parts of) the XAI Demonstrator's [tech stack](/tech-notes/tech-stack/) before,
 chances are that you already have the required software installed or do not need detailed installation instructions.
 
 To write code for the XAI Demonstrator, you need
