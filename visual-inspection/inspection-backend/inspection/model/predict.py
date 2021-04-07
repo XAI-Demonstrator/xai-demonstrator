@@ -8,6 +8,7 @@ from pydantic import BaseModel
 from xaidemo.tracing import add_span_attributes, traced
 
 from .model import decode_label, model
+from ..config import settings
 
 
 class Prediction(BaseModel):
@@ -45,6 +46,10 @@ def predict(image_file: IO[bytes],
     add_span_attributes({"prediction.id": str(prediction_id)})
 
     input_img = Image.open(image_file)
+
+    if settings.log_input:
+        input_img.save(settings.log_path / f"{prediction_id}.png")
+
     model_input = preprocess(input_img)
 
     class_label = predict_class(model_input)
