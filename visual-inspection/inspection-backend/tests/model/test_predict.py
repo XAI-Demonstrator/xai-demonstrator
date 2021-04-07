@@ -1,4 +1,5 @@
 import pytest
+import pathlib
 
 from inspection.model import predict
 from PIL import Image
@@ -36,3 +37,20 @@ def test_that_a_prediction_is_generated(generate_image):
     img = generate_image(224, 224)
 
     _ = predict.predict(img)
+
+
+def test_that_input_is_saved(generate_image, mocker, tmp_path):
+    predict.settings.log_path = tmp_path
+    mocker.patch.object(predict, "predict_class", return_value="myclass")
+
+    img = generate_image(112, 112)
+
+    predict.settings.log_input = True
+    prediction = predict.predict(img)
+    expected_path = tmp_path / f"{str(prediction.prediction_id)}.png"
+    assert pathlib.Path.exists(expected_path)
+
+    predict.settings.log_input = False
+    prediction = predict.predict(img)
+    expected_path = tmp_path / f"{str(prediction.prediction_id)}.png"
+    assert not pathlib.Path.exists(expected_path)
