@@ -5,7 +5,7 @@ The purpose of this short instruction is to set up an environment to clone the r
 ## Quick Start
 
 If you've developed with (parts of) the XAI Demonstrator's [tech stack](/tech-notes/tech-stack/) before,
-chances are that you already have the required software installed or do not need detailed installation instructions.
+chances are that you already have the required software installed or do not need detailed setup instructions.
 
 To write code for the XAI Demonstrator, you need
 - Git
@@ -16,7 +16,19 @@ Then, you can clone
 [github.com/XAI-Demonstrator/xai-demonstrator](https://github.com/XAI-Demonstrator/xai-demonstrator)
 and are good to go.
 
-## Install Git
+## Tools
+
+All you need is a text editor and a terminal
+(under Windows, we recommend you use *Git Bash* that ships with [Git for Windows](https://gitforwindows.org/)).
+
+The XAI Demonstrator team uses *PyCharm Professional*, which supports not only Python, but web development as well.
+It can be downloaded [here](https://www.jetbrains.com/de-de/pycharm/download/).
+(Note that the *Community* version has only limited support for web development.
+The *Professional* version can be obtained for free for students and other educational users.)
+
+## Get the code
+
+### Install Git
 
 As almost all modern software projects, the XAI Demonstrator's code is stored in a [Git](https://git-scm.com/) repository.
 
@@ -33,9 +45,19 @@ As almost all modern software projects, the XAI Demonstrator's code is stored in
 - **Linux (Debian-based)**: `apt-get install git`
 - **Windows**: Download installer from [the official website](https://git-scm.com/download/win)
 
-## Install NodeJS
+### Clone the repository
 
-The XAI Demonstrator's frontend requires the [NodeJS JavaScript runtime](https://nodejs.org/en/).
+Navigate to the directory in which you want to keep the source code and run
+
+```shell
+git clone https://github.com/XAI-Demonstrator/xai-demonstrator.git
+```
+
+## Prepare for frontend development
+
+### Install NodeJS
+
+The XAI Demonstrator's frontends require the [NodeJS JavaScript runtime](https://nodejs.org/en/).
 
 - **macOS**: `brew install node@12`
 - **Windows**: Download the installer from [the official website](https://nodejs.org/dist/latest-v12.x/ )
@@ -46,35 +68,33 @@ The XAI Demonstrator's frontend requires the [NodeJS JavaScript runtime](https:/
     software, we recommend you use a version manager such as [NVM](https://github.com/nvm-sh/nvm)
     or [NVM for Windows](https://github.com/coreybutler/nvm-windows)
 
-## Install Python
+### Install frontend dependencies
 
-The XAI Demonstrator requires Python 3.8.
+Navigate to the frontend's directory (e.g., `cd visual-inspection/inspection-frontend`)
+and run `npm install`.
+
+To check that everything works as expected, run `npm test:unit` to execute the unit test suite.
+
+Afterwards, you can launch the frontend development server using `npm serve`.
+
+## Prepare for backend development
+
+### Install Python
+
+The XAI Demonstrator's backends require Python 3.8.
 We recommend that you set up a dedicated Python environment for your work on the XAI Demonstrator.
 While the different components and use cases each have their own set of requirements, to date these requirements are compatible.
 
 - **Linux**: We recommend using [PyEnv](https://github.com/pyenv/pyenv) to obtain the correct Python version and set up the virtual environment.
 - **macOS and Windows**: We recommend using the [Anaconda distribution](https://www.anaconda.com/products/individual).
 
+### Install backend dependencies
 
-## Tools
+Make sure your Python environment is activated
+and navigate to the backend's directory (e.g., `cd visual-inspection/inspection-backend`).
 
-PyCharm Professional can be downloaded under following link: 
+Then, first run `pip install -r requirements.txt` to install the backend's dependencies.
+To install the test dependencies that are only required for testing and development purposes,
+run `pip install -r requirements-test.txt`.
 
-- https://www.jetbrains.com/de-de/pycharm/download/
-
-
-### Set up local server 
-
-Navigate in: 
-
-- visual-inspection/inspection-frontend/
- 
-Now install npm:
-
-- npm install 
-
-Run npm: 
-
-- npm run serve
-
-Now click on one of the links to run the visual inspection use case locally.
+To check that everything works as expected, run `pytest tests/` to execute the unit test suite.

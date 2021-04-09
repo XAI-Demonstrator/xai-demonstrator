@@ -11,3 +11,16 @@ Frontend | [![Coverage Status](https://coveralls.io/repos/github/XAI-Demonstrato
   pre-trained on ImageNet
 - Backend microservice built with [FastAPI](https://fastapi.tiangolo.com/)
 - Frontend created with [VueJS](https://vuejs.org/)
+
+## Environment Variables
+
+Defined in [inspection/config.py](./inspection-backend/inspection/config.py).
+
+Variable | Description | Default Value
+---------|-------------|--------------
+`SERVICE_NAME` | The name that the app uses as its identifier, e.g. when logging or emitting traces | `"inspection-service"`
+`ROOT_PATH` | FastAPI root path ([doc](https://fastapi.tiangolo.com/advanced/behind-a-proxy/)) | `""`
+`PATH_PREFIX` | FastAPI router prefix ([doc](https://fastapi.tiangolo.com/tutorial/bigger-applications/#include-an-apirouter-with-a-custom-prefix-tags-responses-and-dependencies)) | `""`
+`DEFAULT_EXPLAINER` | The explanation generator to use if a request does not speficy one | `"lime"`
+`LOG_INPUT` | Save input images to disk | `False`
+`LOG_PATH` | Path to store the logged images | `./log`
