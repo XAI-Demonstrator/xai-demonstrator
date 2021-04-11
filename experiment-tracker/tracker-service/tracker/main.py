@@ -1,6 +1,6 @@
 import time
 import uuid
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 
 import couchdb
 from fastapi import FastAPI, HTTPException
@@ -19,6 +19,10 @@ class Request(BaseModel):
     response: Optional[Dict[str, Any]]
 
 
+class Dump(BaseModel):
+    requests: List[Request]
+
+
 @app.put("/record", status_code=201)
 def record(request: Request):
     repo[str(request.request_id)] = request.dict(exclude={'request_id'})
@@ -35,3 +39,9 @@ def retrieve(identifier: uuid.UUID) -> Request:
     except (KeyError, couchdb.ResourceNotFound):
         raise HTTPException(status_code=404,
                             detail=f"No record {str(identifier)} in database.")
+
+
+@app.get("/dump")
+def dump() -> Dump:
+    return Dump(requests=[Request(**repo[doc_id], request_id=doc_id)
+                          for doc_id in repo])

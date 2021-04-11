@@ -51,3 +51,15 @@ def test_that_request_for_missing_record_is_handled_gracefully(client):
     response = client.get(f"/get/{str(uuid.uuid4())}")
 
     assert response.status_code == 404
+
+
+def test_that_dump_is_created(client):
+    for _ in range(10):
+        record = example.copy()
+        record["request_id"] = str(uuid.uuid4())
+        _ = client.put("/record", json=record)
+
+    response = client.get("/dump")
+
+    assert response.status_code == 200
+    assert len(response.json()["requests"]) == 10
