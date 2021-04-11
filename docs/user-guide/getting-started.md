@@ -13,7 +13,6 @@ of software without making a mess.
 Don't worry if you've never used *Git* before.
 In this tutorial, we'll show you all the commands you need in detail.
 
-
 !!! note "Installing Git"
 
     To install *Git*, see the instructions [here](/user-guide/dev-setup/#install-git)
@@ -25,9 +24,11 @@ In this tutorial, we'll show you all the commands you need in detail.
     [as a ZIP file]().
 
     However, please note that without Git **you will not be able to
-    build use cases containers yourself.** Thus, you are restricted to
-    launching deployment configurations that utilize pre-built container
-    images (more on that in the next section).
+    run use cases locally,** because Python dependencies are installed
+    through Git.
+
+    Thus, you are restricted to launching deployment configurations that
+    utilize pre-built container images (more on that in the next section).
 
 To download ("check out") the _XAI Demontrator_ source code from GitHub,
 open a terminal (on Windows, we recommend *Git Bash*)
@@ -40,9 +41,20 @@ code in a new folder called `xai-demonstrator`.
 
 ## Install Docker
 
+All parts of the _XAI Demonstrator_ are packaged and run as Docker containers.
+These are best thought of as self-contained units that contain all required
+dependencies and runtimes.
+
+To run the _XAI Demonstrator_ or individual use cases locally, you need to install
+Docker (but nothing else).
+Docker is available for all common operating systems.
+See [the instructions in the Docker documentation](https://docs.docker.com/engine/install/)
+to learn how to install _Docker Engine_ on your local machine.
+Make sure you install the `docker-compose` utility as well.
 
 ## Run your very own XAI Demonstrator instance
 
+To launch the full _XAI Demonstrator_, you can use the `test-local` configuration:
 
 ```bash
 cd xai-demonstrator/deployments/test-local
@@ -51,10 +63,12 @@ docker-compose up
 
 !!! warning "Download size"
 
-    This will download several GB of files! 
+    This will download several GB of files from the GitHub Container Registry! 
 
-We used only a small part of the source code:
+After the downloads completed and the containers are spun up, you can visit your
+very own _XAI Demonstrator_ at [http://localhost:8000/](http://localhost:8000/).
 
+We used only a very small part of the source code:
 ```bash
 cat docker-compose.yml
 ```
