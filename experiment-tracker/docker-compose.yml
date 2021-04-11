@@ -17,6 +17,11 @@ services:
     build: ./database
     expose:
       - 5984
+    volumes:
+      - xaidemo-db:/opt/couchdb/data
     environment:
       COUCHDB_USER: ${COUCHDB_USER}
       COUCHDB_PASSWORD: ${COUCHDB_PASSWORD}
+
+volumes:
+  xaidemo-db:
