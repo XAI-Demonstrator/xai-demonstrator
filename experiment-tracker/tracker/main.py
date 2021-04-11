@@ -1,4 +1,4 @@
-import datetime
+import time
 import uuid
 from typing import Dict, Any, Optional
 
@@ -9,9 +9,13 @@ from pydantic import BaseModel, ValidationError
 
 from .config import settings
 
-couch = couchdb.Server(f"{settings.db_user}:{settings.db_password}@{settings.db_server}:{settings.db_port}")
+couch = couchdb.Server(f"http://{settings.db_user}:{settings.db_password}"
+                       f"@{settings.db_server}:{settings.db_port}")
 
-db = couch[settings.db_name]
+try:
+    db = couch.create(settings.db_name)
+except couchdb.PreconditionFailed:
+    db = couch[settings.db_name]
 
 app = FastAPI()
 
@@ -19,20 +23,21 @@ app = FastAPI()
 class Request(BaseModel):
     service_name: str
     request_id: uuid.UUID
-    timestamp: datetime.datetime = datetime.datetime.now()
+    timestamp: float = time.time()
     request: Optional[Dict[str, Any]]
     response: Optional[Dict[str, Any]]
 
 
 @app.put("/record")
 def record(request: Request):
-    db[request.request_id] = request.dict()
+    db[str(request.request_id)] = request.dict(exclude={'request_id'})
 
 
 @app.get("/get/{identifier}")
 def retrieve(identifier: uuid.UUID) -> Request:
     try:
-        return Request(**db[identifier])
+        return Request(**db[str(identifier)],
+                       request_id=identifier)
     except ValidationError:
         print("Invalid DB entry")
     except couchdb.ResourceNotFound:
