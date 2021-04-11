@@ -1,0 +1,23 @@
+version: '3.7'
+
+services:
+  tracker:
+    build: .
+    depends_on:
+      - couchdb
+    ports:
+      - 8000:8000
+    environment:
+      DB_SERVER: couchdb
+      DB_PORT: 5984
+      DB_USER: ${COUCHDB_USER}
+      DB_PASSWORD: ${COUCHDB_PASSWORD}
+
+  couchdb:
+    build:
+      ./database
+    expose:
+      - 5984
+    environment:
+      COUCHDB_USER: ${COUCHDB_USER}
+      COUCHDB_PASSWORD: ${COUCHDB_PASSWORD}
