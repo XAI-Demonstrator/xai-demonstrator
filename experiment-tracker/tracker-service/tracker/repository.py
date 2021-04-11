@@ -26,5 +26,9 @@ class Repository:
     def __setitem__(self, identifier: str, value):
         self.database[identifier] = value
 
+    def __iter__(self):
+        for doc_id in self.database:
+            yield doc_id
+
 
 repo = Repository()
