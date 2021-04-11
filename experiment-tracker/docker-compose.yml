@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   tracker:
-    build: .
+    build: ./tracker-service
     depends_on:
       - couchdb
     ports:
@@ -14,8 +14,7 @@ services:
       DB_PASSWORD: ${COUCHDB_PASSWORD}
 
   couchdb:
-    build:
-      ./database
+    build: ./database
     expose:
       - 5984
     environment:
