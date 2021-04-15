@@ -73,9 +73,9 @@ The XAI Demonstrator's frontends require the [NodeJS JavaScript runtime](https:/
 Navigate to the frontend's directory (e.g., `cd visual-inspection/inspection-frontend`)
 and run `npm install`.
 
-To check that everything works as expected, run `npm test:unit` to execute the unit test suite.
+To check that everything works as expected, run `npm run test:unit` to execute the unit test suite.
 
-Afterwards, you can launch the frontend development server using `npm serve`.
+Afterwards, you can launch the frontend development server using `npm run serve`.
 
 ## Prepare for backend development
 
