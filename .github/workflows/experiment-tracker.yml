@@ -1,0 +1,49 @@
+name: Experiment Tracker
+
+on:
+  push:
+    paths:
+      - 'experiment-tracker/**'
+      - '!experiment-tracker/**.md'
+
+jobs:
+  test-tracker-service:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2.2.2
+        with:
+          python-version: 3.8
+      - name: Lint with flake8
+        run: |
+          set -e
+          cd ./experiment-tracker/tracker-service
+          echo $PWD
+          pip install flake8
+          # stop the build if there are Python syntax errors or undefined names
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+      - name: Install dependencies
+        run: |
+          set -e
+          cd ./experiment-tracker/tracker-service
+          echo $PWD
+          pip install -r requirements.txt
+      - name: Run unit tests with pytest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COVERALLS_FLAG_NAME: experiment-tracker
+          ON_MASTER: ${{ github.ref == 'refs/heads/master' }}
+        run: |
+          set -e
+          cd ./experiment-tracker/tracker-service
+          echo $PWD
+          pip install -r requirements-test.txt
+          pytest -v --cov=tracker tests/
+          # when on master, pretend to be on branch x-cov-tracker-service
+          $ON_MASTER && export GITHUB_REF="refs/heads/x-cov-tracker-service"
+          $ON_MASTER && export GITHUB_HEAD_REF="x-cov-backend-utils"
+          coveralls --service=github
