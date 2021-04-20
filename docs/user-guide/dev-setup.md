@@ -98,3 +98,7 @@ To install the test dependencies that are only required for testing and developm
 run `pip install -r requirements-test.txt`.
 
 To check that everything works as expected, run `pytest tests/` to execute the unit test suite.
+
+## What's next?
+
+*TODO*
