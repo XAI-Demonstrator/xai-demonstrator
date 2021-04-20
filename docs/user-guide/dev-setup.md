@@ -8,8 +8,9 @@ If you've developed with (parts of) the XAI Demonstrator's [tech stack](/tech-no
 chances are that you already have the required software installed or do not need detailed setup instructions.
 
 To write code for the XAI Demonstrator, you need
+
 - Git
-- NodeJS
+- Node.js
 - Python
 
 Then, you can clone
@@ -55,16 +56,15 @@ git clone https://github.com/XAI-Demonstrator/xai-demonstrator.git
 
 ## Prepare for frontend development
 
-### Install NodeJS
-
-The XAI Demonstrator's frontends require the [NodeJS JavaScript runtime](https://nodejs.org/en/).
+### Install Node.js
+The XAI Demonstrator's frontends require the [Node.js JavaScript runtime](https://nodejs.org/en/).
 
 - **macOS**: `brew install node@12`
 - **Windows**: Download the installer from [the official website](https://nodejs.org/dist/latest-v12.x/ )
 
-!!! note "Recommendation: Use a Node Version Manager 💡"
+!!! note "Recommendation: Use a Node.js Version Manager 💡"
 
-    If you frequently work with NodeJS or would like to install NodeJS cleanly separated from your other
+    If you frequently work with Node.js or would like to install Node.js cleanly separated from your other
     software, we recommend you use a version manager such as [NVM](https://github.com/nvm-sh/nvm)
     or [NVM for Windows](https://github.com/coreybutler/nvm-windows)
 
