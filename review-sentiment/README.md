@@ -4,6 +4,8 @@ Build    | ![Review Sentiment](https://github.com/XAI-Demonstrator/xai-demonstra
 Backend  | [![Coverage Status](https://coveralls.io/repos/github/XAI-Demonstrator/xai-demonstrator/badge.svg?branch=x-cov-sentiment-backend)](https://coveralls.io/github/XAI-Demonstrator/xai-demonstrator?branch=x-cov-sentiment-backend)
 Frontend | [![Coverage Status](https://coveralls.io/repos/github/XAI-Demonstrator/xai-demonstrator/badge.svg?branch=x-cov-sentiment-frontend)](https://coveralls.io/github/XAI-Demonstrator/xai-demonstrator?branch=x-cov-sentiment-frontend)
 
+- **[Documentation](https://xai-demonstrator.github.io/xai-demonstrator/use-cases/review-sentiment/)**
+
 ## Components
 
 - Multilingual sentiment analysis provided by [NLPTown's bert-base-multilingual-uncased-sentiment](https://huggingface.co/nlptown/bert-base-multilingual-uncased-sentiment) model

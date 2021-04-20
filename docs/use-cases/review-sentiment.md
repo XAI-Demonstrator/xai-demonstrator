@@ -1,5 +1,14 @@
 # Customer Review Sentiment Analysis
 
+## Running the service locally (with Docker)
+
+To launch a standalone instance of the service:
+
+```shell
+cd review-sentiment
+docker-compose up
+```
+
 ## Running the service locally (without Docker)
 
 During development, it can be desirable to launch the service directly and not as a Docker container.
