@@ -2,7 +2,20 @@
   <div class="inspector">
     <MultiBounce v-if="!prediction"
                  v-bind:numberOfDots="3"/>
-    <p v-show="prediction && currentPrediction">„Das ist {{ prediction }}“</p>
+      <div v-if="prediction.length > 1">
+        <l>
+            <p v-show="prediction && currentPrediction">„Das ist {{ prediction[0] }} Genauigkeit“</p>
+            <p v-show="prediction && currentPrediction">„Das ist {{ prediction[1] }} Genauigkeit“</p>
+            <p v-show="prediction && currentPrediction">„Das ist {{ prediction[2] }} Genauigkeit“</p>
+        </l>
+      </div>
+      <div v-else>
+        <l>
+            <p v-show="prediction && currentPrediction">„Das ist {{ prediction[0] }} Genauigkeit“</p>
+        </l>
+      </div>
+    
+
   </div>
 </template>
 
@@ -23,7 +36,7 @@ export default {
   },
   methods: {
     async predict(blob) {
-      this.prediction = null;
+      this.prediction = [];
 
       while (this.cancelTokens.length > 0) {
         this.cancelTokens.pop().cancel()
@@ -39,8 +52,18 @@ export default {
         cancelToken: source.token
       })
           .then(response => {
-            this.prediction = response.data.class_label
-            this.$emit('inspection-completed')
+          if (response.data.length > 1)
+          {
+         this.prediction[0] = response.data[0].class_label.concat(' mit ', parseFloat(100*response.data[0].class_percentage).toFixed(2)+"%")
+         this.prediction[1] = response.data[1].class_label.concat(' mit ', parseFloat(100*response.data[1].class_percentage).toFixed(2)+"%")
+         this.prediction[2] = response.data[2].class_label.concat(' mit ', parseFloat(100*response.data[2].class_percentage).toFixed(2)+"%")
+
+          }
+          else
+          {
+         this.prediction[0] = response.data[0].class_label.concat(' mit ', parseFloat(100*response.data[0].class_percentage).toFixed(2)+"%")
+          }
+          this.$emit('inspection-completed')
           })
           .catch(error => {
             console.log(error)

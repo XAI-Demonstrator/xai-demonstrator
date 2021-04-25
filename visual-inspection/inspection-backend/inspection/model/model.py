@@ -99,5 +99,8 @@ GERMAN_LABELS = {
 
 
 def decode_label(prediction):
-    original_label = tf.keras.applications.mobilenet_v2.decode_predictions(prediction, top=1)[0][0][1]
-    return GERMAN_LABELS[original_label] if original_label in GERMAN_LABELS else original_label
+    original_list = tf.keras.applications.mobilenet_v2.decode_predictions(prediction, top=3)[0]
+    for i in range(0,len(original_list)):
+        original_list[i] = list(original_list[i])
+        original_list[i][1] = GERMAN_LABELS[original_list[i][1]] if original_list[i][1] in GERMAN_LABELS else original_list[i][1]
+    return original_list #GERMAN_LABELS[original_label] if original_label in GERMAN_LABELS else original_label

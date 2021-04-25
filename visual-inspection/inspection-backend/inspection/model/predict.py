@@ -14,6 +14,8 @@ from ..config import settings
 class Prediction(BaseModel):
     prediction_id: uuid.UUID
     class_label: str
+#NADER: added class_percentage feature 
+    class_percentage: float 
 
 
 @traced
@@ -52,7 +54,27 @@ def predict(image_file: IO[bytes],
 
     model_input = preprocess(input_img)
 
-    class_label = predict_class(model_input)
+    prediction_all = predict_class(model_input)
+    
+    #class_label = prediction_all[0][1]
+    #class_percentage = prediction_all[0][2]
+    print(len(prediction_all))
+    Top_Predictions = []
+    if len(prediction_all) > 1 :
+        for i in range(0, len(prediction_all)):
+            class_label = prediction_all[i][1]
+            class_percentage = prediction_all[i][2]
+            Top_Predictions.append(Prediction(prediction_id=prediction_id,
+                                    class_label=class_label, class_percentage= class_percentage))
+        return Top_Predictions
+    else:
+        class_label = prediction_all[0][1]
+        class_percentage = prediction_all[0][2]
+        Top_Predictions.append(Prediction(prediction_id=prediction_id,
+                         class_label=class_label, class_percentage= class_percentage))
+        return Top_Predictions
+    
+    #class_label = predict_class(model_input)
 
-    return Prediction(prediction_id=prediction_id,
-                      class_label=class_label)
+    #return Prediction(prediction_id=prediction_id,
+    #                  class_label=class_label)
