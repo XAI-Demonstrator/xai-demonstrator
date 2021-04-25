@@ -1,22 +1,33 @@
 <template>
   <div class="inspector">
-    <MultiBounce v-if="!prediction"
+    <MultiBounce v-if="prediction.length===0"
                  v-bind:numberOfDots="3"/>
       <div v-if="prediction.length > 1">
+           <span v-if="topAcc > 20">
         <l>
             <p v-show="prediction && currentPrediction">„Das ist {{ prediction[0] }} Genauigkeit“</p>
             <p v-show="prediction && currentPrediction">„Das ist {{ prediction[1] }} Genauigkeit“</p>
             <p v-show="prediction && currentPrediction">„Das ist {{ prediction[2] }} Genauigkeit“</p>
         </l>
+                 </span>
+  <span v-else>
+   
+      Das ist {{ topAcc }} Genauigkeit!!
+
+  </span>
       </div>
       <div v-else>
         <l>
             <p v-show="prediction && currentPrediction">„Das ist {{ prediction[0] }} Genauigkeit“</p>
         </l>
+  
       </div>
     
 
-  </div>
+          
+
+</div>
+
 </template>
 
 <script>
@@ -37,6 +48,7 @@ export default {
   methods: {
     async predict(blob) {
       this.prediction = [];
+      this.topAcc = null;
 
       while (this.cancelTokens.length > 0) {
         this.cancelTokens.pop().cancel()
@@ -63,7 +75,9 @@ export default {
           {
          this.prediction[0] = response.data[0].class_label.concat(' mit ', parseFloat(100*response.data[0].class_percentage).toFixed(2)+"%")
           }
-          this.$emit('inspection-completed')
+          this.topAcc =100*response.data[0].class_percentage;
+          this.$emit('inspection-completed');
+          
           })
           .catch(error => {
             console.log(error)
