@@ -43,6 +43,7 @@
                         v-on:inspection-completed="inspectionCompleted"/>
           <ExplainInspection ref="explainer"
                              v-bind:prediction-ready="currentPrediction"
+                             v-bind:Cls_Acc_List = "cls_accuracy_List" 
                              v-on:explanation-requested="explanationRequested"
                              v-on:explanation-received="explanationReceived"/>
         </div>
@@ -84,9 +85,11 @@ export default {
     },
     async requestInspection(canvas) {
       canvas.toBlob(await this.$refs.inspector.predict)
+ 
     },
     inspectionCompleted() {
       this.currentPrediction = true;
+      this.cls_accuracy_List =this.$refs.inspector.topPredictions;
     },
     async explanationRequested() {
       this.currentExplanation = false;

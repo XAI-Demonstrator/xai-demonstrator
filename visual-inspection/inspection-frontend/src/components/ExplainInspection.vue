@@ -1,14 +1,26 @@
 <template>
   <div>
     <div class="explanation-request">
-      <button class="xd-button xd-primary"
-              v-show="!waitingForExplanation"
-              v-bind:disabled="!predictionReady"
-              v-on:click="buttonClicked">
-        Woran erkennst du das?
-      </button>
-      <MultiBounce v-if="waitingForExplanation"
+            <MultiBounce v-if="waitingForExplanation"
                    v-bind:numberOfDots="3"/>
+    <div v-for="(item, index) in Cls_Acc_List" :key="index"> 
+        <span v-if="item[1] > MinAccuracy">
+            <button class="xd-button xd-primary"
+                  v-show="!waitingForExplanation && predictionReady"
+                  v-bind:disabled="!predictionReady"
+                  v-on:click="buttonClicked">
+            Warum ist das {{item[0]}} mit GK {{item[1]}}%?
+            </button>
+         </span>
+         <span v-else>
+            <button class="xd-button xd-primary"
+                  v-show="!waitingForExplanation  && predictionReady"
+                  v-bind:disabled="true"
+                  v-on:click="buttonClicked">
+             „Gk {{item[1]}}%, bitte passen Sie den Ausschnitt an!“
+            </button>
+          </span>
+     </div>
     </div>
   </div>
 </template>
@@ -27,7 +39,12 @@ export default {
     predictionReady: {
       type: Boolean,
       default: false
+    },
+    Cls_Acc_List: {
+      type: Object,
+      default: undefined
     }
+      
   },
   methods: {
     buttonClicked() {
@@ -73,6 +90,7 @@ export default {
   },
   data() {
     return {
+      MinAccuracy: 15.0,
       explanation: null,
       waitingForExplanation: false,
       backendUrl: process.env.VUE_APP_BACKEND_URL
@@ -84,10 +102,12 @@ export default {
 <style scoped>
 .explanation-request {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   width: 100%;
-  min-height: 60px;
+  min-height: 180px;
 }
+
 
 </style>

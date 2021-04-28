@@ -1,33 +1,16 @@
 <template>
   <div class="inspector">
     <MultiBounce v-if="prediction.length===0"
-                 v-bind:numberOfDots="3"/>
-      <div v-if="prediction.length > 1">
-           <span v-if="topAcc > 20">
-        <l>
+                 v-bind:numberOfDots="3"/>  
+       <div v-if="prediction.length > 1">
             <p v-show="prediction && currentPrediction">„Das ist {{ prediction[0] }} Genauigkeit“</p>
             <p v-show="prediction && currentPrediction">„Das ist {{ prediction[1] }} Genauigkeit“</p>
             <p v-show="prediction && currentPrediction">„Das ist {{ prediction[2] }} Genauigkeit“</p>
-        </l>
-                 </span>
-  <span v-else>
-   
-      Das ist {{ topAcc }} Genauigkeit!!
-
-  </span>
       </div>
       <div v-else>
-        <l>
             <p v-show="prediction && currentPrediction">„Das ist {{ prediction[0] }} Genauigkeit“</p>
-        </l>
-  
-      </div>
-    
-
-          
-
-</div>
-
+      </div>        
+  </div>
 </template>
 
 <script>
@@ -48,7 +31,7 @@ export default {
   methods: {
     async predict(blob) {
       this.prediction = [];
-      this.topAcc = null;
+      this.topPredictions = [];
 
       while (this.cancelTokens.length > 0) {
         this.cancelTokens.pop().cancel()
@@ -69,13 +52,17 @@ export default {
          this.prediction[0] = response.data[0].class_label.concat(' mit ', parseFloat(100*response.data[0].class_percentage).toFixed(2)+"%")
          this.prediction[1] = response.data[1].class_label.concat(' mit ', parseFloat(100*response.data[1].class_percentage).toFixed(2)+"%")
          this.prediction[2] = response.data[2].class_label.concat(' mit ', parseFloat(100*response.data[2].class_percentage).toFixed(2)+"%")
+         this.topPredictions[0] = [response.data[0].class_label, parseFloat(100*response.data[0].class_percentage).toFixed(2)];
+         this.topPredictions[1] = [response.data[1].class_label, parseFloat(100*response.data[1].class_percentage).toFixed(2)];
+         this.topPredictions[2] = [response.data[2].class_label, parseFloat(100*response.data[2].class_percentage).toFixed(2)];
 
           }
           else
           {
          this.prediction[0] = response.data[0].class_label.concat(' mit ', parseFloat(100*response.data[0].class_percentage).toFixed(2)+"%")
+         this.topPredictions[0] = [response.data[0].class_label, parseFloat(100*response.data[0].class_percentage).toFixed(2)];
           }
-          this.topAcc =100*response.data[0].class_percentage;
+          
           this.$emit('inspection-completed');
           
           })
@@ -96,11 +83,12 @@ export default {
 
 <style scoped>
 .inspector {
+  display: flex;
   width: 100%;
   display: flex;
-  flex-direction: row;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
-  min-height: 30px;
+  min-height: 90px;
 }
 </style>
