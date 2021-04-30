@@ -8,8 +8,8 @@
             <button class="xd-button xd-primary"
                   v-show="!waitingForExplanation && predictionReady"
                   v-bind:disabled="!predictionReady"
-                  v-on:click="buttonClicked">
-            Warum ist das {{item[0]}} mit GK {{item[1]}}%?
+                  v-on:click="buttonClicked(index)">
+            Warum ist das {{item[0]}} mit {{item[1]}}% Gk.?
             </button>
          </span>
          <span v-else>
@@ -17,7 +17,7 @@
                   v-show="!waitingForExplanation  && predictionReady"
                   v-bind:disabled="true"
                   v-on:click="buttonClicked">
-             „Gk {{item[1]}}%, bitte passen Sie den Ausschnitt an!“
+             {{item[1]}}% Gk., bitte passen Sie den Ausschnitt an!
             </button>
           </span>
      </div>
@@ -47,15 +47,17 @@ export default {
       
   },
   methods: {
-    buttonClicked() {
-      this.$emit('explanation-requested')
+    buttonClicked(index_of_label_to_explain) {
+     // document.write(index_of_label_to_explain);
+      this.$emit('explanation-requested', index_of_label_to_explain)
     },
-    async explain(blob) {
+    async explain(index_of_label_to_explain, blob) {
+      //document.write(index_of_label_to_explain + 10);
       this.waitingForExplanation = true;
 
       const form = new FormData();
       form.append('file', blob);
-
+      form.append('index_of_label_to_explain', index_of_label_to_explain);
       const rawParams = Object.fromEntries(new URLSearchParams(window.location.search.substring(1)))
       const allParams = unflatten(rawParams)
 
@@ -108,6 +110,5 @@ export default {
   width: 100%;
   min-height: 180px;
 }
-
 
 </style>

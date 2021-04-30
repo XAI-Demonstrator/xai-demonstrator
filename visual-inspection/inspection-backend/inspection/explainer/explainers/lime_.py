@@ -37,6 +37,7 @@ class LIMEConfiguration(BaseModel):
 @traced(label="compute_explanation", attributes={"explanation.method": "lime"})
 def lime_explanation(input_img: np.ndarray,
                      model_: tf.keras.models.Model,
+                     index_of_label_to_explain: int,
                      **settings) -> np.ndarray:
     config = LIMEConfiguration(**settings)
 
@@ -44,15 +45,14 @@ def lime_explanation(input_img: np.ndarray,
                                          top_labels=config.explainer.top_labels,
                                          num_features=config.explainer.num_features,
                                          num_samples=config.explainer.num_samples)
-
-    return render_explanation(explanation, config.renderer)
+    return render_explanation(explanation, index_of_label_to_explain, config.renderer)
 
 
 @traced
-def render_explanation(explanation: lime_image.ImageExplanation,
+def render_explanation(explanation: lime_image.ImageExplanation, index_of_label_to_explain : int,
                        config: RendererConfiguration):
     image, mask = explanation.get_image_and_mask(
-        explanation.top_labels[0],
+        explanation.top_labels[index_of_label_to_explain],
         positive_only=config.positive_only,
         negative_only=False,
         num_features=config.num_features,
