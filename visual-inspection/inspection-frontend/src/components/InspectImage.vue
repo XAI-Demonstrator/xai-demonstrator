@@ -1,16 +1,13 @@
 <template>
   <div class="inspector">
     <MultiBounce v-if="prediction.length===0"
-                 v-bind:numberOfDots="3"/>  
-       <div v-if="prediction.length > 1">
-            <p v-show="prediction && currentPrediction">„Das ist {{ prediction[0] }} Genauigkeit“</p>
-            <p v-show="prediction && currentPrediction">„Das ist {{ prediction[1] }} Genauigkeit“</p>
-            <p v-show="prediction && currentPrediction">„Das ist {{ prediction[2] }} Genauigkeit“</p>
-      </div>
-      <div v-else>
-            <p v-show="prediction && currentPrediction">„Das ist {{ prediction[0] }} Genauigkeit“</p>
-      </div>        
-  </div>
+                 v-bind:numberOfDots="3"/>     
+        <span v-if="currentPrediction && topPredictions[0][1] > MinAccuracy"> 
+            <div class="prediction-result" v-for="(item, index) in prediction" :key="index"> 
+                <p class="p-item">„Das ist {{item}} Genauigkeit“</p>
+            </div>
+        </span>  
+</div>
 </template>
 
 <script>
@@ -73,9 +70,10 @@ export default {
   },
   data() {
     return {
-      prediction: null,
+      prediction: [],
       backendUrl: process.env.VUE_APP_BACKEND_URL,
-      cancelTokens: []
+      cancelTokens: [],
+      MinAccuracy: 15
     }
   }
 }
@@ -91,4 +89,18 @@ export default {
   align-items: center;
   min-height: 90px;
 }
+.prediction-result {
+  flex-direction: column;
+  font-style: normal;
+  font-size: 16px;
+  text-align: center;
+  color: black;
+  border: 2px solid gray;
+    }
+  .center {
+  color: black;
+  text-align: center;
+  border: 3px solid red;
+}
+
 </style>

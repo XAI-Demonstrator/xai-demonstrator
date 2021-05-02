@@ -1,28 +1,23 @@
 <template>
-  <div>
-    <div class="explanation-request">
-            <MultiBounce v-if="waitingForExplanation"
-                   v-bind:numberOfDots="3"/>
-    <div v-for="(item, index) in Cls_Acc_List" :key="index"> 
-        <span v-if="item[1] > MinAccuracy">
-            <button class="xd-button xd-primary"
-                  v-show="!waitingForExplanation && predictionReady"
-                  v-bind:disabled="!predictionReady"
-                  v-on:click="buttonClicked(index)">
-            Warum ist das {{item[0]}} mit {{item[1]}}% Gk.?
-            </button>
-         </span>
+    <div>
+        <div class="explanation-request">
+                <MultiBounce v-if="waitingForExplanation"
+                       v-bind:numberOfDots="3"/>
+        <span v-if="Cls_Acc_List[0][1] > Cls_Min_Acc">
+            <div v-for="(item, index) in Cls_Acc_List" :key="index"> 
+                    <button class="xd-button xd-primary"
+                          v-show="!waitingForExplanation && predictionReady"
+                          v-bind:disabled="!predictionReady"
+                          v-on:click="buttonClicked(index)">
+                    Warum ist das {{item[0]}} mit {{item[1]}}% Gk.?
+                    </button>
+            </div>
+        </span>
          <span v-else>
-            <button class="xd-button xd-primary"
-                  v-show="!waitingForExplanation  && predictionReady"
-                  v-bind:disabled="true"
-                  v-on:click="buttonClicked">
-             {{item[1]}}% Gk., bitte passen Sie den Ausschnitt an!
-            </button>
-          </span>
-     </div>
+            <p class = "center">Ich bin mir noch nicht sicher, bitte passen Sie den Ausschnitt an!</p>
+        </span> 
+        </div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -43,6 +38,10 @@ export default {
     Cls_Acc_List: {
       type: Object,
       default: undefined
+    },
+    Cls_Min_Acc :{
+      type: Number,
+      default: 0
     }
       
   },
@@ -92,7 +91,6 @@ export default {
   },
   data() {
     return {
-      MinAccuracy: 15.0,
       explanation: null,
       waitingForExplanation: false,
       backendUrl: process.env.VUE_APP_BACKEND_URL
@@ -110,5 +108,13 @@ export default {
   width: 100%;
   min-height: 180px;
 }
+.center {
+  color: black;
+  text-align: center;
+  border: 3px solid red;
+}
+.xd-button{
+      border: 2px solid #fff;
+    }
 
 </style>

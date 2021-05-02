@@ -44,6 +44,7 @@
           <ExplainInspection ref="explainer"
                              v-bind:prediction-ready="currentPrediction"
                              v-bind:Cls_Acc_List = "cls_accuracy_List" 
+                             v-bind:Cls_Min_Acc = "cls_MinAccuracy"
                              v-on:explanation-requested="explanationRequested"
                              v-on:explanation-received="explanationReceived"/>
         </div>
@@ -90,6 +91,7 @@ export default {
     inspectionCompleted() {
       this.currentPrediction = true;
       this.cls_accuracy_List =this.$refs.inspector.topPredictions;
+      this.cls_MinAccuracy = this.$refs.inspector.MinAccuracy;
     },
     async explanationRequested(index_of_label_to_explain) {
          
