@@ -44,7 +44,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@master
     - name: Create container and publish to Registry
-      uses: elgohr/Publish-Docker-Github-Action@3.03
+      uses: elgohr/Publish-Docker-Github-Action@3.04
       with:
         name: xai-demonstrator/landing-page-service
         username: ${{ secrets.GHCR_PAT_OWNER }}
