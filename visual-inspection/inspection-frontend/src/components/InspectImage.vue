@@ -2,8 +2,10 @@
   <div class="inspector">
     <MultiBounce v-if="prediction.length===0"
                  v-bind:numberOfDots="3"/>     
-        <span v-if="currentPrediction && topPredictions[0][1] > MinAccuracy"> 
-            <div class="prediction-result" v-for="(item, index) in prediction" :key="index"> 
+        <span class="prediction-result" v-if="currentPrediction && topPredictions[0][1] > MinAccuracy"> 
+            Bestimmung:
+            <br />
+            <div v-for="(item, index) in prediction" :key="index"> 
                 <p class="p-item">„Das ist {{item}} Genauigkeit“</p>
             </div>
         </span>  
@@ -87,7 +89,7 @@ export default {
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  min-height: 90px;
+  min-height: 100px;
 }
 .prediction-result {
   flex-direction: column;

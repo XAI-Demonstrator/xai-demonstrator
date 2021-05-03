@@ -1,9 +1,14 @@
 <template>
     <div>
+        <br />
         <div class="explanation-request">
                 <MultiBounce v-if="waitingForExplanation"
                        v-bind:numberOfDots="3"/>
-        <span v-if="Cls_Acc_List[0][1] > Cls_Min_Acc">
+        <span class = "center_block_gray" v-show="!waitingForExplanation && predictionReady" v-if="Cls_Acc_List[0][1] > Cls_Min_Acc">
+            Erklärung:
+            <br />
+            <input type="radio" name="erk" v-model="positive_only" v-bind:value="0">Nur Relevant
+            <input type="radio" name="erk" v-model="positive_only" v-bind:value="1">Relevant und Nicht
             <div v-for="(item, index) in Cls_Acc_List" :key="index"> 
                     <button class="xd-button xd-primary"
                           v-show="!waitingForExplanation && predictionReady"
@@ -14,7 +19,7 @@
             </div>
         </span>
          <span v-else>
-            <p class = "center">Ich bin mir noch nicht sicher, bitte passen Sie den Ausschnitt an!</p>
+            <p class = "center_block_red" v-show="!waitingForExplanation && predictionReady">Ich bin mir noch nicht sicher, bitte passen Sie den Ausschnitt an!</p>
         </span> 
         </div>
     </div>
@@ -93,25 +98,33 @@ export default {
     return {
       explanation: null,
       waitingForExplanation: false,
-      backendUrl: process.env.VUE_APP_BACKEND_URL
+      backendUrl: process.env.VUE_APP_BACKEND_URL,
+       positive_only_true: true,
+       positive_only_false: false
     }
   }
 }
 </script>
 
 <style scoped>
-.explanation-request {
+.explanation-request { 
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  min-height: 180px;
+  min-height: 200px;
 }
-.center {
+.center_block_red {
   color: black;
   text-align: center;
   border: 3px solid red;
+}
+.center_block_gray {
+  color: black;
+  text-align: center;
+  border: 2px solid gray;
+
 }
 .xd-button{
       border: 2px solid #fff;
