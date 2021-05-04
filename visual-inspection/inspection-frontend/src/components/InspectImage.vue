@@ -1,12 +1,16 @@
 <template>
   <div class="inspector">
-    <MultiBounce v-if="prediction.length===0"
+    <MultiBounce v-if="topPredictions.length===0"
                  v-bind:numberOfDots="3"/>     
         <span class="prediction-result" v-if="currentPrediction && topPredictions[0][1] > MinAccuracy"> 
             Bestimmung:
             <br />
-            <div v-for="(item, index) in prediction" :key="index"> 
-                <p class="p-item">„Das ist {{item}} Genauigkeit“</p>
+            <p>„Die KI ist sich zu {{topPredictions[0][1]}}% sicher, dass es sich um {{topPredictions[0][0]}} handelt.“</p>
+            <div v-for="(item, index) in topPredictions" :key="index"> 
+                <a v-show="index === 1">„Alternativ könnte das auch </a>
+                <a v-show="index > 0">{{item[0]}} ({{item[1]}}%)</a>
+                <a v-show="index > 0 && index < topPredictions.length-1"> oder </a>
+                <a v-show="index === topPredictions.length-1"> sein.“</a>
             </div>
         </span>  
 </div>
@@ -29,7 +33,7 @@ export default {
   },
   methods: {
     async predict(blob) {
-      this.prediction = [];
+      //this.prediction = [];
       this.topPredictions = [];
 
       while (this.cancelTokens.length > 0) {
@@ -48,9 +52,9 @@ export default {
           .then(response => {
           if (response.data.length > 1)
           {
-         this.prediction[0] = response.data[0].class_label.concat(' mit ', parseFloat(100*response.data[0].class_percentage).toFixed(2)+"%")
-         this.prediction[1] = response.data[1].class_label.concat(' mit ', parseFloat(100*response.data[1].class_percentage).toFixed(2)+"%")
-         this.prediction[2] = response.data[2].class_label.concat(' mit ', parseFloat(100*response.data[2].class_percentage).toFixed(2)+"%")
+         //this.prediction[0] = response.data[0].class_label.concat(' mit ', parseFloat(100*response.data[0].class_percentage).toFixed(2)+"%")
+         //this.prediction[1] = response.data[1].class_label.concat(' mit ', parseFloat(100*response.data[1].class_percentage).toFixed(2)+"%")
+         //this.prediction[2] = response.data[2].class_label.concat(' mit ', parseFloat(100*response.data[2].class_percentage).toFixed(2)+"%")
          this.topPredictions[0] = [response.data[0].class_label, parseFloat(100*response.data[0].class_percentage).toFixed(2)];
          this.topPredictions[1] = [response.data[1].class_label, parseFloat(100*response.data[1].class_percentage).toFixed(2)];
          this.topPredictions[2] = [response.data[2].class_label, parseFloat(100*response.data[2].class_percentage).toFixed(2)];
@@ -58,7 +62,7 @@ export default {
           }
           else
           {
-         this.prediction[0] = response.data[0].class_label.concat(' mit ', parseFloat(100*response.data[0].class_percentage).toFixed(2)+"%")
+         //this.prediction[0] = response.data[0].class_label.concat(' mit ', parseFloat(100*response.data[0].class_percentage).toFixed(2)+"%")
          this.topPredictions[0] = [response.data[0].class_label, parseFloat(100*response.data[0].class_percentage).toFixed(2)];
           }
           
@@ -72,7 +76,8 @@ export default {
   },
   data() {
     return {
-      prediction: [],
+      //prediction: [],
+      topPredictions: [],
       backendUrl: process.env.VUE_APP_BACKEND_URL,
       cancelTokens: [],
       MinAccuracy: 15

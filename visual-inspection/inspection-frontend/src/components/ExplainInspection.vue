@@ -7,19 +7,29 @@
         <span class = "center_block_gray" v-show="!waitingForExplanation && predictionReady" v-if="Cls_Acc_List[0][1] > Cls_Min_Acc">
             Erklärung:
             <br />
-            <input type="radio" name="erk" v-model="positive_only" v-bind:value="0">Nur Relevant
-            <input type="radio" name="erk" v-model="positive_only" v-bind:value="1">Relevant und Nicht
+            <input type="radio" name="erk" v-model="positive_only" v-bind:value="1">Relevant
+            <input type="radio" name="erk" v-model="positive_only" v-bind:value="0">Relevant und Unrelevant
             <div v-for="(item, index) in Cls_Acc_List" :key="index"> 
+                 <span v-if="index===0"> 
                     <button class="xd-button xd-primary"
                           v-show="!waitingForExplanation && predictionReady"
                           v-bind:disabled="!predictionReady"
-                          v-on:click="buttonClicked(index)">
-                    Warum ist das {{item[0]}} mit {{item[1]}}% Gk.?
+                          v-on:click="buttonClicked(index, positive_only)">
+                    Warum ist das {{item[0]}}?
                     </button>
+                  </span>
+                 <span v-else> 
+                    <button class="xd-button xd-primary"
+                          v-show="!waitingForExplanation && predictionReady"
+                          v-bind:disabled="!predictionReady"
+                          v-on:click="buttonClicked(index, positive_only)">
+                    Warum könnte das auch {{item[0]}} sein?
+                    </button>
+                  </span>
             </div>
         </span>
          <span v-else>
-            <p class = "center_block_red" v-show="!waitingForExplanation && predictionReady">Ich bin mir noch nicht sicher, bitte passen Sie den Ausschnitt an!</p>
+            <p class = "center_block_red" v-show="!waitingForExplanation && predictionReady">Die KI erkennt keinen Gegenstand mit ausreichender Genauigkeit. Bitte passen Sie den Bidlausschnitt an.</p>
         </span> 
         </div>
     </div>
@@ -51,17 +61,18 @@ export default {
       
   },
   methods: {
-    buttonClicked(index_of_label_to_explain) {
+    buttonClicked(index_of_label_to_explain, positive_only_parameter) {
      // document.write(index_of_label_to_explain);
-      this.$emit('explanation-requested', index_of_label_to_explain)
+      this.$emit('explanation-requested', index_of_label_to_explain, positive_only_parameter)
     },
-    async explain(index_of_label_to_explain, blob) {
+    async explain(index_of_label_to_explain,positive_only_parameter, blob) {
       //document.write(index_of_label_to_explain + 10);
       this.waitingForExplanation = true;
 
       const form = new FormData();
       form.append('file', blob);
       form.append('index_of_label_to_explain', index_of_label_to_explain);
+      form.append('positive_only_parameter', positive_only_parameter);
       const rawParams = Object.fromEntries(new URLSearchParams(window.location.search.substring(1)))
       const allParams = unflatten(rawParams)
 
@@ -100,7 +111,8 @@ export default {
       waitingForExplanation: false,
       backendUrl: process.env.VUE_APP_BACKEND_URL,
        positive_only_true: true,
-       positive_only_false: false
+       positive_only_false: false,
+       positive_only: 1
     }
   }
 }
@@ -119,6 +131,7 @@ export default {
   color: black;
   text-align: center;
   border: 3px solid red;
+  padding: 15px;
 }
 .center_block_gray {
   color: black;
