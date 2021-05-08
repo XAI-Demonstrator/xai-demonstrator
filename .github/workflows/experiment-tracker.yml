@@ -45,5 +45,5 @@ jobs:
           pytest -v --cov=tracker tests/
           # when on master, pretend to be on branch x-cov-tracker-service
           $ON_MASTER && export GITHUB_REF="refs/heads/x-cov-tracker-service"
-          $ON_MASTER && export GITHUB_HEAD_REF="x-cov-backend-utils"
+          $ON_MASTER && export GITHUB_HEAD_REF="x-cov-tracker-service"
           coveralls --service=github
