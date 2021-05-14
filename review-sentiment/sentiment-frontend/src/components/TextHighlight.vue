@@ -49,9 +49,9 @@ export default {
     },
     calcLightness(score) {
       if (score <= 0) {
-        return Math.min(this.preScaler * Math.abs(score) * 40, 40)
+        return 40
       } else {
-        return Math.min(this.preScaler * Math.abs(score) * 27, 27)
+        return 27
       }
     },
     whitespace(word) {
