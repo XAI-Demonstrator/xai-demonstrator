@@ -8,7 +8,7 @@ aiofiles==0.6.0
 python-multipart==0.0.5
 lime==0.2.0.1
 
-tensorflow-cpu==2.4.1
+tensorflow-cpu==2.5.0
 Pillow==8.2.0
 
 git+https://github.com/xai-demonstrator/xai-demonstrator.git@a2e9b54a75ccaab9d77da420fd8d85b3001b9c24#egg=xaidemo&subdirectory=common/backend-utils
