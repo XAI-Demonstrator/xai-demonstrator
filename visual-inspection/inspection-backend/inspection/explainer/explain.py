@@ -27,7 +27,6 @@ def generate_output_image(raw_image: np.ndarray,
     buffered = io.BytesIO()
     exp_image.save(buffered, format="png")
     encoded_image_string = base64.b64encode(buffered.getvalue())
-
     return bytes("data:image/png;base64,", encoding="utf-8") + encoded_image_string
 
 
@@ -52,6 +51,5 @@ def explain(image_file: IO[bytes],
     explainer_input = preprocess(input_image)[0]
 
     raw_image = EXPLAINERS[method](explainer_input, model_, index_of_label_to_explain,positive_only_parameter, **settings)
-
     return Explanation(explanation_id=explanation_id,
                        image=generate_output_image(raw_image, input_image.size))

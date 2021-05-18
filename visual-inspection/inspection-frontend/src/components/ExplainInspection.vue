@@ -7,22 +7,22 @@
         <span class = "center_block_gray" v-show="!waitingForExplanation && predictionReady" v-if="Cls_Acc_List[0][1] > Cls_Min_Acc">
             Erklärung:
             <br />
-            <input type="radio" name="erk" v-model="positive_only" v-bind:value="1">Relevant
-            <input type="radio" name="erk" v-model="positive_only" v-bind:value="0">Relevant und Unrelevant
             <div v-for="(item, index) in Cls_Acc_List" :key="index"> 
                  <span v-if="index===0"> 
                     <button class="xd-button xd-primary"
+                          ref="'B'+index"
                           v-show="!waitingForExplanation && predictionReady"
                           v-bind:disabled="!predictionReady"
-                          v-on:click="buttonClicked(index, positive_only)">
+                          v-on:click="buttonClicked(index, positive_only, $event)">
                     Warum ist das {{item[0]}}?
                     </button>
                   </span>
                  <span v-else> 
                     <button class="xd-button xd-primary"
+                          ref="'B'+index"
                           v-show="!waitingForExplanation && predictionReady"
                           v-bind:disabled="!predictionReady"
-                          v-on:click="buttonClicked(index, positive_only)">
+                          v-on:click="buttonClicked(index, positive_only, $event)">
                     Warum könnte das auch {{item[0]}} sein?
                     </button>
                   </span>
@@ -50,6 +50,10 @@ export default {
       type: Boolean,
       default: false
     },
+    isButtonClicked: {
+      type: Boolean,
+      default: false
+    }, 
     Cls_Acc_List: {
       type: Object,
       default: undefined
@@ -61,9 +65,15 @@ export default {
       
   },
   methods: {
-    buttonClicked(index_of_label_to_explain, positive_only_parameter) {
-     // document.write(index_of_label_to_explain);
-      this.$emit('explanation-requested', index_of_label_to_explain, positive_only_parameter)
+    buttonClicked(index_of_label_to_explain, positive_only_parameter, event) {
+    this.$emit('explanation-requested', index_of_label_to_explain, positive_only_parameter);
+    let elems = document.getElementsByTagName('button');
+    for(let i = 0; i < elems.length; i++)
+      {
+         elems[i].disabled = false;
+      }
+    event.target.disabled = true;
+
     },
     async explain(index_of_label_to_explain,positive_only_parameter, blob) {
       //document.write(index_of_label_to_explain + 10);
@@ -110,9 +120,7 @@ export default {
       explanation: null,
       waitingForExplanation: false,
       backendUrl: process.env.VUE_APP_BACKEND_URL,
-       positive_only_true: true,
-       positive_only_false: false,
-       positive_only: 1
+      positive_only: 0
     }
   }
 }
@@ -125,7 +133,7 @@ export default {
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  min-height: 200px;
+  min-height: 190px;
 }
 .center_block_red {
   color: black;
@@ -137,7 +145,7 @@ export default {
   color: black;
   text-align: center;
   border: 2px solid gray;
-
+  padding: 10px;
 }
 .xd-button{
       border: 2px solid #fff;

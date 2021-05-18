@@ -5,12 +5,12 @@
         <span class="prediction-result" v-if="currentPrediction && topPredictions[0][1] > MinAccuracy"> 
             Bestimmung:
             <br />
-            <p>„Die KI ist sich zu {{topPredictions[0][1]}}% sicher, dass es sich um {{topPredictions[0][0]}} handelt.“</p>
+            <p>Die KI ist sich zu {{topPredictions[0][1]}}% sicher, dass es sich um {{topPredictions[0][0]}} handelt.</p>
             <div v-for="(item, index) in topPredictions" :key="index"> 
-                <a v-show="index === 1">„Alternativ könnte das auch </a>
+                <a v-show="index === 1">Alternativ könnte das auch </a>
                 <a v-show="index > 0">{{item[0]}} ({{item[1]}}%)</a>
                 <a v-show="index > 0 && index < topPredictions.length-1"> oder </a>
-                <a v-show="index === topPredictions.length-1"> sein.“</a>
+                <a v-show="index === topPredictions.length-1"> sein.</a>
             </div>
         </span>  
 </div>
@@ -55,15 +55,15 @@ export default {
          //this.prediction[0] = response.data[0].class_label.concat(' mit ', parseFloat(100*response.data[0].class_percentage).toFixed(2)+"%")
          //this.prediction[1] = response.data[1].class_label.concat(' mit ', parseFloat(100*response.data[1].class_percentage).toFixed(2)+"%")
          //this.prediction[2] = response.data[2].class_label.concat(' mit ', parseFloat(100*response.data[2].class_percentage).toFixed(2)+"%")
-         this.topPredictions[0] = [response.data[0].class_label, parseFloat(100*response.data[0].class_percentage).toFixed(2)];
-         this.topPredictions[1] = [response.data[1].class_label, parseFloat(100*response.data[1].class_percentage).toFixed(2)];
-         this.topPredictions[2] = [response.data[2].class_label, parseFloat(100*response.data[2].class_percentage).toFixed(2)];
+         this.topPredictions[0] = [response.data[0].class_label, parseFloat(100*response.data[0].class_percentage).toFixed(0)];
+         this.topPredictions[1] = [response.data[1].class_label, parseFloat(100*response.data[1].class_percentage).toFixed(0)];
+         this.topPredictions[2] = [response.data[2].class_label, parseFloat(100*response.data[2].class_percentage).toFixed(0)];
 
           }
           else
           {
          //this.prediction[0] = response.data[0].class_label.concat(' mit ', parseFloat(100*response.data[0].class_percentage).toFixed(2)+"%")
-         this.topPredictions[0] = [response.data[0].class_label, parseFloat(100*response.data[0].class_percentage).toFixed(2)];
+         this.topPredictions[0] = [response.data[0].class_label, parseFloat(100*response.data[0].class_percentage).toFixed(0)];
           }
           
           this.$emit('inspection-completed');
@@ -94,7 +94,7 @@ export default {
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  min-height: 100px;
+  min-height: 150px;
 }
 .prediction-result {
   flex-direction: column;
@@ -103,6 +103,7 @@ export default {
   text-align: center;
   color: black;
   border: 2px solid gray;
+  padding: 10px;
     }
   .center {
   color: black;
