@@ -9,16 +9,16 @@
   },
   "dependencies": {
     "@xai-demonstrator/xaidemo-ui": "^0.3.2",
-    "core-js": "^3.12.0",
+    "core-js": "^3.12.1",
     "vue": "^2.6.11"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^4.5.13",
-    "@vue/cli-plugin-eslint": "^4.5.13",
-    "@vue/cli-service": "^4.5.13",
+    "@vue/cli-plugin-babel": "^4.5.12",
+    "@vue/cli-plugin-eslint": "^4.5.12",
+    "@vue/cli-service": "^4.5.12",
     "babel-eslint": "^10.1.0",
-    "eslint": "^7.26.0",
-    "eslint-plugin-vue": "^7.9.0",
+    "eslint": "^7.23.0",
+    "eslint-plugin-vue": "^7.8.0",
     "vue-template-compiler": "^2.6.11"
   },
   "eslintConfig": {
