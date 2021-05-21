@@ -23,11 +23,12 @@ def preprocess(img: Image) -> np.ndarray:
     add_span_attributes({"image.size": img.size})
 
     # cf. https://deeplizard.com/learn/video/OO4HD-1wRN8
-    img = img.resize((224, 224), Image.BICUBIC)
+    img = img.resize((299, 299), Image.BICUBIC)
     img_array = tf.keras.preprocessing.image.img_to_array(img)
     img_array = np.expand_dims(img_array, axis=0)
     img_array = img_array[:, :, :, :3]
-    return tf.keras.applications.mobilenet_v2.preprocess_input(img_array)
+    #return tf.keras.applications.mobilenet_v2.preprocess_input(img_array)
+    return tf.keras.applications.xception.preprocess_input(img_array)
 
 
 @traced

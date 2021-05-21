@@ -10,7 +10,7 @@
                 <a v-show="index === 1">Alternativ könnte das auch </a>
                 <a v-show="index > 0">{{item[0]}} ({{item[1]}}%)</a>
                 <a v-show="index > 0 && index < topPredictions.length-1"> oder </a>
-                <a v-show="index === topPredictions.length-1"> sein.</a>
+                <a v-show="index > 0 && index === topPredictions.length-1"> sein.</a>
             </div>
         </span>  
 </div>
@@ -50,22 +50,11 @@ export default {
         cancelToken: source.token
       })
           .then(response => {
-          if (response.data.length > 1)
-          {
-         //this.prediction[0] = response.data[0].class_label.concat(' mit ', parseFloat(100*response.data[0].class_percentage).toFixed(2)+"%")
-         //this.prediction[1] = response.data[1].class_label.concat(' mit ', parseFloat(100*response.data[1].class_percentage).toFixed(2)+"%")
-         //this.prediction[2] = response.data[2].class_label.concat(' mit ', parseFloat(100*response.data[2].class_percentage).toFixed(2)+"%")
-         this.topPredictions[0] = [response.data[0].class_label, parseFloat(100*response.data[0].class_percentage).toFixed(0)];
-         this.topPredictions[1] = [response.data[1].class_label, parseFloat(100*response.data[1].class_percentage).toFixed(0)];
-         this.topPredictions[2] = [response.data[2].class_label, parseFloat(100*response.data[2].class_percentage).toFixed(0)];
+              var i;
+              for (i = 0; i < response.data.length; i++) {
+                 this.topPredictions[i] = [response.data[i].class_label, parseFloat(100*response.data[i].class_percentage).toFixed(0)];
+          }
 
-          }
-          else
-          {
-         //this.prediction[0] = response.data[0].class_label.concat(' mit ', parseFloat(100*response.data[0].class_percentage).toFixed(2)+"%")
-         this.topPredictions[0] = [response.data[0].class_label, parseFloat(100*response.data[0].class_percentage).toFixed(0)];
-          }
-          
           this.$emit('inspection-completed');
           
           })
