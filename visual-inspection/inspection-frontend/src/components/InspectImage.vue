@@ -1,9 +1,19 @@
 <template>
   <div class="inspector">
-    <MultiBounce v-if="!prediction"
-                 v-bind:numberOfDots="3"/>
-    <p v-show="prediction && currentPrediction">„Das ist {{ prediction }}“</p>
-  </div>
+    <MultiBounce v-if="topPredictions.length===0"
+                 v-bind:numberOfDots="3"/>     
+        <span class="prediction-result" v-if="currentPrediction && topPredictions[0][1] > MinAccuracy"> 
+            Bestimmung:
+            <br />
+            <p>Die KI ist sich zu {{topPredictions[0][1]}}% sicher, dass es sich um {{topPredictions[0][0]}} handelt.</p>
+            <div v-for="(item, index) in topPredictions" :key="index"> 
+                <a v-show="index === 1">Alternativ könnte das auch </a>
+                <a v-show="index > 0">{{item[0]}} ({{item[1]}}%)</a>
+                <a v-show="index > 0 && index < topPredictions.length-1"> oder </a>
+                <a v-show="index > 0 && index === topPredictions.length-1"> sein.</a>
+            </div>
+        </span>  
+</div>
 </template>
 
 <script>
@@ -23,7 +33,8 @@ export default {
   },
   methods: {
     async predict(blob) {
-      this.prediction = null;
+      //this.prediction = [];
+      this.topPredictions = [];
 
       while (this.cancelTokens.length > 0) {
         this.cancelTokens.pop().cancel()
@@ -39,8 +50,13 @@ export default {
         cancelToken: source.token
       })
           .then(response => {
-            this.prediction = response.data.class_label
-            this.$emit('inspection-completed')
+              var i;
+              for (i = 0; i < response.data.length; i++) {
+                 this.topPredictions[i] = [response.data[i].class_label, parseFloat(100*response.data[i].class_percentage).toFixed(0)];
+          }
+
+          this.$emit('inspection-completed');
+          
           })
           .catch(error => {
             console.log(error)
@@ -49,9 +65,11 @@ export default {
   },
   data() {
     return {
-      prediction: null,
+      //prediction: [],
+      topPredictions: [],
       backendUrl: process.env.VUE_APP_BACKEND_URL,
-      cancelTokens: []
+      cancelTokens: [],
+      MinAccuracy: 15
     }
   }
 }
@@ -59,11 +77,27 @@ export default {
 
 <style scoped>
 .inspector {
+  display: flex;
   width: 100%;
   display: flex;
-  flex-direction: row;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
-  min-height: 30px;
+  min-height: 150px;
 }
+.prediction-result {
+  flex-direction: column;
+  font-style: normal;
+  font-size: 16px;
+  text-align: center;
+  color: black;
+  border: 2px solid gray;
+  padding: 10px;
+    }
+  .center {
+  color: black;
+  text-align: center;
+  border: 3px solid red;
+}
+
 </style>
