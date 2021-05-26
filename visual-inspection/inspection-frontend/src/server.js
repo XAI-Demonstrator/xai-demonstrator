@@ -11,7 +11,8 @@ export function makeServer({environment = "development"} = {}) {
             this.post("/predict", () => ({
                 prediction_id: 'abc',
                 class_label: labels[Math.floor(Math.random() * labels.length)],
-                class_id: 4
+                class_id: 4,
+               class_percentage : 1.0
             }),
                 {timing: 2000})
 
