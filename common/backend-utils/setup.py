@@ -8,7 +8,7 @@ setup(name='xaidemo',
       license='Apache 2.0',
       packages=['xaidemo'],
       install_requires=[
-          'aiofiles==0.6.0',
+          'aiofiles==0.7.0',
           'opentelemetry-api==0.17b0',
           'opentelemetry-sdk==0.17b0',
           'opentelemetry-instrumentation-fastapi==0.17b0',
