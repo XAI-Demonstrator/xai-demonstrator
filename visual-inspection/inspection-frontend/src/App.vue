@@ -4,9 +4,13 @@
         v-bind:standalone="!Boolean(backendUrl)"
         v-bind:title="useCaseTitle"/>
     <main>
-      <section>
-        <div class="xd-section xd-light">
+      <section class="app_heading">
+        <div v-if="!expButtonClicked">
           <p>Wähle einen Bildausschnitt und die KI bestimmt den Gegenstand.</p>
+        </div>
+        <div v-else>
+            <p>Ausgegraute Bereiche sind für die Entscheidung der KI weniger relevant gewesen.</p>
+            <p>Wähle einen neuen Bildausschnitt und die KI bestimmt weitere Gegenstände.</p>
         </div>
       </section>
       <div id="image-container">
@@ -43,6 +47,9 @@
                         v-on:inspection-completed="inspectionCompleted"/>
           <ExplainInspection ref="explainer"
                              v-bind:prediction-ready="currentPrediction"
+                             v-bind:Cls_Acc_List = "cls_accuracy_List"
+                             v-bind:isButtonClicked = "expButtonClicked"
+                             v-bind:Cls_Min_Acc = "cls_MinAccuracy"
                              v-on:explanation-requested="explanationRequested"
                              v-on:explanation-received="explanationReceived"/>
         </div>
@@ -79,24 +86,31 @@ export default {
       if (!this.waitingForExplanation) {
         this.currentPrediction = false;
         this.currentExplanation = false;
+        this.expButtonClicked = false;
         await this.debouncedRequestInspection(canvas)
       }
     },
     async requestInspection(canvas) {
       canvas.toBlob(await this.$refs.inspector.predict)
+ 
     },
     inspectionCompleted() {
       this.currentPrediction = true;
+      this.cls_accuracy_List =this.$refs.inspector.topPredictions;
+      this.cls_MinAccuracy = this.$refs.inspector.MinAccuracy;
     },
-    async explanationRequested() {
+    async explanationRequested(index_of_label_to_explain, positive_only_parameter) {
+         
       this.currentExplanation = false;
       this.waitingForExplanation = true;
-      this.$refs.cropper.getResult().canvas.toBlob(await this.$refs.explainer.explain)
+       
+      this.$refs.cropper.getResult().canvas.toBlob(await this.$refs.explainer.explain.bind(null, index_of_label_to_explain, positive_only_parameter))
     },
     explanationReceived(explanationImg) {
       this.explanationImg = explanationImg;
       this.currentExplanation = true;
       this.waitingForExplanation = false;
+      this.expButtonClicked = true;
     },
     sizeRestrictions({minWidth, minHeight, maxWidth, maxHeight, imageSize}) {
       return {
@@ -276,6 +290,14 @@ main section {
     width: 100%;
     max-width: 450px;
   }
+.app_heading { 
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 90px;
+  text-align: justify;
+  text-justify: inter-word;
+}
 
   .cropper {
     max-width: calc(450px - 16px);
