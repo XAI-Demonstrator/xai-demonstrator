@@ -2,6 +2,10 @@
   <div class="highlight-box">
     <span v-for="pair in processedExplanation" :key="pair.word + Math.random()"
           v-bind:style="{'color': calcHSL(pair.score)}">{{ whitespace(pair.word) }}{{ pair.word }}</span>
+    <p class ="legend-text">stärker</p>
+    <span class = "legend-box xd-green"></span>
+    <p class ="legend-text">schwächer</p>
+      <span class = "legend-box xd-red"></span>
   </div>
 </template>
 
@@ -45,9 +49,9 @@ export default {
     },
     calcLightness(score) {
       if (score <= 0) {
-        return Math.min(this.preScaler * Math.abs(score) * 40, 40)
+        return 40
       } else {
-        return Math.min(this.preScaler * Math.abs(score) * 27, 27)
+        return 27
       }
     },
     whitespace(word) {
@@ -77,4 +81,25 @@ export default {
   background-color: #fff;
   padding: 8px;
 }
+
+.legend-text{
+  font-size: small;
+  padding: 0;
+  margin:0 0.25em;
+  display: inline-block;
+  float: right;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 1.4em;
+}
+
+.legend-box{
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+  vertical-align: middle;
+  border-radius: 0.1em;
+  float: right;
+}
+
 </style>
