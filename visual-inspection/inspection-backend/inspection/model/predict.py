@@ -14,6 +14,8 @@ from ..config import settings
 class Prediction(BaseModel):
     prediction_id: uuid.UUID
     class_label: str
+#NADER: added class_percentage feature 
+    class_percentage: float 
 
 
 @traced
@@ -21,11 +23,12 @@ def preprocess(img: Image) -> np.ndarray:
     add_span_attributes({"image.size": img.size})
 
     # cf. https://deeplizard.com/learn/video/OO4HD-1wRN8
-    img = img.resize((224, 224), Image.BICUBIC)
+    img = img.resize((299, 299), Image.BICUBIC)
     img_array = tf.keras.preprocessing.image.img_to_array(img)
     img_array = np.expand_dims(img_array, axis=0)
     img_array = img_array[:, :, :, :3]
-    return tf.keras.applications.mobilenet_v2.preprocess_input(img_array)
+    #return tf.keras.applications.mobilenet_v2.preprocess_input(img_array)
+    return tf.keras.applications.xception.preprocess_input(img_array)
 
 
 @traced
@@ -52,7 +55,27 @@ def predict(image_file: IO[bytes],
 
     model_input = preprocess(input_img)
 
-    class_label = predict_class(model_input)
+    prediction_all = predict_class(model_input)
+    
+    #class_label = prediction_all[0][1]
+    #class_percentage = prediction_all[0][2]
+    print(len(prediction_all))
+    Top_Predictions = []
+    if len(prediction_all) > 1 :
+        for i in range(0, len(prediction_all)):
+            class_label = prediction_all[i][1]
+            class_percentage = prediction_all[i][2]
+            Top_Predictions.append(Prediction(prediction_id=prediction_id,
+                                    class_label=class_label, class_percentage= class_percentage))
+        return Top_Predictions
+    else:
+        class_label = prediction_all[0][1]
+        class_percentage = prediction_all[0][2]
+        Top_Predictions.append(Prediction(prediction_id=prediction_id,
+                         class_label=class_label, class_percentage= class_percentage))
+        return Top_Predictions
+    
+    #class_label = predict_class(model_input)
 
-    return Prediction(prediction_id=prediction_id,
-                      class_label=class_label)
+    #return Prediction(prediction_id=prediction_id,
+    #                  class_label=class_label)
