@@ -1,12 +1,61 @@
 import tensorflow as tf
 
 # TODO: Replace with custom model variant
-model = tf.keras.applications.MobileNetV2(input_shape=None,
-                                          include_top=True,
-                                          weights="imagenet")
-
+#model = tf.keras.applications.MobileNetV2(input_shape=None,
+#                                          include_top=True,
+#                                          weights="imagenet")
+model = tf.keras.applications.Xception( include_top=True,
+                                        weights="imagenet",
+                                        classes=1000,
+                                        classifier_activation="softmax")
 GERMAN_LABELS = {
+    "Polaroid_camera": "eine Sofortbildkamera",
+    "lens_cap": "ein Objektivdeckel",
+    "pedestal": "ein Sockel",
+    "necklace": "eine Halskette",
+    "typewriter_keyboard": "eine Schreibmaschinentastatur",
+    "laptop": "ein Laptop",
+    "pitcher": "ein Krug",
+    "tray": "ein Tablett",
+    "dishrag": "ein Abwaschtuch",
+    "doormat": "eine Fußmatte",
+    "binder": "ein Bindemittel",
+    "pencil_box": "eine Federtasche",
+    "joystick": "ein Steuergriff",
+    "letter_opener": "ein Brieföffner",
+    "measuring_cup": "ein Messbecher",
+    "mortar": "ein Mörtel",
+    "rubber_eraser": "ein  Radierer",
+    "projector": "ein Projektor",
+    "buckle": "eine Schnalle",
     "reel": "eine Rolle",
+    "paintbrush": "ein Malpinsel",
+    "ocarina": "eine Okarina",
+    "bottlecap": "Flaschenverschluss",
+    "syringe": "eine Spritze",
+    "lotion": "eine Lotion",
+    "stole": "eine Stola",
+    "apron": "eine Schürze",
+    "mailbag": "ein Briefbeutel",
+    "perfume": "ein Parfüm",
+    "sandal": "eine Sandale",
+    "flute": "eine Flöte",
+    "binoculars": "ein Fernglas",
+    "book_jacket": "ein Buchumschlag",
+    "honeycomb": "eine Honigwabe",
+    "poncho": "ein Poncho",
+    "water_bottle": "eine Wasserflasche",
+    "padlock": "ein Vorhängeschloss",
+    "pajama": "ein Schlafanzug",
+    "scale": "ein Maßstab",
+    "bib": "ein Latz",
+    "cassette_player": "ein Kassettenspieler",
+    "kimono": "ein Kimono",
+    "Windsor_tie": "eine Windsor-Krawatte",
+    "ladle": "Schöpfkelle",
+    "cornet": "ein Kornett",
+    "punching_bag": "ein Boxsack",
+    "tripod": "ein Dreifuß",
     "cellular_telephone": "ein Handy",
     "modem": "ein Modem",
     "computer_keyboard": "eine Tastatur",
@@ -14,8 +63,8 @@ GERMAN_LABELS = {
     "consomme": "eine Brühe",
     "cup": "eine Tasse",
     "espresso": "ein Espresso",
-    "face_powder": "Gesichtspuder",
-    "soap_dispenser": "Seifenspender",
+    "face_powder": "ein Gesichtspuder",
+    "soap_dispenser": "ein Seifenspender",
     "sarong": "ein Sarong",
     "swimming_trunks": "eine Badehose",
     "loupe": "eine Lupe",
@@ -30,10 +79,10 @@ GERMAN_LABELS = {
     "mouse": "eine Maus",
     "magnetic_compass": "ein Kompass",
     "strainer": "ein Sieb",
-    "pill_bottle": "eine Pillendose",
+    "pill_bottle": "ein Tablettenfläschchen",
     "handkerchief": "ein Taschentuch",
     "saltshaker": "ein Salzstreuer",
-    "eggnog": "Eierlikör",
+    "eggnog": "ein Eierlikör",
     "ballpoint": "ein Kugelschreiber",
     "chain": "eine Kette",
     "loudspeaker": "ein Lautsprecher",
@@ -44,7 +93,7 @@ GERMAN_LABELS = {
     "whistle": "eine Pfeife",
     "paper_towel": "ein Papierhandtuch",
     "band_aid": "ein Pflaster",
-    "beaker": "ein Messbecher",
+    "beaker": "ein Becher",
     "bolo_tie": "eine Westernkrawatte",
     "can_opener": "ein Dosenöffner",
     "cassette": "eine Kassette",
@@ -64,7 +113,7 @@ GERMAN_LABELS = {
     "sunglass": "ein Brennglas",
     "toaster": "ein Toaster",
     "toilet_seat": "eine Klobrille",
-    "velvet": "Samt",
+    "velvet": "measuring_cupSamt",
     "wall_clock": "eine Wanduhr",
     "windsor_tie": "eine Windsor-Krawatte",
     "notebook": "ein Notizbuch",
@@ -99,5 +148,9 @@ GERMAN_LABELS = {
 
 
 def decode_label(prediction):
-    original_label = tf.keras.applications.mobilenet_v2.decode_predictions(prediction, top=1)[0][0][1]
-    return GERMAN_LABELS[original_label] if original_label in GERMAN_LABELS else original_label
+    #original_list = tf.keras.applications.mobilenet_v2.decode_predictions(prediction, top=3)[0]
+    original_list = tf.keras.applications.xception.decode_predictions(prediction, top=3)[0]
+    for i in range(0,len(original_list)):
+        original_list[i] = list(original_list[i])
+        original_list[i][1] = GERMAN_LABELS[original_list[i][1]] if original_list[i][1] in GERMAN_LABELS else original_list[i][1]
+    return original_list #GERMAN_LABELS[original_label] if original_label in GERMAN_LABELS else original_label
