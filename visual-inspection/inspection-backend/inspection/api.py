@@ -19,6 +19,8 @@ def predict_weather(file: UploadFile = File(...)) -> Prediction:
 # TODO: Allow non-nested settings
 class ExplanationRequest(BaseModel):
     method: str = _settings.default_explainer
+    index_of_label_to_explain: int = 0
+    positive_only_parameter: bool = False
     settings: Dict[str, Dict[str, Union[StrictInt, StrictFloat, StrictBool,
                                         int, float, bool,
                                         str]]]
@@ -34,10 +36,12 @@ class ExplanationRequest(BaseModel):
             raise ValueError(f"{v} is not an available explanation method")
         return v
 
-
+#Nader We shoud add a top_index here to indey the top labels
 @api.post("/explain")
 def explain_classification(file: UploadFile = File(...),
                            method: Optional[str] = Form(None),
+                           index_of_label_to_explain: Optional[int] = Form(None),
+                           positive_only_parameter:  Optional[bool] = Form(None),
                            settings: Optional[str] = Form(None)) -> Explanation:
     if settings is not None:
         if method is None:
@@ -51,9 +55,11 @@ def explain_classification(file: UploadFile = File(...),
     try:
         request = ExplanationRequest.parse_raw('{"settings":' + settings + '}')
         request.method = method
+        request.index_of_label_to_explain = index_of_label_to_explain
+        request.positive_only_parameter = positive_only_parameter
     except ValidationError as errors_out:
         raise HTTPException(
             status_code=HTTP_422_UNPROCESSABLE_ENTITY, detail=errors_out.errors()
         )
 
-    return explain(file.file, method=request.method, settings=request.settings)
+    return explain(file.file, method=request.method,index_of_label_to_explain=request.index_of_label_to_explain ,positive_only_parameter=request.positive_only_parameter, settings=request.settings)
