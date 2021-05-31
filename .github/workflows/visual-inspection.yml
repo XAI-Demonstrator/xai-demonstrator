@@ -17,7 +17,7 @@ jobs:
         uses: actions/setup-python@v2.2.2
         with:
           python-version: 3.8
-      - uses: actions/cache@v2.1.5
+      - uses: actions/cache@v2.1.6
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('./visual-inspection/inspection-backend/requirements*.txt') }}
@@ -66,7 +66,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '12'
-      - uses: actions/cache@v2.1.5
+      - uses: actions/cache@v2.1.6
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('./visual-inspection/inspection-frontend/package-lock.json') }}
@@ -112,7 +112,7 @@ jobs:
       uses: actions/setup-python@v2.2.2
       with:
         python-version: 3.8
-    - uses: actions/cache@v2.1.5
+    - uses: actions/cache@v2.1.6
       with:
         path: ~/.cache/pip
         key: ${{ runner.os }}-pip-${{ hashFiles('./visual-inspection/inspection-backend/requirements*.txt') }}
