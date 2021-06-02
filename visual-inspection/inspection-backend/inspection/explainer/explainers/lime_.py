@@ -4,9 +4,9 @@ from lime import lime_image
 from pydantic import BaseModel
 from skimage.segmentation import mark_boundaries
 from xaidemo.tracing import traced
-
+# np.random.seed(0) # to have a fixed explanation eacch time it is aquired!! [Did not work]
+#np.random.seed(0)
 _lime = lime_image.LimeImageExplainer()
-
 
 class ExplainerConfiguration(BaseModel):
     top_labels: int = 5

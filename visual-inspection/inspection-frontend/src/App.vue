@@ -5,11 +5,10 @@
         v-bind:title="useCaseTitle"/>
     <main>
       <section class="app_heading">
-        <div v-if="!expButtonClicked">
+        <div v-if="!expDisplayed">
           <p>Wähle einen Bildausschnitt und die KI bestimmt den Gegenstand.</p>
         </div>
         <div v-else>
-            <p>Ausgegraute Bereiche sind für die Entscheidung der KI weniger relevant gewesen.</p>
             <p>Wähle einen neuen Bildausschnitt und die KI bestimmt weitere Gegenstände.</p>
         </div>
       </section>
@@ -48,7 +47,7 @@
           <ExplainInspection ref="explainer"
                              v-bind:prediction-ready="currentPrediction"
                              v-bind:Cls_Acc_List = "cls_accuracy_List"
-                             v-bind:isButtonClicked = "expButtonClicked"
+                             v-bind:explanationDisplayed = "expDisplayed"
                              v-bind:Cls_Min_Acc = "cls_MinAccuracy"
                              v-on:explanation-requested="explanationRequested"
                              v-on:explanation-received="explanationReceived"/>
@@ -86,8 +85,8 @@ export default {
       if (!this.waitingForExplanation) {
         this.currentPrediction = false;
         this.currentExplanation = false;
-        this.expButtonClicked = false;
-        await this.debouncedRequestInspection(canvas)
+        this.expDisplayed = false;
+        await this.debouncedRequestInspection(canvas);
       }
     },
     async requestInspection(canvas) {
@@ -110,7 +109,7 @@ export default {
       this.explanationImg = explanationImg;
       this.currentExplanation = true;
       this.waitingForExplanation = false;
-      this.expButtonClicked = true;
+      this.expDisplayed = true;
     },
     sizeRestrictions({minWidth, minHeight, maxWidth, maxHeight, imageSize}) {
       return {

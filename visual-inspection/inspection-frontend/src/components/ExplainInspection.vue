@@ -6,7 +6,6 @@
                        v-bind:numberOfDots="3"/>
         <span class = "center_block_gray" v-show="!waitingForExplanation && predictionReady" v-if="Cls_Acc_List[0][1] > Cls_Min_Acc">
             Erklärung:
-            <br />
             <div v-for="(item, index) in Cls_Acc_List" :key="index"> 
                  <span v-if="index===0"> 
                     <button class="xd-button xd-primary"
@@ -27,6 +26,9 @@
                     </button>
                   </span>
             </div>
+            <span v-if= "explanationDisplayed">
+                <p>Ausgegraute Bereiche im Bild sind für die Entscheidung der KI weniger relevant gewesen.</p>
+            </span>
         </span>
          <span v-else>
             <p class = "center_block_red" v-show="!waitingForExplanation && predictionReady">Die KI erkennt keinen Gegenstand mit ausreichender Genauigkeit. Bitte passen Sie den Bidlausschnitt an.</p>
@@ -50,10 +52,10 @@ export default {
       type: Boolean,
       default: false
     },
-    isButtonClicked: {
+    explanationDisplayed: {
       type: Boolean,
       default: false
-    }, 
+    },
     Cls_Acc_List: {
       type: Object,
       default: undefined
@@ -72,7 +74,7 @@ export default {
       {
          elems[i].disabled = false;
       }
-    event.target.disabled = true;
+    event.target.disabled = false;
 
     },
     async explain(index_of_label_to_explain,positive_only_parameter, blob) {
@@ -106,7 +108,7 @@ export default {
 
       await axios.post(this.backendUrl + '/explain', form)
           .then(response => {
-            this.$emit('explanation-received', response.data.image)
+            this.$emit('explanation-received', response.data.image);
             this.waitingForExplanation = false;
           })
           .catch(error => {
@@ -133,7 +135,7 @@ export default {
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  min-height: 190px;
+  min-height: 200px;
 }
 .center_block_red {
   color: black;
