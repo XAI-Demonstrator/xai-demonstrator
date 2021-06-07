@@ -59,7 +59,7 @@ jobs:
           dry-run: ${{ github.ref != 'refs/heads/master' }}
       - name: Slack Notification
         if: github.ref == 'refs/heads/master'
-        uses: rtCamp/action-slack-notify@v2.1.3
+        uses: rtCamp/action-slack-notify@v2.2.0
         env:
           SLACK_CHANNEL: xai-demonstrator-monitor
           SLACK_MESSAGE: 'Released a new version of @xai-demonstrator/xaidemo-ui :bricks: at https://www.npmjs.com/package/@xai-demonstrator/xaidemo-ui'
