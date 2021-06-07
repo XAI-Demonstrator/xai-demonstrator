@@ -16,7 +16,7 @@ jobs:
           retry-delay: 30s
       - name: Notify Slack
         if: ${{ failure() }}
-        uses: rtCamp/action-slack-notify@v2.1.3
+        uses: rtCamp/action-slack-notify@v2.2.0
         env:
           SLACK_CHANNEL: xai-demonstrator-monitor
           SLACK_MESSAGE: 'Cannot reach test deployment at https://test.xaidemo.de :disappointed:'
@@ -39,7 +39,7 @@ jobs:
           retry-delay: 30s
       - name: Notify Slack
         if: ${{ failure() }}
-        uses: rtCamp/action-slack-notify@v2.1.3
+        uses: rtCamp/action-slack-notify@v2.2.0
         env:
           SLACK_CHANNEL: xai-demonstrator-monitor
           SLACK_MESSAGE: 'Cannot reach prod deployment at https://www.xaidemo.de/ :rotating_light:'
