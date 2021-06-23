@@ -98,5 +98,6 @@ export default {
   vertical-align: middle;
   border-radius: 0.1em;
   float: right;
+
 }
 </style>
