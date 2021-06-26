@@ -2,12 +2,12 @@ wheel
 numpy
 pydantic
 
-fastapi==0.65.1
-uvicorn==0.13.4
-transformers==4.6.0
+fastapi==0.65.2
+uvicorn==0.14.0
+transformers==4.7.0
 captum==0.3.1
 
 --find-links https://download.pytorch.org/whl/torch_stable.html
-torch==1.8.1+cpu
+torch==1.9.0+cpu
 
 git+https://github.com/xai-demonstrator/xai-demonstrator.git@f1c235958a38d5e97061231a559c2a47b71ff32c#egg=xaidemo&subdirectory=common/backend-utils
