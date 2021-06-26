@@ -1,9 +1,13 @@
 <template>
   <div id="app" class="xd-app">
-    <div class="blank-header xd-primary"><h1>XAI-Demonstrator <span class="beta-label">Beta</span></h1></div>
+    <div class="blank-header xd-primary"><h1>XAI-Demonstrator <span class="beta-label">Beta</span></h1>
+    </div>
     <header class="xd-secondary">
+       <img class = "xai-icon" v-bind:src="require('@/assets/icon.svg' +'')"/>
+      <h2>XIA Demonstrator</h2>
       <h3>Hinterfrage die KI und entdecke Erklärbare Künstliche Intelligenz</h3>
     </header>
+
     <main>
       <div id="select">
         <a v-for="useCase in useCases" :key="useCase.title" v-bind:href="useCase.route">
@@ -84,7 +88,6 @@ export default {
   padding-left: 12px;
   display: flex;
   align-items: center;
-
   font-family: 'Calibri Light', sans-serif;
   box-shadow: 0 4px 12px rgba(120, 120, 120, 0.4);
 }
@@ -101,7 +104,6 @@ header {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  align-items: center;
   flex: 0;
   border-radius: 3px;
   box-shadow: 2px 2px 4px rgba(180, 180, 180, 0.5);
@@ -115,11 +117,26 @@ header h1, .blank-header h1 {
   font-size: 25px;
 }
 
+header h2{
+  color: #EBEBEB;
+  padding: 0;
+  margin: 0;
+  font-weight: 400;
+  font-size: 35px;
+  float: left;
+}
+
 header h3 {
   color: #EBEBEB;
   padding: 0;
   margin: 0;
   font-weight: 400;
+  align-items: center;
+}
+
+.xai-icon{
+  padding-bottom: 50px;
+  width: 70%;
 }
 
 #select {
