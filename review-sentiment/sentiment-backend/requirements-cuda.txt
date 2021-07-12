@@ -3,7 +3,7 @@ numpy
 fastapi==0.66.0
 uvicorn==0.14.0
 transformers==4.8.2
-captum==0.3.1
+captum==0.4.0
 
 --find-links https://download.pytorch.org/whl/cu100/torch_stable.html
 torch==1.4.0
