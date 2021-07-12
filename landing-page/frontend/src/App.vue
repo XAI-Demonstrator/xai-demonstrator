@@ -3,7 +3,6 @@
     <div class="blank-header xd-primary"><h1>XAI-Demonstrator <span class="beta-label">Beta</span></h1>
     </div>
     <header class="xd-secondary">
-       <img class = "xai-icon" v-bind:src="require('@/assets/icon.svg' +'')"/>
       <h2>XAI-Demonstrator</h2>
       <h3>Hinterfrage die KI und entdecke Erklärbare Künstliche Intelligenz</h3>
     </header>
