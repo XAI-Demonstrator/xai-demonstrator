@@ -11,7 +11,7 @@
   "dependencies": {
     "@xai-demonstrator/xaidemo-ui": "^0.3.3",
     "core-js": "^3.13.0",
-    "vue": "^2.6.11"
+    "vue": "^2.6.14"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.5.13",
@@ -22,10 +22,10 @@
     "axios": "^0.21.1",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.27.0",
-    "eslint-plugin-vue": "^7.9.0",
+    "eslint-plugin-vue": "^7.13.0",
     "flush-promises": "^1.0.2",
     "miragejs": "^0.1.41",
-    "vue-template-compiler": "^2.6.11"
+    "vue-template-compiler": "^2.6.14"
   },
   "eslintConfig": {
     "root": true,
