@@ -143,7 +143,7 @@ export default {
     }
   },
   created() {
-    document.title = this.useCaseTitle + " – XAI Demonstrator";
+    document.title = this.useCaseTitle + " – XAI-Demonstrator";
     this.debouncedRequestInspection = debounce(this.requestInspection, 500)
   }
   ,

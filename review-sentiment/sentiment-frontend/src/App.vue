@@ -100,7 +100,7 @@ export default {
     }
   },
   created() {
-    document.title = this.useCaseTitle + " – XAI Demonstrator"
+    document.title = this.useCaseTitle + " – XAI-Demonstrator"
   },
   async mounted() {
     await axios.get(this.backendUrl + '/load')
