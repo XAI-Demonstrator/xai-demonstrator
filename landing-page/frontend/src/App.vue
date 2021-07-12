@@ -4,7 +4,7 @@
     </div>
     <header class="xd-secondary">
        <img class = "xai-icon" v-bind:src="require('@/assets/icon.svg' +'')"/>
-      <h2>XIA Demonstrator</h2>
+      <h2>XAI-Demonstrator</h2>
       <h3>Hinterfrage die KI und entdecke Erklärbare Künstliche Intelligenz</h3>
     </header>
 
