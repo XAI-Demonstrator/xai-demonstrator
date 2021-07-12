@@ -5,5 +5,14 @@ module.exports = {
             .use('vue-svg-inline-loader')
             .loader('vue-svg-inline-loader')
             .options({ /* ... */})
+
+        if (process.env.NODE_ENV === 'development') {
+            config.plugin('html')
+                .tap(args => {
+                    args[0].title = "XAI-Demonstrator";
+                    args[0].favicon = './static/favicon.ico';
+                    return args
+                })
+        }
     }
 }
