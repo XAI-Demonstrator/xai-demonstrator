@@ -2,9 +2,9 @@ wheel
 numpy
 pydantic
 
-fastapi==0.65.2
+fastapi==0.66.0
 uvicorn==0.14.0
-transformers==4.7.0
+transformers==4.8.2
 captum==0.3.1
 
 --find-links https://download.pytorch.org/whl/torch_stable.html
