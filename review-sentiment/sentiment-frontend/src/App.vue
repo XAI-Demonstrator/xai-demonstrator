@@ -46,12 +46,10 @@ export default {
       useCaseTitle: "Stimmung erkennen",
       introductionTexts: {
         'movie': 'Wie war der Film, den du zuletzt gesehen hast?',
-        'restaurant': 'Wie war dein letzter Restaurant-Besuch?',
         'travel': 'Wie hat dir deine letzte Reise gefallen?'
       },
       defaultReviews: {
         'movie': 'Die Story war ziemlich vorhersehbar, würde ich nicht empfehlen...',
-        'restaurant': 'Super Pizza und schneller Service - gerne bald wieder!!',
         'travel': 'Der Zug kam natürlich zu spät, aber die Aussicht war einmalig!'
       },
       infoText: [
@@ -75,7 +73,7 @@ export default {
       infoLinkLabel: "Interesse geweckt? Hier gibt’s mehr Infos",
       reviewText: '',
       numberOfStars: null,
-      reviewTopic: ['movie', 'restaurant', 'travel'][Math.floor(Math.random() * 3)],
+      reviewTopic: ['movie', 'travel'][Math.floor(Math.random() * 2)],
       backendUrl: process.env.VUE_APP_BACKEND_URL
     }
   },
