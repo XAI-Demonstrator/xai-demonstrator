@@ -10,10 +10,10 @@
     </div>
     <div class="legend">
       <div class="legend-element">
-        &#9668; schwächer
+        &#9668; negativ
       </div>
       <div class="legend-element legend-right">
-        stärker &#9658;
+        positiv &#9658;
       </div>
       <div class="legend-element">&nbsp;</div>
     </div>

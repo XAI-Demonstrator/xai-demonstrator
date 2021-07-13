@@ -5,8 +5,8 @@
             v-bind:style="{'color': calcHSL(pair.score)}">{{ whitespace(pair.word) }}{{ pair.word }}</span>
     </div>
     <div class="legend">
-      <div class="legend-entry"><div class="legend-marker xd-green"></div><span class="legend-text">stärker</span></div>
-      <div class="legend-entry"><div class="legend-marker xd-red"></div><span class="legend-text">schwächer</span></div>
+      <div class="legend-entry"><div class="legend-marker xd-green"></div><span class="legend-text">positiv</span></div>
+      <div class="legend-entry"><div class="legend-marker xd-red"></div><span class="legend-text">negativ</span></div>
     </div>
   </div>
 </template>
