@@ -1,6 +1,6 @@
 numpy
 
-fastapi==0.66.0
+fastapi==0.67.0
 uvicorn==0.14.0
 transformers==4.8.2
 captum==0.4.0
