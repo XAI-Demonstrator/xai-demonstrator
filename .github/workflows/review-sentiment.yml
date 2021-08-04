@@ -13,16 +13,19 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
       - name: Set up Python 3.8
         uses: actions/setup-python@v2.2.2
         with:
           python-version: 3.8
+
       - uses: actions/cache@v2.1.6
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('./review-sentiment/sentiment-backend/requirements*.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
+
       - name: Install dependencies
         run: |
           set -e
@@ -30,6 +33,7 @@ jobs:
           echo $PWD
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+
       - name: Lint with flake8
         run: |
           set -e
@@ -40,6 +44,7 @@ jobs:
           flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
           # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
           flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
       - name: Run unit tests with pytest
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -61,10 +66,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@master
+
       - name: Set up Node 12
         uses: actions/setup-node@v2
         with:
           node-version: '12'
+
       - uses: actions/cache@v2.1.6
         with:
           path: ~/.npm
@@ -77,12 +84,14 @@ jobs:
           cd ./review-sentiment/sentiment-frontend
           echo $PWD
           npm install
+
       - name: Run tests
         run: |
           set -e
           cd ./review-sentiment/sentiment-frontend
           echo $PWD
           npm run test:unit
+
       - name: Report coverage
         if: github.ref == 'refs/heads/master'
         env:
@@ -106,16 +115,19 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@master
+
       - name: Set up Python 3.8
         uses: actions/setup-python@v2.2.2
         with:
           python-version: 3.8
+
       - uses: actions/cache@v2.1.6
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('./review-sentiment/sentiment-backend/requirements*.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
+
       - name: Install dependencies
         run: |
           set -e
@@ -123,6 +135,7 @@ jobs:
           echo $PWD
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+
       - name: Run integration tests with pytest
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -139,11 +152,12 @@ jobs:
           $COVERALLS_PARALLEL && export GITHUB_HEAD_REF="x-cov-sentiment-backend"
           coveralls --service=github
           coveralls --service=github --finish
+
       - name: Create container and publish to Registry
         uses: elgohr/Publish-Docker-Github-Action@3.04
         with:
           name: xai-demonstrator/review-sentiment-service
-          username: ${{ secrets.GHCR_PAT_OWNER }}
-          password: ${{ secrets.GHCR_WRITE }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
           registry: ghcr.io
           workdir: review-sentiment/
