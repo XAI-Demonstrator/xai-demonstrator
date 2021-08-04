@@ -19,7 +19,7 @@ jobs:
       - name: Install dependencies
         run: |
           set -e
-          cd ./github/maintenance
+          cd ./.github/maintenance
           npm install
 
       - name: Remove old, untagged images from GHCR
