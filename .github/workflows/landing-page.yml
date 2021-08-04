@@ -14,23 +14,27 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@master
-      - name: Set up Node 12
+
+      - name: Set up Node 14
         uses: actions/setup-node@v2
         with:
-          node-version: '12'
+          node-version: '14'
+
       - uses: actions/cache@v2.1.6
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('./landing-page/frontend/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
+
       - name: Install dependencies
         run: |
           set -e
           cd ./landing-page/frontend
           echo $PWD
           npm install
-      - name: Test Build
+
+      - name: Test build
         run: |
           set -e
           cd ./landing-page/frontend
@@ -43,12 +47,13 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@master
+
     - name: Create container and publish to Registry
       uses: elgohr/Publish-Docker-Github-Action@3.04
       with:
         name: xai-demonstrator/landing-page-service
-        username: ${{ secrets.GHCR_PAT_OWNER }}
-        password: ${{ secrets.GHCR_WRITE }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
         registry: ghcr.io
         workdir: ./
         context: ./

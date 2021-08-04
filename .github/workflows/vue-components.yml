@@ -12,26 +12,31 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v2
-      - name: Set up Node 12
+
+      - name: Set up Node 14
         uses: actions/setup-node@v2
         with:
-          node-version: '12'
+          node-version: '14'
+
       - uses: actions/cache@v2.1.6
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('./common/vue-components/xaidemo-ui/package-lock.json') }}
           restore-keys: |
            ${{ runner.os }}-node-
+
       - name: Install dependecies
         run: |
           set -e
           cd ./common/vue-components/xaidemo-ui
           npm install
+
       - name: Run tests
         run: |
           set -e
           cd ./common/vue-components/xaidemo-ui
           npm run test:unit
+
       - name: Report coverage
         if: github.ref == 'refs/heads/master'
         env:
@@ -44,11 +49,13 @@ jobs:
           cd ./common/vue-components/xaidemo-ui
           npm install coveralls
           cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
+
       - name: Build xaidemo-ui library
         run: |
           set -e
           cd ./common/vue-components/xaidemo-ui
           npm run build:lib
+
       - name: Publish xaidemo-ui package
         uses: JS-DevTools/npm-publish@v1
         with:
@@ -57,6 +64,7 @@ jobs:
           access: public
           check-version: true
           dry-run: ${{ github.ref != 'refs/heads/master' }}
+
       - name: Slack Notification
         if: github.ref == 'refs/heads/master'
         uses: rtCamp/action-slack-notify@v2.2.0
