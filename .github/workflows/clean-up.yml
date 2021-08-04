@@ -27,6 +27,7 @@ jobs:
           GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -e
+          cd ./.github/maintenance
           node clean-ghcr.js xai-demonstrator landing-page-service 3
           node clean-ghcr.js xai-demonstrator review-sentiment-service 3
           node clean-ghcr.js xai-demonstrator visual-inspection-service 3
