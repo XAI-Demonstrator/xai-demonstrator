@@ -15,8 +15,8 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 COPY inspection-backend/requirements.txt /requirements.txt
-RUN pip install --upgrade pip \
-    && pip install -r /requirements.txt \
+RUN pip install --no-cache-dir --upgrade pip \
+    && pip install --compile --no-cache-dir -r /requirements.txt \
     && rm -rf /root/.cache/pip
 
 COPY inspection-backend/inspection /inspection
