@@ -2,8 +2,35 @@ name: Clean Up
 on:
   schedule:
     - cron: "15 14 */7 * *"
+  workflow_dispatch:
 
 jobs:
+  ghcr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@master
+
+      - name: Set up Node 14
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: |
+          set -e
+          cd ./github/maintenance
+          npm install
+
+      - name: Remove old, untagged images from GHCR
+        env:
+          GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          node clean-ghcr.js xai-demonstrator landing-page-service 3
+          node clean-ghcr.js xai-demonstrator review-sentiment-service 3
+          node clean-ghcr.js xai-demonstrator visual-inspection-service 3
+
   gcp-test:
     runs-on: ubuntu-latest
     steps:
