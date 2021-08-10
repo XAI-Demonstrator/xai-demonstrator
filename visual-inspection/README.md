@@ -9,10 +9,10 @@ Frontend | [![Coverage Status](https://coveralls.io/repos/github/XAI-Demonstrato
 
 ## Components
 
-- Predictions currently provided by a [MobileNetV2 model](https://www.tensorflow.org/api_docs/python/tf/keras/applications/mobilenet_v2)
-  pre-trained on ImageNet
+- Predictions are provided by a [MobileNetV2 model](https://www.tensorflow.org/api_docs/python/tf/keras/applications/mobilenet_v2)
+  pre-trained on ImageNet and fine-tuned on task-specific samples
 - Backend microservice built with [FastAPI](https://fastapi.tiangolo.com/)
-- Frontend created with [VueJS](https://vuejs.org/)
+- Frontend created with [VueJS](https://vuejs.org/) utilizing the [Advanced Cropper](https://norserium.github.io/vue-advanced-cropper/) component
 
 ## Environment Variables
 
