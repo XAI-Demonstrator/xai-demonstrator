@@ -1,29 +1,28 @@
-import tensorflow as tf
 import json
 import pathlib
 
+import tensorflow as tf
+
 PATH = pathlib.Path(__file__).parent
 
-# TODO: Replace with custom model variant
-model = tf.keras.models.load_model(PATH /"my_model")
-
-with open(PATH/"original_labels.json") as json_file:
+with open(PATH / "original_labels.json") as json_file:
     CLASS_INDEX = json.load(json_file)
 
-
-with open(PATH/ "german_labels.json") as json_file:
+with open(PATH / "german_labels.json") as json_file:
     GERMAN_LABELS = json.load(json_file)
+
+model = tf.keras.models.load_model(PATH / "my_model")
 
 
 def decode_predictions(prediction):
     if len(prediction.shape) != 2 or prediction.shape[1] != 1001:
         raise ValueError('`decode_predictions` expects '
                          'a batch of predictions '
-                         '(i.e. a 2D array of shape (samples, 1000)). '
+                         '(i.e. a 2D array of shape (samples, 1001)). '
                          'Found array with shape: ' + str(prediction.shape))
 
-    top_indice = prediction.argmax()
-    return CLASS_INDEX.get(str(top_indice))[1]
+    top_indices = prediction.argmax()
+    return CLASS_INDEX.get(str(top_indices))[1]
 
 
 def decode_label(prediction):
