@@ -5,4 +5,7 @@
 **/dist
 **/.coverage
 
-./inspection-backend/inspection/static
+inspection-backend/inspection/static
+inspection-backend/inspection/model/my_model
+
+
