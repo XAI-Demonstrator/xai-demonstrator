@@ -1,130 +1,31 @@
 import tensorflow as tf
+import json
+import pathlib
+
+PATH = pathlib.Path(__file__).parent
 
 # TODO: Replace with custom model variant
-model = tf.keras.applications.MobileNetV2(input_shape=None,
-                                          include_top=True,
-                                          weights="imagenet")
+model = tf.keras.models.load_model(PATH /"my_model")
 
-GERMAN_LABELS = {
-    "reel": "eine Rolle",
-    "cellular_telephone": "ein Handy",
-    "modem": "ein Modem",
-    "computer_keyboard": "eine Tastatur",
-    "space_bar": "eine Leertaste",
-    "consomme": "eine Brühe",
-    "cup": "eine Tasse",
-    "espresso": "ein Espresso",
-    "face_powder": "Gesichtspuder",
-    "soap_dispenser": "Seifenspender",
-    "sarong": "ein Sarong",
-    "swimming_trunks": "eine Badehose",
-    "loupe": "eine Lupe",
-    "CD_player": "ein CD-Player",
-    "reflex_camera": "eine Foto-Kamera",
-    "lighter": "ein Feuerzeug",
-    "switch": "ein Schalter",
-    "crossword_puzzle": "ein Kreuzworträtsel",
-    "stethoscope": "ein Stethoskop",
-    "wallet": "ein Portemonnaie",
-    "iPod": "ein iPod",
-    "mouse": "eine Maus",
-    "magnetic_compass": "ein Kompass",
-    "strainer": "ein Sieb",
-    "pill_bottle": "eine Pillendose",
-    "handkerchief": "ein Taschentuch",
-    "saltshaker": "ein Salzstreuer",
-    "eggnog": "Eierlikör",
-    "ballpoint": "ein Kugelschreiber",
-    "chain": "eine Kette",
-    "loudspeaker": "ein Lautsprecher",
-    "remote_control": "eine Fernbedienung",
-    "combination_lock": "ein Zahlenschloss",
-    "thimble": "ein Fingerhut",
-    "hook": "ein Haken",
-    "whistle": "eine Pfeife",
-    "paper_towel": "ein Papierhandtuch",
-    "band_aid": "ein Pflaster",
-    "beaker": "ein Messbecher",
-    "bolo_tie": "eine Westernkrawatte",
-    "can_opener": "ein Dosenöffner",
-    "cassette": "eine Kassette",
-    "cleaver": "ein Hackmesser",
-    "cocktail_shaker": "ein Cocktail-Shaker",
-    "envelope": "ein Umschlag",
-    "harmonica": "eine Harmonika",
-    "pick": "ein Zahnstocher",
-    "purse": "eine Handtasche",
-    "racket": "ein Schläger",
-    "revolver": "ein Revolver",
-    "rule": "ein Lineal",
-    "safety_pin": "eine Sicherheitsnadel",
-    "shower_curtain": "ein Duschvorhang",
-    "spotlight": "ein Scheinwerfer",
-    "stopwatch": "eine Stoppuhr",
-    "sunglass": "ein Brennglas",
-    "toaster": "ein Toaster",
-    "toilet_seat": "eine Klobrille",
-    "velvet": "Samt",
-    "wall_clock": "eine Wanduhr",
-    "windsor_tie": "eine Windsor-Krawatte",
-    "notebook": "ein Notizbuch",
-    "hand-held_computer": "ein Taschencomputer",
-    "radio": "ein Radio",
-    "shower_cap": "eine Badehaube",
-    "diaper": "eine Windel",
-    "studio_couch": "eine Couch",
-    "polaroid_camera": "eine Polaroid-Kamera",
-    "analog_clock": "eine Analoguhr",
-    "sunglasses": "eine Sonnenbrille",
-    "hard_disc": "eine Festplatte",
-    "corkscrew": "eine Korkenzieher",
-    "digital_watch": "eine Digitaluhr",
-    "washer": "eine Waschmaschine",
-    "pencil_sharpener": "ein Anspitzer",
-    "tape_player": "ein Kassettenspieler",
-    "barometer": "ein Barometer",
-    "coffee_mug": "ein Kaffeebecher",
-    "nematode": "ein Fadenwurm",
-    "quill": "ein Federkiel",
-    "hair_slide": "eine Haarspange",
-    "nipple": "ein Babyflaschen-Aufsatz",
-    "Petri_dish": "eine Petrischale",
-    "plate_rack": "ein Geschirr-Abtropfgitter",
-    "vase": "eine Vase",
-    "bubble": "eine Blase",
-    "plastic_bag": "eine Plastiktüte",
-    "lipstick": "ein Lippenstift",
-    "hand_blower": "ein Handbläser",
-    "desktop_computer": "ein Desktop-PC",
-    "measuring_cup": "ein Messbecher",
-    "mixing_bowl": "eine Rührschüssel",
-    "whiskey_jug": "ein Whiskey-Krug",
-    "Windsor_tie": "eine Windsor-Krawatte",
-    "binder": "ein Ordner",
-    "dishrag": "ein Geschirrtuch",
-    "mailbag": "ein Briefbeutel",
-    "packet": "ein Paket",
-    "prayer_rug": "ein Gebetsteppich",
-    "punching_bag": "ein Boxsack",
-    "swab": "ein Tupfer",
-    "Polaroid_camera": "eine Polaroid-Kamera",
-    "cassette_player": "ein Kassettenspieler",
-    "hatchet": "eine Axt",
-    "hourglass": "eine Sanduhr",
-    "iron": "Eisen",
-    "mosquito_net": "ein Moskitonetz",
-    "red_wine": "ein Rotwein",
-    "typewriter_keyboard": "eine Schreibmaschinentastatur",
-    "ocarina": "eine Okarine",
-    "chain_saw": "eine Kettensäge",
-    "knee_pad": "ein Knieschoner",
-    "muzzle": "eine Schnauze",
-    "padlock": "ein Vorhängeschloss",
-    "tick": "eine Zecke",
-    "key": "ein Schlüssel"
-}
+with open(PATH/"original_labels.json") as json_file:
+    CLASS_INDEX = json.load(json_file)
+
+
+with open(PATH/ "german_labels.json") as json_file:
+    GERMAN_LABELS = json.load(json_file)
+
+
+def decode_predictions(prediction):
+    if len(prediction.shape) != 2 or prediction.shape[1] != 1001:
+        raise ValueError('`decode_predictions` expects '
+                         'a batch of predictions '
+                         '(i.e. a 2D array of shape (samples, 1000)). '
+                         'Found array with shape: ' + str(prediction.shape))
+
+    top_indice = prediction.argmax()
+    return CLASS_INDEX.get(str(top_indice))[1]
 
 
 def decode_label(prediction):
-    original_label = tf.keras.applications.mobilenet_v2.decode_predictions(prediction, top=1)[0][0][1]
+    original_label = decode_predictions(prediction)
     return GERMAN_LABELS[original_label] if original_label in GERMAN_LABELS else original_label
