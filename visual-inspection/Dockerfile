@@ -5,6 +5,10 @@ WORKDIR /
 COPY ./inspection-frontend/ .
 RUN npm install && npm run build
 
+RUN apk --no-cache add curl bash unzip
+COPY inspection-backend/download_model.sh /download_model.sh
+RUN mkdir inspection && mkdir inspection/model && /download_model.sh
+
 FROM python:3.8-slim
 
 WORKDIR /
@@ -21,10 +25,9 @@ RUN pip install --upgrade pip \
 
 COPY inspection-backend/inspection /inspection
 
-COPY inspection-backend/download_model.sh /download_model.sh
-RUN /download_model.sh
-
 RUN mkdir /inspection/static
 COPY --from=builder /dist/ /inspection/static/
+
+COPY --from=builder /inspection/model/my_model /inspection/model/
 
 CMD ["uvicorn", "inspection.main:app", "--host", "0.0.0.0", "--port", "8000"]
