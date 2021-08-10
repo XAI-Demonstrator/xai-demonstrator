@@ -11,7 +11,10 @@ with open(PATH / "original_labels.json") as json_file:
 with open(PATH / "german_labels.json") as json_file:
     GERMAN_LABELS = json.load(json_file)
 
-model = tf.keras.models.load_model(PATH / "my_model")
+try:
+    model = tf.keras.models.load_model(PATH / "my_model")
+except IOError:
+    raise IOError('Cannot find custom model. Run download_model.sh once to obtain it.')
 
 
 def decode_predictions(prediction):
