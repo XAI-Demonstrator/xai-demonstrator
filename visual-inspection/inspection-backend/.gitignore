@@ -1,5 +1,6 @@
 .coverage
 htmlcov/
 log/
+inspection/model/my_model
 
 inspection/static
