@@ -38,7 +38,7 @@ jobs:
           npm run test:unit
 
       - name: Report coverage
-        if: github.ref == 'refs/heads/master'
+        if: ${{ github.ref == 'refs/heads/master' }}
         env:
           COVERALLS_SERVICE_NAME: github
           COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -57,6 +57,7 @@ jobs:
           npm run build:lib
 
       - name: Publish xaidemo-ui package
+        if: ${{ github.actor != 'dependabot[bot]' }}
         uses: JS-DevTools/npm-publish@v1
         with:
           token: ${{ secrets.NPM_TOKEN }}
@@ -66,7 +67,7 @@ jobs:
           dry-run: ${{ github.ref != 'refs/heads/master' }}
 
       - name: Slack Notification
-        if: github.ref == 'refs/heads/master'
+        if: ${{ github.ref == 'refs/heads/master' }}
         uses: rtCamp/action-slack-notify@v2.2.0
         env:
           SLACK_CHANNEL: xai-demonstrator-monitor
