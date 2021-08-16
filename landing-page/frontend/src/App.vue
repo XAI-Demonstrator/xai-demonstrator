@@ -3,7 +3,7 @@
     <div class="blank-header xd-primary"><h1>XAI-Demonstrator <span class="beta-label">Beta</span></h1>
     </div>
     <header class="xd-secondary">
-      <h2>XAI-Demonstrator</h2>
+      <img v-bind:src="require('@/assets/logo-white.svg')" class="main-logo" />
       <h3>Hinterfrage die KI und entdecke Erklärbare Künstliche Intelligenz</h3>
     </header>
 
@@ -65,7 +65,7 @@ export default {
           ]
         }
       ],
-      infoUrl: "https://www.uni-ulm.de/mawi/iba/forschung/forschungsthemen/explainable-artificial-intelligence/xai-demonstrator/",
+      infoUrl: "https://www.erklaerbare-ki.de",
       linkLabel: "Interesse geweckt? Besuche unsere Website! "
     }
   }
@@ -130,9 +130,9 @@ header h3 {
   align-items: center;
 }
 
-.xai-icon{
-  padding-bottom: 50px;
-  width: 70%;
+.main-logo {
+  width: 61.8%;
+  margin-bottom: 1vh;
 }
 
 #select {
@@ -213,7 +213,7 @@ section img.next {
 
   header {
     height: auto;
-    min-height: 280px;
+    min-height: 38.2vh;
   }
 
   main {
@@ -243,7 +243,7 @@ section img.next {
 
   header {
     width: auto;
-    min-width: 280px;
+    min-width: 38.2vw;
   }
 
   main {
@@ -273,7 +273,6 @@ section img.next {
 
   header {
     height: auto;
-    min-height: 280px;
     margin-left: 4px;
     margin-right: 4px;
   }
