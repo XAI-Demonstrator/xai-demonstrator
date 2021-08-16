@@ -65,7 +65,7 @@ export default {
           ]
         }
       ],
-      infoUrl: "https://www.uni-ulm.de/mawi/iba/forschung/forschungsthemen/explainable-artificial-intelligence/xai-demonstrator/",
+      infoUrl: "https://www.erklaerbare-ki.de",
       linkLabel: "Interesse geweckt? Besuche unsere Website! "
     }
   }
