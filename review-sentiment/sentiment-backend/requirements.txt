@@ -4,7 +4,7 @@ pydantic
 matplotlib==3.4.2
 
 fastapi==0.66.0
-uvicorn==0.14.0
+uvicorn==0.15.0
 transformers==4.8.2
 captum==0.4.0
 
