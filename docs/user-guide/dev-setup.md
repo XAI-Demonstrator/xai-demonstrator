@@ -2,20 +2,20 @@
 
 The purpose of this short instruction is to set up an environment to clone the repository and run it locally on the users computer. 
 
-## Quick Start
+!!! note "Quick start for advanced developers"
 
-If you've developed with (parts of) the XAI Demonstrator's [tech stack](/tech-notes/tech-stack/) before,
-chances are that you already have the required software installed or do not need detailed setup instructions.
+    If you've developed software using (parts of) the XAI Demonstrator's [tech stack](/tech-notes/tech-stack/) before,
+    chances are that you already have the required software installed or do not need detailed setup instructions.
 
-To write code for the XAI Demonstrator, you need
+    To write code for the XAI Demonstrator, you need
 
-- Git
-- Node.js
-- Python
+    - Git
+    - Node.js
+    - Python
 
-Then, you can clone
-[github.com/XAI-Demonstrator/xai-demonstrator](https://github.com/XAI-Demonstrator/xai-demonstrator)
-and are good to go.
+    Then, you can clone
+    [github.com/XAI-Demonstrator/xai-demonstrator](https://github.com/XAI-Demonstrator/xai-demonstrator)
+    and are good to go.
 
 ## Tools
 
@@ -31,7 +31,8 @@ The *Professional* version can be obtained for free for students and other educa
 
 ### Install Git
 
-As almost all modern software projects, the XAI Demonstrator's code is stored in a [Git](https://git-scm.com/) repository.
+As is the case for almost all modern software projects,
+the _XAI Demonstrator_'s code is stored in a [Git](https://git-scm.com/) repository.
 
 !!! note "Prepare your macOS device 🍎"
 
@@ -56,7 +57,7 @@ git clone https://github.com/XAI-Demonstrator/xai-demonstrator.git
 ## Prepare for frontend development
 
 ### Install Node.js
-The XAI Demonstrator's frontends require the [Node.js JavaScript runtime](https://nodejs.org/en/).
+The _XAI Demonstrator_'s frontends require the [Node.js JavaScript runtime](https://nodejs.org/en/).
 
 - **macOS**: `brew install node@12`
 - **Windows**: Download the installer from [the official website](https://nodejs.org/dist/latest-v12.x/ )
@@ -80,7 +81,7 @@ Afterwards, you can launch the frontend development server using `npm run serve`
 
 ### Install Python
 
-The XAI Demonstrator's backends require Python 3.8.
+The _XAI Demonstrator_'s backends require Python 3.8.
 We recommend that you set up a dedicated Python environment for your work on the XAI Demonstrator.
 While the different components and use cases each have their own set of requirements, to date these requirements are compatible.
 
