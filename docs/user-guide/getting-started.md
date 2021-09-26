@@ -164,10 +164,60 @@ in the terminal.
 
 ## Modify a use case
 
+To see how quickly changes can be made and be tested, we will slightly modify the
+user interface. Of course, making more impactful changes or creating new use cases
+will involve significantly more effort and steps, which we will dive into in later
+parts of this user guide.
+
+For now, we will navigate to the file
+[`xai-demonstrator/visual-inspection/inspection-frontend/compoents/ExplainInspection.vue`](https://github.com/XAI-Demonstrator/xai-demonstrator/blob/master/visual-inspection/inspection-frontend/components/ExplainInspection.vue)
+and open it with a text editor.
+
+You will find that a `<button>` is defined within the first lines of the file. That's
+the button that users click to request an explanation for the machine learning model's
+classification of the object in the selected part of the image.
+
+Find the text on the button and modify it. As long as you make sure to not delete the
+angle brackets that surround it, there's nothing that can really go wrong. (The worst
+that can happen is that you make the text so long that the layout looks funky.)
+
+At the time of writing, the relevant parts of the code looked like:
+```html
+      <button class="xd-button xd-secondary"
+              v-show="!waitingForExplanation"
+              v-bind:disabled="!predictionReady"
+              v-on:click="buttonClicked">
+        Woran erkennst du das?
+      </button>
+```
+
+And we might change it to an English translation:
+```html
+      <button class="xd-button xd-secondary"
+              v-show="!waitingForExplanation"
+              v-bind:disabled="!predictionReady"
+              v-on:click="buttonClicked">
+        What makes you think so?
+      </button>
+```
+
+Once you've changed the line, you can repeat the steps that build and launch the
+container from the previous section:
+```bash
+docker build -t visual-inspection-service .
+docker run -p 8000:8000 visual-inspection-service
+```
+
+Once that's done, head to [http://localhost:8000/](http://localhost:8000/) and
+check that the text on the button has indeed changed.
 
 ## What's next?
 
 Congratulations! You have not only set up everything that's necessary to run your very
 own _XAI Demonstrator_, but already made changes to the source code of a use case and
-tested the results. 
+tested the results.
 
+In the next part of the user guide, we will
+[set up your local development environment](dev-setup.md).
+That will equip you with all the tools you need to conveniently make changes
+to individual components of the _XAI Demonstrator_ and develop your own use cases.

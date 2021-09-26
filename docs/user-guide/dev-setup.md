@@ -41,7 +41,6 @@ As almost all modern software projects, the XAI Demonstrator's code is stored in
 
     `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`
 
-
 - **macOS**: `brew install git`
 - **Linux (Debian-based)**: `apt-get install git`
 - **Windows**: Download installer from [the official website](https://git-scm.com/download/win)
