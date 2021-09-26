@@ -5,33 +5,25 @@ _XAI Demonstrator_ instance and make a first change.
 
 ## Get the source code
 
-To develop your own use cases and contribute to the _XAI Demonstrator_ project
-you need the software tool _Git_ to manage your source code files.
+If you just want to quickly try out the _XAI Demonstrator_ and
+do not have _Git_ installed, you can simply download the source code
+[as a ZIP file](https://github.com/XAI-Demonstrator/xai-demonstrator/archive/refs/heads/master.zip),
+unpack the file on your computer, and skip to the next section.
+
+However, if you plan to contribute to the _XAI Demonstrator_ project and perhaps even
+develop your own uses cases, it makes sense to retrieve the source code using _Git_.
 _Git_ is a so-called [version control system](https://en.wikipedia.org/wiki/Version_control)
 that keeps track of all the changes that are made and enables teams to work
 on the same piece of software without making a mess.
 
 Don't worry if you've never used _Git_ before.
-In this tutorial, we'll show you all the commands you need in detail.
+Throughout this user guide, we'll show you all the commands you need in detail.
 
 !!! note "Installing Git"
 
-    To install _Git_, see the instructions [here](./dev-setup/#install-git).
+    To install _Git_, see the instructions [here](./dev-setup#install-git).
 
-!!! note "Downloading without Git"
-
-    If you just want to quickly try out the _XAI Demonstrator_ and
-    do not have _Git_ installed, you can simply download the source code
-    [as a ZIP file](https://github.com/XAI-Demonstrator/xai-demonstrator/archive/refs/heads/master.zip).
-
-    However, please note that without _Git_ **you will not be able to
-    run use cases locally,** because some of the Python dependencies are
-    installed through _Git_.
-
-    Thus, you are restricted to launching deployment configurations that
-    utilize pre-built container images (more on that in the next section).
-
-To download ("check out") the _XAI Demontrator_ source code from GitHub,
+To download ("check out") the _XAI Demonstrator_ source code from _GitHub_,
 open a terminal (on Windows, we recommend the _Git Bash_ that ships with _Git_),
 navigate to the folder you'd like to store the source code in, and run the
 following _Git_ command:
@@ -91,7 +83,7 @@ After the downloads complete and the containers are spun up, you can visit your
 very own _XAI Demonstrator_ at [http://localhost:8000/](http://localhost:8000/).
 
 To launch this instance of the _XAI Demonstrator_, we used only a very small part
-of the source code: The file [deployment/test-local/docker-compose.yml](https://github.com/XAI-Demonstrator/xai-demonstrator/deployment/test-local/docker-compose.yml).
+of the source code: The file [`deployment/test-local/docker-compose.yml`](https://github.com/XAI-Demonstrator/xai-demonstrator/blob/master/deployment/test-local/docker-compose.yml).
 It instructs the _Docker Engine_ to download and launch several containers
 (four at the time of writing) that together comprise the _XAI Demonstrator_.
 
@@ -135,7 +127,7 @@ docker build -t visual-inspection-service .
 
 While waiting for the command to complete, you can take a look at the
 [`Dockerfile`](https://github.com/XAI-Demonstrator/xai-demonstrator/blob/master/visual-inspection/Dockerfile).
-(We'll dive into the details of this file [later](use-cases.md), so don't
+(We'll dive into the details of this file [later](./use-cases.md), so don't
 if at first sight it appears to be very complicated.)
 
 When you scroll through the file, you can see that _Docker_ is instructed to `COPY`
@@ -170,7 +162,7 @@ will involve significantly more effort and steps, which we will dive into in lat
 parts of this user guide.
 
 For now, we will navigate to the file
-[`xai-demonstrator/visual-inspection/inspection-frontend/compoents/ExplainInspection.vue`](https://github.com/XAI-Demonstrator/xai-demonstrator/blob/master/visual-inspection/inspection-frontend/components/ExplainInspection.vue)
+[`visual-inspection/inspection-frontend/src/compoents/ExplainInspection.vue`](https://github.com/XAI-Demonstrator/xai-demonstrator/blob/master/visual-inspection/inspection-frontend/src/components/ExplainInspection.vue)
 and open it with a text editor.
 
 You will find that a `<button>` is defined within the first lines of the file. That's
@@ -218,6 +210,6 @@ own _XAI Demonstrator_, but already made changes to the source code of a use cas
 tested the results.
 
 In the next part of the user guide, we will
-[set up your local development environment](dev-setup.md).
+[set up your local development environment](./dev-setup.md).
 That will equip you with all the tools you need to conveniently make changes
 to individual components of the _XAI Demonstrator_ and develop your own use cases.
