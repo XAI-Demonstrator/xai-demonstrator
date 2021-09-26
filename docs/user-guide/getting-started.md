@@ -1,7 +1,7 @@
 # Getting started
 
 This guide describes how to download the source code, launch your very own
-_XAI Demonstrator_ instance and make a first change.
+_XAI Demonstrator_ instance, and make a first change.
 
 ## Get the source code
 
@@ -19,7 +19,7 @@ on the same piece of software without making a mess.
 Don't worry if you've never used _Git_ before.
 Throughout this user guide, we'll show you all the commands you need in detail.
 
-!!! note "Installing Git"
+!!! note "Installing _Git_"
 
     To install _Git_, see the instructions [here](./dev-setup#install-git).
 
@@ -35,9 +35,9 @@ git clone https://github.com/xai-demonstrator/xai-demonstrator.git
 After a couple of seconds, you'll find  the entire _XAI Demonstrator_ source
 code in a new folder called `xai-demonstrator`.
 
-## Install Docker
+## Install _Docker_
 
-All parts of the _XAI Demonstrator_ are packaged and run as Docker containers.
+All parts of the _XAI Demonstrator_ are packaged and run as _Docker_ containers.
 These are best thought of as self-contained units that contain all required
 dependencies and runtimes.
 
@@ -51,9 +51,9 @@ dependencies and runtimes.
     distinguish between the two when it becomes necessary later.
 
 To run the _XAI Demonstrator_ or individual use cases locally on your computer,
-you need to install Docker (but nothing else).
-Docker is available for all common operating systems.
-See [the instructions in the Docker documentation](https://docs.docker.com/engine/install/)
+you need to install _Docker_ (but nothing else).
+_Docker_ is available for all common operating systems.
+See [the instructions in the _Docker_ documentation](https://docs.docker.com/engine/install/)
 to learn how to install _Docker Engine_ on your computer.
 Make sure you install the `docker-compose` utility as well.
 
@@ -71,7 +71,7 @@ docker-compose up
 
 !!! warning "Download size"
 
-    This will download several GB of files from the GitHub Container Registry!
+    This will download several GB of files from the _GitHub Container Registry_!
 
 !!! info "Permissions"
 
@@ -83,7 +83,8 @@ After the downloads complete and the containers are spun up, you can visit your
 very own _XAI Demonstrator_ at [http://localhost:8000/](http://localhost:8000/).
 
 To launch this instance of the _XAI Demonstrator_, we used only a very small part
-of the source code: The file [`deployment/test-local/docker-compose.yml`](https://github.com/XAI-Demonstrator/xai-demonstrator/blob/master/deployment/test-local/docker-compose.yml).
+of the source code: The file
+[`deployment/test-local/docker-compose.yml`](https://github.com/XAI-Demonstrator/xai-demonstrator/blob/master/deployment/test-local/docker-compose.yml).
 It instructs the _Docker Engine_ to download and launch several containers
 (four at the time of writing) that together comprise the _XAI Demonstrator_.
 
