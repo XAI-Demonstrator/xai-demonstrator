@@ -98,13 +98,11 @@ def test_that_app_is_instrumented():
 
     tracing.instrument_app(app)
 
-    assert app.is_instrumented_by_opentelemetry
     assert len(app.user_middleware) == 1
     assert app.user_middleware[0].cls is OpenTelemetryMiddleware
 
 
 def test_that_traced_without_parameters_adds_span():
-
     @tracing.traced
     def my_function():
         return tracing.trace.get_current_span()
@@ -113,7 +111,6 @@ def test_that_traced_without_parameters_adds_span():
 
 
 def test_that_traced_with_custom_label_adds_span():
-
     @tracing.traced(label="custom_span_label")
     def my_function():
         return tracing.trace.get_current_span()
@@ -122,7 +119,6 @@ def test_that_traced_with_custom_label_adds_span():
 
 
 def test_that_traced_with_attributes_adds_span():
-
     @tracing.traced(attributes={"first": 1, "second": "two"})
     def my_function():
         return tracing.trace.get_current_span()
@@ -136,7 +132,6 @@ def test_that_traced_with_attributes_adds_span():
 
 
 def test_that_traced_with_label_and_attributes_adds_span():
-
     @tracing.traced(label="my_custom_label",
                     attributes={"first": 1, "second": "two"})
     def my_function():
