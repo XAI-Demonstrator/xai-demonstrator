@@ -4,7 +4,6 @@ from typing import Any, Callable, Dict, Union
 
 from fastapi import FastAPI
 from opentelemetry import trace
-from opentelemetry.exporter import jaeger
 from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
 from opentelemetry.sdk.trace import TracerProvider
 from pydantic import BaseSettings
@@ -37,32 +36,32 @@ def set_up(service_name: str):
         The name under which the data is exported.
     """
     if tracing_settings.TRACING_EXPORTER.lower() == "jaeger":
-        from opentelemetry.sdk.trace.export import BatchExportSpanProcessor
+        from opentelemetry.sdk.trace.export import BatchSpanProcessor
+        from opentelemetry.exporter.jaeger.thrift import JaegerExporter
 
-        jaeger_exporter = jaeger.JaegerSpanExporter(
-            service_name=service_name,
+        jaeger_exporter = JaegerExporter(
             agent_host_name=tracing_settings.JAEGER_AGENT_HOST_NAME,
             agent_port=tracing_settings.JAEGER_AGENT_PORT,
         )
 
         trace.get_tracer_provider().add_span_processor(
-            BatchExportSpanProcessor(jaeger_exporter)
+            BatchSpanProcessor(jaeger_exporter)
         )
     elif tracing_settings.TRACING_EXPORTER.lower() == "console":
-        from opentelemetry.sdk.trace.export import SimpleExportSpanProcessor, ConsoleSpanExporter
+        from opentelemetry.sdk.trace.export import SimpleSpanProcessor, ConsoleSpanExporter
 
         trace.get_tracer_provider().add_span_processor(
-            SimpleExportSpanProcessor(ConsoleSpanExporter())
+            SimpleSpanProcessor(ConsoleSpanExporter())
         )
     elif tracing_settings.TRACING_EXPORTER == "gcp":
         from opentelemetry.exporter.cloud_trace import CloudTraceSpanExporter
-        from opentelemetry.tools.cloud_trace_propagator import CloudTraceFormatPropagator
-        from opentelemetry.sdk.trace.export import BatchExportSpanProcessor
-        from opentelemetry.propagators import set_global_textmap
+        from opentelemetry.propagators.cloud_trace_propagator import CloudTraceFormatPropagator
+        from opentelemetry.sdk.trace.export import BatchSpanProcessor
+        from opentelemetry.propagate import set_global_textmap
 
         cloud_trace_exporter = CloudTraceSpanExporter()
         trace.get_tracer_provider().add_span_processor(
-            BatchExportSpanProcessor(cloud_trace_exporter)
+            BatchSpanProcessor(cloud_trace_exporter)
         )
 
         set_global_textmap(CloudTraceFormatPropagator())
