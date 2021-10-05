@@ -15,6 +15,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 COPY sentiment-backend/requirements.txt /requirements.txt
+COPY sentiment-backend/requirements-base.txt /requirements-base.txt
 RUN pip install --no-cache-dir --upgrade pip \
     && pip install --compile --no-cache-dir -r /requirements.txt \
     && rm -rf /root/.cache/pip
