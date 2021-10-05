@@ -24,7 +24,7 @@ jobs:
 
       - name: Remove old, untagged images from GHCR
         env:
-          GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_ACCESS_TOKEN: ${{ secrets.PACKAGE_MANAGEMENT_PAT }}
         run: |
           set -e
           cd ./.github/maintenance
