@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@xai-demonstrator/xaidemo-ui": "^0.3.5",
-    "axios": "^0.21.4",
+    "axios": "^0.22.0",
     "classnames": "^2.3.1",
     "core-js": "^3.18.1",
     "debounce": "^1.2.1",
