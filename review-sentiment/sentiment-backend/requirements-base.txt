@@ -5,7 +5,7 @@ matplotlib==3.4.2
 
 fastapi==0.68.1
 uvicorn==0.15.0
-transformers==4.11.2
+transformers==4.11.3
 captum==0.4.0
 
 git+https://github.com/xai-demonstrator/xai-demonstrator.git@14de5f249e4c4b43085c4922bfcf890f8b8277a3#egg=xaidemo&subdirectory=common/backend-utils
