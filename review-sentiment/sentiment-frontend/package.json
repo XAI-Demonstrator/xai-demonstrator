@@ -22,7 +22,7 @@
     "axios": "^0.22.0",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.32.0",
-    "eslint-plugin-vue": "^7.19.0",
+    "eslint-plugin-vue": "^7.19.1",
     "flush-promises": "^1.0.2",
     "miragejs": "^0.1.42",
     "vue-template-compiler": "^2.6.14"
