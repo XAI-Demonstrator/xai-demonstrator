@@ -41,7 +41,7 @@ jobs:
              cd test-deployment/deployment/test-deployment/ || exit 0
              sudo docker-compose down
        - name: Copy docker-compose.yml to test server
-         uses: appleboy/scp-action@v0.1.1
+         uses: appleboy/scp-action@v0.1.2
          with:
            host: ${{ secrets.TEST_HOST }}
            username: ${{ secrets.TEST_USER }}
