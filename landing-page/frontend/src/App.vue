@@ -131,7 +131,7 @@ header h3 {
 }
 
 .main-logo {
-  width: 61.8%;
+  width: 50%;
   margin-bottom: 1vh;
 }
 
