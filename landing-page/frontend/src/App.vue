@@ -1,9 +1,11 @@
 <template>
   <div id="app" class="xd-app">
+    <GitHubRibbon url="https://github.com/xai-demonstrator/xai-demonstrator"/>
+    <XAIStudioRibbon url="https://www.xai-studio.de"/>
     <div class="blank-header xd-primary"><h1>XAI-Demonstrator <span class="beta-label">Beta</span></h1>
     </div>
     <header class="xd-secondary">
-      <img v-bind:src="require('@/assets/logo-white.svg')" class="main-logo" />
+      <img v-bind:src="require('@/assets/logo-white.svg')" class="main-logo"/>
       <h3>Hinterfrage die KI und entdecke Erklärbare Künstliche Intelligenz</h3>
     </header>
 
@@ -31,11 +33,13 @@
 
 <script>
 import {FloatingInfoButton} from '@xai-demonstrator/xaidemo-ui';
+import {GitHubRibbon} from '@xai-demonstrator/xaidemo-ui';
+import {XAIStudioRibbon} from '@xai-demonstrator/xaidemo-ui';
 
 export default {
   name: 'App',
   components: {
-    FloatingInfoButton
+    FloatingInfoButton, GitHubRibbon, XAIStudioRibbon
   },
   data() {
     return {
@@ -113,7 +117,7 @@ header h1, .blank-header h1 {
   font-size: 25px;
 }
 
-header h2{
+header h2 {
   color: #EBEBEB;
   padding: 0;
   margin: 0;
