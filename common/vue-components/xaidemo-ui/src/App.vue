@@ -1,5 +1,7 @@
 <template>
   <div id="app" class="xd-app">
+    <GitHubRibbon url="https://localhost/" />
+    <XAIStudioRibbon url="https://www.xai-studio.de" />
     <UseCaseHeader title="UI Demo Use Case" v-bind:standalone="standalone"/>
     <main>
       <section class="xd-section xd-light">
@@ -50,10 +52,12 @@ import UseCaseHeader from "@/components/UseCaseHeader";
 import FloatingInfoButton from "@/components/FloatingInfoButton";
 import SpinningIndicator from "@/components/SpinningIndicator";
 import MultiBounce from "@/components/MultiBounce";
+import GitHubRibbon from "@/components/GitHubRibbon";
+import XAIStudioRibbon from "@/components/XAIStudioRibbon";
 
 export default {
   name: "App",
-  components: {MultiBounce, FloatingInfoButton, UseCaseHeader, SpinningIndicator},
+  components: {XAIStudioRibbon, GitHubRibbon, MultiBounce, FloatingInfoButton, UseCaseHeader, SpinningIndicator},
   data: function () {
     return {
       standalone: true,

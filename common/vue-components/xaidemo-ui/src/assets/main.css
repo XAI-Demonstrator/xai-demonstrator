@@ -86,6 +86,11 @@ p {
     color: #EBEBEB;
 }
 
+.xd-fill-primary {
+    fill: #323232;
+    color: #EBEBEB;
+}
+
 .xd-light {
     background-color: #EBEBEB;
     color: #323232;
@@ -93,6 +98,11 @@ p {
 
 .xd-secondary {
     background-color: #103260;
+    color: #EBEBEB;
+}
+
+.xd-fill-secondary {
+    fill: #103260;
     color: #EBEBEB;
 }
 
