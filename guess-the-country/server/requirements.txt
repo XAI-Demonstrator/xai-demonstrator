@@ -1,0 +1,16 @@
+fastapi==0.68.0
+uvicorn==0.14.0
+fastapi
+typing
+starlette
+pydantic
+shapely
+requests
+opencv-python
+datetime
+matplotlib
+lime
+scikit-image
+numpy
+tensorflow
+python-multipart
