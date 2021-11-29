@@ -1,6 +1,7 @@
 import datetime
 import os
 import random
+import urllib.error
 from urllib.request import urlretrieve
 
 import cv2
@@ -671,7 +672,7 @@ def streetview():
         url = GOOGLE_URL + "&location=" + locstring
         try:
             urlretrieve(url, outfile)
-        except urllib2.URLError:
+        except urllib.error.URLError:
             # print("    No imagery")
             break
         imagery_hits += 1
