@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="xd-app">
-    <UseCaseHeader title="XAI Streetview" v-bind:standalone="true" />
+    <UseCaseHeader title="XAI Streetview"/>
     <main>
       <section class="xd-section xd-light">
         {{ msg }}
@@ -19,9 +19,9 @@
       <section class="xd-section xd-light" id="radio"
                style="display: flex;    align-content: flex-end;    flex-wrap: wrap;    align-items: baseline;">
         <input type="radio" id="Tel-Aviv" name="City" value="Tel-Aviv" checked>
-          <label for="Tel-Aviv">Tel-Aviv</label>
-          <input type="radio" id="Berlin" name="City" value="Berlin">
-          <label for="Berlin">Berlin</label>
+        <label for="Tel-Aviv">Tel-Aviv</label>
+        <input type="radio" id="Berlin" name="City" value="Berlin">
+        <label for="Berlin">Berlin</label>
         <button type="button" class="xd-button xd-secondary" style="width:auto; margin-left: auto;"
                 v-on:click="answer()">Was I right?
         </button>
@@ -137,20 +137,20 @@
 </template>
 
 <script>
-import {notify} from 'notiwind'
+import {notify, NotificationGroup, Notification} from 'notiwind'
 import axios from 'axios'
-import UseCaseHeader from '@xai-demonstrator/xaidemo-ui'
-import FloatingInfoButton from '@xai-demonstrator/xaidemo-ui'
-import SpinningIndicator from '@xai-demonstrator/xaidemo-ui'
+import {UseCaseHeader, FloatingInfoButton, SpinningIndicator} from '@xai-demonstrator/xaidemo-ui'
 
 export default {
   name: 'App',
   components: {
     UseCaseHeader,
     FloatingInfoButton,
-    SpinningIndicator
+    SpinningIndicator,
+    NotificationGroup,
+    Notification
   },
-  data () {
+  data() {
     return {
       prediction: 'Israel',
       other: 'Germany',
@@ -181,8 +181,8 @@ export default {
         }]
     }
   },
-  async created () {
-    if (document.cookie == '') {
+  async created() {
+    if (document.cookie === '') {
       document.cookie = 'AI=' + this.score_ai + '; Secure'
       document.cookie = 'User=' + this.score_user + '; Secure'
     } else {
@@ -199,7 +199,7 @@ export default {
     this.getStreetview()
   },
   methods: {
-    getMessage () {
+    getMessage() {
       axios.get('/msg')
         .then((res) => {
           this.msg = res.data
@@ -208,7 +208,7 @@ export default {
           console.error(error)
         })
     },
-    getStreetview () {
+    getStreetview() {
       axios.get('/streetview')
         .then((res) => {
           this.url = res.data
@@ -217,10 +217,10 @@ export default {
           console.error(error)
         })
     },
-    submitFile () {
+    submitFile() {
       var result
       this.waitingForExplanation = true
-      if (this.url.search('Israel') == -1) {
+      if (this.url.search('Israel') === -1) {
         result = 'Berlin'
       } else {
         result = 'Tel-Aviv'
@@ -228,7 +228,7 @@ export default {
       // const config = { headers: {'Content-Type': 'application/json'} };
       axios.post('/predict/image3/?url=' + this.url).then((res) => {
         this.prediction = res.data[0]
-        if (result == res.data[0]) {
+        if (result === res.data[0]) {
           this.score_ai = parseInt(document.cookie.split('; ')
             .find(row => row.startsWith('AI='))
             .split('=')[1])
@@ -259,12 +259,12 @@ export default {
           console.error(error)
         })
     },
-    explain () {
+    explain() {
       this.waitingForExplanation = true
       axios.post('/predict/explain2/?url=' + this.url).then((res) => {
         this.url = res.data
 
-        if (this.prediction == 'Tel-Aviv') {
+        if (this.prediction === 'Tel-Aviv') {
           this.other = 'Berlin'
         } else {
           this.other = 'Tel-Aviv'
@@ -279,7 +279,7 @@ export default {
           console.error(error)
         })
     },
-    restart () {
+    restart() {
       axios.post('/restart?url=' + this.url).then((res) => {
         document.getElementById('legend').style.display = 'none'
         document.getElementById('explain').style.display = 'none'
@@ -294,21 +294,21 @@ export default {
         })
     },
 
-    answer () {
+    answer() {
       var answer
-      if (document.getElementById('Tel-Aviv').checked == true) {
+      if (document.getElementById('Tel-Aviv').checked === true) {
         answer = 'Tel-Aviv'
       } else {
         answer = 'Berlin'
       }
 
       var result
-      if (this.url.search('Israel') == -1) {
+      if (this.url.search('Israel') === -1) {
         result = 'Berlin'
       } else {
         result = 'Tel-Aviv'
       }
-      if (result == answer) {
+      if (result === answer) {
         this.score_user = parseInt(document.cookie.split('; ')
           .find(row => row.startsWith('User='))
           .split('=')[1])
