@@ -14,7 +14,7 @@ scikit-image
 numpy
 tensorflow
 python-multipart
-cv2
+opencv-python
 urllib2
 shapely
 
