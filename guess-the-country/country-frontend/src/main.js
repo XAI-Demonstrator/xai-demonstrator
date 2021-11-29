@@ -1,11 +1,9 @@
-import { createApp } from 'vue'
+import Vue from 'vue'
 import App from './App.vue'
-import axios from 'axios';
-import "./assets/styles/main.css";
-import Notifications from 'notiwind'
+import '@xai-demonstrator/xaidemo-ui/lib/xaidemo-ui.css'
 
-axios.defaults.withCredentials = true;
-axios.defaults.baseURL = 'http://localhost:8000/';  // the FastAPI backend
+Vue.config.productionTip = false
 
-createApp(App).use(Notifications).mount('#app')
-
+new Vue({
+    render: h => h(App),
+}).$mount('#app')
