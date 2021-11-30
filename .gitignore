@@ -14,6 +14,7 @@ node_modules/
 *.tar.gz
 *.zip
 *.whl
+*.pb
 
 /experiments
 /site
