@@ -15,8 +15,6 @@ try:
     model = tf.keras.models.load_model(PATH / "my_model")
 except IOError:
     raise IOError('Cannot find custom model. Run download_model.sh once to obtain it.')
-except tf.errors.AlreadyExistsError:
-    print("DEBUG flaky test on GitHub Actions")
 
 
 def decode_predictions(prediction):
