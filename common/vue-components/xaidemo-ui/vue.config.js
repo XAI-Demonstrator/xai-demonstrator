@@ -10,7 +10,7 @@ module.exports = {
             config.plugin('html')
                 .tap(args => {
                     args[0].title = "XAI-Demonstrator";
-                    args[0].favicon = './static/favicon.ico';
+                    args[0].favicon = './public/favicon.ico';
                     return args
                 })
         }

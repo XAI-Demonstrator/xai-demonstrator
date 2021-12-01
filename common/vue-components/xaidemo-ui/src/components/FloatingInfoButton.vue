@@ -100,8 +100,8 @@ export default {
   z-index: 99;
 }
 
-.slide-enter,
-.slide-leave-active {
+.slide-enter-from,
+.slide-leave-to {
   transform: translate3d(100%, 0, 0);
 }
 
@@ -156,11 +156,15 @@ export default {
 }
 
 .fade-enter-active, .fade-leave-active {
-  transition: opacity 0.3s ease;
+  transition: opacity 0.2s ease;
 }
 
-.fade-enter, .fade-leave-to {
+.fade-enter-from, .fade-leave-to {
   opacity: 0;
+}
+
+.fade-enter-to, .fade-leave-from {
+  opacity: 1;
 }
 
 @media screen and (min-width: 450px) and (min-height: 650px) {
@@ -180,14 +184,19 @@ export default {
 
   .slide-enter-active,
   .slide-leave-active {
-    transform: none;
-    transition: opacity 0.6s ease-out;
+    transition: opacity 0.4s ease;
   }
 
-  .slide-enter,
+  .slide-enter-from,
   .slide-leave-to {
     transform: none;
     opacity: 0;
+  }
+
+  .slide-enter-to,
+  .slide-leave-from {
+    transform: none;
+    opacity: 1;
   }
 
   #info-content {
