@@ -1,7 +1,7 @@
 <template>
   <div id="info-button">
     <transition name="slide">
-      <div id="info-popup" class="popup" v-if="popupVisible">
+      <div id="info-popup" v-if="popupVisible">
         <div id="info-content">
           <section v-for="part in infoText" v-bind:key="part.header" class="xd-section xd-light">
             <h3>{{ part.headline }}</h3>
@@ -82,27 +82,30 @@ export default {
 }
 
 #info-popup {
-  margin-top: 42px;
-  padding: 12px 8px 8px;
-  height: calc(100% - 42px);
-  width: 100%;
-  background-color: #fff;
-  box-shadow: inset 0 4px 12px rgba(120, 120, 120, 0.4);
-}
-
-.popup {
+  position: fixed;
   top: 0;
   right: 0;
-  bottom: auto;
-  left: auto;
-  position: fixed;
-  transition: .3s ease-out;
+
+  margin-top: 42px;
+  padding: 12px 8px 8px;
+
+  height: calc(100% - 42px);
+  width: 100%;
+
+  background-color: #fff;
+  box-shadow: inset 0 4px 12px rgba(120, 120, 120, 0.4);
+
   z-index: 99;
 }
 
 .slide-enter-from,
 .slide-leave-to {
   transform: translate3d(100%, 0, 0);
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  transition: transform .3s ease-out;
 }
 
 #info-content {
@@ -170,16 +173,17 @@ export default {
 @media screen and (min-width: 450px) and (min-height: 650px) {
 
   #info-popup {
-    max-width: 432px;
-    top: calc(50% - 310px + 42px + 12px);
+    position: absolute;
+
     right: auto;
     left: auto;
-    bottom: auto;
+
+    margin-top: 50px;
+    max-width: 432px;
+    padding: 12px 0 0;
+
     box-shadow: none;
-    height: calc(624px - 42px - 12px);
     overflow: hidden;
-    padding: 0;
-    margin: 0;
   }
 
   .slide-enter-active,

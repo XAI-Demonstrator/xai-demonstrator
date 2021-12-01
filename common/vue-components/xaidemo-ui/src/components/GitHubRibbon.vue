@@ -43,7 +43,7 @@ export default {
 }
 
 .github-corner svg {
-  position: absolute;
+  position: fixed;
   top: 0;
   border: 0;
   right: 0;
