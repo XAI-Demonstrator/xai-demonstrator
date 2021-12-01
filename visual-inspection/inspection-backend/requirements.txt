@@ -4,11 +4,11 @@ pydantic
 
 fastapi==0.70.0
 uvicorn==0.15.0
-aiofiles==0.7.0
+aiofiles==0.8.0
 python-multipart==0.0.5
 lime==0.2.0.1
 
 tensorflow-cpu==2.7.0
 Pillow==8.4.0
 
-git+https://github.com/xai-demonstrator/xai-demonstrator.git@14de5f249e4c4b43085c4922bfcf890f8b8277a3#egg=xaidemo&subdirectory=common/backend-utils
+git+https://github.com/xai-demonstrator/xai-demonstrator.git@7ae03d8c808c05f22b61acf921793261b3b5619a#egg=xaidemo&subdirectory=common/backend-utils

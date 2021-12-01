@@ -1,11 +1,10 @@
 wheel
 numpy
 pydantic
-matplotlib==3.4.2
 
-fastapi==0.68.1
+fastapi==0.70.0
 uvicorn==0.15.0
-transformers==4.11.2
-captum==0.4.0
+transformers==4.12.5
+captum==0.4.1
 
-git+https://github.com/xai-demonstrator/xai-demonstrator.git@14de5f249e4c4b43085c4922bfcf890f8b8277a3#egg=xaidemo&subdirectory=common/backend-utils
+git+https://github.com/xai-demonstrator/xai-demonstrator.git@7ae03d8c808c05f22b61acf921793261b3b5619a#egg=xaidemo&subdirectory=common/backend-utils
