@@ -1,5 +1,7 @@
 <template>
   <div id="app" class="xd-app">
+    <GitHubRibbon url="https://github.com/xai-demonstrator/xai-demonstrator"/>
+    <XAIStudioRibbon url="https://www.xai-studio.de"/>
     <UseCaseHeader
         v-bind:standalone="!Boolean(backendUrl)"
         v-bind:title="useCaseTitle"/>
@@ -62,7 +64,7 @@ import 'vue-advanced-cropper/dist/style.css'
 import InspectImage from "@/components/InspectImage";
 import ExplainInspection from "@/components/ExplainInspection";
 import ExplanationStencil from "@/components/ExplanationStencil";
-import {FloatingInfoButton, UseCaseHeader} from '@xai-demonstrator/xaidemo-ui';
+import {FloatingInfoButton, UseCaseHeader, XAIStudioRibbon, GitHubRibbon} from '@xai-demonstrator/xaidemo-ui';
 import {debounce} from "debounce";
 
 export default {
@@ -72,7 +74,9 @@ export default {
     InspectImage,
     ExplainInspection,
     UseCaseHeader,
-    FloatingInfoButton
+    FloatingInfoButton,
+    XAIStudioRibbon,
+    GitHubRibbon
   },
   methods: {
     async imageChanged({canvas}) {

@@ -1,5 +1,7 @@
 <template>
   <div id="app" class="xd-app">
+    <GitHubRibbon url="https://github.com/xai-demonstrator/xai-demonstrator"/>
+    <XAIStudioRibbon url="https://www.xai-studio.de"/>
     <UseCaseHeader v-bind:standalone="!Boolean(backendUrl)"
                    v-bind:title="useCaseTitle"/>
     <main>
@@ -29,7 +31,7 @@
 import ComposeReview from "@/components/ComposeReview";
 import AnalyzeReview from "@/components/AnalyzeReview";
 import ExplainAnalysis from "@/components/ExplainAnalysis";
-import {FloatingInfoButton, UseCaseHeader} from "@xai-demonstrator/xaidemo-ui";
+import {FloatingInfoButton, UseCaseHeader, XAIStudioRibbon, GitHubRibbon} from "@xai-demonstrator/xaidemo-ui";
 import axios from "axios";
 
 export default {
@@ -39,7 +41,9 @@ export default {
     AnalyzeReview,
     ExplainAnalysis,
     FloatingInfoButton,
-    UseCaseHeader
+    UseCaseHeader,
+    XAIStudioRibbon,
+    GitHubRibbon
   },
   data() {
     return {
