@@ -43,20 +43,6 @@ export default {
   },
   data() {
     return {
-      useCases: [
-        {
-          logo: require('@/assets/sentiment-stars.svg'),
-          title: "Stimmung erkennen",
-          description: "Entdecke, wie die KI die Stimmung in einem Text bestimmt!",
-          route: "/sentiment/"
-        },
-        {
-          logo: require('@/assets/inspection-eye.svg'),
-          title: "Gegenstände erkennen",
-          description: "Finde heraus, woran die KI Gegenstände auf Bildern erkennt!",
-          route: "/inspection/"
-        }
-      ],
       infoText: [
         {
           headline: "Der XAI-Demonstrator",
@@ -71,6 +57,11 @@ export default {
       ],
       infoUrl: "https://www.erklaerbare-ki.de",
       linkLabel: "Interesse geweckt? Besuche unsere Website! "
+    }
+  },
+  computed: {
+    useCases() {
+      return this.$appConfig.useCases.filter(useCase => useCase.include)
     }
   }
 }

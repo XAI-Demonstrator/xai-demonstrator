@@ -3,7 +3,7 @@ FROM node:14-alpine as builder
 RUN mkdir /frontend
 WORKDIR /frontend
 COPY ./landing-page/frontend .
-RUN npm install && npm run build
+RUN npm install && npm run build -- --mode test-deployment
 
 RUN mkdir /sentiment
 WORKDIR /sentiment
