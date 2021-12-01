@@ -22,7 +22,7 @@ jobs:
       - uses: actions/cache@v2.1.6
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('./visual-inspection/inspection-backend/requirements*.txt') }}
+          key: ${{ runner.os }}-pip-${{ hashFiles('./guess-the-country/country-backend/requirements*.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
 
@@ -59,7 +59,7 @@ jobs:
       - uses: actions/cache@v2.1.6
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('./visual-inspection/inspection-frontend/package-lock.json') }}
+          key: ${{ runner.os }}-node-${{ hashFiles('./guess-the-country/country-frontend/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
 
@@ -88,7 +88,7 @@ jobs:
     - uses: actions/cache@v2.1.6
       with:
         path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-${{ hashFiles('./visual-inspection/inspection-backend/requirements*.txt') }}
+        key: ${{ runner.os }}-pip-${{ hashFiles('./guess-the-country/country-backend/requirements*.txt') }}
         restore-keys: |
           ${{ runner.os }}-pip-
 
