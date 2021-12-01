@@ -4,7 +4,7 @@ pydantic
 
 fastapi==0.70.0
 uvicorn==0.15.0
-aiofiles==0.7.0
+aiofiles==0.8.0
 python-multipart==0.0.5
 lime==0.2.0.1
 
