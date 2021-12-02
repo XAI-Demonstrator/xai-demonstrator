@@ -18,7 +18,7 @@ export default {
 
 <style scoped>
 .studio-logo {
-  position: absolute;
+  position: fixed;
   bottom: 10px;
   right: 10px;
   border: 0;

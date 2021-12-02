@@ -77,9 +77,19 @@ export default {
   opacity: 0.15;
 }
 
-.indicator-enter,
+.indicator-enter-active,
 .indicator-leave-active {
+  transition: opacity .4s ease;
+}
+
+.indicator-enter-from,
+.indicator-leave-to {
   opacity: 0;
+}
+
+.indicator-enter-to,
+.indicator-leave-from {
+  opacity: 1;
 }
 
 @keyframes spinner-rotate-smooth {

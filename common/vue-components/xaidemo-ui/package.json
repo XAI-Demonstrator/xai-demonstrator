@@ -1,6 +1,6 @@
 {
   "name": "@xai-demonstrator/xaidemo-ui",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build:app": "vue-cli-service build",
@@ -10,21 +10,22 @@
   },
   "main": "./lib/xaidemo-ui.common.js",
   "dependencies": {
-    "core-js": "^3.19.1",
-    "vue": "^2.6.14"
+    "core-js": "^3.19.2",
+    "vue": "^3.2.23"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^5.15.0",
+    "@testing-library/jest-dom": "^5.15.1",
     "@vue/cli-plugin-babel": "^4.5.15",
     "@vue/cli-plugin-eslint": "^4.5.15",
     "@vue/cli-plugin-unit-jest": "^4.5.15",
     "@vue/cli-service": "^4.5.15",
-    "@vue/test-utils": "^1.2.2",
+    "@vue/compiler-sfc": "^3.1.0",
+    "@vue/test-utils": "^2.0.0-rc.17",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
-    "vue-svg-inline-loader": "^2.1.2",
-    "vue-template-compiler": "^2.6.14"
+    "vue-jest": "^5.0.0-alpha.10",
+    "vue-svg-inline-loader": "^2.1.2"
   },
   "eslintConfig": {
     "root": true,

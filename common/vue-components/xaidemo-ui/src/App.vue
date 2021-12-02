@@ -24,7 +24,7 @@
       </section>
       <section class="xd-section xd-border-secondary">
         <p>Sometimes, we are just waiting...</p>
-        <MultiBounce numberOfDots="3" dot-class="xd-secondary"/>
+        <MultiBounce v-bind:umberOfDots="3" dot-class="xd-secondary"/>
       </section>
       <section class="xd-section xd-light">
         <h3>Section Headline</h3>
@@ -81,6 +81,8 @@ body {
 #app {
   display: flex;
   justify-content: space-between;
+  position: relative;
+  overflow: hidden;
 }
 
 main {
