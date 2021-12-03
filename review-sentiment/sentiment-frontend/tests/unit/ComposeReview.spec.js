@@ -1,14 +1,13 @@
-import {createLocalVue, shallowMount} from '@vue/test-utils'
+import { mount } from '@vue/test-utils'
 import ComposeReview from "@/components/ComposeReview";
 
 
 describe('ComposeReview.vue', () => {
 
-    const localVue = createLocalVue()
-    let wrapper = shallowMount(ComposeReview, localVue);
+    let wrapper = mount(ComposeReview);
 
     beforeEach(() => {
-            wrapper = shallowMount(ComposeReview, localVue);
+            wrapper = mount(ComposeReview);
         }
     )
 

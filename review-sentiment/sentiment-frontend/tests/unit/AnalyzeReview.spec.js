@@ -1,4 +1,4 @@
-import {createLocalVue, shallowMount} from '@vue/test-utils'
+import {shallowMount} from "@vue/test-utils";
 import AnalyzeReview from "@/components/AnalyzeReview";
 import axios from 'axios';
 import flushPromises from 'flush-promises';
@@ -7,11 +7,10 @@ jest.mock('axios');
 
 describe('AnalyzeReview.vue', () => {
 
-    const localVue = createLocalVue()
-    let wrapper = shallowMount(AnalyzeReview, localVue);
+    let wrapper = shallowMount(AnalyzeReview);
 
     beforeEach(() => {
-            wrapper = shallowMount(AnalyzeReview, localVue);
+            wrapper = shallowMount(AnalyzeReview);
         }
     )
 
@@ -43,9 +42,10 @@ describe('AnalyzeReview.vue', () => {
         axios.post.mockImplementationOnce(() => Promise.resolve(response))
 
         const button = wrapper.find('button')
-        await button.trigger('click')
+        expect(button.element.disabled).toBeFalsy()
 
-        expect(button.attributes('disabled')).toBe('disabled')
+        await button.trigger('click')
+        expect(button.element.disabled).toBeTruthy()
 
         await flushPromises()
 

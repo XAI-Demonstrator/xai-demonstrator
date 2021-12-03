@@ -1,4 +1,4 @@
-import {createLocalVue, shallowMount} from '@vue/test-utils'
+import { shallowMount } from '@vue/test-utils'
 import ExplainAnalysis from "@/components/ExplainAnalysis";
 import axios from "axios";
 import flushPromises from 'flush-promises';
@@ -7,11 +7,10 @@ jest.mock('axios');
 
 describe('ExplainAnalysis.vue', () => {
 
-    const localVue = createLocalVue()
-    let wrapper = shallowMount(ExplainAnalysis, localVue);
+    let wrapper = shallowMount(ExplainAnalysis);
 
     beforeEach(() => {
-            wrapper = shallowMount(ExplainAnalysis, localVue);
+            wrapper = shallowMount(ExplainAnalysis);
         }
     )
 
@@ -50,9 +49,10 @@ describe('ExplainAnalysis.vue', () => {
         const mockPost = axios.post.mockImplementationOnce(() => Promise.resolve(response))
 
         const button = wrapper.find('button')
-        await button.trigger('click')
+        expect(button.element.disabled).toBeFalsy()
 
-        expect(button.attributes('disabled')).toBe('disabled')
+        await button.trigger('click')
+        expect(button.element.disabled).toBeTruthy()
 
         await flushPromises()
 
@@ -100,9 +100,10 @@ describe('ExplainAnalysis.vue', () => {
         const mockPost = axios.post.mockImplementationOnce(() => Promise.resolve(response))
 
         const button = wrapper.find('button')
-        await button.trigger('click')
+        expect(button.element.disabled).toBeFalsy()
 
-        expect(button.attributes('disabled')).toBe('disabled')
+        await button.trigger('click')
+        expect(button.element.disabled).toBeTruthy()
 
         await flushPromises()
 
