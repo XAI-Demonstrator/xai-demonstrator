@@ -1,4 +1,4 @@
-import {shallowMount, createLocalVue} from "@vue/test-utils";
+import {shallowMount} from "@vue/test-utils";
 import ExplainInspection from "@/components/ExplainInspection";
 import {MultiBounce} from "@xai-demonstrator/xaidemo-ui";
 import axios from "axios";
@@ -33,11 +33,10 @@ describe('ExplainInspection.vue', () => {
         window.location = location
     })
 
-    const localVue = createLocalVue()
-    let wrapper = shallowMount(ExplainInspection, localVue);
+    let wrapper = shallowMount(ExplainInspection);
 
     beforeEach(() => {
-        wrapper = shallowMount(ExplainInspection, localVue);
+        wrapper = shallowMount(ExplainInspection);
     });
 
     afterEach(() => {
@@ -47,13 +46,13 @@ describe('ExplainInspection.vue', () => {
     it('disables button if prediction is not ready', async () => {
         await wrapper.setProps({predictionReady: false})
 
-        expect(wrapper.find('button').attributes('disabled')).toBe('disabled')
+        expect(wrapper.find('button').element.disabled).toBeTruthy()
     })
 
     it('enables button if prediction is ready', async () => {
         await wrapper.setProps({predictionReady: true})
 
-        expect(wrapper.find('button').attributes('disabled')).toBeUndefined()
+        expect(wrapper.find('button').element.disabled).toBeFalsy()
     })
 
     it('show bouncing dots while waiting for explanation', async () => {

@@ -14,7 +14,7 @@
       <div id="image-container">
         <Cropper ref="cropper" class="cropper" :src="img" @change="imageChanged"
                  :min-width="20" :min-height="20"
-                 :stencil-component="ExplanationStencil"
+                 :stencil-component="explanationstencil"
                  :debounce="false"
                  :resizeImage="{wheel: false, touch: false}"
                  :moveImage="{mouse: false, touch: false}"
@@ -67,6 +67,11 @@ import ExplanationStencil from "@/components/ExplanationStencil";
 import {FloatingInfoButton, UseCaseHeader, XAIStudioRibbon, GitHubRibbon} from '@xai-demonstrator/xaidemo-ui';
 import {debounce} from "debounce";
 
+/* https://forum.vuejs.org/t/vue-received-a-component-which-was-made-a-reactive-object/119004/2 */
+const componentMap = {
+  stencil: ExplanationStencil
+}
+
 export default {
   name: 'App',
   components: {
@@ -113,7 +118,6 @@ export default {
   },
   data() {
     return {
-      ExplanationStencil,
       currentPrediction: false,
       currentExplanation: false,
       waitingForExplanation: false,
@@ -144,6 +148,11 @@ export default {
         }],
       backendUrl: process.env.VUE_APP_BACKEND_URL,
       img: require('./assets/table.jpg')
+    }
+  },
+  computed: {
+    explanationstencil() {
+      return componentMap['stencil']
     }
   },
   created() {
