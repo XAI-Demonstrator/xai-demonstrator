@@ -46,6 +46,6 @@ export {
 export default {
   install (Vue) {
     Vue.appConfig = config
-    Vue.prototype.$appConfig = config
+    Vue.config.globalProperties.$appConfig = config
   }
 }

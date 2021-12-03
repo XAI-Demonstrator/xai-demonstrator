@@ -1,14 +1,13 @@
-import {createLocalVue, shallowMount} from '@vue/test-utils'
+import { shallowMount } from '@vue/test-utils'
 import TextHighlight from "@/components/TextHighlight";
 
 
 describe('Component', () => {
 
-    const localVue = createLocalVue()
-    let wrapper = shallowMount(TextHighlight, localVue);
+    let wrapper = shallowMount(TextHighlight);
 
     beforeEach(() => {
-        wrapper = shallowMount(TextHighlight, localVue)
+        wrapper = shallowMount(TextHighlight)
     })
 
     it('HSL is calculated', async () => {

@@ -1,4 +1,4 @@
-import {createLocalVue, shallowMount} from "@vue/test-utils";
+import { shallowMount} from "@vue/test-utils";
 import InspectImage from "@/components/InspectImage";
 import {MultiBounce} from "@xai-demonstrator/xaidemo-ui";
 import axios from 'axios';
@@ -8,11 +8,10 @@ jest.mock('axios');
 
 describe('InspectImage.vue', () => {
 
-    const localVue = createLocalVue()
-    let wrapper = shallowMount(InspectImage, localVue);
+    let wrapper = shallowMount(InspectImage);
 
     beforeEach(() => {
-            wrapper = shallowMount(InspectImage, localVue);
+            wrapper = shallowMount(InspectImage);
             axios.CancelToken.source.mockImplementation(() => {
                 return {token: 'abcde'}
             })

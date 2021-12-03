@@ -1,4 +1,4 @@
-import {createLocalVue, shallowMount} from '@vue/test-utils'
+import { mount, shallowMount} from "@vue/test-utils";
 import App from "@/App";
 import axios from "axios";
 import flushPromises from "flush-promises";
@@ -12,24 +12,57 @@ describe('App.vue', () => {
             status: 'loaded'
         }
     }
+
+    const AnalyzeReviewStub = {
+        render: () => {
+        },
+        methods: {
+            resetComponent: () => {}
+        }
+    }
+
+    const ExplainAnalysisStub = {
+        render: () => {},
+        methods: {
+            resetComponent: () => {}
+        }
+    }
+
     const loader = axios.get.mockImplementation(() => Promise.resolve(response))
 
-    const localVue = createLocalVue()
-    let wrapper = shallowMount(App, localVue)
+    let wrapper = mount(App, {
+        shallow: true,
+        global: {
+            stubs: {
+                AnalyzeReview: AnalyzeReviewStub,
+                ExplainAnalysis: ExplainAnalysisStub
+            }
+        }
+    });
 
     beforeEach(() => {
-            wrapper = shallowMount(App, localVue);
-            wrapper.vm.$refs = {
-                'analyzer': {resetComponent: jest.fn()},
-                'explainer': {resetComponent: jest.fn()}
-            }
+            wrapper = mount(App, {
+                shallow: true,
+                global: {
+                    stubs: {
+                        AnalyzeReview: AnalyzeReviewStub,
+                        ExplainAnalysis: ExplainAnalysisStub
+                    }
+                }
+            })
         }
     )
 
     it('triggers backend loading after mounting', async () => {
         loader.mockClear()
 
-        await shallowMount(App, localVue)
+        await shallowMount(App, {
+                stubs: {
+                    'analyzer': AnalyzeReviewStub,
+                    'explainer': ExplainAnalysisStub
+                }
+            })
+
         await flushPromises()
 
         expect(loader.mock.calls.length).toBe(1)
