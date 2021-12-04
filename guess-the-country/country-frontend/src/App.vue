@@ -34,14 +34,9 @@
       </button>
       <button type="button" class="xd-button xd-secondary" id="submit" v-on:click="submitFile()">What the AI says
       </button>
-    </main>
-    <SpinningIndicator class="indicator" v-bind:visible="waitingForExplanation"/>
-    <FloatingInfoButton
-      v-bind:info-text="infoText"
-      v-bind:info-url="infoUrl"
-      v-bind:link-label="linkLabel"/>
-    <SpinningIndicator/>
+          <SpinningIndicator class="indicator" v-bind:visible="waitingForExplanation"/>
 
+    </main>
     <NotificationGroup group="foo">
       <div class="fixed inset-0 flex items-start justify-end p-6 px-4 py-6 pointer-events-none">
         <div class="w-full max-w-sm">
@@ -132,12 +127,16 @@
         </div>
       </div>
     </NotificationGroup>
-
+    <FloatingInfoButton
+      v-bind:info-text="infoText"
+      v-bind:info-url="infoUrl"
+      v-bind:link-label="linkLabel"/>
   </div>
 </template>
 
 <script>
-import {notify, NotificationGroup, Notification} from 'notiwind'
+import notify from 'notiwind'
+import NotificationGroup from 'notiwind'
 import axios from 'axios'
 import {UseCaseHeader, FloatingInfoButton, SpinningIndicator} from '@xai-demonstrator/xaidemo-ui'
 
@@ -348,6 +347,8 @@ body {
 #app {
   display: flex;
   justify-content: space-between;
+  position: relative;
+  overflow: hidden;
 }
 
 main {

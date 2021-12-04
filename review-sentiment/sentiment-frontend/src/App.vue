@@ -117,6 +117,9 @@ export default {
 <style>
 #app {
   display: flex;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
 }
 
 main {
