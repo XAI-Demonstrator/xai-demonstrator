@@ -8,7 +8,6 @@ __all__ = ["vue_frontend"]
 
 
 def _return_if_exists(path):
-    print(path)
     if path.exists():
         return FileResponse(path)
     else:
