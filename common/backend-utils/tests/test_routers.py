@@ -28,6 +28,9 @@ def client_with_static_files(tmp_path):
     app_js = js_dir / "app.js"
     app_js.write_text("JS FOR TEST")
 
+    unreachable_file = tmp_path / "unreachable.txt"
+    unreachable_file.write_text("none of your business")
+
     return client
 
 
@@ -53,4 +56,14 @@ def test_that_static_files_are_returned(client_with_static_files):
 
 def test_that_missing_static_files_yield_404(client_with_static_files):
     r = client_with_static_files.get("/js/missing.js")
+    assert r.status_code == 404
+
+
+def test_that_users_can_only_access_static_files(client_with_static_files):
+    r = client_with_static_files.get("/%2E%2E/unreachable.txt")
+    assert r.status_code == 404
+
+
+def test_that_users_cannot_reach_above_static_folder(client_with_static_files):
+    r = client_with_static_files.get("/%2E%2E/static/favicon.ico")
     assert r.status_code == 404
