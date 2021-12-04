@@ -71,6 +71,9 @@ export default {
 
 #app {
   display: flex;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
 }
 
 .blank-header {
