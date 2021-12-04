@@ -23,6 +23,22 @@ Throughout this user guide, we'll show you all the commands you need in detail.
 
     To install _Git_, see the instructions [here](./dev-setup#install-git).
 
+!!! note "Configuring _Git_ on Windows"
+
+    Windows uses a different method to mark line endings in text files.
+    To avoid issues, please run the following command to configure _Git_
+    _prior to_ running `git clone` to keep the original line endings:
+
+    ```bash
+    git config --global core.autocrlf false
+    ```
+
+    If this is not configured correctly, shell scripts that are copied
+    into the Docker images will have Windows-style line endings and 
+    cannot be executed in the Linux environments of the images.
+    For more information, see
+    [this post on Unix StackExchange](https://unix.stackexchange.com/questions/433444/cant-run-script-file-in-docker-no-such-file-or-directory/626437).
+
 To download ("check out") the _XAI Demonstrator_ source code from _GitHub_,
 open a terminal (on Windows, we recommend the _Git Bash_ that ships with _Git_),
 navigate to the folder you'd like to store the source code in, and run the
