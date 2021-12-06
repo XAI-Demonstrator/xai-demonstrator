@@ -11,7 +11,7 @@
   "dependencies": {
     "@xai-demonstrator/xaidemo-ui": "^0.4.3",
     "core-js": "^3.19.2",
-    "vue": "^3.2.23"
+    "vue": "^3.2.24"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.5.15",
