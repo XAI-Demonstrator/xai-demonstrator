@@ -32,14 +32,9 @@ trace.set_tracer_provider(
 
 
 def set_up():
-    """Instantiate and configure the span exporter.
+    """Instantiate the span exporter.
 
-    The exporter is select and configured through environment variables.
-
-    Parameters
-    ----------
-    service_name : str
-        The name under which the data is exported.
+    The exporter is selected and configured through environment variables.
     """
     if tracing_settings.TRACING_EXPORTER.lower() == "jaeger":
         from opentelemetry.sdk.trace.export import BatchSpanProcessor
