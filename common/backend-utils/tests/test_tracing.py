@@ -26,7 +26,7 @@ def test_jaeger_exporter_tracing_setup(mocker):
     settings.TRACING_EXPORTER = "jaeger"
     mocker.patch.object(tracing, 'tracing_settings', settings)
 
-    tracing.set_up("test-service")
+    tracing.set_up()
 
     spy.assert_called_once()
     assert len(provider.processors) == 1
@@ -45,7 +45,7 @@ def test_console_exporter_tracing_setup(mocker):
     settings.TRACING_EXPORTER = "console"
     mocker.patch.object(tracing, 'tracing_settings', settings)
 
-    tracing.set_up("test-service")
+    tracing.set_up()
 
     spy.assert_called_once()
     assert len(provider.processors) == 1
@@ -67,7 +67,7 @@ def test_gcp_exporter_tracing_setup(mocker):
     settings.TRACING_EXPORTER = "gcp"
     mocker.patch.object(tracing, 'tracing_settings', settings)
 
-    tracing.set_up("test-service")
+    tracing.set_up()
 
     spy.assert_called_once()
     assert len(provider.processors) == 1
@@ -86,7 +86,7 @@ def test_default_exporter_tracing_setup(mocker):
     settings.TRACING_EXPORTER = "default"
     mocker.patch.object(tracing, 'tracing_settings', settings)
 
-    tracing.set_up("test-service")
+    tracing.set_up()
 
     spy.assert_not_called()
     assert len(provider.processors) == 0

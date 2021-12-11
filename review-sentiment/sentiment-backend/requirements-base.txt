@@ -7,4 +7,4 @@ uvicorn==0.15.0
 transformers==4.12.5
 captum==0.4.1
 
-git+https://github.com/xai-demonstrator/xai-demonstrator.git@f29abe2b0620735e2dc9c396acce9b6e47c3729e#egg=xaidemo&subdirectory=common/backend-utils
+git+https://github.com/xai-demonstrator/xai-demonstrator.git@6f230206fd06fc0b43fc1d430a4ad804d2605123#egg=xaidemo&subdirectory=common/backend-utils

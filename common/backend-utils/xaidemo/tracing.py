@@ -1,10 +1,11 @@
-"""OpenTelemetry tracing utilities"""
+"""OpenTelemetry tracing utilities for the XAI Demonstrator."""
 from functools import wraps
 from typing import Any, Callable, Dict, Union
 
 from fastapi import FastAPI
 from opentelemetry import trace
 from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
+from opentelemetry.sdk.resources import SERVICE_NAME, Resource
 from opentelemetry.sdk.trace import TracerProvider
 from pydantic import BaseSettings
 
@@ -12,11 +13,10 @@ from . import __version__
 
 __all__ = ["set_up", "instrument_app", "add_span_attributes", "traced"]
 
-trace.set_tracer_provider(TracerProvider())
-
 
 class TracingSettings(BaseSettings):
     TRACING_EXPORTER: str = "default"
+    SERVICE_NAME: str = "unknown-xaidemo-service"
     # OpenTelemetry Jaeger exporter configuration
     JAEGER_AGENT_HOST_NAME: str = "localhost"
     JAEGER_AGENT_PORT: int = 6831
@@ -24,16 +24,17 @@ class TracingSettings(BaseSettings):
 
 tracing_settings = TracingSettings()
 
+trace.set_tracer_provider(
+    TracerProvider(  
+        resource=Resource.create({SERVICE_NAME: tracing_settings.SERVICE_NAME})
+    )
+)
 
-def set_up(service_name: str):
-    """Instantiate and configure the span exporter.
 
-    The exporter is select and configured through environment variables.
+def set_up():
+    """Instantiate the span exporter.
 
-    Parameters
-    ----------
-    service_name : str
-        The name under which the data is exported.
+    The exporter is selected and configured through environment variables.
     """
     if tracing_settings.TRACING_EXPORTER.lower() == "jaeger":
         from opentelemetry.sdk.trace.export import BatchSpanProcessor
