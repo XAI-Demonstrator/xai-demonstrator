@@ -5,7 +5,7 @@ from xaidemo.routers import vue_frontend
 from .api import api
 from .config import settings
 
-tracing.set_up(settings.service_name)
+tracing.set_up()
 
 app = FastAPI(root_path=settings.root_path)
 app.include_router(api, prefix=settings.path_prefix)
