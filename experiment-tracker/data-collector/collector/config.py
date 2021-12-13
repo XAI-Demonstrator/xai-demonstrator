@@ -2,7 +2,7 @@ from pydantic import BaseSettings
 
 
 class Settings(BaseSettings):
-    service_name: str = "experiment-tracker"
+    service_name: str = "experiment-collector"
     # Database settings
     db_server: str = "localhost"
     db_port: int = 5984
