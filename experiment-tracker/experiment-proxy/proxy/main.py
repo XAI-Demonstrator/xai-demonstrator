@@ -14,7 +14,7 @@ from .config import settings
 from .http_client import AioHttpClientSession
 from .record import RequestData, ResponseData, TrackedData, record_data
 
-tracing.set_up("main")
+tracing.set_up()
 AioHttpClientInstrumentor().instrument()
 
 
@@ -85,7 +85,7 @@ async def proxy(request: Request,
                                                    decoded=list(msg.values())[0]) if content_type else {},
                                response=ResponseData(raw=response.body.hex(' ', 4),
                                                      decoded=decoded_response,
-                                                     status=response.status_code))
+                                                     status_code=response.status_code))
 
     trace_id = trace.get_current_span().get_span_context().trace_id
     background_tasks.add_task(record_data, f"{trace_id:x}", endpoint, "tracked", tracked_data.dict())
