@@ -115,6 +115,3 @@ def test_that_response_is_recorded(aiomock):
     raw_data = recorded_response["raw"]
     assert raw_data
     assert json.loads(bytes.fromhex(raw_data).decode("utf-8")) == {"so": "nice", "out": "here"}
-
-
-

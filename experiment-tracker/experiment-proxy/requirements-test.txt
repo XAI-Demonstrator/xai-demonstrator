@@ -1,2 +1,3 @@
 pytest
+pytest-asyncio
 aioresponses==0.7.2
