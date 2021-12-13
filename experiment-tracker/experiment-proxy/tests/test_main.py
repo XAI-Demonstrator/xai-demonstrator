@@ -2,6 +2,7 @@ import aioresponses
 import pytest
 from fastapi.testclient import TestClient
 from yarl import URL
+import json
 
 from proxy import main
 
@@ -86,3 +87,34 @@ def test_that_error_message_is_passed(aiomock):
 
     assert response.status_code == 409
     assert response.json()["msg"] == "Write conflict."
+
+
+def test_that_status_code_is_recorded(aiomock):
+    aiomock.post("/route", status=404)
+
+    response = client.post("/route")
+
+    assert response.status_code == 404
+    call = aiomock.requests.get(("POST", URL("/record")))[0]
+    assert call.kwargs["json"]["part"]["tracked"]["response"]["status_code"] == 404
+
+
+def test_that_response_is_recorded(aiomock):
+    aiomock.post("/route", status=200, payload={"so": "nice", "out": "here"})
+
+    response = client.post("/route")
+
+    assert response.status_code == 200
+
+    call = aiomock.requests.get(("POST", URL("/record")))[0]
+
+    recorded_response = call.kwargs["json"]["part"]["tracked"]["response"]
+    assert recorded_response["status_code"] == 200
+    assert recorded_response["decoded"] == {"so": "nice", "out": "here"}
+
+    raw_data = recorded_response["raw"]
+    assert raw_data
+    assert json.loads(bytes.fromhex(raw_data).decode("utf-8")) == {"so": "nice", "out": "here"}
+
+
+

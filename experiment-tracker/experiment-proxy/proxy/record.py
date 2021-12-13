@@ -25,7 +25,7 @@ class RequestData(BaseModel):
 
 class ResponseData(BaseModel):
     raw: Optional[str]
-    status: str
+    status_code: int
     decoded: Optional[dict]
 
     @root_validator
