@@ -17,7 +17,7 @@ class RequestData(BaseModel):
     @root_validator
     def all_or_nothing(cls, values):
         entries = [values.get("raw"), values.get("content_type"), values.get("decoded")]
-        is_none = [entry is None for entry in entries]
+        is_none = [(entry is None or not entry) for entry in entries]
         if not all(is_none) and any(is_none):
             raise ValueError("Either all or none of the values have to be set.")
         return values
@@ -31,7 +31,7 @@ class ResponseData(BaseModel):
     @root_validator
     def all_or_nothing(cls, values):
         entries = [values.get("raw"), values.get("decoded")]
-        is_none = [entry is None for entry in entries]
+        is_none = [(entry is None or not entry) for entry in entries]
         if not all(is_none) and any(is_none):
             raise ValueError("Either both 'raw' and 'decoded' are set or neither is.")
         return values
