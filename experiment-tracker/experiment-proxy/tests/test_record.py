@@ -5,7 +5,7 @@ import pytest
 from pydantic import ValidationError
 from yarl import URL
 
-from proxy.record import RequestData, ResponseData, record_data, PartialRecordRequest
+from proxy.record import RequestData, ResponseData, record_data
 
 
 def test_that_request_can_be_empty():

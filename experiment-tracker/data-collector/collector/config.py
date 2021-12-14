@@ -11,5 +11,4 @@ class Settings(BaseSettings):
     db_password: str
 
 
-
 settings = Settings()
