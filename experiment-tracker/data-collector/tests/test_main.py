@@ -1,10 +1,9 @@
 import uuid
 from unittest.mock import patch
-import json
+
 import pytest
 from fastapi.testclient import TestClient
-
-from tracker import main
+from collector import main
 
 
 @pytest.fixture()
@@ -16,35 +15,34 @@ def client():
 my_id = str(uuid.uuid4())
 
 example = {
-    "service_name": "test-service",
-    "request_id": my_id,
-    "request": {
-        "text": "This is a test!"
+    "id": my_id,
+    "source": {
+        "name": "test-service"
     },
-    "response": {
-        "prediction_id": my_id,
-        "class_name": "Camera",
-        "class_id": 4
+    "part": {
+        "demo": {
+            "msg": "hello world"
+        }
     }
 }
 
 
 def test_that_request_is_recorded(client):
-    response = client.put("/record", json=example)
+    response = client.post("/record", json=example)
+    assert response.status_code == 200
 
-    assert response.status_code == 201
 
-
-def test_that_request_can_be_retrieved(client):
-    _ = client.put("/record", json=example)
+def test_that_record_can_be_retrieved(client):
+    response = client.post("/record", json=example)
+    assert response.status_code == 200
 
     response = client.get(f"/get/{my_id}")
 
-    request = response.json()
-    del request["timestamp"]
+    record = response.json()
+    del record["timestamp"]
 
     assert response.status_code == 200
-    assert request == example
+    assert record["data"] == example["part"]
 
 
 def test_that_request_for_missing_record_is_handled_gracefully(client):
@@ -56,10 +54,10 @@ def test_that_request_for_missing_record_is_handled_gracefully(client):
 def test_that_dump_is_created(client):
     for _ in range(10):
         record = example.copy()
-        record["request_id"] = str(uuid.uuid4())
-        _ = client.put("/record", json=record)
+        record["id"] = str(uuid.uuid4())
+        _ = client.post("/record", json=record)
 
     response = client.get("/dump")
 
     assert response.status_code == 200
-    assert len(response.json()["requests"]) == 10
+    assert len(response.json()["records"]) == 10
