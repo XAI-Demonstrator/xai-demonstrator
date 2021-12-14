@@ -3,7 +3,7 @@ name: Experiment Tracker
 on:
   push:
     paths:
-      - 'experiment-tracker/'
+      - 'experiment-tracker/**'
       - '!experiment-tracker/**.md'
 
 jobs:
@@ -120,7 +120,7 @@ jobs:
       - name: Spin up experiment tracker
         run: |
           cd ./experiment-tracker
-          docker-compose up -d
+          docker-compose --env-file .env.test up -d
 
       - name: Run integration tests
         run: |
