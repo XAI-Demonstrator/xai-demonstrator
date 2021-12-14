@@ -1,8 +1,11 @@
+import io
+import json
+
 import aioresponses
+import png
 import pytest
 from fastapi.testclient import TestClient
 from yarl import URL
-import json
 
 from proxy import main
 
@@ -14,6 +17,21 @@ def aiomock():
     with aioresponses.aioresponses() as m:
         m.post("/record", status=200)
         yield m
+
+
+@pytest.fixture
+def generate_image():
+    def _generate(width, height):
+        img = [3 * [min(255, v) for v in range(width)] for _ in range(height)]
+        w = png.Writer(width, height, greyscale=False, alpha=False)
+
+        f = io.BytesIO()
+        w.write(f, img)
+        f.seek(0)
+
+        return f
+
+    return _generate
 
 
 def test_that_empty_call_is_passed(aiomock):
@@ -115,3 +133,11 @@ def test_that_response_is_recorded(aiomock):
     raw_data = recorded_response["raw"]
     assert raw_data
     assert json.loads(bytes.fromhex(raw_data).decode("utf-8")) == {"so": "nice", "out": "here"}
+
+
+def test_that_files_in_payload_are_handled(aiomock, generate_image):
+    aiomock.post("/route", status=200)
+
+    response = client.post("/route", data={"file": generate_image(128, 64)})
+
+    assert response.status_code == 200
