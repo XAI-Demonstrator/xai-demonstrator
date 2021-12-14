@@ -2,7 +2,7 @@ import time
 from typing import Dict, Any, Optional, List
 
 import couchdb
-from fastapi import FastAPI, HTTPException, Response
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, ValidationError
 from starlette.status import HTTP_404_NOT_FOUND, HTTP_409_CONFLICT, HTTP_500_INTERNAL_SERVER_ERROR
 from xaidemo import tracing
