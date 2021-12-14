@@ -3,9 +3,10 @@ import couchdb
 from .config import settings
 
 couch = couchdb.Server(f"http://{settings.db_user}:{settings.db_password}"  # noqa
-                       f"@{settings.db_server}:{settings.db_port}")
+                       f"@{settings.db_host}:{settings.db_port}")
 
 
+# TODO: Prevent simultaneous writes to the same id
 class Repository:
 
     def __init__(self):

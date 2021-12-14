@@ -2,13 +2,14 @@ from pydantic import BaseSettings
 
 
 class Settings(BaseSettings):
-    service_name: str = "experiment-collector"
+    service_name: str = "data-collector"
     # Database settings
-    db_server: str = "localhost"
+    db_host: str = "localhost"
     db_port: int = 5984
-    db_user: str = "user"
-    db_password: str = "pw"
     db_name: str = "xaidemo"
+    db_user: str
+    db_password: str
+
 
 
 settings = Settings()
