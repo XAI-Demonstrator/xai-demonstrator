@@ -50,7 +50,7 @@ class Dump(BaseModel):
 
 
 @app.post("/record")
-def record(partial_record: PartialRecord, response: Response):
+def record(partial_record: PartialRecord):
     id_ = partial_record.id
     if id_ in repo:
         current_record = Record(**repo[id_])
@@ -67,7 +67,8 @@ def record(partial_record: PartialRecord, response: Response):
         repo[id_] = current_record.dict()
 
     else:
-        # TOOD: Check that complete source information is given
+        # TODO: Check that complete source information is given
+
         repo[id_] = Record(id=id_,
                            source=partial_record.source.dict(),
                            data=partial_record.part).dict()
@@ -87,6 +88,8 @@ def retrieve(identifier: str) -> Record:
 
 @app.get("/dump")
 def dump() -> Dump:
+    # TODO: How large can this response be? We might need to return data in chunks
+
     return Dump(records=[Record(**repo[doc_id])
                          for doc_id in repo])
 
