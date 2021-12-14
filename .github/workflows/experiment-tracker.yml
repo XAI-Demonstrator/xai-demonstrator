@@ -3,7 +3,7 @@ name: Experiment Tracker
 on:
   push:
     paths:
-      - 'experiment-tracker/'
+      - 'experiment-tracker/**'
       - '!experiment-tracker/**.md'
 
 jobs:
