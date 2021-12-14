@@ -1,0 +1,5 @@
+pytest
+pydantic
+pypng
+aiohttp
+pytest-asyncio
