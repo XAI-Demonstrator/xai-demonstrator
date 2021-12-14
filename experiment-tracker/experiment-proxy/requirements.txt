@@ -1,7 +1,8 @@
-fastapi==0.70.1
+fastapi
 pydantic
-multipart
-aiohttp==3.8.1
-opentelemetry-instrumentation-aiohttp-client==0.26b1
+python-multipart
+aiohttp
+uvicorn
+opentelemetry-instrumentation-aiohttp-client
 
-git+https://github.com/xai-demonstrator/xai-demonstrator.git@f29abe2b0620735e2dc9c396acce9b6e47c3729e#egg=xaidemo&subdirectory=common/backend-utils
+git+https://github.com/xai-demonstrator/xai-demonstrator.git@6f230206fd06fc0b43fc1d430a4ad804d2605123#egg=xaidemo&subdirectory=common/backend-utils

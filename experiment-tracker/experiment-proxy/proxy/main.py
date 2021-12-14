@@ -8,6 +8,7 @@ from opentelemetry.instrumentation.aiohttp_client import (
     AioHttpClientInstrumentor
 )
 from starlette.status import HTTP_400_BAD_REQUEST, HTTP_406_NOT_ACCEPTABLE
+from starlette.datastructures import UploadFile
 from xaidemo import tracing
 
 from .config import settings
@@ -78,11 +79,16 @@ async def proxy(request: Request,
                     raise HTTPException(status_code=HTTP_406_NOT_ACCEPTABLE,
                                         detail="The experiment proxy can only handle JSON responses.")
             else:
-                decoded_response = ""
+                decoded_response = {}
+
+    decoded_request = list(msg.values())[0] if content_type else {}
+    for key, value in decoded_request.items():
+        if isinstance(value, UploadFile):
+            decoded_request[key] = value.file.read().hex(' ', 4)
 
     tracked_data = TrackedData(request=RequestData(raw=body.hex(' ', 4),
                                                    content_type=content_type,
-                                                   decoded=list(msg.values())[0]) if content_type else {},
+                                                   decoded=decoded_request),
                                response=ResponseData(raw=response.body.hex(' ', 4),
                                                      decoded=decoded_response,
                                                      status_code=response.status_code))

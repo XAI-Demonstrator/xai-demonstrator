@@ -51,7 +51,7 @@ class SourceInformation(BaseModel):
 class PartialRecordRequest(BaseModel):
     id: str
     source: SourceInformation
-    part: Dict[str, Any]
+    part: Dict[str, Dict[str, Any]]
 
 
 async def record_data(trace_id: str,
@@ -64,7 +64,7 @@ async def record_data(trace_id: str,
 
     partial = PartialRecordRequest(id=trace_id,
                                    source=SourceInformation(endpoint=endpoint),
-                                   part = {"tracked": value})
+                                   part={"tracked": value})
 
     async with AioHttpClientSession() as session:
         await session.post(settings.collector_url + "/record",
