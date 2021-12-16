@@ -92,7 +92,7 @@ jobs:
           cd ./experiment-tracker/data-collector
           echo $PWD
           pip install -r requirements-test.txt
-          pytest -v --cov=proxy tests/
+          pytest -v --cov=collector tests/
           # when on master, pretend to be on branch x-cov-data-collector
           $ON_MASTER && export GITHUB_REF="refs/heads/x-cov-data-collector"
           $ON_MASTER && export GITHUB_HEAD_REF="x-cov-data-collector"

@@ -44,7 +44,7 @@ async def test_that_request_is_recorded(proxy, collector):
             dump = await response.json()
 
         for record in dump["records"]:
-            if "find" in record["data"]["tracked"]["request"]["decoded"]:
+            if "find" in record["data"]["tracked"]["data"]["request"]["decoded"]:
                 break
         else:
             raise AssertionError("Did not find entry")
@@ -56,3 +56,26 @@ async def test_that_request_is_recorded(proxy, collector):
             single_record = await response.json()
 
         assert record == single_record
+
+
+@pytest.mark.asyncio
+async def test_that_one_call_yields_one_record(proxy, collector):
+    async with aiohttp.ClientSession() as session:
+        async with session.post(proxy + "/json_with_record", json={"find": "me i'm special"}) as response:
+            assert response.status == 200
+
+        # Wait for the collector to receive the data
+        await asyncio.sleep(10)
+
+        async with session.get(collector + "/dump") as response:
+            assert response.status == 200
+            dump = await response.json()
+
+        for record in dump["records"]:
+            if "backend" in record["data"]:
+                break
+        else:
+            raise AssertionError("Did not find entry")
+
+        assert "tracked" in record["data"]
+        assert record["data"]["tracked"]["data"]["find"] == "me i'm special"
