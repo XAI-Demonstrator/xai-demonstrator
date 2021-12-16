@@ -1,7 +1,9 @@
-import pytest
-import aiohttp
 import asyncio
 import uuid
+
+import aiohttp
+import pytest
+
 
 @pytest.mark.asyncio
 async def test_that_json_calls_work(proxy):
