@@ -1,9 +1,9 @@
+import pytest
+
 import fastapi
 from fastapi.testclient import TestClient
 
 from xaidemo import routers
-
-import pytest
 
 
 @pytest.fixture
