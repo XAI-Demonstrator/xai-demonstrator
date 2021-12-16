@@ -6,7 +6,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, ValidationError
 from starlette.status import HTTP_404_NOT_FOUND, HTTP_409_CONFLICT, HTTP_500_INTERNAL_SERVER_ERROR
 from xaidemo import tracing
-from xaidemo.tracking.data_models import PartialRecordRequest
+from xaidemo.tracking.record import PartialRecordRequest
 
 from .repository import repo
 

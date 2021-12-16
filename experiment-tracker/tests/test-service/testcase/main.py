@@ -5,7 +5,7 @@ from xaidemo import tracing, tracking
 tracing.set_up()
 
 app = FastAPI()
-tracking.instrument(app)
+tracking.instrument_app(app)
 
 
 class TestResponse(BaseModel):

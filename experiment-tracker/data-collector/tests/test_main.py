@@ -5,7 +5,7 @@ from copy import deepcopy
 import pytest
 from fastapi.testclient import TestClient
 from collector import main
-from xaidemo.tracking.data_models import PartialRecordRequest
+from xaidemo.tracking.record import PartialRecordRequest
 
 
 @pytest.fixture()

@@ -3,4 +3,4 @@ pydantic
 couchdb
 uvicorn
 
-git+https://github.com/xai-demonstrator/xai-demonstrator.git@45ca0d245ef33a28b4cc25495df7dc8db83f2725#egg=xaidemo&subdirectory=common/backend-utils
+git+https://github.com/xai-demonstrator/xai-demonstrator.git@345e1bc05395f5fa13721c3714a5871682a2adfc#egg=xaidemo&subdirectory=common/backend-utils

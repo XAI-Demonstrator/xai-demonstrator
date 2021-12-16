@@ -1,8 +1,7 @@
 from typing import Optional
 
 from pydantic import BaseModel, root_validator
-from xaidemo.tracking.data_models import PartialRecordRequest, SourceInformation
-from xaidemo.tracking.record import initialize_record
+from xaidemo.tracking.record import initialize_record, PartialRecordRequest, SourceInformation
 
 from .config import settings
 
