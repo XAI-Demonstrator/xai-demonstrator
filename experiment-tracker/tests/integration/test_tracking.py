@@ -78,4 +78,4 @@ async def test_that_one_call_yields_one_record(proxy, collector):
             raise AssertionError("Did not find entry")
 
         assert "tracked" in record["data"]
-        assert record["data"]["tracked"]["data"]["find"] == "me i'm special"
+        assert record["data"]["backend"]["data"]["msg"] == "hello world!"

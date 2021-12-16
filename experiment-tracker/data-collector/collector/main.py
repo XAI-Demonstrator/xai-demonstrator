@@ -1,5 +1,7 @@
+import logging
+import threading
 import time
-from typing import Dict, Any, Optional, List
+from typing import Dict, Any, List
 
 import couchdb
 from fastapi import FastAPI, HTTPException
@@ -8,7 +10,10 @@ from starlette.status import HTTP_404_NOT_FOUND, HTTP_409_CONFLICT, HTTP_500_INT
 from xaidemo import tracing
 from xaidemo.tracking.record import PartialRecordRequest
 
+from .config import settings
 from .repository import repo
+
+logger = logging.getLogger(__name__)
 
 tracing.set_up()
 
@@ -20,9 +25,6 @@ class Record(BaseModel):
     timestamp: float = time.time()
     service: str
     data: Dict[str, Dict[str, Any]]
-
-    _id: Optional[str]
-    _rev: Optional[str]
 
     class Config:
         extra = "ignore"
@@ -38,33 +40,57 @@ class Dump(BaseModel):
     records: List[Record]
 
 
+creation_lock = threading.Lock()
+
+
 @app.post("/record")
 def record(partial_record_request: PartialRecordRequest):
-    id_ = partial_record_request.id
-    if id_ in repo:
-        current_record = Record(**repo[id_])
+    if partial_record_request.id in repo:
+        update_record(partial_record_request)
+    else:
+        with creation_lock:
+            if partial_record_request.id not in repo:
+                partial_record = create_partial_record(partial_record_request)
+                repo[partial_record_request.id] = Record(id=partial_record_request.id,
+                                                         service=partial_record_request.source.service,
+                                                         data=partial_record).dict()
+            else:
+                update_record(partial_record_request)
 
-        if current_record.service != partial_record_request.source.service:
+
+def update_record(partial_record_request):
+    id_ = partial_record_request.id
+
+    for attempt in range(settings.retries):
+        try:
+            _update_record(id_, partial_record_request)
+        except couchdb.http.ResourceConflict:
+            logger.warning("Resource conflict, try again...")
+        else:
+            break
+    else:
+        logger.error(f"Could not submit update to {id_} within {settings.retries} attempts.")
+
+
+def _update_record(id_, partial_record_request):
+    current_doc = repo[id_]
+
+    current_record = Record(**current_doc)
+    if current_record.service != partial_record_request.source.service:
+        raise HTTPException(
+            status_code=HTTP_409_CONFLICT,
+            detail=f"Key {id_} is already associated with {current_record.service}, "
+                   f"received partial request allegedly from {partial_record_request.source.service}"
+        )
+    for key in partial_record_request.part:
+        if key in current_record.data:
             raise HTTPException(
                 status_code=HTTP_409_CONFLICT,
-                detail=f"Key {id_} is already associated with {current_record.service}, "
-                       f"received partial request allegedly from {partial_record_request.source.service}"
-            )
+                detail=f"Key {key} already set for item {id_}.")
 
-        for key in partial_record_request.part:
-            if key in current_record.data:
-                raise HTTPException(
-                    status_code=HTTP_409_CONFLICT,
-                    detail=f"Key {key} already set for item {id_}.")
-
-        partial_record = create_partial_record(partial_record_request)
-        current_record.data.update(partial_record)
-        repo[id_] = current_record.dict()
-    else:
-        partial_record = create_partial_record(partial_record_request)
-        repo[id_] = Record(id=id_,
-                           service=partial_record_request.source.service,
-                           data=partial_record).dict()
+    partial_record = create_partial_record(partial_record_request)
+    current_doc["data"].update(partial_record)
+    repo[id_] = current_doc
 
 
 def create_partial_record(partial_record_request: PartialRecordRequest):

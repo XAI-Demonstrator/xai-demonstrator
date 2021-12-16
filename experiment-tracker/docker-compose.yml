@@ -54,6 +54,8 @@ services:
       - SERVICE_NAME=test-case
       - TRACING_EXPORTER=jaeger
       - JAEGER_AGENT_HOST_NAME=jaeger
+      - COLLECTOR_URL=http://collector:8000
+      - EXPERIMENT=1
 
   jaeger:
     image: jaegertracing/all-in-one

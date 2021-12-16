@@ -9,6 +9,7 @@ class Settings(BaseSettings):
     db_name: str = "xaidemo"
     db_user: str
     db_password: str
+    retries: int = 3
 
 
 settings = Settings()
