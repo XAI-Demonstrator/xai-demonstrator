@@ -22,8 +22,9 @@ tracing.instrument_app(app)
 test_client = TestClient(app)
 
 
-def test_that_data_is_sent_to_collector(aiomock):
-    assert settings.experiment
+def test_that_data_is_sent_to_collector(aiomock, mocker):
+    mocker.patch.object(settings, "experiment", new=True)
+    mocker.patch.object(settings, "collector_url", new="http://collector")
     aiomock.post(settings.collector_url + "/record", status=200, repeat=True)
 
     test_client.post("/test")
@@ -32,8 +33,9 @@ def test_that_data_is_sent_to_collector(aiomock):
     assert len(calls) == 2
 
 
-def test_that_collector_timeout_is_handled_gracefully(aiomock):
-    assert settings.experiment
+def test_that_collector_timeout_is_handled_gracefully(aiomock, mocker):
+    mocker.patch.object(settings, "experiment", new=True)
+    mocker.patch.object(settings, "collector_url", new="http://collector")
     aiomock.post(settings.collector_url + "/record", timeout=True, repeat=True)
 
     test_client.post("/test")
@@ -44,6 +46,7 @@ def test_that_collector_timeout_is_handled_gracefully(aiomock):
 
 def test_that_experiments_can_be_turned_off(aiomock, mocker):
     mocker.patch.object(settings, "experiment", new=False)
+    mocker.patch.object(settings, "collector_url", new="http://collector")
     assert not settings.experiment
 
     aiomock.post(settings.collector_url + "/record", status=200, repeat=True)

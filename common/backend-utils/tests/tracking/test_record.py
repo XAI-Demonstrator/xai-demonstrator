@@ -1,6 +1,6 @@
 import pytest
-from xaidemo.tracking.data_models import PartialRecordRequest, SourceInformation
-from xaidemo.tracking.record import send_record, logger, TaskMemory
+from xaidemo.tracking.record import TaskMemory, PartialRecordRequest, SourceInformation
+from xaidemo.tracking.record import send_record, logger, settings
 from yarl import URL
 
 partial_record_request = PartialRecordRequest(id="abc123",
@@ -28,19 +28,23 @@ def test_that_task_memory_is_erased():
 
 
 @pytest.mark.asyncio
-async def test_that_data_is_sent(aiomock):
-    aiomock.post("/record", status=200)
+async def test_that_data_is_sent(aiomock, mocker):
+    mocker.patch.object(settings, "experiment", new=True)
+    mocker.patch.object(settings, "collector_url", new="http://collector")
+    aiomock.post(settings.collector_url + "/record", status=200)
 
     await send_record(partial_record_request)
 
-    call = aiomock.requests.get(("POST", URL("/record")))[0]
+    call = aiomock.requests.get(("POST", URL(settings.collector_url + "/record")))[0]
     assert call.kwargs["json"]["id"] == "abc123"
     assert call.kwargs["json"]["part"] == {"payload": {"key": "value"}}
 
 
 @pytest.mark.asyncio
 async def test_that_collector_issues_are_handled_gracefully(aiomock, mocker):
-    aiomock.post("/record", status=409)
+    mocker.patch.object(settings, "experiment", new=True)
+    mocker.patch.object(settings, "collector_url", new="http://collector")
+    aiomock.post(settings.collector_url + "/record", status=409)
     logger_mock = mocker.patch.object(logger, "error")
 
     await send_record(partial_record_request)
@@ -50,7 +54,9 @@ async def test_that_collector_issues_are_handled_gracefully(aiomock, mocker):
 
 @pytest.mark.asyncio
 async def test_that_unavailable_collector_is_handled_gracefully(aiomock, mocker):
-    aiomock.post("/record", timeout=True)
+    mocker.patch.object(settings, "experiment", new=True)
+    mocker.patch.object(settings, "collector_url", new="http://collector")
+    aiomock.post(settings.collector_url + "/record", timeout=True)
     logger_mock = mocker.patch.object(logger, "error")
 
     await send_record(partial_record_request)
