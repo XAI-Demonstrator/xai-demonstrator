@@ -1,4 +1,4 @@
-# XAI Demonstrator experiment tracking
+# Experiment tracking
 
 - [`data-collector`](./data-collector)
 - [`experiment-proxy`](./experiment-proxy)

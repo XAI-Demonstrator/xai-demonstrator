@@ -1,19 +1,14 @@
 from pydantic import BaseSettings
 
-__all__ = ["settings"]
 
-
-class Settings(BaseSettings):
-    # proxy
-    backend_url: str = ""
+class ProxySettings(BaseSettings):
+    backend_url: str
     backend_timeout: int = 300
-    backend_service: str = "undefined"
-    # experiment data collector
-    collector_url: str = ""
-    collector_timeout: int = 60
-    # aiohttp
-    connection_limit: int = 100
-    connection_limit_per_host: int = 100
+    backend_service: str
+    # This environment variable is handled by the xaidemo package,
+    # where it is defined as an optional configuration parameter
+    # We keep this here to ensure that it is set in all cases
+    collector_url: str  # pragma: no cover
 
 
-settings = Settings()
+settings = ProxySettings()

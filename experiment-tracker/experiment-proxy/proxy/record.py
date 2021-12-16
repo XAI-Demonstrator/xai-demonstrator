@@ -1,12 +1,9 @@
-from typing import Dict, Any, Optional
-from pydantic import BaseModel, root_validator
+from typing import Optional
 
-import aiohttp
+from pydantic import BaseModel, root_validator
+from xaidemo.tracking.record import initialize_record, PartialRecordRequest, SourceInformation
 
 from .config import settings
-from .http_client import AioHttpClientSession
-
-collector_timeout = aiohttp.ClientTimeout(settings.collector_timeout)
 
 
 class RequestData(BaseModel):
@@ -42,31 +39,13 @@ class TrackedData(BaseModel):
     response: ResponseData
 
 
-class SourceInformation(BaseModel):
-    name: str = settings.backend_service
-    location: str = settings.backend_url
-    endpoint: str
+def prepare_record(endpoint: str,
+                   key: str,
+                   value: TrackedData) -> PartialRecordRequest:
+    record_id, label = initialize_record(label=endpoint)
+    source_info = SourceInformation(service=settings.backend_service)
 
-
-class PartialRecordRequest(BaseModel):
-    id: str
-    source: SourceInformation
-    part: Dict[str, Dict[str, Any]]
-
-
-async def record_data(trace_id: str,
-                      endpoint: str,
-                      key: str,
-                      value: Dict[str, Any]):
-    """Send the data to the collector."""
-    if key == "id":
-        raise ValueError("Key cannot be 'id'")
-
-    partial = PartialRecordRequest(id=trace_id,
-                                   source=SourceInformation(endpoint=endpoint),
-                                   part={"tracked": value})
-
-    async with AioHttpClientSession() as session:
-        await session.post(settings.collector_url + "/record",
-                           timeout=collector_timeout,
-                           json=partial.dict())
+    return PartialRecordRequest(id=record_id,
+                                source=source_info,
+                                part={key: value.dict()},
+                                label=label)
