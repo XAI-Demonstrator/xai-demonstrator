@@ -8,6 +8,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, ValidationError
 from starlette.status import HTTP_404_NOT_FOUND, HTTP_409_CONFLICT, HTTP_500_INTERNAL_SERVER_ERROR
 from xaidemo import tracing
+from xaidemo.tracing import traced
 from xaidemo.tracking.record import PartialRecordRequest
 
 from .config import settings
@@ -58,6 +59,7 @@ def record(partial_record_request: PartialRecordRequest):
                 update_record(partial_record_request)
 
 
+@traced
 def update_record(partial_record_request):
     id_ = partial_record_request.id
 
