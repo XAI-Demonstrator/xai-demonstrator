@@ -7,6 +7,7 @@ from typing import Optional, List
 
 from opentelemetry import trace
 from pydantic import BaseModel
+from xaidemo.tracing import traced, get_tracer
 
 from .config import settings
 from ..http_client import AioHttpClientSession
@@ -68,6 +69,7 @@ def get_record_id(span: Optional[trace.Span] = None):
     return f"{trace_id:x}"
 
 
+@traced
 def record_data(key: str, value: Dict[str, Any], label: Optional[str] = None):
     if not settings.experiment:
         return
@@ -85,12 +87,13 @@ async def send_record(partial_record: PartialRecordRequest):
     logger.info(f"Recording data for {partial_record.source.service}: {partial_record.label} "
                 f"(ID: {partial_record.id})")
 
-    async with AioHttpClientSession() as session:
-        try:
-            async with session.post(settings.collector_url + "/record",
-                                    timeout=settings.collector_timeout,
-                                    json=partial_record.dict()) as response:
-                if response.status != 200:
-                    logger.error(f"Request to collector service failed with: {response.status}")
-        except asyncio.exceptions.TimeoutError:
-            logger.error(f"Request to collector timed out.")
+    with get_tracer().start_as_current_span("send_record"):
+        async with AioHttpClientSession() as session:
+            try:
+                async with session.post(settings.collector_url + "/record",
+                                        timeout=settings.collector_timeout,
+                                        json=partial_record.dict()) as response:
+                    if response.status != 200:
+                        logger.error(f"Request to collector service failed with: {response.status}")
+            except asyncio.exceptions.TimeoutError:
+                logger.error(f"Request to collector timed out.")

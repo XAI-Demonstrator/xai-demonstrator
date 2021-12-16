@@ -25,7 +25,7 @@ class TracingSettings(BaseSettings):
 tracing_settings = TracingSettings()
 
 trace.set_tracer_provider(
-    TracerProvider(  
+    TracerProvider(
         resource=Resource.create({SERVICE_NAME: tracing_settings.SERVICE_NAME})
     )
 )
@@ -93,6 +93,11 @@ def add_span_attributes(attributes: Dict[str, Any],
         span.set_attribute(attribute, value)
 
 
+def get_tracer():
+    return trace.get_tracer(instrumenting_module_name=__name__,
+                            instrumenting_library_version=__version__)
+
+
 def traced(func: Union[Callable, None] = None,
            label: Union[None, str] = None,
            attributes: Union[Dict[str, Any], None] = None) -> Callable:
@@ -133,8 +138,7 @@ def traced(func: Union[Callable, None] = None,
 
         @wraps(func_)
         def with_tracer(*args, **kwargs):
-            tracer = trace.get_tracer(instrumenting_module_name=__name__,
-                                      instrumenting_library_version=__version__)
+            tracer = get_tracer()
             with tracer.start_as_current_span(_label) as span:
                 add_span_attributes(attributes, span)
                 return func_(*args, **kwargs)
