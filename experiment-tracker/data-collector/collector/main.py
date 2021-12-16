@@ -6,6 +6,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, ValidationError
 from starlette.status import HTTP_404_NOT_FOUND, HTTP_409_CONFLICT, HTTP_500_INTERNAL_SERVER_ERROR
 from xaidemo import tracing
+from xaidemo.tracking.data_models import PartialRecordRequest
 
 from .repository import repo
 
@@ -14,19 +15,10 @@ tracing.set_up()
 app = FastAPI()
 
 
-class SourceInformation(BaseModel):
-    name: Optional[str]
-    location: Optional[str]
-    endpoint: Optional[str]
-
-    class Config:
-        extra = "forbid"
-
-
 class Record(BaseModel):
     id: str
     timestamp: float = time.time()
-    source: SourceInformation
+    service: str
     data: Dict[str, Dict[str, Any]]
 
     _id: Optional[str]
@@ -37,12 +29,9 @@ class Record(BaseModel):
 
 
 class PartialRecord(BaseModel):
-    id: str
-    source: SourceInformation
-    part: Dict[str, Dict[str, Any]]
-
-    class Config:
-        extra = "forbid"
+    data: Dict[str, Any]
+    label: str
+    provider: str
 
 
 class Dump(BaseModel):
@@ -50,28 +39,41 @@ class Dump(BaseModel):
 
 
 @app.post("/record")
-def record(partial_record: PartialRecord):
-    id_ = partial_record.id
+def record(partial_record_request: PartialRecordRequest):
+    id_ = partial_record_request.id
     if id_ in repo:
         current_record = Record(**repo[id_])
 
-        # TODO: Check that there is no conflicting source information
+        if current_record.service != partial_record_request.source.service:
+            raise HTTPException(
+                status_code=HTTP_409_CONFLICT,
+                detail=f"Key {id_} is already associated with {current_record.service}, "
+                       f"received partial request allegedly from {partial_record_request.source.service}"
+            )
 
-        for key in partial_record.part:
+        for key in partial_record_request.part:
             if key in current_record.data:
                 raise HTTPException(
                     status_code=HTTP_409_CONFLICT,
                     detail=f"Key {key} already set for item {id_}.")
 
-        current_record.data.update(partial_record.part)
+        partial_record = create_partial_record(partial_record_request)
+        current_record.data.update(partial_record)
         repo[id_] = current_record.dict()
-
     else:
-        # TODO: Check that complete source information is given
-
+        partial_record = create_partial_record(partial_record_request)
         repo[id_] = Record(id=id_,
-                           source=partial_record.source.dict(),
-                           data=partial_record.part).dict()
+                           service=partial_record_request.source.service,
+                           data=partial_record).dict()
+
+
+def create_partial_record(partial_record_request: PartialRecordRequest):
+    return {
+        key: PartialRecord(
+            data=partial_record_request.part[key],
+            label=partial_record_request.label,
+            provider=partial_record_request.source.provider
+        ).dict() for key in partial_record_request.part}
 
 
 @app.get("/get/{identifier}")
