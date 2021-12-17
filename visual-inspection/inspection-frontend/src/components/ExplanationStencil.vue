@@ -242,10 +242,10 @@ export default {
 					:class="classes.preview"
 					:transitions="transitions"
 				/>
-			</draggable-area>
       <!-- Modification for XAI Demonstrator -->
       <div v-show="internalExplanationMode" v-bind:style="explanationStyle">&nbsp;</div>
       <!-- /Modification -->
+      </draggable-area>
 		</bounding-box>
 	</div>
 </template>
