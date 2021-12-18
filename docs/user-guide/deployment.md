@@ -4,7 +4,7 @@
 ## What does 'deployment' mean?
 
 In the
-[Getting Started](getting_started.md#run-your-very-own-xai-demonstrator-instance)
+[Getting Started](getting-started.md#run-your-very-own-xai-demonstrator-instance)
 chapter of this user guide, you have learned how to spin up an XAI Demonstrator instance.
 
 In IT lingo, a 'deployment' is a permanently running instance of an IT system.
@@ -15,7 +15,7 @@ It comprises both a number of services, their configuration, and the infrastruct
 You can use the 
 [_test-local_](https://github.com/XAI-Demonstrator/xai-demonstrator/tree/master/deployment/test-local)
 configuration as described in 
-[Getting Started](getting_started.md#run-your-very-own-xai-demonstrator-instance).
+[Getting Started](getting-started.md#run-your-very-own-xai-demonstrator-instance).
 
 If you want to use your own or modified use cases, there are two options.
 

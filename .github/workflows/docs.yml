@@ -4,13 +4,33 @@ on:
   push:
     paths:
       - 'docs/**'
-    branches:
-      - master
+      - '**.md'
 
 
 jobs:
-  docs:
+  generate:
+    name: Build the docs
     runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2.3.1
+        with:
+          python-version: '3.x'
+      - name: Install MkDocs
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Generate docs
+        run: |
+          mkdocs build
+
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    needs:
+      - generate
     steps:
     - name: Checkout code
       uses: actions/checkout@master
