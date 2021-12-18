@@ -13,7 +13,7 @@
         </div>
       </div>
     </transition>
-    <div id="icon-container">
+    <div id="icon-container" v-if="!embedded">
       <transition name="fade" mode="out-in">
         <div class="icon xd-red" v-if="popupVisible" v-on:click="closePopup" key="close">
           <img svg-inline src="../assets/close.svg" alt="Close"/>
@@ -62,6 +62,13 @@ export default {
   data: function () {
     return {
       popupVisible: false
+    }
+  },
+  computed: {
+    embedded() {
+      const uri = window.location.search.substring(1);
+      let params = new URLSearchParams(uri);
+      return params.has("embedded")
     }
   },
   methods: {

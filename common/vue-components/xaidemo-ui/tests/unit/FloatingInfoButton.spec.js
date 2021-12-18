@@ -1,43 +1,65 @@
-import { shallowMount } from '@vue/test-utils'
+import {shallowMount} from '@vue/test-utils'
 import FloatingInfoButton from '@/components/FloatingInfoButton.vue'
 
 describe('FloatingInfoButton.vue', () => {
 
-  it('popup is not visible when mounted', () => {
-    const wrapper = shallowMount(FloatingInfoButton)
+    let windowSpy;
 
+    beforeEach(() => {
+        windowSpy = jest.spyOn(window, "window", "get");
+    });
 
-    expect(wrapper.find('#info-popup').exists()).toBe(false)
-  })
+    afterEach(() => {
+        windowSpy.mockRestore();
+    });
 
-  it('popup can be opened and closed', async () => {
-    const wrapper = shallowMount(FloatingInfoButton)
+    it('popup is not visible when mounted', () => {
+        const wrapper = shallowMount(FloatingInfoButton)
 
-    await wrapper.vm.openPopup()
+        expect(wrapper.find('#info-popup').exists()).toBe(false)
+    })
 
-    expect(wrapper.find('#info-popup').exists()).toBe(true)
+    it('popup can be opened and closed', async () => {
+        const wrapper = shallowMount(FloatingInfoButton)
 
-    await wrapper.vm.closePopup()
+        await wrapper.vm.openPopup()
 
-    expect(wrapper.find('#info-popup').exists()).toBe(false)
-  })
+        expect(wrapper.find('#info-popup').exists()).toBe(true)
 
-  it('info button opens popup', async () => {
-    const wrapper = shallowMount(FloatingInfoButton)
+        await wrapper.vm.closePopup()
 
-    const infobutton = wrapper.find('#icon-container').find('div.icon')
-    expect(infobutton.classes()).toContain('xd-primary')
+        expect(wrapper.find('#info-popup').exists()).toBe(false)
+    })
 
-    await infobutton.trigger('click')
+    it('info button opens popup', async () => {
+        const wrapper = shallowMount(FloatingInfoButton)
 
-    expect(wrapper.find('#info-popup').exists()).toBe(true)
-    
-    const closebutton = wrapper.find('#icon-container').find('div.icon')
-    expect(closebutton.classes()).toContain('xd-red')
+        const infobutton = wrapper.find('#icon-container').find('div.icon')
+        expect(infobutton.classes()).toContain('xd-primary')
 
-    await closebutton.trigger('click')
+        await infobutton.trigger('click')
 
-    expect(wrapper.find('#info-popup').exists()).toBe(false)
-  })
-  
+        expect(wrapper.find('#info-popup').exists()).toBe(true)
+
+        const closebutton = wrapper.find('#icon-container').find('div.icon')
+        expect(closebutton.classes()).toContain('xd-red')
+
+        await closebutton.trigger('click')
+
+        expect(wrapper.find('#info-popup').exists()).toBe(false)
+    })
+
+    it('info button is hidden in embedded mode', () => {
+        const searchString = '?embedded'
+        windowSpy.mockImplementation(() => ({
+            location: {
+                search: searchString
+            }
+        }))
+
+        const wrapper = shallowMount(FloatingInfoButton)
+
+        expect(wrapper.find('#icon-container').exists()).toBe(false)
+    })
+
 })
