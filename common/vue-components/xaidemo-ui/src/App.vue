@@ -76,13 +76,13 @@ export default {
 body {
   padding: 0;
   margin: 0;
+  background-color: silver;
 }
 
 #app {
   display: flex;
   justify-content: space-between;
   position: relative;
-  overflow: hidden;
 }
 
 main {

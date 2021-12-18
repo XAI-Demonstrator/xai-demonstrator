@@ -68,7 +68,7 @@ p {
         max-width: 450px;
 
         padding: 8px;
-        overflow: auto;
+        overflow: hidden;
 
         border: 1px solid #ddd;
         box-shadow: 2px 2px 4px rgba(120, 120, 120, 0.4);
