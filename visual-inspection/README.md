@@ -1,4 +1,4 @@
-# Visual inspection explanation service
+# Visual Explanations
 
 | Build    | ![Visual Inspection](https://github.com/XAI-Demonstrator/xai-demonstrator/workflows/Visual%20Inspection/badge.svg?branch=master)                                                                                                     |
 |----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -13,8 +13,6 @@
 - Frontend created with [VueJS](https://vuejs.org/) utilizing the [Advanced Cropper](https://norserium.github.io/vue-advanced-cropper/) component
 
 ## Environment Variables
-
-Defined in [inspection/config.py](./inspection-backend/inspection/config.py).
 
 Variable | Description | Default Value
 ---------|-------------|--------------

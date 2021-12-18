@@ -1,2 +1,4 @@
 mkdocs
+mkdocs-exclude
 mkdocs-material
+mkdocs-same-dir

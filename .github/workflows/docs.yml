@@ -24,7 +24,7 @@ jobs:
           pip install -r requirements.txt
       - name: Generate docs
         run: |
-          mkdocs build --strict
+          mkdocs build
 
   deploy:
     runs-on: ubuntu-latest
