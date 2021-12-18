@@ -44,6 +44,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
+    needs:
+      - test
     steps:
     - name: Checkout code
       uses: actions/checkout@master
