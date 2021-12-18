@@ -19,7 +19,8 @@ plugins:
           - 'landing-page/*'
           - 'site/*'
         regex:
-          - '^.*(?<!\.md)$'
+          # if we do not include JS, CSS, PNG, then the docs' assets are not included in the build
+          - '^.*(?<!\.md)(?<!\.css)(?<!\.js)(?<!\.png)$'
 
 nav:
   - Home: 'index.md'
