@@ -5,6 +5,7 @@ on:
     paths:
       - 'docs/**'
       - '**.md'
+      - 'mkdocs.yml'
 
 
 jobs:
