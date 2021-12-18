@@ -1,7 +1,7 @@
 <template>
   <div id="navigation-header" class="xd-primary">
     <div class="header-icon">
-      <a href="/" v-if="!standalone || !embedded">
+      <a href="/" v-if="!standalone && !embedded">
         <img svg-inline src="../assets/arrow-left.svg" alt="Back"/>
       </a>
     </div>
