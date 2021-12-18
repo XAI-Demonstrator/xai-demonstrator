@@ -1,7 +1,7 @@
 <template>
   <div id="navigation-header" class="xd-primary">
     <div class="header-icon">
-      <a href="/" v-if="!standalone">
+      <a href="/" v-if="!standalone || !embedded">
         <img svg-inline src="../assets/arrow-left.svg" alt="Back"/>
       </a>
     </div>
@@ -30,6 +30,11 @@ export default {
   computed: {
     reloadUrl() {
       return "./" + window.location.search
+    },
+    embedded() {
+      const uri = window.location.search.substring(1);
+      let params = new URLSearchParams(uri);
+      return params.has("embedded")
     }
   }
 }
