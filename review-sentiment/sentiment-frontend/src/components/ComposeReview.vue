@@ -1,7 +1,7 @@
 <template>
   <div>
     <p v-if="showIntro && !text" class="intro-text">{{ introductionText }}</p>
-    <p v-if="showIntro && !text" class="intro-text">Gebe deine Bewertung ein oder nutze das Beispiel:</p>
+    <p v-if="showIntro && !text" class="intro-text">Gib deine Bewertung ein oder nutze das Beispiel:</p>
     <textarea
         v-bind:placeholder="defaultReview"
         v-model="text"
