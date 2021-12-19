@@ -5,4 +5,4 @@
 **/dist
 **/.coverage
 
-./sentiment-backend/sentiment/static
+sentiment-backend/sentiment/static
