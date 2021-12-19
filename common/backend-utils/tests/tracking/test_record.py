@@ -27,6 +27,13 @@ def test_that_task_memory_is_erased():
     assert not TaskMemory.memory["dummy2"]
 
 
+def test_that_same_key_cannot_be_set_twice():
+    TaskMemory.add_task("my_key", partial_record_request)
+
+    with pytest.raises(ValueError):
+        TaskMemory.add_task("my_key", partial_record_request)
+
+
 @pytest.mark.asyncio
 async def test_that_data_is_sent(aiomock, mocker):
     mocker.patch.object(settings, "experiment", new=True)
