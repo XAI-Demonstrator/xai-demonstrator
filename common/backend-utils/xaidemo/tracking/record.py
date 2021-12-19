@@ -2,8 +2,8 @@ import asyncio
 import logging
 import threading
 from collections import defaultdict
-from typing import Dict, Any
-from typing import Optional, List
+from json import JSONDecodeError
+from typing import Dict, Any, Optional, List
 
 from opentelemetry import trace
 from pydantic import BaseModel
@@ -38,12 +38,17 @@ class TaskMemory:
     memory: Dict[str, List[PartialRecordRequest]] = defaultdict(list)
 
     @classmethod
-    def add_task(cls, record_id, task):
+    def add_task(cls, record_id: str, partial_record: PartialRecordRequest):
         with cls.lock:
-            cls.memory[record_id].append(task)
+            for record in cls.memory[record_id]:
+                for existing_key in record.part.keys():
+                    for new_key in partial_record.part.keys():
+                        if existing_key == new_key:
+                            raise ValueError(f"Cannot use same key twice: {new_key}")
+            cls.memory[record_id].append(partial_record)
 
     @classmethod
-    def get_tasks_and_erase_memory(cls, record_id):
+    def get_tasks_and_erase_memory(cls, record_id: str):
         with cls.lock:
             list_of_tasks = cls.memory[record_id]
             del cls.memory[record_id]
@@ -80,6 +85,11 @@ def record_data(key: str, value: Dict[str, Any], label: Optional[str] = None):
                                           source=SourceInformation(),
                                           part={key: value},
                                           label=label)
+    try:
+        _ = partial_record.json()
+    except (JSONDecodeError, TypeError) as e:
+        raise ValueError(f"The data is not JSON-serializable: {e}")
+
     TaskMemory.add_task(record_id, partial_record)
 
 

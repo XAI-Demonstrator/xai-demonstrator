@@ -3,3 +3,10 @@ pydantic
 pypng
 aiohttp
 pytest-asyncio
+
+opentelemetry-api
+opentelemetry-sdk
+opentelemetry-instrumentation-requests
+requests
+
+git+https://github.com/xai-demonstrator/xai-demonstrator.git@cddb9fe42c002cf44252228781ca67b61f89181d#egg=xaidemo&subdirectory=common/backend-utils

@@ -6,7 +6,6 @@ couch = couchdb.Server(f"http://{settings.db_user}:{settings.db_password}"  # no
                        f"@{settings.db_host}:{settings.db_port}")
 
 
-# TODO: Prevent simultaneous writes to the same id
 class Repository:
 
     def __init__(self):

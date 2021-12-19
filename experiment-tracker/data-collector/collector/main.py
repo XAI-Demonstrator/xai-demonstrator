@@ -55,8 +55,9 @@ def record(partial_record_request: PartialRecordRequest):
                 repo[partial_record_request.id] = Record(id=partial_record_request.id,
                                                          service=partial_record_request.source.service,
                                                          data=partial_record).dict()
-            else:
-                update_record(partial_record_request)
+                return  # return early to allow the logical "else" to be outside the lock context
+        # else
+        update_record(partial_record_request)
 
 
 @traced
