@@ -53,4 +53,4 @@ jobs:
           # when on master, pretend to be on branch x-cov-backend-utils
           $ON_MASTER && export GITHUB_REF="refs/heads/x-cov-backend-utils"
           $ON_MASTER && export GITHUB_HEAD_REF="x-cov-backend-utils"
-          coveralls --service=github
+          coveralls --service=github --srcdir=common/backend-utils
