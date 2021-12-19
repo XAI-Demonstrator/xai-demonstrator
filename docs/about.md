@@ -1,21 +1,26 @@
 # About
 
 The _XAI Demonstrator_ is a modular platform that lets users interact with production-grade Explainable AI (XAI) systems.
-It is developed by a team at the
-[Institute of Business Analytics](https://www.uni-ulm.de/mawi/iba/)
+It is developed by a team associated with the [Institute of Business Analytics](https://www.uni-ulm.de/mawi/iba/)
 at the University of Ulm.
+
+[![XAI Studio Logo](../common/vue-components/xaidemo-ui/src/assets/xai-studio-logo.svg)](https://www.xai-studio.de)
 
 ## Team
 
+- Julia Brasse
 - Hanna Broder
 - Maximilian Förster
-- Philipp Hühn  
+- Philipp Hühn
 - Kilian Kluge
 - Lars Mostue
-- Mike Rothenhäusler  
+- Matthias Nase
+- Mike Rothenhäusler
 - Isabel Schöberl
 - Philipp Schröppel
 - Irina Sigler
+- Marie Walter
+- Theresa Züger
 
 ## License
 
@@ -27,4 +32,4 @@ file for details.
 ## Funding
 
 Initial conceptualization, design, and development of the _XAI Demonstrator_
-was supported by the Péter Horváth-Stiftung.
+was supported by the Péter-Horváth-Stiftung.

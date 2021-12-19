@@ -15,7 +15,6 @@ plugins:
           - '**frontend**'
           - 'common/*'
           - 'deployment/*'
-          - 'experiment-tracker/*'
           - 'landing-page/*'
           - 'site/*'
         regex:
@@ -33,6 +32,8 @@ nav:
       - Review Sentiment: 'review-sentiment/README.md'
       - Visual Inspection: 'visual-inspection/README.md'
       - Guess the Country: 'guess-the-country/README.md'
+  - Experiment Tracking:
+      - Introduction: 'experiment-tracker/README.md'
   - Tech Notes:
       - 'docs/tech-notes/monorepo.md'
       - 'docs/tech-notes/tech-stack.md'

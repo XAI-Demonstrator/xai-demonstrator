@@ -22,11 +22,26 @@ updates:
     directory: "/visual-inspection/inspection-frontend"
     schedule:
       interval: "weekly"    
-      
+
+  - package-ecosystem: "npm"
+    directory: "/guess-the-country/country-frontend"
+    schedule:
+      interval: "weekly"
+
   - package-ecosystem: "npm"
     directory: "/landing-page/frontend"
     schedule:
-      interval: "weekly"          
+      interval: "weekly"
+
+  - package-ecosystem: "npm"
+    directory: "/.github/maintenance"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "npm"
+    directory: "/common/vue-components/"
+    schedule:
+      interval: "weekly"
       
   # Maintain dependencies for pip
   - package-ecosystem: "pip"
@@ -38,4 +53,23 @@ updates:
     directory: "/visual-inspection/inspection-backend"
     schedule:
       interval: "weekly"
-      
+
+  - package-ecosystem: "pip"
+    directory: "/guess-the-country/country-backend"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "pip"
+    directory: "/common/backend-utils"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "pip"
+    directory: "/experiment-tracker/experiment-proxy"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "pip"
+    directory: "/experiment-tracker/data-collector"
+    schedule:
+      interval: "weekly"

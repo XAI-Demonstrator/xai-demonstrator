@@ -42,7 +42,7 @@ jobs:
       - name: Run unit tests with pytest
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          COVERALLS_FLAG_NAME: sentiment-utils
+          COVERALLS_FLAG_NAME: backend-utils
           ON_MASTER: ${{ github.ref == 'refs/heads/master' }}
         run: |
           set -e
