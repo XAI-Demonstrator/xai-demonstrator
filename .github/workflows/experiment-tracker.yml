@@ -50,7 +50,7 @@ jobs:
           # when on master, pretend to be on branch x-cov-experiment-proxy
           $ON_MASTER && export GITHUB_REF="refs/heads/x-cov-experiment-proxy"
           $ON_MASTER && export GITHUB_HEAD_REF="x-cov-experiment-proxy"
-          coveralls --service=github
+          coveralls --service=github --srcdir=experiment-tracker/experiment-proxy
 
   test-collector:
     runs-on: ubuntu-latest
@@ -96,7 +96,7 @@ jobs:
           # when on master, pretend to be on branch x-cov-data-collector
           $ON_MASTER && export GITHUB_REF="refs/heads/x-cov-data-collector"
           $ON_MASTER && export GITHUB_HEAD_REF="x-cov-data-collector"
-          coveralls --service=github
+          coveralls --service=github --srcdir=experiment-tracker/data-collector
 
   integration-tests:
     runs-on: ubuntu-latest

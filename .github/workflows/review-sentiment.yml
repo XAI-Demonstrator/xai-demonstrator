@@ -59,7 +59,7 @@ jobs:
           # when on master, pretend to be on branch x-cov-sentiment-backend
           $COVERALLS_PARALLEL && export GITHUB_REF="refs/heads/x-cov-sentiment-backend"
           $COVERALLS_PARALLEL && export GITHUB_HEAD_REF="x-cov-sentiment-backend"
-          coveralls --service=github
+          coveralls --service=github --srcdir=review-sentiment/sentiment-backend
 
   test-frontend:
     runs-on: ubuntu-latest
@@ -150,7 +150,7 @@ jobs:
           # when on master, pretend to be on branch x-cov-sentiment-backend
           $COVERALLS_PARALLEL && export GITHUB_REF="refs/heads/x-cov-sentiment-backend"
           $COVERALLS_PARALLEL && export GITHUB_HEAD_REF="x-cov-sentiment-backend"
-          coveralls --service=github
+          coveralls --service=github --srcdir=review-sentiment/sentiment-backend
           coveralls --service=github --finish
 
       - name: Create container and publish to Registry

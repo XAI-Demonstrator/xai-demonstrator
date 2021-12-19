@@ -65,7 +65,7 @@ jobs:
           # when on master, pretend to be on branch x-cov-inspection-backend
           $COVERALLS_PARALLEL && export GITHUB_REF="refs/heads/x-cov-inspection-backend"
           $COVERALLS_PARALLEL && export GITHUB_HEAD_REF="x-cov-inspection-backend"
-          coveralls --service=github
+          coveralls --service=github --srcdir=visual-inspection/inspection-backend
 
 
   test-frontend:
@@ -165,7 +165,7 @@ jobs:
         # when on master, pretend to be on branch x-cov-inspection-backend
         $COVERALLS_PARALLEL && export GITHUB_REF="refs/heads/x-cov-inspection-backend"
         $COVERALLS_PARALLEL && export GITHUB_HEAD_REF="x-cov-inspection-backend"
-        coveralls --service=github
+        coveralls --service=github --srcdir=visual-inspection/inspection-backend
         coveralls --service=github --finish
 
     - name: Create container and publish to Registry
