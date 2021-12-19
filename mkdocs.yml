@@ -13,13 +13,12 @@ plugins:
           - 'README.md'
           - '**node_modules**'
           - '**frontend**'
-          - 'common/*'
           - 'deployment/*'
           - 'landing-page/*'
           - 'site/*'
         regex:
           # if we do not include JS, CSS, PNG, then the docs' assets are not included in the build
-          - '^.*(?<!\.md)(?<!\.css)(?<!\.js)(?<!\.png)$'
+          - '^.*(?<!\.md)(?<!\.css)(?<!\.js)(?<!\.png)(?<!\.svg)$'
 
 nav:
   - Home: 'index.md'
@@ -34,6 +33,9 @@ nav:
       - Guess the Country: 'guess-the-country/README.md'
   - Experiment Tracking:
       - Introduction: 'experiment-tracker/README.md'
+      - Experiment Proxy: 'experiment-tracker/experiment-proxy/README.md'
+      - Data Collector: 'experiment-tracker/data-collector/README.md'
+      - Instrumentation: 'common/backend-utils/xaidemo/tracking/README.md'
   - Tech Notes:
       - 'docs/tech-notes/monorepo.md'
       - 'docs/tech-notes/tech-stack.md'
