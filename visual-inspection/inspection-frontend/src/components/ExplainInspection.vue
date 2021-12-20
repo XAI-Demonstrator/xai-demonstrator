@@ -52,6 +52,9 @@ export default {
           .filter((key) => {
             return key !== 'method'
           })
+          .filter((key) => {
+            return key !== 'embedded'
+          })
           .reduce((obj, key) => {
             obj[key] = allParams[key];
             return obj;
