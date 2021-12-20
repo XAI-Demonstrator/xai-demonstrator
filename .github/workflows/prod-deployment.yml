@@ -117,6 +117,7 @@ jobs:
               --concurrency "${{ matrix.concurrent }}" \
               --update-env-vars "PATH_PREFIX=/api/${{ matrix.prefix }}" \
               --update-env-vars "TRACING_EXPORTER=gcp"
+              --update-env-vars "SERVICE_NAME=${{ matrix.service }}"
 
       - name: Show Output
         run: echo ${{ steps.deploy.outputs.url }}
