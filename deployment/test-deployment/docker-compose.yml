@@ -21,6 +21,7 @@ services:
       - 8000
     environment:
       - ROOT_PATH=/api/sentiment
+      - SERVICE_NAME=sentiment-service
       - TRACING_EXPORTER=jaeger
       - JAEGER_AGENT_HOST_NAME=jaeger
 
@@ -30,6 +31,7 @@ services:
       - 8000
     environment:
       - ROOT_PATH=/api/inspection
+      - SERVICE_NAME=inspection-service
       - TRACING_EXPORTER=jaeger
       - JAEGER_AGENT_HOST_NAME=jaeger
 
