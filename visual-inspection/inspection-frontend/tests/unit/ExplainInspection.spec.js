@@ -154,4 +154,30 @@ describe('ExplainInspection.vue', () => {
         expect(payload.has('settings')).toBe(false)
     })
 
+    it('ignores embedded parameter', async () => {
+        window.location.search = "?embedded"
+
+        const response = {
+            data: {
+                image: 'data:image/png;base64,'
+            }
+        }
+
+        const expected = new FormData();
+        expected.append("method", "lime")
+
+        const mockPost = axios.post.mockImplementationOnce(() => Promise.resolve(response))
+
+        await wrapper.vm.explain('fake-blob')
+        await flushPromises()
+
+        expect(mockPost).toHaveBeenCalled()
+        expect(mockPost.mock.calls[0][0]).toStrictEqual('/explain')
+
+        const payload = mockPost.mock.calls[0][1]
+
+        expect(payload.has('method')).toBe(false)
+        expect(payload.has('settings')).toBe(false)
+    })
+
 })
