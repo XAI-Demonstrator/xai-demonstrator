@@ -10,33 +10,44 @@
         {{ msg }}
         <p>Your Score: {{ score_user }} and AI Score: {{ score_ai }}</p>
       </section>
-      <section class="xd-section xd-light">
-        <img class="xd-border-secondary" :src="url"/>
+      <section v-show="user_answer"  class="xd-section xd-light">
+        <p v-if="user_answer == label" >Your answer: {{user_answer}} is right</p>
+        <p v-else>Your answer: {{user_answer}} is wrong, the right answer ist: {{label}}</p>
       </section>
-      <section style="display: none; align-content: flex-end;    flex-wrap: wrap;    align-items: baseline;"
+      <section v-show="prediction"  class="xd-section xd-light">
+        <p v-if="prediction == label" >The AI answer: {{prediction}} is right</p>
+        <p v-else>The AI answer: {{prediction}} is wrong, the right answer ist: {{label}}</p>
+      </section>
+      <section class="xd-section xd-light">
+        <img class="xd-border-secondary;" v-bind:src="this.streetviewimage"/>
+      </section>
+      <section  v-if="explanation" style="align-content: flex-end;    flex-wrap: wrap;    align-items: baseline;"
                class="xd-section xd-light" id="legend">
         <ul class="legend">
           <li><span class="positiv"></span> {{ prediction }}</li>
-          <li><span class="negativ"></span> {{ other }}</li>
+          <li><span class="negativ"></span> Other classes </li>
         </ul>
       </section>
-      <section class="xd-section xd-light" id="radio"
+
+      
+      <section v-if="!user_answer" class="xd-section xd-light" id="radio"
                style="display: flex;    align-content: flex-end;    flex-wrap: wrap;    align-items: baseline;">
-        <input type="radio" id="Tel-Aviv" name="City" value="Tel-Aviv" checked>
-        <label for="Tel-Aviv">Tel-Aviv</label>
+        
+        <input type="radio" id="Tel Aviv" name="City" value="Tel Aviv" checked>
+        <label for="Tel Aviv">Tel Aviv</label>
         <input type="radio" id="Berlin" name="City" value="Berlin">
         <label for="Berlin">Berlin</label>
         <button type="button" class="xd-button xd-secondary" style="width:auto; margin-left: auto;"
                 v-on:click="answer()">Was I right?
-        </button>
+      </button>
       </section>
-      <button style="display: none;" type="button" class="xd-button xd-secondary" id="explain" v-on:click="explain()">
+      <button v-if="prediction && explanation == null" type="button" class="xd-button xd-secondary" id="explain" v-on:click="explain()"> <!-- v-show --> 
         Explain it to me
       </button>
-      <button style="display: none;" type="button" class="xd-button xd-secondary" id="new" v-on:click="restart()">Start
+      <button v-if="explanation" type="button" class="xd-button xd-secondary" id="new" v-on:click="restart()">Start <!-- v-show --> 
         again
       </button>
-      <button type="button" class="xd-button xd-secondary" id="submit" v-on:click="submitFile()">What the AI says
+      <button v-if="!prediction" type="button"  class="xd-button xd-secondary" id="submit" v-on:click="submitFile()">What the AI says
       </button>
           <SpinningIndicator class="indicator" v-bind:visible="waitingForExplanation"/>
 
@@ -65,12 +76,14 @@ export default {
     return {
       useCaseTitle: 'Guess the country',
       backendUrl: process.env.VUE_APP_BACKEND_URL,
-      prediction: 'Israel',
-      other: 'Germany',
+      explanation: null,
+      prediction: null,
+      label: null,
+      user_answer: null,
       score_ai: 0,
       score_user: 0,
       msg: '',
-      url: '',
+      streetviewimage: null,
       waitingForExplanation: false,
       infoUrl: 'https://xai-demonstrator.github.io/#use-case-ii',
       infoLinkLabel: 'Interesse geweckt? Hier gibt’s mehr Infos!',
@@ -95,7 +108,7 @@ export default {
   },
   async created() {
     if (document.cookie === '') {
-      document.cookie = 'AI=' + this.score_ai + '; Secure'
+      document.cookie = 'AI=' + this.score_ai + '; Secure' //Cookies entfernen
       document.cookie = 'User=' + this.score_user + '; Secure'
     } else {
       this.score_ai = parseInt(document.cookie.split('; ')
@@ -114,7 +127,7 @@ export default {
     getMessage() {
       axios.get('/msg')
         .then((res) => {
-          this.msg = res.data
+          this.msg = res.data.data
         })
         .catch((error) => {
           console.error(error)
@@ -122,128 +135,79 @@ export default {
     },
     getStreetview() {
       axios.get('/streetview')
-        .then((res) => {
-          this.url = res.data
-        })
-        .catch((error) => {
-          console.error(error)
-        })
+       .then(res => {
+          this.streetviewimage = res.data.image
+          this.label = res.data.class_label
+          })
+          .catch(error => {
+            console.log(error)
+          }) 
     },
     submitFile() {
-      var result
       this.waitingForExplanation = true
-      if (this.url.search('Israel') === -1) {
-        result = 'Berlin'
-      } else {
-        result = 'Tel-Aviv'
-      }
-      // const config = { headers: {'Content-Type': 'application/json'} };
-      axios.post('/predict/image3/?url=' + this.url).then((res) => {
-        this.prediction = res.data[0]
-        if (result === res.data[0]) {
-          this.score_ai = parseInt(document.cookie.split('; ')
-            .find(row => row.startsWith('AI='))
-            .split('=')[1])
-          this.score_ai = this.score_ai + 1
+     
+      let form = new FormData();
+      form.append('file', this.streetviewimage);
 
-          document.cookie = 'AI=' + this.score_ai + '; Secure'
-          console.log(document.cookie)
-         /* notify({
-            group: 'foo',
-            title: 'Success',
-            text: 'The AI predicted: ' + res.data[0] + ' and it was actually taken in ' + result
-          }, 5000) */
-        } else {
-       /*   notify({
-            group: 'bottom',
-            title: 'Wrong',
-            text: 'The AI predicted: ' + res.data[0] + ' and it was actually taken in ' + result
-          }, 5000) */
-        }
-
-        document.getElementById('radio').style.display = 'none'
-        document.getElementById('explain').style.display = 'block'
-        document.getElementById('submit').style.display = 'none'
-
-        this.waitingForExplanation = false
+      axios.post('/predict', form)
+      .then((res) => {
+            this.prediction = res.data.class_label
+            this.$emit('inspection-completed')
+            this.waitingForExplanation = false
+            if(this.prediction == this.label){
+                this.score_ai = this.score_ai + 1
+                document.cookie = 'AI=' + this.score_ai + '; Secure'
+            } else {
+                document.cookie = 'AI=' + this.score_ai + '; Secure'// Explanation und Prediction ID (visual expection backend) + Label + Methode  
+            }
       })
-        .catch((error) => {
+      .catch((error) => {
           console.error(error)
         })
-    },
+      },
+
     explain() {
       this.waitingForExplanation = true
-      axios.post('/predict/explain2/?url=' + this.url).then((res) => {
-        this.url = res.data
 
-        if (this.prediction === 'Tel-Aviv') {
-          this.other = 'Berlin'
-        } else {
-          this.other = 'Tel-Aviv'
-        }
-        document.getElementById('explain').style.display = 'none'
-        document.getElementById('submit').style.display = 'none'
-        document.getElementById('new').style.display = 'block'
-        document.getElementById('legend').style.display = 'flex'
-        this.waitingForExplanation = false
+      let form = new FormData();
+      form.append('file', this.streetviewimage);
+      
+      axios.post('/explain', form).then((res) => {
+          this.streetviewimage = res.data.image
+          this.explanation = res.data.explain_id 
+          this.waitingForExplanation = false
       })
         .catch((error) => {
           console.error(error)
         })
     },
+
     restart() {
-      axios.post('/restart?url=' + this.url).then((res) => {
-        document.getElementById('legend').style.display = 'none'
-        document.getElementById('explain').style.display = 'none'
-        document.getElementById('submit').style.display = 'block'
-        document.getElementById('new').style.display = 'none'
-        this.url = ''
-        this.msg = res.data
-        window.location.reload()
-      })
-        .catch((error) => {
-          console.error(error)
-        })
+        this.explanation = null
+        this.prediction = null
+        this.user_answer = null
+        this.getStreetview()
     },
 
     answer() {
-      var answer
-      if (document.getElementById('Tel-Aviv').checked === true) {
-        answer = 'Tel-Aviv'
-      } else {
-        answer = 'Berlin'
+      var radios = document.getElementsByName('City');
+
+      for (var i = 0, length = radios.length; i < length; i++) {
+        if (radios[i].checked) {
+         this.user_answer = radios[i].value
+          break;
+        }
       }
 
-      var result
-      if (this.url.search('Israel') === -1) {
-        result = 'Berlin'
-      } else {
-        result = 'Tel-Aviv'
-      }
-      if (result === answer) {
-        this.score_user = parseInt(document.cookie.split('; ')
-          .find(row => row.startsWith('User='))
-          .split('=')[1])
-        this.score_user = this.score_user + 1
+      if(this.user_answer == this.label){
+       this.score_user = this.score_user + 1
         document.cookie = 'User=' + this.score_user + '; Secure'
-/*
-        notify({
-          group: 'foo',
-          title: 'Success',
-          text: 'The picture was taken in ' + result
-        }, 3000) */
-      } else {
-   /*     notify({
-          group: 'bottom',
-          title: 'Wrong',
-          text: 'The picture was taken in ' + result
-        }, 3000) */
       }
     }
 
   }
-
 }
+
 </script>
 
 <style>
