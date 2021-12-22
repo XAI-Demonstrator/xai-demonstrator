@@ -12,8 +12,8 @@ api = APIRouter()
 
 
 @api.post("/predict")
-def predict_weather(file: UploadFile = File(...)) -> Prediction:
-    return predict(file.file)
+def predict_object(file: UploadFile = File(...), language: Optional[str] = Form(None)) -> Prediction:
+    return predict(file.file, language)
 
 
 # TODO: Allow non-nested settings

@@ -1,5 +1,5 @@
 import uuid
-from typing import Callable, IO
+from typing import Callable, IO, Optional
 
 import numpy as np
 import tensorflow as tf
@@ -30,18 +30,18 @@ def preprocess(img: Image) -> np.ndarray:
 
 @traced
 def predict_class(model_input: np.ndarray,
+                  language: Optional[str] = None,
                   model_: tf.keras.Model = model,
                   decode_label_: Callable[[np.ndarray], str] = decode_label) -> str:
     prediction = model_.predict(model_input)
 
-    class_label = decode_label_(prediction)
+    class_label = decode_label_(prediction, language)
 
     return class_label
 
 
 @traced
-def predict(image_file: IO[bytes],
-            ) -> Prediction:
+def predict(image_file: IO[bytes], language: Optional[str] = None) -> Prediction:
     prediction_id = uuid.uuid4()
     add_span_attributes({"prediction.id": str(prediction_id)})
 
@@ -52,7 +52,7 @@ def predict(image_file: IO[bytes],
 
     model_input = preprocess(input_img)
 
-    class_label = predict_class(model_input)
+    class_label = predict_class(model_input, language)
 
     return Prediction(prediction_id=prediction_id,
                       class_label=class_label)

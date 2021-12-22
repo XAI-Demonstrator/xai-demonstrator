@@ -1,4 +1,8 @@
-from inspection import api
+import pytest
+
+from fastapi.testclient import TestClient
+
+from inspection import api, main
 
 FULL_TYPED_SETTINGS = '''{"settings": {"explainer": {
                                         "int_compatible": "50",
@@ -28,3 +32,15 @@ def test_explanation_request_parses_typed_values():
     assert explainer["proper_bool"]
     assert isinstance(explainer["bool_compatible"], bool)
     assert not explainer["bool_compatible"]
+
+
+client = TestClient(main.app)
+
+
+def test_that_language_is_passed(generate_image, mocker):
+    p = mocker.patch.object(api, "predict")
+
+    response = client.post("/predict", files={"file": generate_image(200, 300)}, data={"language": "en"})
+
+    assert response.status_code == 200
+    assert p.call_args[0][1] == "en"
