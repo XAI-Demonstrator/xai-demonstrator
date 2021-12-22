@@ -36,6 +36,6 @@ def decode_label(prediction, language: Optional[str] = None):
     original_label = decode_predictions(prediction)
     if language is not None and language[:2] == "en":
         return ENGLISH_LABELS[original_label] if original_label in ENGLISH_LABELS\
-            else "a" + original_label.replace("_", " ")
+            else "a " + original_label.replace("_", " ")
     else:
         return GERMAN_LABELS[original_label] if original_label in GERMAN_LABELS else original_label
