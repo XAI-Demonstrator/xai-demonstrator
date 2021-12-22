@@ -2,7 +2,7 @@
   <div class="inspector">
     <MultiBounce v-if="!prediction"
                  v-bind:numberOfDots="3"/>
-    <p v-show="prediction && currentPrediction">„Das ist {{ prediction }}“</p>
+    <p v-show="prediction && currentPrediction">{{ $t('answer', { object: prediction }) }}</p>
   </div>
 </template>
 
@@ -34,6 +34,7 @@ export default {
 
       const form = new FormData();
       form.append('file', blob);
+      form.append('language', this.$i18n.locale)
 
       await axios.post(this.backendUrl + '/predict', form, {
         cancelToken: source.token
@@ -56,6 +57,13 @@ export default {
   }
 }
 </script>
+
+<i18n>
+{
+  "de": { "answer": "„Das ist {object}“"},
+  "en": { "answer": "\"This is {object}\""}
+}
+</i18n>
 
 <style scoped>
 .inspector {
