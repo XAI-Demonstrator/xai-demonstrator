@@ -1,5 +1,6 @@
 import json
 import pathlib
+from typing import Optional
 
 import tensorflow as tf
 
@@ -10,6 +11,9 @@ with open(PATH / "original_labels.json") as json_file:
 
 with open(PATH / "german_labels.json") as json_file:
     GERMAN_LABELS = json.load(json_file)
+
+with open(PATH / "english_labels.json") as json_file:
+    ENGLISH_LABELS = json.load(json_file)
 
 try:
     model = tf.keras.models.load_model(PATH / "my_model")
@@ -28,6 +32,10 @@ def decode_predictions(prediction):
     return CLASS_INDEX.get(str(top_indices))[1]
 
 
-def decode_label(prediction):
+def decode_label(prediction, language: Optional[str] = None):
     original_label = decode_predictions(prediction)
-    return GERMAN_LABELS[original_label] if original_label in GERMAN_LABELS else original_label
+    if language is not None and language[:2] == "en":
+        return ENGLISH_LABELS[original_label] if original_label in ENGLISH_LABELS\
+            else "a" + original_label.replace("_", " ")
+    else:
+        return GERMAN_LABELS[original_label] if original_label in GERMAN_LABELS else original_label

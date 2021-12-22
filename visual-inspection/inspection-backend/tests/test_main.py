@@ -14,6 +14,13 @@ def test_that_prediction_succeeds(generate_image):
 
 
 @pytest.mark.integration
+def test_language_fallback(generate_image):
+    response = client.post("/predict", files={"file": generate_image(200, 300)}, data={"language": "xyzabc"})
+
+    assert response.status_code == 200
+
+
+@pytest.mark.integration
 def test_that_explanation_succeeds(generate_image):
     r = client.post("/explain", files={"file": generate_image(110, 224)})
 
