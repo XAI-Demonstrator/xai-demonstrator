@@ -11,5 +11,12 @@ module.exports = {
                 args[0].favicon = './public/favicon.ico';
                 return args
             })
+
+        config.module
+            .rule('i18n')
+            .resourceQuery(/blockType=i18n/)
+            .type('javascript/auto')
+            .use('i18n')
+            .loader('@intlify/vue-i18n-loader')
     }
 }

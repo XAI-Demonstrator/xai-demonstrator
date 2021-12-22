@@ -5,7 +5,7 @@
               v-show="!waitingForExplanation"
               v-bind:disabled="!predictionReady"
               v-on:click="buttonClicked">
-        Woran erkennst du das?
+        {{ $t('question') }}
       </button>
       <MultiBounce v-if="waitingForExplanation"
                    v-bind:numberOfDots="3"/>
@@ -83,6 +83,17 @@ export default {
   }
 }
 </script>
+
+<i18n>
+{
+  "de": {
+    "question": "Woran erkennst du das?"
+  },
+  "en": {
+    "question": "How do you know?"
+  }
+}
+</i18n>
 
 <style scoped>
 .explanation-request {

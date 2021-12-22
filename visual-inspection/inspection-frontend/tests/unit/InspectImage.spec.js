@@ -1,4 +1,4 @@
-import { shallowMount} from "@vue/test-utils";
+import {shallowMount} from "@vue/test-utils";
 import InspectImage from "@/components/InspectImage";
 import {MultiBounce} from "@xai-demonstrator/xaidemo-ui";
 import axios from 'axios';
@@ -6,17 +6,35 @@ import flushPromises from 'flush-promises';
 
 jest.mock('axios');
 
+
 describe('InspectImage.vue', () => {
 
-    let wrapper = shallowMount(InspectImage);
+    let wrapper = shallowMount(InspectImage, {
+        global: {
+            mocks: {
+                $t: () => {},
+                $i18n: () => {
+                    locale: "en"
+                }
+            }
+        }
+    })
 
     beforeEach(() => {
-            wrapper = shallowMount(InspectImage);
-            axios.CancelToken.source.mockImplementation(() => {
-                return {token: 'abcde'}
-            })
-        }
-    )
+        wrapper = shallowMount(InspectImage, {
+            global: {
+                mocks: {
+                    $t: () => {},
+                    $i18n: () => {
+                        locale: "en"
+                    }
+                }
+            }
+        })
+        axios.CancelToken.source.mockImplementation(() => {
+            return {token: 'abcde'}
+        })
+    })
 
     it('shows bouncing dots while waiting for prediction', async () => {
         await wrapper.setData({prediction: null})

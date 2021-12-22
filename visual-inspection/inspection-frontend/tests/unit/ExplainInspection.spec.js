@@ -33,11 +33,23 @@ describe('ExplainInspection.vue', () => {
         window.location = location
     })
 
-    let wrapper = shallowMount(ExplainInspection);
+    let wrapper = shallowMount(ExplainInspection, {
+        global: {
+            mocks: {
+                $t: () => {}
+            }
+        }
+    })
 
     beforeEach(() => {
-        wrapper = shallowMount(ExplainInspection);
-    });
+        wrapper = shallowMount(ExplainInspection, {
+            global: {
+                mocks: {
+                    $t: () => {}
+                }
+            }
+        })
+    })
 
     afterEach(() => {
         jest.resetAllMocks()
