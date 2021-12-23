@@ -27,7 +27,6 @@ def create_segments(img: np.ndarray, seg_method: str, settings: list) -> np.ndar
 
 def generate_samples(segment_mask: np.ndarray, num_of_samples: int, p: float) -> np.ndarray:
     """
-
     Parameters
     ----------
     segment_mask : np.ndarray
@@ -36,18 +35,13 @@ def generate_samples(segment_mask: np.ndarray, num_of_samples: int, p: float) ->
         The number of samples to generate
     p : float
         The probability for each segment to be replaced
-
     Returns
     -------
-
     samples : np.ndarray
         A two-dimensional array of dimension (num_of_samples, number_of_segments)
     """
     num_of_segments = np.max(segment_mask)
-
-    ...
-
-    return samples
+    return np.array([np.random.binomial(n=1, p=p, size=num_of_segments) for i in range(num_of_samples)])
 
 
 def generate_images(image: np.ndarray, segment_mask: np.ndarray, samples: np.ndarray) -> np.ndarray:
