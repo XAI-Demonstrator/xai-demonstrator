@@ -15,16 +15,17 @@ def create_segments(img: np.ndarray, seg_method: str, settings: list) -> np.ndar
         return slic(image=img, n_segments=250, compactness=2, convert2lab=True, sigma=1, start_label=1)
 
     if seg_method == "quickshift":
-        return quickshift(img, kernel_size=5, max_dist=6, ratio=0.7)  # mb sigma = 6
+        return quickshift(image=img, kernel_size=5, max_dist=6, ratio=0.7)  # mb sigma = 6
 
     if seg_method == "watershed":
         gradient = sobel(rgb2gray(img))
-        return watershed(gradient, markers=250, compactness=0.001)
+        return watershed(image=gradient, markers=250, compactness=0.001)
 
     else:
         raise ValueError("{} is not a valid segmentation method".format(seg_method))
 
 
+# method to determine which segments are displayed for each sample
 def generate_samples(segment_mask: np.ndarray, num_of_samples: int, p: float) -> np.ndarray:
     """
     Parameters
@@ -40,11 +41,21 @@ def generate_samples(segment_mask: np.ndarray, num_of_samples: int, p: float) ->
     samples : np.ndarray
         A two-dimensional array of dimension (num_of_samples, number_of_segments)
     """
-    num_of_segments = np.max(segment_mask)
+    num_of_segments = np.max(segment_mask) + 1
     return np.array([np.random.binomial(n=1, p=p, size=num_of_segments) for i in range(num_of_samples)])
 
 
+# method for generating example images with each excluded segments in black
 def generate_images(image: np.ndarray, segment_mask: np.ndarray, samples: np.ndarray) -> np.ndarray:
-
-    ...
+    images = np.zeros((samples.shape[0],) + image.shape)
+    segment_mask = segment_mask.reshape(334, 500, 1)
+    segment_ids = np.unique(segment_mask)
+    samples_enu = enumerate(samples)
+    for i, sample in samples_enu:
+        mask = np.zeros(image.shape)
+        for s_id in segment_ids:
+            if sample[s_id]:
+                mask += segment_mask == s_id
+        images[i] = mask * image
+    return images
 
