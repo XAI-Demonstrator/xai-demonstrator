@@ -130,8 +130,6 @@ def streetview():
 
         imagery_hits += 1
         status = False
-        buffered = io.BytesIO()
-        #contents.save(buffered, format="png")
         encoded_image_string = base64.b64encode(contents)
         encoded_bytes = bytes("data:image/png;base64,", encoding="utf-8") + encoded_image_string
     return  {         
