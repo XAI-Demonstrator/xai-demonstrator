@@ -16,7 +16,7 @@ def load_image(file):
     return img 
 
 def predict_image(image, model):
-    CATEGORIES = ["Tel-Aviv", "Berlin", "Hamburg"]
+    CATEGORIES = ["Tel Aviv","Westjerusalem", "Berlin", "Hamburg"]
     prediction = model.predict(image)
     result = (CATEGORIES[int(np.argmax(prediction, axis=1))])
     return result

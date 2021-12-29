@@ -37,6 +37,10 @@
         <label for="Tel Aviv">Tel Aviv</label>
         <input type="radio" id="Berlin" name="City" value="Berlin">
         <label for="Berlin">Berlin</label>
+        <input type="radio" id="Westjerusalem" name="City" value="Westjerusalem" checked>
+        <label for="Westjerusalem">Westjerusalem</label>
+        <input type="radio" id="Hamburg" name="City" value="Hamburg">
+        <label for="Hamburg">Hamburg</label>
         <button type="button" class="xd-button xd-secondary" style="width:auto; margin-left: auto;"
                 v-on:click="answer()">Was I right?
       </button>
@@ -119,7 +123,6 @@ export default {
         .find(row => row.startsWith('User='))
         .split('=')[1])
     }
-    console.log(document.cookie)
     this.getMessage()
     this.getStreetview()
   },
@@ -168,14 +171,19 @@ export default {
 
     explain() {
       this.waitingForExplanation = true
+      const blob = new Blob([this.streetviewimage]);
 
       let form = new FormData();
-      form.append('file', this.streetviewimage);
+      form.append('file', blob );
       
-      axios.post('/explain', form).then((res) => {
+      axios.post('/explain', form,  {
+              headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+      }).then((res) => {
           this.streetviewimage = res.data.image
-          this.explanation = res.data.explain_id 
           this.waitingForExplanation = false
+          this.explanation = res.data.explain_id 
       })
         .catch((error) => {
           console.error(error)
