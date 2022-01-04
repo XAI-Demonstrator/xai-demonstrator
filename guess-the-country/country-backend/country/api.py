@@ -1,17 +1,14 @@
-import datetime
-import os
 import random
 import urllib.error
 from urllib.request import urlretrieve
-
-import cv2
 import requests
-from .explainer.explain import explain_cnn
+from .explainer.explain import explain_cnn, convert_explanation
 from fastapi import APIRouter
 from .model.predict import load_model, load_image, predict_image, preprocess 
 from shapely.geometry import Point, Polygon
 from .config import settings
 import base64
+import uuid
 
 api = APIRouter()
 
@@ -31,8 +28,8 @@ def generate_random(polygon):
 # See https://developers.google.com/maps/documentation/streetview/
 API_KEY = settings.google_maps_api_token
 GOOGLE_URL = (
-        "http://maps.googleapis.com/maps/api/streetview?sensor=false&"
-        "size=640x640&source=outdoor&key=" + API_KEY
+        "http://maps.googleapis.com/maps/api/streetview?size=448x448&sensor=false&"
+    "size=640x640&source=outdoor&key=" + API_KEY
 )
 
 API_URL = "https://maps.googleapis.com/maps/api/streetview/metadata"  # Not billed
@@ -46,31 +43,30 @@ def predict(file: UploadFile = File(...)):
     model = load_model()
     image = load_image(file)
     pre_image = preprocess(image)
-
+    prediction_id = uuid.uuid4()
     label = predict_image(pre_image, model)
-    print(label)
     return {
-                "prediction_id": 'abc',
+                "prediction_id": prediction_id,
                 "class_label": label,
-                "class_id": 4
             }
 
 
-# Explain Prediction
-@api.post("/predict/explain2/")
-async def explain_api(url):
-    url2 = url.replace('.', "../vue-webapp/public", 1)
+#Explain Prediction
+@app.post("/explain")
+async def explain_api(file: UploadFile = File(...)):
     model = load_model()
-    image = prepare(url2)
-    model = load_model()
-    os.remove(url2)
-    explanation = explain_cnn(image, model)
-    image = explanation.astype('float32') * 224
-    image = cv2.resize(image, (640, 640))
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    date = str(datetime.datetime.now())
-    cv2.imwrite("../vue-webapp/public/Image/Explain/proof-" + date + ".png", image)
-    return "./Image/Explain/proof-" + date + ".png"
+    image = load_image(file)
+    pre_image = preprocess(image)
+
+    explanation = explain_cnn(pre_image, model)
+    explain_id = uuid.uuid4()
+    encoded_image_string = convert_explanation(explanation)
+    encoded_bytes = bytes("data:image/png;base64,", encoding="utf-8") + encoded_image_string
+   
+    return {         
+        "image": encoded_bytes,
+        "explain_id": explain_id
+    }
 
 
 
@@ -95,7 +91,7 @@ def streetview():
     tel_aviv = {
     "country": "Israel",
     "city": "Tel Aviv",
-    "polygon": [(34.775838,32.1030508),(34.7701732,32.0968887),(34.7663108,32.0880357),(34.7657958,32.0794908),(34.7642938,32.0776181),(34.7607318,32.0697087),(34.7595945,32.0660538),(34.753286,32.0564522),(34.7490588,32.0555792),(34.7478566,32.0512504),(34.7531137,32.0500682),(34.7589288,32.0496317),(34.7617612,32.0495953),(34.7656879,32.0476675),(34.7686276,32.0446119),(34.7780046,32.0388278),(34.7802362,32.0400465),(34.782897,32.0436661),(34.7841844,32.0490679),(34.7842595,32.0504592),(34.7839913,32.051996),(34.7843561,32.0552332),(34.7849124,32.056933),(34.7860711,32.0594426),(34.7884529,32.0634797),(34.7903412,32.0660073),(34.7922079,32.0688985),(34.7921007,32.0725533),(34.7928442,32.0743626),(34.7936515,32.0764877),(34.7949803,32.0782886),(34.7965091,32.0796886),(34.7967076,32.0809794),(34.7972763,32.0829793),(34.7989929,32.0868699),(34.800216,32.0912875),(34.8010635,32.0953503),(34.8019111,32.0994131),(34.788779,32.0967229),(34.7793806,32.0960503),(34.7774923,32.0972864),(34.777621,32.0991587),(34.7777498,32.10114),(34.775838,32.1030508)]
+    "polygon": [(34.775838,32.1030508),(34.7701732,32.0968887),(34.7663108,32.0880357),(34.7657958,32.0794908),(34.7642938,32.0776181),(34.7607318,32.0697087),(34.7595945,32.0660538),(34.753286,32.0564522),(34.7490588,32.0555792),(34.7478566,32.0512504),(34.7531137,32.0500682),(34.7589288,32.0496317),(34.7617612,32.0495953),(34.7656879,32.0476675),(34.7686276,32.0446119),(34.7780046,32.0388278),(34.7802362,32.0400465),(34.782897,32.0436661),(34.7841844,32.0490679),(34.7842595,32.0504592),(34.7839913,32.051996),(34.7843561,32.0552332),(34.7849124,32.056933),(34.7860711,32.0594426),(34.7884529,32.0634797),(34.7903412,32.0660073),(34.7922079,32.0688985),(34.7926157,32.0724078),(34.793445,32.0743626),(34.7943381,32.0762695),(34.7956669,32.0783613),(34.7965091,32.0796886),(34.7967076,32.0809794),(34.7972763,32.0829793),(34.7989929,32.0868699),(34.800216,32.0912875),(34.8010635,32.0953503),(34.8019111,32.0994131),(34.788779,32.0967229),(34.7793806,32.0960503),(34.7774923,32.0972864),(34.777621,32.0991587),(34.7777498,32.10114),(34.775838,32.1030508)]
     }
 
     jerusalem = {
