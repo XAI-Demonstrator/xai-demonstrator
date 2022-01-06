@@ -22,7 +22,8 @@ def create_segments(img: np.ndarray, seg_method: str, settings: Dict) -> np.ndar
     -------
 
     """
-    # currently, using fixed settings
+    # TODO: Allow for changes in settings
+    # TODO: Reduce to practically useful segmentation variants
     if seg_method == "felzenszwalb":
         return felzenszwalb(image=img, scale=250, sigma=0.6, min_size=45)
 
@@ -58,6 +59,7 @@ def generate_samples(segment_mask: np.ndarray, num_of_samples: int, p: float) ->
         A two-dimensional array of dimension (num_of_samples, number_of_segments)
     """
     num_of_segments = np.max(segment_mask) + 1
+    # TODO: Do not loop, but generate entire array in one step
     return np.array([np.random.binomial(n=1, p=p, size=num_of_segments) for i in range(num_of_samples)])
 
 
@@ -78,13 +80,15 @@ def generate_images(image: np.ndarray, segment_mask: np.ndarray, samples: np.nda
     images = np.zeros((samples.shape[0],) + image.shape)
     segment_mask = segment_mask.reshape(image.shape[:2] + (1,))
     segment_ids = np.unique(segment_mask)
-    samples_enu = enumerate(samples)
-    for i, sample in samples_enu:
+
+    # TODO: Do not loop (twice)
+    for i, sample in enumerate(samples):
         mask = np.zeros(image.shape)
         for s_id in segment_ids:
             if sample[s_id]:
                 mask += segment_mask == s_id
         images[i] = mask * image
+
     return images
 
 
@@ -93,19 +97,14 @@ def predict_images(images: np.ndarray, model_: tf.keras.models.Model) -> np.ndar
 
     Parameters
     ----------
-    images
-    model_
+    images : np.ndarray
+        Images as an array of dimension (num_of_samples, IMG_SIZE, IMG_SIZE, 3)
+    model_ : tf.keras.models.Model
+        A tf.keras model that takes an input of size (IMG_SIZE, IMG_SIZE, 3)
 
     Returns
     -------
+    An array of size (num_of_samples, output_dimension)
 
     """
-    predictions = []
-    for i in images:
-        tst_pic = np.expand_dims(i, axis=0)
-        tst_pic = tst_pic[:, :, :, :3]
-        tst_pic = tf.keras.applications.mobilenet_v2.preprocess_input(tst_pic)
-        prediction = predict_class(tst_pic, model_=model_)
-        predictions.append(prediction)
-    print(predictions)
-    return np.array([])
+    return model_.predict(images)
