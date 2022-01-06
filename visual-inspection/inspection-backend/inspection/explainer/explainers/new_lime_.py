@@ -3,6 +3,9 @@ import numpy as np
 from skimage.segmentation import felzenszwalb, slic, quickshift, watershed
 from skimage.filters import sobel
 from skimage.color import rgb2gray
+import tensorflow as tf
+from ...model.model import model
+from ...model.predict import *
 
 
 # method to create segments out of a loaded picture using different methods and settings
@@ -48,7 +51,7 @@ def generate_samples(segment_mask: np.ndarray, num_of_samples: int, p: float) ->
 # method for generating example images with each excluded segments in black
 def generate_images(image: np.ndarray, segment_mask: np.ndarray, samples: np.ndarray) -> np.ndarray:
     images = np.zeros((samples.shape[0],) + image.shape)
-    segment_mask = segment_mask.reshape(334, 500, 1)
+    segment_mask = segment_mask.reshape(image.shape[:2] + (1,))
     segment_ids = np.unique(segment_mask)
     samples_enu = enumerate(samples)
     for i, sample in samples_enu:
@@ -59,3 +62,14 @@ def generate_images(image: np.ndarray, segment_mask: np.ndarray, samples: np.nda
         images[i] = mask * image
     return images
 
+
+def predict_images(images: np.ndarray, model_: tf.keras.models.Model = model) -> np.ndarray:
+    predictions = []
+    for i in images:
+        tst_pic = np.expand_dims(i, axis=0)
+        tst_pic = tst_pic[:, :, :, :3]
+        tst_pic = tf.keras.applications.mobilenet_v2.preprocess_input(tst_pic)
+        prediction = predict_class(tst_pic, model_= model_)
+        predictions.append(prediction)
+    print(predictions)
+    return np.array([])
