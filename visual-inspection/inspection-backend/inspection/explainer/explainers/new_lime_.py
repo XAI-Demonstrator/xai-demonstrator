@@ -1,15 +1,27 @@
-# new explainer
+"""XAI Demonstrator LIME explainer"""
+from typing import Dict
+
 import numpy as np
-from skimage.segmentation import felzenszwalb, slic, quickshift, watershed
-from skimage.filters import sobel
-from skimage.color import rgb2gray
 import tensorflow as tf
-from ...model.model import model
-from ...model.predict import *
+from skimage.color import rgb2gray
+from skimage.filters import sobel
+from skimage.segmentation import felzenszwalb, slic, quickshift, watershed
 
 
-# method to create segments out of a loaded picture using different methods and settings
-def create_segments(img: np.ndarray, seg_method: str, settings: list) -> np.ndarray:
+def create_segments(img: np.ndarray, seg_method: str, settings: Dict) -> np.ndarray:
+    """
+    create segments out of a loaded picture using different methods and settings
+
+    Parameters
+    ----------
+    img
+    seg_method
+    settings
+
+    Returns
+    -------
+
+    """
     # currently, using fixed settings
     if seg_method == "felzenszwalb":
         return felzenszwalb(image=img, scale=250, sigma=0.6, min_size=45)
@@ -28,9 +40,10 @@ def create_segments(img: np.ndarray, seg_method: str, settings: list) -> np.ndar
         raise ValueError("{} is not a valid segmentation method".format(seg_method))
 
 
-# method to determine which segments are displayed for each sample
 def generate_samples(segment_mask: np.ndarray, num_of_samples: int, p: float) -> np.ndarray:
     """
+    determine which segments are displayed for each sample
+
     Parameters
     ----------
     segment_mask : np.ndarray
@@ -48,8 +61,20 @@ def generate_samples(segment_mask: np.ndarray, num_of_samples: int, p: float) ->
     return np.array([np.random.binomial(n=1, p=p, size=num_of_segments) for i in range(num_of_samples)])
 
 
-# method for generating example images with each excluded segments in black
 def generate_images(image: np.ndarray, segment_mask: np.ndarray, samples: np.ndarray) -> np.ndarray:
+    """Generating example images with each excluded segments in black
+
+
+    Parameters
+    ----------
+    image
+    segment_mask
+    samples
+
+    Returns
+    -------
+
+    """
     images = np.zeros((samples.shape[0],) + image.shape)
     segment_mask = segment_mask.reshape(image.shape[:2] + (1,))
     segment_ids = np.unique(segment_mask)
@@ -63,13 +88,24 @@ def generate_images(image: np.ndarray, segment_mask: np.ndarray, samples: np.nda
     return images
 
 
-def predict_images(images: np.ndarray, model_: tf.keras.models.Model = model) -> np.ndarray:
+def predict_images(images: np.ndarray, model_: tf.keras.models.Model) -> np.ndarray:
+    """
+
+    Parameters
+    ----------
+    images
+    model_
+
+    Returns
+    -------
+
+    """
     predictions = []
     for i in images:
         tst_pic = np.expand_dims(i, axis=0)
         tst_pic = tst_pic[:, :, :, :3]
         tst_pic = tf.keras.applications.mobilenet_v2.preprocess_input(tst_pic)
-        prediction = predict_class(tst_pic, model_= model_)
+        prediction = predict_class(tst_pic, model_=model_)
         predictions.append(prediction)
     print(predictions)
     return np.array([])
