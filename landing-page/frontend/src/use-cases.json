@@ -1,0 +1,18 @@
+{
+  "de": {
+    "sentiment-title": "Stimmung erkennen",
+    "sentiment-description": "Entdecke, wie die KI die Stimmung in einem Text bestimmt!",
+    "inspection-title": "Gegenstände erkennen",
+    "inspection-description": "Finde heraus, woran die KI Gegenstände auf Bildern erkennt!",
+    "country-title": "Guess the Country",
+    "country-description": "Kannst du besser als die KI zwischen Tel-Aviv und Berlin unterscheiden?"
+  },
+  "en": {
+    "sentiment-title": "Sentiment Analysis",
+    "sentiment-description": "Discover how the AI determines a text's sentiment!",
+    "inspection-title": "Object Detection",
+    "inspection-description": "Discover how the AI detects objects in an image!",
+    "country-title": "Guess the Country",
+    "country-description": "Can you beat the AI at distinguishing Tel-Aviv from Berlin?"
+  }
+}

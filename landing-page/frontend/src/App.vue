@@ -2,11 +2,11 @@
   <div id="app" class="xd-app">
     <GitHubRibbon url="https://github.com/xai-demonstrator/xai-demonstrator"/>
     <XAIStudioRibbon url="https://www.xai-studio.de"/>
-    <div class="blank-header xd-primary"><h1>XAI-Demonstrator <span class="beta-label">Beta</span></h1>
+    <div class="blank-header xd-primary"><h1>{{ $t('xaidemonstrator') }} <span class="beta-label">Beta</span></h1>
     </div>
     <header class="xd-secondary">
       <img v-bind:src="require('@/assets/logo-white.svg')" class="main-logo"/>
-      <h3>Hinterfrage die KI und entdecke Erklärbare Künstliche Intelligenz</h3>
+      <h3>{{ $t('claim') }}</h3>
     </header>
 
     <main>
@@ -15,8 +15,8 @@
           <section class="xd-section xd-light">
             <img v-bind:src="useCase.logo" class="logo xd-secondary" :alt="useCase.title"/>
             <div class="description">
-              <h3>{{ useCase.title }}</h3>
-              <p>{{ useCase.description }}</p>
+              <h3>{{ $t(useCase.title) }}</h3>
+              <p>{{ $t(useCase.description) }}</p>
             </div>
             <img class="next" v-bind:src="require('@/assets/arrow-right.svg')"/>
           </section>
@@ -45,27 +45,43 @@ export default {
     return {
       infoText: [
         {
-          headline: "Der XAI-Demonstrator",
-          paragraphs: [
-            "Eine KI, die sich dir gegenüber wie ein Team-Mitglied erklärt? Der XAI-Demonstrator zeigt, wie das geht.",
-            "Anhand leicht zugänglicher Beispiele veranschaulicht die App die Möglichkeiten von Explainable AI (XAI). " +
-            "Live und interaktiv erzeugt sie Erklärungen mit modernen Methoden direkt aus der Forschung.",
-            "Damit wird die Vision einer Künstlichen Intelligenz, die nicht länger eine Black Box ist, " +
-            "sondern von ihren Nutzerinnen und Nutzern verstanden und hinterfragt werden kann, Realität."
-          ]
+          headline: this.$t('info1headline'),
+          paragraphs: [this.$t('info1paragraph1'), this.$t('info1paragraph2'), this.$t('info1paragraph3')]
         }
       ],
       infoUrl: "https://www.erklaerbare-ki.de",
-      linkLabel: "Interesse geweckt? Besuche unsere Website! "
+      linkLabel: this.$t('infoLinkLabel')
     }
   },
   computed: {
     useCases() {
       return this.$appConfig.useCases.filter(useCase => useCase.include)
     }
+  },
+  created() {
+    document.title = this.$t('xaidemonstrator');
   }
 }
 </script>
+
+<i18n src="./use-cases.json"></i18n>
+<i18n>
+{
+  "de": {
+    "claim": "Hinterfrage die KI und entdecke Erklärbare Künstliche Intelligenz",
+    "info1headline": "Der XAI-Demonstrator",
+    "info1paragraph1": "Eine KI, die sich dir gegenüber wie ein Team-Mitglied erklärt? Der XAI-Demonstrator zeigt, wie das geht.",
+    "info1paragraph2": "Anhand leicht zugänglicher Beispiele veranschaulicht die App die Möglichkeiten von Explainable AI (XAI). Live und interaktiv erzeugt sie Erklärungen mit modernen Methoden direkt aus der Forschung.",
+    "info1paragraph3": "Damit wird die Vision einer Künstlichen Intelligenz, die nicht länger eine Black Box ist, sondern von ihren Nutzerinnen und Nutzern verstanden und hinterfragt werden kann, Realität.",
+    "infoLinkLabel": "Interesse geweckt? Besuche unsere Website!"
+  },
+  "en": {
+    "claim": "Scrutinize the AI and discover Explainable Artificial Intelligence",
+    "info1headline": "The XAI Demonstrator",
+    "infoLinkLabel": "Want to learn more? (in German)"
+  }
+}
+</i18n>
 
 <style>
 

@@ -10,9 +10,11 @@
   "dependencies": {
     "@xai-demonstrator/xaidemo-ui": "^0.4.4",
     "core-js": "^3.20.0",
-    "vue": "^3.2.26"
+    "vue": "^3.2.26",
+    "vue-i18n": "^9.2.0-beta.25"
   },
   "devDependencies": {
+    "@intlify/vue-i18n-loader": "^4.1.0",
     "@vue/cli-plugin-babel": "^4.5.15",
     "@vue/cli-plugin-eslint": "^4.5.15",
     "@vue/cli-service": "^4.5.15",
