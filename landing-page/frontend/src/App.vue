@@ -49,7 +49,7 @@ export default {
           paragraphs: [this.$t('info1paragraph1'), this.$t('info1paragraph2'), this.$t('info1paragraph3')]
         }
       ],
-      infoUrl: "https://www.erklaerbare-ki.de",
+      infoUrl: "https://www.erklaerbare-ki.de/xai-demonstrator/",
       linkLabel: this.$t('infoLinkLabel')
     }
   },
@@ -78,6 +78,9 @@ export default {
   "en": {
     "claim": "Scrutinize the AI and discover Explainable Artificial Intelligence",
     "info1headline": "The XAI Demonstrator",
+    "info1paragraph1": "An AI that acts like a team member and explains its decisions and actions? The XAI Demonstrator shows that it's possible.",
+    "info1paragraph2": "Using accessible examples, the app demonstrates the potential of Explainable AI (XAI). All explanations are generated in real time using state-of-the-art XAI methods.",
+    "info1paragraph3": "The XAI Demonstrator brings the vision of an AI that is no longer a black box to reality, allowing its users to fully comprehend and challenge its decisions.",
     "infoLinkLabel": "Want to learn more? (in German)"
   }
 }
