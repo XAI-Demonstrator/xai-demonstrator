@@ -73,7 +73,7 @@ export default {
           ]
         }
       ],
-      infoUrl: "https://xai-demonstrator.github.io/#use-case-i",
+      infoUrl: "https://www.erklaerbare-ki.de/xai-demonstrator/",
       infoLinkLabel: "Interesse geweckt? Hier gibt’s mehr Infos",
       reviewText: '',
       numberOfStars: null,

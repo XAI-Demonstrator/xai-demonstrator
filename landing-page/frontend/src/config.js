@@ -4,22 +4,22 @@ const config = {
     useCases: [
         {
             logo: require('@/assets/sentiment-stars.svg'),
-            title: "Stimmung erkennen",
-            description: "Entdecke, wie die KI die Stimmung in einem Text bestimmt!",
+            title: "sentiment-title",
+            description: "sentiment-description",
             route: "/sentiment/",
             include: parse(process.env.VUE_APP_SENTIMENT, false)
         },
         {
             logo: require('@/assets/inspection-eye.svg'),
-            title: "Gegenstände erkennen",
-            description: "Finde heraus, woran die KI Gegenstände auf Bildern erkennt!",
+            title: "inspection-title",
+            description: "inspection-description",
             route: "/inspection/",
             include: parse(process.env.VUE_APP_INSPECTION, false)
         },
         {
             logo: require('@/assets/inspection-eye.svg'),
-            title: "Guess the Country",
-            description: "Kannst du besser als die KI zwischen Tel-Aviv und Berlin unterscheiden?",
+            title: "country-title",
+            description: "country-description",
             route: "/country/",
             include: parse(process.env.VUE_APP_COUNTRY, false)
         }
