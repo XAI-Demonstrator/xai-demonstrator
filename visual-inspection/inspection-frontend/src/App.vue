@@ -126,7 +126,7 @@ export default {
         width: 100,
         height: 100
       },
-      infoUrl: "https://xai-demonstrator.github.io/#use-case-ii",
+      infoUrl: "https://www.erklaerbare-ki.de/xai-demonstrator/",
       infoText: [{
         headline: this.$t('info1headline'),
         paragraphs: [this.$t('info1paragraph1'), this.$t('info1paragraph2'), this.$t('info1paragraph3')]
