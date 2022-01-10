@@ -10,7 +10,7 @@ const download = (url, path, callback) => {
     })
 }
 
-const url = 'https://storage.googleapis.com/xai-demonstrator-assets/visual-inspection/images/table.jpg'
+const url = 'https://storage.googleapis.com/xai-demo-assets/visual-inspection/images/table.jpg'
 const dir = './src/assets/'
 const filename = 'table.jpg'
 
