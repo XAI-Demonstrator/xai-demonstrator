@@ -2,9 +2,12 @@ import cv2
 import numpy as np
 import tensorflow as tf
 import base64
+import pathlib
+
+PATH = pathlib.Path(__file__).parent
 
 def load_model():
-    model = tf.keras.models.load_model("my_model")
+    model = tf.keras.models.load_model(PATH / "my_model")
     return model
 
 def load_image(file):

@@ -1,7 +1,7 @@
 version: '3.7'
 
 services:
-  inspection:
+  country:
     build: .
     ports:
       - 8000:8000

@@ -59,7 +59,7 @@
     <FloatingInfoButton
       v-bind:info-text="infoText"
       v-bind:info-url="infoUrl"
-      v-bind:link-label="linkLabel"/>
+      v-bind:link-label="infoLinkLabel"/>
   </div>
 </template>
 
@@ -148,14 +148,18 @@ export default {
     },
     submitFile() {
       this.waitingForExplanation = true
-     
-      let form = new FormData();
-      form.append('file', this.streetviewimage);
+      const blob = new Blob([this.streetviewimage]);
 
-      axios.post('/predict', form)
+      let form = new FormData();
+      form.append('file', blob );
+
+      axios.post('/predict', form, {
+              headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+      })
       .then((res) => {
             this.prediction = res.data.class_label
-            this.$emit('inspection-completed')
             this.waitingForExplanation = false
             if(this.prediction == this.label){
                 this.score_ai = this.score_ai + 1
@@ -168,7 +172,6 @@ export default {
           console.error(error)
         })
       },
-
     explain() {
       this.waitingForExplanation = true
       const blob = new Blob([this.streetviewimage]);

@@ -1,9 +1,9 @@
 import random
 import urllib.error
-from urllib.request import urlretrieve
+from urllib.request import urlretrieve, urlopen
 import requests
 from .explainer.explain import explain_cnn, convert_explanation
-from fastapi import APIRouter
+from fastapi import APIRouter, UploadFile, File
 from .model.predict import load_model, load_image, predict_image, preprocess 
 from shapely.geometry import Point, Polygon
 from .config import settings
@@ -38,7 +38,7 @@ IMG_PREFIX = "img_"
 IMG_SUFFIX = ".png"
 
 
-@app.post("/predict")
+@api.post("/predict")
 def predict(file: UploadFile = File(...)):
     model = load_model()
     image = load_image(file)
@@ -52,7 +52,7 @@ def predict(file: UploadFile = File(...)):
 
 
 #Explain Prediction
-@app.post("/explain")
+@api.post("/explain")
 async def explain_api(file: UploadFile = File(...)):
     model = load_model()
     image = load_image(file)
@@ -72,10 +72,11 @@ async def explain_api(file: UploadFile = File(...)):
 
 @api.get("/msg")
 def home():
-    return "Was this Google Streetview photo taken in Tel-Aviv or Berlin? Challenge yourself with an AI."
+    return {         
+        "data":"Was this Google Streetview photo taken in Tel-Aviv or Berlin? Challenge yourself with an AI."
+    }
 
-
-@app.get("/streetview")
+@api.get("/streetview")
 def streetview():
     hamburg = {
     "country": "Germany",
@@ -120,7 +121,7 @@ def streetview():
         try:
             contents = urlopen(url).read()
             #urlretrieve(url, outfile)
-        except urllib2.URLError:
+        except URLError:
             #print("    No imagery")
             break
 
