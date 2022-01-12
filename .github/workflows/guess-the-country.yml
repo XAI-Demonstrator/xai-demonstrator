@@ -154,7 +154,7 @@ jobs:
     - name: Create container and publish to Registry
       uses: elgohr/Publish-Docker-Github-Action@3.04
       with:
-        name: xai-demonstrator/guess-the-country
+        name: xai-demonstrator/guess-the-country-service
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
         registry: ghcr.io
