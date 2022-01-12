@@ -44,6 +44,12 @@ jobs:
           flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
           # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
           flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+      
+      - name: Download model
+        run: |
+          set -e
+          cd ./guess-the-country/country-backend
+          ./download_model.sh
 
   test-frontend:
     runs-on: ubuntu-latest
@@ -99,3 +105,35 @@ jobs:
         echo $PWD
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+
+    - name: Download model
+        run: |
+          set -e
+          cd ./guess-the-country/country-backend
+          ./download_model.sh
+
+    - name: Run integration tests with pytest
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        COVERALLS_FLAG_NAME: inspection-backend-int
+        COVERALLS_PARALLEL: true
+      run: |
+        set -e
+        cd ./visual-inspection/inspection-backend
+        echo $PWD
+        pip install -r requirements-test.txt
+        # pytest -v --cov=inspection -m "integration" tests/
+        # when on master, pretend to be on branch x-cov-country-backend
+        $COVERALLS_PARALLEL && export GITHUB_REF="refs/heads/x-cov-country-backend"
+        $COVERALLS_PARALLEL && export GITHUB_HEAD_REF="x-cov-country-backend"
+        coveralls --service=github
+        coveralls --service=github --finish
+
+    - name: Create container and publish to Registry
+      uses: elgohr/Publish-Docker-Github-Action@3.04
+      with:
+        name: xai-demonstrator/guess-the-country
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+        registry: ghcr.io
+        workdir: guess-the-country/
