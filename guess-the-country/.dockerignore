@@ -1,0 +1,11 @@
+**/.pytest_cache
+**/.gitignore
+**/__pycache__
+**/node_modules
+**/dist
+**/.coverage
+
+country-backend/country/static
+country-backend/country/model/my_model
+
+

@@ -1,8 +1,11 @@
-import {createApp} from 'vue'
-import Notifications from 'notiwind'
+import { createApp } from 'vue'
 import App from './App.vue'
+import {makeServer} from "./server"
 import '@xai-demonstrator/xaidemo-ui/lib/xaidemo-ui.css'
 
+if (process.env.NODE_ENV === "development") {
+    makeServer()
+}
+
 const app = createApp(App)
-app.use(Notifications)
 app.mount('#app')
