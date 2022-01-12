@@ -8,6 +8,7 @@ services:
     depends_on:
       - inspection
       - sentiment
+      - country
     ports:
       - 8000:80
 
@@ -16,3 +17,7 @@ services:
 
   inspection:
     build: ./visual-inspection/
+
+  country:
+    build: ./guess-the-country/
+
