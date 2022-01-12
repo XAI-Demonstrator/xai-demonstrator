@@ -8,4 +8,5 @@ class Settings(BaseSettings):
     # Google Maps API access
     google_maps_api_token = ""
 
+
 settings = Settings()
