@@ -129,10 +129,10 @@ jobs:
         pip install -r requirements.txt
 
     - name: Download model
-        run: |
-          set -e
-          cd ./guess-the-country/country-backend
-          ./download_model.sh
+      run: |
+        set -e
+        cd ./guess-the-country/country-backend
+        ./download_model.sh
 
     - name: Run integration tests with pytest
       env:
