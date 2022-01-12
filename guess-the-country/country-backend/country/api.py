@@ -12,6 +12,7 @@ import uuid
 
 api = APIRouter()
 
+#To-DO: Polygons und Model auserhalb von Funktionen programmieren, damit diese im RAM sind
 
 def generate_random(polygon):
     points = []
