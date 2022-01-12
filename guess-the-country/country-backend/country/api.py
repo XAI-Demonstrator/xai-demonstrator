@@ -1,5 +1,6 @@
 import random
-from urllib.request import urlopen, error
+from urllib.request import urlopen
+from urllib.error import URLError
 import requests
 from .explainer.explain import explain_cnn, convert_explanation
 from fastapi import APIRouter, UploadFile, File
@@ -147,7 +148,7 @@ def streetview():
         try:
             contents = urlopen(url).read()
             #urlretrieve(url, outfile)
-        except error.URLError:
+        except URLError:
             #print("    No imagery")
             break
 
