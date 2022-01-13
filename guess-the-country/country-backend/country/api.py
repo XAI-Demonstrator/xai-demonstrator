@@ -4,14 +4,11 @@ from urllib.error import URLError
 import requests
 from .explainer.explain import explain_cnn, convert_explanation
 from fastapi import APIRouter, UploadFile, File
-from .model.predict import load_model, load_image, predict_image, preprocess
+from .model.predict import load_model, load_image, predict_image, preprocess, model
 from shapely.geometry import Point, Polygon
 from .config import settings
 import base64
 import uuid
-import pathlib
-
-PATH = pathlib.Path(__file__).parent
 
 api = APIRouter()
 
@@ -92,7 +89,6 @@ jerusalem = {
 
 country_array = [tel_aviv, berlin, hamburg, jerusalem]
 
-model = tf.keras.models.load_model(PATH / "my_model")
 
 @api.post("/predict")
 def predict(file: UploadFile = File(...)):
