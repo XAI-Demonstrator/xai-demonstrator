@@ -19,8 +19,9 @@ at the University of Ulm.
 - Isabel Schöberl
 - Philipp Schröppel
 - Irina Sigler
+- Theresa Tröger
 - Marie Walter
-- Theresa Züger
+- Dennis Winter
 
 ## License
 
