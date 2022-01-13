@@ -128,7 +128,7 @@ export default {
   },
   methods: {
     getMessage() {
-      axios.get('/msg')
+      axios.get(this.backendUrl + '/msg')
         .then((res) => {
           this.msg = res.data.data
         })
@@ -137,7 +137,7 @@ export default {
         })
     },
     getStreetview() {
-      axios.get('/streetview')
+      axios.get(this.backendUrl +'/streetview')
        .then(res => {
           this.streetviewimage = res.data.image
           this.label = res.data.class_label
@@ -153,7 +153,7 @@ export default {
       let form = new FormData();
       form.append('file', blob );
 
-      axios.post('/predict', form, {
+      axios.post(this.backendUrl +'/predict', form, {
               headers: {
                     'Content-Type': 'multipart/form-data'
                 }
@@ -179,7 +179,7 @@ export default {
       let form = new FormData();
       form.append('file', blob );
       
-      axios.post('/explain', form,  {
+      axios.post(this.backendUrl +'/explain', form,  {
               headers: {
                     'Content-Type': 'multipart/form-data'
                 }
