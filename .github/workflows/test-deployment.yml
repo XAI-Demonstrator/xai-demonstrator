@@ -58,19 +58,17 @@ jobs:
          uses: appleboy/ssh-action@v0.1.4
          env:
            STREETVIEW_API_KEY: ${{ secrets.STREETVIEW_API_KEY }}
-           PASS_CHECK: "Pass Check"
          with:
            host: ${{ secrets.HOST }}
            username: ${{ secrets.USER }}
            key: ${{ secrets.SSH_KEY }}
-           envs: STREETVIEW_API_KEY,PASS_CHECK
+           envs: STREETVIEW_API_KEY
            script: |
              set -e
-             echo $PASS_CHECK
              export STREETVIEW_API_KEY=$STREETVIEW_API_KEY
              cd test-deployment/deployment/test-deployment/
-             sudo docker-compose pull
-             sudo docker-compose up -d
+             sudo -E docker-compose pull
+             sudo -E docker-compose up -d
              sleep 10 && rm ~/.test-deployment-lock
        - name: Slack Notification
          uses: rtCamp/action-slack-notify@v2.2.0
