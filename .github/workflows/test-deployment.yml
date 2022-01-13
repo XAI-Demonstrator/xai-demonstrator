@@ -6,6 +6,7 @@ on:
       - "Landing Page"
       - "Review Sentiment"
       - "Visual Inspection"
+      - "Guess the Country"
     branches:
       - master
     types:
