@@ -22,7 +22,7 @@ on:
 jobs:
   deploy:
      runs-on: ubuntu-latest
-     if: ${{ github.event_name == 'push' || github.event.workflow_run.conclusion == 'success' }}
+     if: ${{ github.event_name == 'push' || github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
      environment:
        name: test
        url: https://test.xaidemo.de
