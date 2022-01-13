@@ -55,7 +55,7 @@ jobs:
        - name: SSH Remote Commands
          uses: appleboy/ssh-action@v0.1.4
          env:
-           STREETVIEW_API_KEY: ${{ secrets.STREEVIEW_API_KEY }}
+           STREETVIEW_API_KEY: ${{ secrets.STREETVIEW_API_KEY }}
          with:
            host: ${{ secrets.HOST }}
            username: ${{ secrets.USER }}
