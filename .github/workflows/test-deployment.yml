@@ -21,14 +21,17 @@ jobs:
   deploy:
      runs-on: ubuntu-latest
      if: ${{ github.event_name == 'push' || github.event.workflow_run.conclusion == 'success' }}
+     environment:
+       name: test
+       url: https://test.xaidemo.de
      steps:
        - uses: actions/checkout@master
        - name: Wait for lock to release and place lock
          uses: appleboy/ssh-action@v0.1.4
          with:
-           host: ${{ secrets.TEST_HOST }}
-           username: ${{ secrets.TEST_USER }}
-           key: ${{ secrets.TEST_KEY }}
+           host: ${{ secrets.HOST }}
+           username: ${{ secrets.USER }}
+           key: ${{ secrets.SSH_KEY }}
            script: |
              set -e
              # wait for lock
@@ -43,18 +46,21 @@ jobs:
        - name: Copy docker-compose.yml to test server
          uses: appleboy/scp-action@v0.1.2
          with:
-           host: ${{ secrets.TEST_HOST }}
-           username: ${{ secrets.TEST_USER }}
-           key: ${{ secrets.TEST_KEY }}
+           host: ${{ secrets.HOST }}
+           username: ${{ secrets.USER }}
+           key: ${{ secrets.SSH_KEY }}
            source: "deployment/test-deployment/docker-compose.yml"
            target: "test-deployment"
            rm: true
        - name: SSH Remote Commands
          uses: appleboy/ssh-action@v0.1.4
+         env:
+           STREETVIEW_API_KEY: ${{ secrets.STREEVIEW_API_KEY }}
          with:
-           host: ${{ secrets.TEST_HOST }}
-           username: ${{ secrets.TEST_USER }}
-           key: ${{ secrets.TEST_KEY }}
+           host: ${{ secrets.HOST }}
+           username: ${{ secrets.USER }}
+           key: ${{ secrets.SSH_KEY }}
+           envs: STREETVIEW_API_KEY
            script: |
              set -e
              cd test-deployment/deployment/test-deployment/
