@@ -7,11 +7,6 @@ import pathlib
 PATH = pathlib.Path(__file__).parent
 
 
-def load_model():
-    model = tf.keras.models.load_model(PATH / "my_model")
-    return model
-
-
 def load_image(file):
     encoded_data = str(file.file.read())
     encoded_data = encoded_data.split(',')[1]
