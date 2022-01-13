@@ -64,7 +64,7 @@ jobs:
            envs: STREETVIEW_API_KEY
            script: |
              set -e
-             export STREETVIEW_API_KEY
+             export STREETVIEW_API_KEY=$STREETVIEW_API_KEY
              cd test-deployment/deployment/test-deployment/
              sudo docker-compose pull
              sudo docker-compose up -d
