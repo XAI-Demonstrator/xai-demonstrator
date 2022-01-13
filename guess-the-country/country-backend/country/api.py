@@ -9,6 +9,9 @@ from shapely.geometry import Point, Polygon
 from .config import settings
 import base64
 import uuid
+import pathlib
+
+PATH = pathlib.Path(__file__).parent
 
 api = APIRouter()
 

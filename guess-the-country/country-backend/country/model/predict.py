@@ -2,9 +2,6 @@ import cv2
 import numpy as np
 import tensorflow as tf
 import base64
-import pathlib
-
-PATH = pathlib.Path(__file__).parent
 
 
 def load_image(file):
