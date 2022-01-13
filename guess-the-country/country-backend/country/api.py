@@ -4,7 +4,7 @@ from urllib.error import URLError
 import requests
 from .explainer.explain import explain_cnn, convert_explanation
 from fastapi import APIRouter, UploadFile, File
-from .model.predict import load_model, load_image, predict_image, preprocess, model
+from .model.predict import load_image, predict_image, preprocess, model
 from shapely.geometry import Point, Polygon
 from .config import settings
 import base64
