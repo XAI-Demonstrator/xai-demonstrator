@@ -7,6 +7,7 @@ on:
       - '!landing-page/**.md'
       - 'review-sentiment/sentiment-frontend/**'
       - 'visual-inspection/inspection-frontend/**'
+      - 'guess-the-country/country-frontend/**'
 
 jobs:
   test:
