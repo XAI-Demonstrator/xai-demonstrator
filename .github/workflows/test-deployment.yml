@@ -1,6 +1,7 @@
 name: Test Deployment
 
 on:
+  workflow_dispatch:
   workflow_run:
     workflows:
       - "Landing Page"
@@ -57,13 +58,15 @@ jobs:
          uses: appleboy/ssh-action@v0.1.4
          env:
            STREETVIEW_API_KEY: ${{ secrets.STREETVIEW_API_KEY }}
+           PASS_CHECK: "Pass Check"
          with:
            host: ${{ secrets.HOST }}
            username: ${{ secrets.USER }}
            key: ${{ secrets.SSH_KEY }}
-           envs: STREETVIEW_API_KEY
+           envs: STREETVIEW_API_KEY,PASS_CHECK
            script: |
              set -e
+             echo $PASS_CHECK
              export STREETVIEW_API_KEY=$STREETVIEW_API_KEY
              cd test-deployment/deployment/test-deployment/
              sudo docker-compose pull
