@@ -6,6 +6,7 @@ services:
     depends_on:
       - inspection
       - sentiment
+      - country
     ports:
       - 8000:80
 
@@ -17,6 +18,7 @@ services:
       - 8000
     environment:
       - ROOT_PATH=/api/sentiment
+      - SERVICE_NAME=sentiment-service
       - TRACING_EXPORTER=jaeger
       - JAEGER_AGENT_HOST_NAME=jaeger
 
@@ -28,8 +30,22 @@ services:
       - 8000
     environment:
       - ROOT_PATH=/api/inspection
+      - SERVICE_NAME=inspection-service
       - TRACING_EXPORTER=jaeger
       - JAEGER_AGENT_HOST_NAME=jaeger
+
+  country:
+    image: ghcr.io/xai-demonstrator/guess-the-country-service:latest
+    depends_on:
+      - jaeger
+    expose:
+      - 8000
+    environment:
+      - ROOT_PATH=/api/country
+      - SERVICE_NAME=country-service
+      - TRACING_EXPORTER=jaeger
+      - JAEGER_AGENT_HOST_NAME=jaeger
+      - GOOGLE_MAPS_API_TOKEN=${STREETVIEW_API_KEY}
 
   jaeger:
     image: jaegertracing/all-in-one
