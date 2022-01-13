@@ -162,5 +162,5 @@ def streetview():
                               encoding="utf-8") + encoded_image_string
     return {
         "image": encoded_bytes,
-        "class_label": array[nominated_country]['city']
+        "class_label": country_array[nominated_country]['city']
     }
