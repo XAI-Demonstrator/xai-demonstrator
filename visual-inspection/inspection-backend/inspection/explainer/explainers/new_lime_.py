@@ -1,11 +1,11 @@
 """XAI Demonstrator LIME explainer"""
 from typing import Dict
-
 import numpy as np
 import tensorflow as tf
 from skimage.color import rgb2gray
 from skimage.filters import sobel
 from skimage.segmentation import felzenszwalb, slic, quickshift, watershed
+from sklearn.linear_model import Lasso, BayesianRidge, LinearRegression
 
 
 def create_segments(img: np.ndarray, seg_method: str, settings: Dict) -> np.ndarray:
@@ -60,7 +60,10 @@ def generate_samples(segment_mask: np.ndarray, num_of_samples: int, p: float) ->
     """
     num_of_segments = np.max(segment_mask) + 1
     # TODO: Do not loop, but generate entire array in one step
-    return np.array([np.random.binomial(n=1, p=p, size=num_of_segments) for i in range(num_of_samples)])
+    org_img_sample = np.ones((1, num_of_segments))
+    # append a full 1's sample to generate and predict the original image later on to avoid variance
+    return np.append(np.array([np.random.binomial(n=1, p=p, size=num_of_segments) for i in range(num_of_samples)]),
+                     org_img_sample, axis=0)
 
 
 def generate_images(image: np.ndarray, segment_mask: np.ndarray, samples: np.ndarray) -> np.ndarray:
@@ -108,3 +111,29 @@ def predict_images(images: np.ndarray, model_: tf.keras.models.Model) -> np.ndar
 
     """
     return model_.predict(images)
+
+
+def weigh_segments(samples: np.ndarray, predictions: np.ndarray) -> np.ndarray:
+    """Generating list of coefficients to weight segments
+
+
+    Parameters
+    ----------
+    samples
+    predictions
+
+    Returns
+    -------
+    Array of size (num_of_segments)
+    """
+    # decide which linear regression model to use
+    models = [BayesianRidge(), Lasso(), LinearRegression()]
+    model = models[0]
+    # get the  prediction-Id/column from the original image
+    prev_label_id = np.bincount(np.argmax(predictions, axis=1)).argmax()
+
+    # isolate the column from predictions
+    p_column = predictions[:-1, prev_label_id]
+
+    model.fit(samples[:-1], p_column)
+    return model.coef_
