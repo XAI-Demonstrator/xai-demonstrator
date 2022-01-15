@@ -24,7 +24,7 @@ def test_that_a_prediction_is_generated(generate_image):
 def test_that_a_base64_image_is_preprocessed(gernerate_base64):
     img = gernerate_base64(448, 448)
 
-    result = load_image(img)
+    result = predict.load_image(img)
 
     assert result.shape == (1, 448, 448, 3)
 
