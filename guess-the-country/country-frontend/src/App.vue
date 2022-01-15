@@ -10,13 +10,17 @@
         {{ msg }}
         <p>Your Score: {{ score_user }} and AI Score: {{ score_ai }}</p>
       </section>
-      <section v-show="user_answer"  class="xd-section xd-light">
-        <p v-if="user_answer == label" >Your answer: {{user_answer}} is right</p>
-        <p v-else>Your answer: {{user_answer}} is wrong, the right answer ist: {{label}}</p>
+       <section v-show="user_country_answer"  class="xd-section xd-light">
+        <p v-if="user_country_answer == label_country" >Your answer: {{user_country_answer}} is right</p>
+        <p v-else>Your answer: {{user_country_answer}} is wrong, the right answer ist: {{label_country}}</p>
       </section>
-      <section v-show="prediction"  class="xd-section xd-light">
-        <p v-if="prediction == label" >The AI answer: {{prediction}} is right</p>
-        <p v-else>The AI answer: {{prediction}} is wrong, the right answer ist: {{label}}</p>
+      <section v-show="user_city_answer"  class="xd-section xd-light">
+        <p v-if="user_city_answer == label_city" >Your answer: {{user_city_answer}} is right</p>
+        <p v-else>Your answer: {{user_city_answer}} is wrong, the right answer ist: {{label_city}}</p>
+      </section>
+      <section v-show="prediction_city"  class="xd-section xd-light">
+        <p v-if="prediction_city == label_city" >The AI answer: {{prediction_city}} is right</p>
+        <p v-else>The AI answer: {{prediction_city}} is wrong, the right answer ist: {{label_city}}</p>
       </section>
       <section class="xd-section xd-light">
         <img class="xd-border-secondary;" v-bind:src="this.streetviewimage"/>
@@ -24,34 +28,45 @@
       <section  v-if="explanation" style="align-content: flex-end;    flex-wrap: wrap;    align-items: baseline;"
                class="xd-section xd-light" id="legend">
         <ul class="legend">
-          <li><span class="positiv"></span> {{ prediction }}</li>
+          <li><span class="positiv"></span> {{ prediction_city }}</li>
           <li><span class="negativ"></span> Other classes </li>
         </ul>
       </section>
 
-      
-      <section v-if="!user_answer" class="xd-section xd-light" id="radio"
+      <section v-if="!user_country_answer" class="xd-section xd-light" id="radio_country"
                style="display: flex;    align-content: flex-end;    flex-wrap: wrap;    align-items: baseline;">
-        
-        <input type="radio" id="Tel Aviv" name="City" value="Tel Aviv" checked>
-        <label for="Tel Aviv">Tel Aviv</label>
-        <input type="radio" id="Berlin" name="City" value="Berlin">
-        <label for="Berlin">Berlin</label>
-        <input type="radio" id="Westjerusalem" name="City" value="Westjerusalem" checked>
-        <label for="Westjerusalem">Westjerusalem</label>
-        <input type="radio" id="Hamburg" name="City" value="Hamburg">
-        <label for="Hamburg">Hamburg</label>
+        <div v-for="country in countrys" :key="country.country">
+               <input name="country" type="radio" v-bind:value="country.country">
+               <label>{{ country.country }}</label>
+         </div>      
         <button type="button" class="xd-button xd-secondary" style="width:auto; margin-left: auto;"
-                v-on:click="answer()">Was I right?
+                v-on:click="answer_country()">Was I right?
       </button>
       </section>
-      <button v-if="prediction && explanation == null" type="button" class="xd-button xd-secondary" id="explain" v-on:click="explain()"> <!-- v-show --> 
+
+      
+      <section v-if="!user_city_answer && user_country_answer" class="xd-section xd-light" id="radio_city"
+               style="display: flex;    align-content: flex-end;    flex-wrap: wrap;    align-items: baseline;">
+        
+        <div v-for="country in countrys" :key="country.citys">
+          <div v-if="country.country == label_country">
+             <div v-for="city in country.citys" :key="city.city">
+               <input name="city" type="radio" v-bind:value="city.city">
+               <label>{{ city.city }}</label>
+            </div>
+           </div> 
+         </div>     
+        <button type="button" class="xd-button xd-secondary" style="width:auto; margin-left: auto;"
+                v-on:click="answer_city()">Was I right?
+      </button>
+      </section>
+      <button v-if="prediction_city && explanation == null" type="button" class="xd-button xd-secondary" id="explain" v-on:click="explain()"> <!-- v-show --> 
         Explain it to me
       </button>
       <button v-if="explanation" type="button" class="xd-button xd-secondary" id="new" v-on:click="restart()">Start <!-- v-show --> 
         again
       </button>
-      <button v-if="!prediction" type="button"  class="xd-button xd-secondary" id="submit" v-on:click="submitFile()">What the AI says
+      <button v-if="!prediction_city" type="button"  class="xd-button xd-secondary" id="submit" v-on:click="submitFile()">What the AI says
       </button>
           <SpinningIndicator class="indicator" v-bind:visible="waitingForExplanation"/>
 
@@ -78,12 +93,44 @@ export default {
   },
   data() {
     return {
+       countrys: [
+        {
+          country: 'Israel',
+          citys: [
+             {
+          city: 'Tel Aviv',
+          backend: 'Tel_Aviv'
+          },
+          {
+          city: 'Westjerusalem',
+          backend: 'Westjerusalem'
+          }
+          ]       
+          },
+        {
+          country: 'Germany',
+          citys: [
+             {
+          city: 'Berlin',
+          backend: 'Berlin'
+        },
+        {
+          city: 'Hamburg',
+          backend: 'Hamburg'
+        },
+          ]
+        },
+      ],
+
       useCaseTitle: 'Guess the country',
       backendUrl: process.env.VUE_APP_BACKEND_URL,
       explanation: null,
-      prediction: null,
-      label: null,
-      user_answer: null,
+      prediction_country: null,
+      prediction_city: null,
+      label_city: null,
+      label_country: null,
+      user_country_answer: null,
+      user_city_answer: null,
       score_ai: 0,
       score_user: 0,
       msg: '',
@@ -93,10 +140,10 @@ export default {
       infoLinkLabel: 'Interesse geweckt? Hier gibt’s mehr Infos!',
       infoText: [
         {
-          headline: 'Gegenstände erkennen',
+          headline: 'Land erkennen',
           paragraphs: [
-            'Du interagierst mit einer KI, die einen Gegenstand in einem Bildausschnitt erkennen kann. Aber eine KI ist nie perfekt!',
-            'Durch die Wahl verschiedener Bildausschnitte entdeckst du, für welche Bereiche die KI zuverlässig ist, aber insbesondere auch, wo sie an ihre Grenzen stößt.',
+            'Du interagierst mit einer KI, die ein Google Streetview Foto einer Stadt zuordnen kann. Aber eine KI ist nie perfekt!',
+            'Durch die Wahl verschiedener Bilder entdeckst du, für welche  die KI zuverlässig ist, aber insbesondere auch, wo sie an ihre Grenzen stößt.',
             'Die automatisch erzeugten Erklärungen helfen dir, zu verstehen, wie die KI vorgeht und warum sie manchmal falsche Schlüsse zieht.'
 
           ]
@@ -112,8 +159,10 @@ export default {
   },
   async created() {
     if (document.cookie === '') {
-      document.cookie = 'AI=' + this.score_ai + '; Secure' //Cookies entfernen
-      document.cookie = 'User=' + this.score_user + '; Secure'
+      var expires = (new Date(Date.now()+ 86400*1000)).toUTCString();
+
+      document.cookie = 'AI=' + this.score_ai + '; expires=' + expires + 86400 + '; Secure'
+      document.cookie = 'User=' + this.score_user + '; expires=' + expires + 86400 + '; Secure'
     } else {
       this.score_ai = parseInt(document.cookie.split('; ')
         .find(row => row.startsWith('AI='))
@@ -140,7 +189,9 @@ export default {
       axios.get(this.backendUrl +'/streetview')
        .then(res => {
           this.streetviewimage = res.data.image
-          this.label = res.data.class_label
+          let label = this.label_to_label(res.data.class_label)
+           this.label_country = label.country
+           this.label_city = label.city 
           })
           .catch(error => {
             console.log(error)
@@ -159,9 +210,11 @@ export default {
                 }
       })
       .then((res) => {
-            this.prediction = res.data.class_label
+           let label = this.label_to_label(res.data.class_label)
+           this.prediction_country = label.country
+           this.prediction_city = label.city 
             this.waitingForExplanation = false
-            if(this.prediction == this.label){
+            if(this.prediction_city == this.label_city){
                 this.score_ai = this.score_ai + 1
                 document.cookie = 'AI=' + this.score_ai + '; Secure'
             } else {
@@ -195,26 +248,57 @@ export default {
 
     restart() {
         this.explanation = null
-        this.prediction = null
-        this.user_answer = null
+        this.prediction_city = null
+        this.prediction_country = null
+        this.user_city_answer = null
+        this.user_country_answer = null
         this.getStreetview()
     },
 
-    answer() {
-      var radios = document.getElementsByName('City');
+    answer_city() {
+      var radios = document.getElementsByName('city');
 
       for (var i = 0, length = radios.length; i < length; i++) {
         if (radios[i].checked) {
-         this.user_answer = radios[i].value
+         this.user_city_answer = radios[i].value
           break;
         }
       }
 
-      if(this.user_answer == this.label){
+      if(this.user_city_answer == this.label_city){
        this.score_user = this.score_user + 1
         document.cookie = 'User=' + this.score_user + '; Secure'
       }
+    },
+
+    answer_country(){
+      var radios = document.getElementsByName('country');
+
+      for (var i = 0, length = radios.length; i < length; i++) {
+        if (radios[i].checked) {
+         this.user_country_answer = radios[i].value
+          break;
+        }
+      }
+
+      if(this.user_country_answer == this.label_country){
+        this.score_user = this.score_user + 1
+        document.cookie = 'User=' + this.score_user + '; Secure'
+      }
+    },
+
+    label_to_label(prediction){
+      for(let i in this.countrys){
+        for(let x in this.countrys[i].citys)
+          if(prediction == this.countrys[i].citys[x].backend){
+            return {
+              country: this.countrys[i].country, 
+              city: this.countrys[i].citys[x].city
+            }
+          }
+      }
     }
+
 
   }
 }
@@ -223,46 +307,27 @@ export default {
 
 <style>
 
-* {
-  box-sizing: border-box;
-}
-
-body {
-  padding: 0;
-  margin: 0;
-}
-
 #app {
   display: flex;
   justify-content: space-between;
   position: relative;
   overflow: hidden;
+  flex-direction: column;
 }
 
 main {
   flex-grow: 1;
 }
 
-@media screen and (max-width: 450px) {
-  #app {
-    flex-direction: column;
-  }
-}
 
 @media screen and (min-width: 450px) and (max-height: 650px) {
   #app {
-    flex-direction: column;
+       align-items: center;
   }
-}
 
-@media screen and (min-width: 450px) and (min-height: 650px) {
-  #app {
-    flex-direction: column;
+  main {
+    width: 450px;
   }
-}
-
-.alert {
-  width: 100%;
 }
 
 img {
@@ -270,9 +335,6 @@ img {
 
 }
 
-.btn {
-  margin-top: 10px;
-}
 
 .legend {
   list-style: none;

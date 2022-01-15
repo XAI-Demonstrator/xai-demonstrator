@@ -6,10 +6,7 @@ import pathlib
 
 PATH = pathlib.Path(__file__).parent
 
-
-def load_model():
-    model = tf.keras.models.load_model(PATH / "my_model")
-    return model
+model = tf.keras.models.load_model(PATH / "my_model")
 
 
 def load_image(file):
