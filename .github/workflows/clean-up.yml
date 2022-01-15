@@ -74,13 +74,16 @@ jobs:
 
   bwcloud-test:
     runs-on: ubuntu-latest
+    environment:
+      name: test
+      url: https://test.xaidemo.de
     steps:
       - name: Remove stale Docker images
         uses: appleboy/ssh-action@v0.1.4
         with:
-          host: ${{ secrets.TEST_HOST }}
-          username: ${{ secrets.TEST_USER }}
-          key: ${{ secrets.TEST_KEY }}
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_KEY }}
           script: |
             set -e
             sudo docker image prune -a --force --filter "until=48h"
