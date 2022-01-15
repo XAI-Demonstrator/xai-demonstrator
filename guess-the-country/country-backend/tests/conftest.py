@@ -2,6 +2,7 @@ import io
 
 import png
 import pytest
+import base64
 
 
 @pytest.fixture
