@@ -95,7 +95,7 @@ def predict(file: UploadFile = File(...)):
     image = load_image(file)
     pre_image = preprocess(image)
     prediction_id = uuid.uuid4()
-    label = predict_image(pre_image, model)
+    label = predict_image(pre_image, country_array)
     return {
         "prediction_id": prediction_id,
         "class_label": label,
