@@ -56,7 +56,8 @@ def predict(file: UploadFile = File(...)):
 @api.post("/explain")
 async def explain_api(file: UploadFile = File(...)):
     model = load_model()
-    image = load_image(file)
+    encoded_data = file.file.read()
+    image = load_image(encoded_data)
     pre_image = preprocess(image)
 
     explanation = explain_cnn(pre_image, model)

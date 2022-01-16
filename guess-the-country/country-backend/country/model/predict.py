@@ -12,10 +12,10 @@ def load_model():
     return model
 
 
-def load_image(file):
-    encoded_data = str(file.file.read())
+def load_image(encoded_data):
+    encoded_data = str(encoded_data)
     encoded_data = encoded_data.split(',')[1]
-    nparr = np.fromstring(base64.b64decode(encoded_data), np.uint8)
+    nparr = np.frombuffer(base64.b64decode(encoded_data), np.uint8)
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
     return img
 
