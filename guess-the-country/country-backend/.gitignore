@@ -1,1 +1,2 @@
 country/model/*.model
+.coverage

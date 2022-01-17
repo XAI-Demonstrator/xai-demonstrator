@@ -51,6 +51,22 @@ jobs:
           cd ./guess-the-country/country-backend
           ./download_model.sh
 
+      - name: Run unit tests with pytest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COVERALLS_FLAG_NAME: country-backend-unit
+          COVERALLS_PARALLEL: ${{ github.ref == 'refs/heads/master' }}
+        run: |
+          set -e
+          cd ./guess-the-country/country-backend
+          echo $PWD
+          pip install -r requirements-test.txt
+          pytest -v --cov=country -m "not integration" tests/
+          # when on master, pretend to be on branch x-cov-country-backend
+          $COVERALLS_PARALLEL && export GITHUB_REF="refs/heads/x-cov-country-backend"
+          $COVERALLS_PARALLEL && export GITHUB_HEAD_REF="x-cov-country-backend"
+          coveralls --service=github --srcdir=guess-the-country/country-backend
+
   test-frontend:
     runs-on: ubuntu-latest
     steps:
