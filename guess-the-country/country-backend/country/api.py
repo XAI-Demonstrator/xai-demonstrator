@@ -92,7 +92,8 @@ country_array = [tel_aviv, berlin, hamburg, jerusalem]
 
 @api.post("/predict")
 def predict(file: UploadFile = File(...)):
-    image = load_image(file)
+    encoded_data = file.file.read()
+    image = load_image(encoded_data)
     pre_image = preprocess(image)
     prediction_id = uuid.uuid4()
     label = predict_image(pre_image, country_array)

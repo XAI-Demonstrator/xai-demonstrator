@@ -9,9 +9,8 @@ PATH = pathlib.Path(__file__).parent
 model = tf.keras.models.load_model(PATH / "my_model")
 
 
-def load_image(file):
-    encoded_data = str(file.file.read())
-    encoded_data = encoded_data.split(',')[1]
+def load_image(encoded_data):
+    encoded_data = str(encoded_data.split(',')[1])
     nparr = np.fromstring(base64.b64decode(encoded_data), np.uint8)
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
     return img
