@@ -3,6 +3,8 @@ from skimage.segmentation import mark_boundaries
 import base64
 import cv2
 import numpy as np
+from ..model.predict import model
+
 
 
 def convert_explanation(explanation):
@@ -15,7 +17,7 @@ def convert_explanation(explanation):
     return encoded_image_string
 
 
-def explain_cnn(img, model):
+def explain_cnn(img):
     explainer = lime_image.LimeImageExplainer()
     #explanation = explainer.explain_instance(img[0].astype('double'), model.predict,  segmentation_fn =  SegmentationAlgorithm('slic', kernel_size=4, max_dist=100, ratio=0.4), top_labels=2, hide_color=False, num_samples=1000)
     explanation = explainer.explain_instance(img[0].astype(

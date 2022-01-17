@@ -4,7 +4,7 @@ from urllib.error import URLError
 import requests
 from .explainer.explain import explain_cnn, convert_explanation
 from fastapi import APIRouter, UploadFile, File
-from .model.predict import load_image, predict_image, preprocess, model
+from .model.predict import load_image, predict_image, preprocess
 from shapely.geometry import Point, Polygon
 from .config import settings
 import base64
@@ -108,7 +108,7 @@ async def explain_api(file: UploadFile = File(...)):
     image = load_image(file)
     pre_image = preprocess(image)
 
-    explanation = explain_cnn(pre_image, model)
+    explanation = explain_cnn(pre_image)
     explain_id = uuid.uuid4()
     encoded_image_string = convert_explanation(explanation)
     encoded_bytes = bytes("data:image/png;base64,",
