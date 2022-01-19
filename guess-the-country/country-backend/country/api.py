@@ -1,42 +1,17 @@
-import random
-from urllib.request import urlopen
-from urllib.error import URLError
-import requests
-from .explainer.explain import explain_cnn, convert_explanation
 from fastapi import APIRouter, UploadFile, File
-from .model.predict import load_image, predict_image, preprocess, model
-from shapely.geometry import Point, Polygon
 from .config import settings
-import base64
-import uuid
+from .streetview.collect import get_streetview
+from .model.predict import prediction
+from .explainer.explain import explain
+
 
 api = APIRouter()
-
-#To-DO: Polygons und Model auserhalb von Funktionen programmieren, damit diese im RAM sind
-
-def generate_random(polygon):
-    points = []
-    minx, miny, maxx, maxy = polygon.bounds
-    while len(points) < 1:
-        pnt = Point(random.uniform(minx, maxx), random.uniform(miny, maxy))
-        if polygon.contains(pnt):
-            points.append(pnt)
-    return list(points[0].coords)
-
 
 # Google Street View Image API
 # 25,000 image requests per 24 hours
 # See https://developers.google.com/maps/documentation/streetview/
 API_KEY = settings.google_maps_api_token
-GOOGLE_URL = (
-    "http://maps.googleapis.com/maps/api/streetview?size=448x448&sensor=false&"
-    "size=640x640&source=outdoor&key=" + API_KEY
-)
 
-API_URL = "https://maps.googleapis.com/maps/api/streetview/metadata"  # Not billed
-
-IMG_PREFIX = "img_"
-IMG_SUFFIX = ".png"
 
 hamburg = {
         "country": "Germany",
@@ -87,37 +62,18 @@ jerusalem = {
                     (35.2198646, 31.7956043), (35.2152225, 31.7936072), (35.2118609, 31.7921391), (35.2089856, 31.792431), (35.2044278, 31.7923225), (35.2030115, 31.7910093), (35.2009731, 31.7907722), (35.1996133, 31.7893066), (35.1999968, 31.7878228), (35.1954584, 31.7833671), (35.1901155, 31.7826922), (35.1869949, 31.7788226), (35.1844951, 31.7763532), (35.1817982, 31.7716133)]
     }
 
-country_array = [tel_aviv, berlin, hamburg, jerusalem]
+dict_country = [tel_aviv, berlin, hamburg, jerusalem]
 
 
 @api.post("/predict")
 def predict(file: UploadFile = File(...)):
-    image = load_image(file)
-    pre_image = preprocess(image)
-    prediction_id = uuid.uuid4()
-    label = predict_image(pre_image, model)
-    return {
-        "prediction_id": prediction_id,
-        "class_label": label,
-    }
+    return prediction(input=file.file.read(), dict_country=dict_country)
 
 
 # Explain Prediction
 @api.post("/explain")
 async def explain_api(file: UploadFile = File(...)):
-    image = load_image(file)
-    pre_image = preprocess(image)
-
-    explanation = explain_cnn(pre_image, model)
-    explain_id = uuid.uuid4()
-    encoded_image_string = convert_explanation(explanation)
-    encoded_bytes = bytes("data:image/png;base64,",
-                          encoding="utf-8") + encoded_image_string
-
-    return {
-        "image": encoded_bytes,
-        "explain_id": explain_id
-    }
+    return explain(file.file.read())
 
 
 @api.get("/msg")
@@ -129,37 +85,4 @@ def home():
 
 @api.get("/streetview")
 def streetview():
-
-    nominated_country = random.randint(0, 3)
-    coordinaten = country_array[nominated_country]['polygon']
-    poly = Polygon(coordinaten)
-    imagery_hits = 0
-    status = False
-    while imagery_hits < 1:
-        while status != "OK":
-            coord = generate_random(poly)
-            lng = coord[0][0]
-            lat = coord[0][1]
-            locstring = str(lat) + "," + str(lng)
-            r = requests.get(API_URL + "?key=" + API_KEY +
-                             "&location=" + locstring + "&source=outdoor")
-            status = r.json()["status"]
-            print(status)
-        print("    ========== Got one! ==========")
-        url = GOOGLE_URL + "&location=" + locstring
-        try:
-            contents = urlopen(url).read()
-            #urlretrieve(url, outfile)
-        except URLError:
-            #print("    No imagery")
-            break
-
-        imagery_hits += 1
-        status = False
-        encoded_image_string = base64.b64encode(contents)
-        encoded_bytes = bytes("data:image/png;base64,",
-                              encoding="utf-8") + encoded_image_string
-    return {
-        "image": encoded_bytes,
-        "class_label": country_array[nominated_country]['city']
-    }
+    return get_streetview(dict_country, API_KEY)

@@ -3,12 +3,29 @@ import numpy as np
 import tensorflow as tf
 import base64
 import pathlib
+import uuid
+from pydantic import BaseModel
+from xaidemo.tracing import traced
 
 PATH = pathlib.Path(__file__).parent
 
 model = tf.keras.models.load_model(PATH / "my_model")
 
+class Prediction(BaseModel):
+    prediction_id: uuid.UUID
+    class_label: str
 
+@traced
+def prediction(input, dict_country):
+    encoded_data = str(input)
+    image = load_image(encoded_data)
+    pre_image = preprocess(image)
+    prediction_id = uuid.uuid4()
+    label = predict_image(image=pre_image, dict_country=dict_country)
+    return Prediction(prediction_id=prediction_id,
+                      class_label=label)
+
+@traced
 def load_image(encoded_data):
     encoded_data = str(encoded_data)
     encoded_data = encoded_data.split(',')[1]
@@ -16,14 +33,13 @@ def load_image(encoded_data):
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
     return img
 
-
-def predict_image(image, model):
-    CATEGORIES = ["Tel Aviv", "Westjerusalem", "Berlin", "Hamburg"]
+@traced
+def predict_image(image, dict_country):
     prediction = model.predict(image)
-    result = (CATEGORIES[int(np.argmax(prediction, axis=1))])
+    result = (dict_country[int(np.argmax(prediction, axis=1))]['city'])
     return result
 
-
+@traced
 def preprocess(img, IMG_SIZE=224):
     img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     # resize image to match model's expected sizing

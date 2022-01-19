@@ -239,7 +239,7 @@ export default {
       }).then((res) => {
           this.streetviewimage = res.data.image
           this.waitingForExplanation = false
-          this.explanation = res.data.explain_id 
+          this.explanation = res.data.explanation_id 
       })
         .catch((error) => {
           console.error(error)
