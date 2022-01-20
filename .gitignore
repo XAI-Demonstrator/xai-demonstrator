@@ -18,3 +18,4 @@ node_modules/
 
 /experiments
 /site
+guess-the-country/.env

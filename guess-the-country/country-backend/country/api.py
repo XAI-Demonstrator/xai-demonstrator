@@ -62,12 +62,12 @@ jerusalem = {
                     (35.2198646, 31.7956043), (35.2152225, 31.7936072), (35.2118609, 31.7921391), (35.2089856, 31.792431), (35.2044278, 31.7923225), (35.2030115, 31.7910093), (35.2009731, 31.7907722), (35.1996133, 31.7893066), (35.1999968, 31.7878228), (35.1954584, 31.7833671), (35.1901155, 31.7826922), (35.1869949, 31.7788226), (35.1844951, 31.7763532), (35.1817982, 31.7716133)]
     }
 
-dict_country = [tel_aviv, jerusalem, berlin, hamburg]
+cities = [tel_aviv, jerusalem, berlin, hamburg]
 
 
 @api.post("/predict")
 def predict(file: UploadFile = File(...)):
-    return prediction(input=file.file.read(), dict_country=dict_country)
+    return prediction(file.file.read())
 
 
 # Explain Prediction
@@ -85,4 +85,4 @@ def home():
 
 @api.get("/streetview")
 def streetview():
-    return get_streetview(dict_country, API_KEY)
+    return get_streetview(cities, API_KEY)
