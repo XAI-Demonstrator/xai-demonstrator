@@ -16,12 +16,12 @@ class Prediction(BaseModel):
     class_label: str
 
 @traced
-def prediction(input, dict_country):
+def prediction(input):
     encoded_data = str(input)
     image = load_image(encoded_data)
     pre_image = preprocess(image)
     prediction_id = uuid.uuid4()
-    label = predict_image(image=pre_image, dict_country=dict_country)
+    label = predict_image(image=pre_image)
     return Prediction(prediction_id=prediction_id,
                       class_label=label)
 
@@ -34,9 +34,9 @@ def load_image(encoded_data):
     return img
 
 @traced
-def predict_image(image, dict_country):
+def predict_image(image):
     prediction = model.predict(image)
-    result = (dict_country[int(np.argmax(prediction, axis=1))]['city'])
+    result = decode_model_output(prediction)
     return result
 
 @traced
@@ -46,3 +46,10 @@ def preprocess(img, IMG_SIZE=224):
     img_resize = cv2.resize(img_rgb, (IMG_SIZE, IMG_SIZE))
     pre_image = img_resize.reshape(-1, IMG_SIZE, IMG_SIZE, 3) / 255
     return pre_image
+
+
+MODEL_OUTPUT_MAP = ["Tel_Aviv", "Westjerusalem", "Berlin", "Hamburg"]
+
+@traced
+def decode_model_output(output: np.ndarray) -> str:
+    return MODEL_OUTPUT_MAP[int(np.argmax(output, axis=1))]
