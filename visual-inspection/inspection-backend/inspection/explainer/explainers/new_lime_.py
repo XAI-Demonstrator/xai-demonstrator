@@ -158,15 +158,18 @@ def generate_visual_explanation(weighted_segments: np.ndarray, segment_mask: np.
     -------
 
     """
-    # set colour
+    # set explanation colour
     colours = {"green": [119, 184, 53], "blue": [38, 55, 173], "red": [173, 38, 38], "white": [255, 255, 255],
                "black": [0, 0, 0]}
     colour = colour.lower()
     if colour not in colours.keys():
         colour = "green"
 
-    # normalize coefficients using sigmoid-function: coefficient_i ∈ [0.0, 1.0]
-    n_weighted_segments = data_norm = (weighted_segments - weighted_segments.min()) / (
+    # handle outliers
+    weighted_segments = np.where(weighted_segments > 1.0, 1, weighted_segments)
+    weighted_segments = np.where(weighted_segments < -1.0, -1, weighted_segments)
+    # normalize coefficients: coefficient_i ∈ [0.0, 1.0]
+    n_weighted_segments = (weighted_segments - weighted_segments.min()) / (
             weighted_segments.max() - weighted_segments.min())
 
     # check if volume is bigger than the amount of segments
