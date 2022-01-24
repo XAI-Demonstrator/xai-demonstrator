@@ -1,5 +1,5 @@
 import random
-
+from shapely.geometry import Point
 
 def generate_random(polygon):
     points = []

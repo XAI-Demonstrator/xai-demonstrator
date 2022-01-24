@@ -5,7 +5,7 @@ import requests
 from pydantic import BaseModel
 import base64
 from xaidemo.tracing import traced
-from ..coordinates.polygon import generate_random
+from .polygon import generate_random
 from shapely.geometry import Polygon
 
 
