@@ -8,9 +8,11 @@ from pydantic import BaseModel
 import uuid
 from xaidemo.tracing import traced
 
+
 class Explanation(BaseModel):
     explanation_id: uuid.UUID
     image: bytes
+
 
 @traced
 def explain(data):
@@ -37,6 +39,7 @@ def convert_explanation(explanation):
     retval, buffer = cv2.imencode('.png', img_resized)
     encoded_image_string = base64.b64encode(buffer)
     return encoded_image_string
+
 
 @traced
 def explain_cnn(img, model):
