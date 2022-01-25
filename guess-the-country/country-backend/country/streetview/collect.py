@@ -4,7 +4,7 @@ from urllib.error import URLError
 from pydantic import BaseModel
 import base64
 from xaidemo.tracing import traced
-from .polygon import generate_random
+from .polygon import generate_random, get_locstring
 from shapely.geometry import Polygon
 from xaidemo.http_client import AioHttpClientSession
 
@@ -73,19 +73,16 @@ jerusalem = {
     }
 
 
-country_array = [tel_aviv, jerusalem, berlin, hamburg]
+cities = [tel_aviv, jerusalem, berlin, hamburg]
 
 @traced
 async def get_streetview(API_KEY):
     async with AioHttpClientSession() as session:
-        nominated_country = random.randint(0, 3)
-        poly = country_array[nominated_country]['polygon']
+        city_polygon, city_name = get_city()
         status = False
         while status != 'OK':
-            coord = generate_random(poly)
-            lng = coord[0][0]
-            lat = coord[0][1]
-            locstring = str(lat) + "," + str(lng)
+            coord = generate_random(city_polygon)
+            locstring = get_locstring(coord)
             try:
                 async with session.get(API_URL + "?key=" + API_KEY + "&location=" + locstring + "&source=outdoor") as response: 
                     json_body = (await response.json())
@@ -97,16 +94,31 @@ async def get_streetview(API_KEY):
             except AioHttpClientSession.exceptions.TimeoutError:
                 print(AioHttpClientSession.exceptions.TimeoutError)
         print("    ========== Got one! ==========")
-        url = GOOGLE_URL + API_KEY + "&location=" + locstring
-        try:
-            contents = urlopen(url).read()
-                #urlretrieve(url, outfile)
-        except URLError:
-            print(URLError)
+        image = get_image_from_url(API_KEY, locstring)
         status = False
-        encoded_image_string = base64.b64encode(contents)
-        encoded_bytes = bytes("data:image/png;base64,",
-                                    encoding="utf-8") + encoded_image_string
     return Streetview(
-                image=encoded_bytes,
-                class_label=country_array[nominated_country]['city'])
+                image=encode_image(image),
+                class_label=city_name)
+
+
+def encode_image(image):
+    encoded_image_string = base64.b64encode(image)
+    encoded_bytes = bytes("data:image/png;base64,",encoding="utf-8") + encoded_image_string
+    return encoded_bytes
+
+
+def get_image_from_url(API_KEY, locstring):
+    url = GOOGLE_URL + API_KEY + "&location=" + locstring
+    try:
+        streetview_image = urlopen(url).read()
+    except URLError:
+        print(URLError)
+        streetview_image = null
+    return streetview_image
+
+
+def get_city():
+    city_index = random.randint(0, 3)
+    city_polygon = cities[city_index]['polygon']
+    city_name = cities[city_index]['city']
+    return city_polygon, city_name

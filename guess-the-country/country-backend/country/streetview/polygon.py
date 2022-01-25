@@ -9,3 +9,9 @@ def generate_random(polygon):
         if polygon.contains(pnt):
             points.append(pnt)
     return list(points[0].coords)
+
+def get_locstring(coordinates):
+    lng = coordinates[0][0]
+    lat = coordinates[0][1]
+    locstring = str(lat) + "," + str(lng)
+    return locstring

@@ -3,7 +3,6 @@ import pytest
 import io
 import png
 
-
 @pytest.fixture
 def generate_image():
 
