@@ -22,7 +22,7 @@ def test_if_locstring_is_returned():
 @pytest.mark.integration
 def test_if_streetview_image_is_obtained():
     result = collect.get_streetview()
-    assert type(result) is Streetview
+    assert type(result) is collect.Streetview
     assert type(result.class_label) is str
     assert result[:22] == bytes("data:image/png;base64,", encoding='utf-8')
 

@@ -113,7 +113,7 @@ def get_image_from_url(API_KEY, locstring):
         streetview_image = urlopen(url).read()
     except URLError:
         print(URLError)
-        streetview_image = null
+        streetview_image = None
     return streetview_image
 
 
