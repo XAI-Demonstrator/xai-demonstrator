@@ -3,7 +3,6 @@ from .config import settings
 from .streetview.collect import get_streetview
 from .model.predict import prediction
 from .explainer.explain import explain
-from xaidemo.http_client import AioHttpClientSession
 
 
 api = APIRouter()
@@ -33,7 +32,6 @@ def home():
 
 @api.get("/streetview")
 async def streetview():
-    async with AioHttpClientSession:
-        return get_streetview(API_KEY)
+    return await get_streetview(API_KEY)
 
 

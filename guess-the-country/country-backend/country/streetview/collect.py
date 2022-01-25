@@ -1,12 +1,12 @@
 import random
 from urllib.request import urlopen
 from urllib.error import URLError
-import requests
 from pydantic import BaseModel
 import base64
 from xaidemo.tracing import traced
 from .polygon import generate_random
 from shapely.geometry import Polygon
+from xaidemo.http_client import AioHttpClientSession
 
 
 class Streetview(BaseModel):
@@ -77,33 +77,36 @@ country_array = [tel_aviv, jerusalem, berlin, hamburg]
 
 @traced
 async def get_streetview(API_KEY):
-    nominated_country = random.randint(0, 3)
-    poly = country_array[nominated_country]['polygon']
-    imagery_hits = 0
-    status = False
-    while imagery_hits < 1:
-        while status != "OK":
+    async with AioHttpClientSession() as session:
+        nominated_country = random.randint(0, 3)
+        poly = country_array[nominated_country]['polygon']
+        status = False
+        while status != 'OK':
             coord = generate_random(poly)
             lng = coord[0][0]
             lat = coord[0][1]
             locstring = str(lat) + "," + str(lng)
-            r = requests.get(API_URL + "?key=" + API_KEY +
-                            "&location=" + locstring + "&source=outdoor")
-            status = r.json()["status"]
-            print(status)
+            try:
+                async with session.get(API_URL + "?key=" + API_KEY + "&location=" + locstring + "&source=outdoor") as response: 
+                    json_body = (await response.json())
+                    status = json_body['status']
+                    print(status)
+                    if status == 'REQUEST_DENIED':   
+                        print("NO API-KEY is definied, please set environment variable GOOGLE_MAPS_API_TOKEN")
+                        break            
+            except AioHttpClientSession.exceptions.TimeoutError:
+                print(AioHttpClientSession.exceptions.TimeoutError)
         print("    ========== Got one! ==========")
         url = GOOGLE_URL + API_KEY + "&location=" + locstring
         try:
             contents = urlopen(url).read()
-            #urlretrieve(url, outfile)
+                #urlretrieve(url, outfile)
         except URLError:
-            #print("    No imagery")
-            break
-        imagery_hits += 1
+            print(URLError)
         status = False
         encoded_image_string = base64.b64encode(contents)
         encoded_bytes = bytes("data:image/png;base64,",
-                            encoding="utf-8") + encoded_image_string
+                                    encoding="utf-8") + encoded_image_string
     return Streetview(
-        image=encoded_bytes,
-        class_label=country_array[nominated_country]['city'])
+                image=encoded_bytes,
+                class_label=country_array[nominated_country]['city'])
