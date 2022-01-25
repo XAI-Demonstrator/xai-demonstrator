@@ -8,6 +8,19 @@ from skimage.segmentation import felzenszwalb, slic, quickshift, watershed
 from sklearn.linear_model import Lasso, BayesianRidge, LinearRegression
 
 
+def explain_image(img: np.ndarray, seg_method: str, seg_settings: Dict, num_of_samples: int, samples_p: float,
+                  model_: tf.keras.models.Model, threshold: float, volume: int, colour: str) -> np.ndarray:
+    segment_mask = create_segments(img=img, seg_method=seg_method, settings=seg_settings)
+    samples_theo = generate_samples(segment_mask=segment_mask, num_of_samples=num_of_samples, p=samples_p)
+    samples_imgs = generate_images(image=img, segment_mask=segment_mask, samples=samples_theo)
+    samples_imgs_predictions = predict_images(images = samples_imgs, model_=model_)
+    weighted_segments = weigh_segments(samples=samples_theo, predictions=samples_imgs_predictions)
+    visual_explanation = generate_visual_explanation(weighted_segments=weighted_segments, segment_mask=segment_mask,
+                                                    image=img, threshold=threshold, volume=volume, colour=colour)
+
+    return visual_explanation
+
+
 def create_segments(img: np.ndarray, seg_method: str, settings: Dict) -> np.ndarray:
     """
     create segments out of a loaded picture using different methods and settings
