@@ -176,6 +176,8 @@ def generate_visual_explanation(weighted_segments: np.ndarray, segment_mask: np.
     limit = np.sort(np.unique(n_weighted_segments))[-volume]
     n_d_weighted_segments = np.where(n_weighted_segments >= max(limit, threshold), n_weighted_segments,
                                      0)
+    #TODO: find a cleaner solution; ?(Layer, np.where)?
+
     # manipulate the original image (quick and dirty)
     c = np.array(colours[colour])
     indices = np.argwhere(n_d_weighted_segments != 0)
