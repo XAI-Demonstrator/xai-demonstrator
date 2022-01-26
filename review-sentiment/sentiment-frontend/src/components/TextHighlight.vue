@@ -5,8 +5,8 @@
             v-bind:style="{'color': calcHSL(pair.score)}">{{ whitespace(pair.word) }}{{ pair.word }}</span>
     </div>
     <div class="legend">
-      <div class="legend-entry"><div class="legend-marker xd-green"></div><span class="legend-text">positiv</span></div>
-      <div class="legend-entry"><div class="legend-marker xd-red"></div><span class="legend-text">negativ</span></div>
+      <div class="legend-entry"><div class="legend-marker xd-green"></div><span class="legend-text">{{ $t('positive') }}</span></div>
+      <div class="legend-entry"><div class="legend-marker xd-red"></div><span class="legend-text">{{ $t('negative') }}</span></div>
     </div>
   </div>
 </template>
@@ -77,6 +77,19 @@ export default {
   }
 }
 </script>
+
+<i18n>
+{
+    "de": {
+        "positive": "positiv",
+        "negative": "negativ"
+    },
+    "en": {
+        "positive": "positive",
+        "negative": "negative"
+	}
+}
+</i18n>
 
 <style scoped>
 .highlight-box {

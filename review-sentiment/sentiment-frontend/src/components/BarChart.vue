@@ -10,10 +10,10 @@
     </div>
     <div class="legend">
       <div class="legend-element">
-        &#9668; negativ
+        &#9668; {{ $t('negative') }}
       </div>
       <div class="legend-element legend-right">
-        positiv &#9658;
+        {{ $t('positive') }} &#9658;
       </div>
       <div class="legend-element">&nbsp;</div>
     </div>
@@ -63,6 +63,19 @@ export default {
   }
 }
 </script>
+
+<i18n>
+{
+    "de": {
+        "positive": "positiv",
+        "negative": "negativ"
+    },
+    "en": {
+        "positive": "positive",
+        "negative": "negative"
+	}
+}
+</i18n>
 
 <style scoped>
 :root {

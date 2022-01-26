@@ -1,13 +1,27 @@
-import { mount } from '@vue/test-utils'
+import {mount} from '@vue/test-utils'
 import ComposeReview from "@/components/ComposeReview";
 
 
 describe('ComposeReview.vue', () => {
 
-    let wrapper = mount(ComposeReview);
+    let wrapper = mount(ComposeReview, {
+        global: {
+            mocks: {
+                $t: () => {
+                }
+            }
+        }
+    });
 
     beforeEach(() => {
-            wrapper = mount(ComposeReview);
+            wrapper = mount(ComposeReview, {
+                global: {
+                    mocks: {
+                        $t: () => {
+                        }
+                    }
+                }
+            });
         }
     )
 

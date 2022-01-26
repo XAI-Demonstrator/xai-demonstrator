@@ -7,10 +7,24 @@ jest.mock('axios');
 
 describe('AnalyzeReview.vue', () => {
 
-    let wrapper = shallowMount(AnalyzeReview);
+    let wrapper = shallowMount(AnalyzeReview, {
+        global: {
+            mocks: {
+                $t: () => {
+                }
+            }
+        }
+    });
 
     beforeEach(() => {
-            wrapper = shallowMount(AnalyzeReview);
+            wrapper = shallowMount(AnalyzeReview, {
+                global: {
+                    mocks: {
+                        $t: () => {
+                        }
+                    }
+                }
+            });
         }
     )
 

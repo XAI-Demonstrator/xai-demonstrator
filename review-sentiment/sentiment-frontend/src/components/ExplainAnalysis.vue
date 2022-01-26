@@ -4,10 +4,10 @@
             v-if="!explanationResult"
             class="xd-button xd-secondary"
             v-bind:disabled="waitingForExplanation">
-      <label>Wie kommst du zu dieser Einschätzung?</label>
+      <label>{{ $t('question') }}</label>
     </button>
     <div class="explanation-container" v-if="explanationResult">
-      <p>Die Wörter deines Reviews tragen wie folgt zur Bewertung bei:</p>
+      <p>{{ $t('answer') }}</p>
       <BarChart v-if="explanationResult" v-bind:explanation="explanationResult"></BarChart>
       <TextHighlight v-if="explanationResult != null" v-bind:explanation="explanationResult"></TextHighlight>
     </div>
@@ -71,6 +71,22 @@ export default {
   }
 }
 </script>
+
+
+<i18n>
+{
+    "de": {
+        "question": "Wie kommst du zu dieser Einschätzung?",
+        "answer": "Die Wörter deines Reviews tragen wie folgt zur Bewertung bei:"
+    },
+    "en": {
+        "question": "What makes you think so?",
+        "answer": "The words in your review contribute to the assessment as follows:"
+    }
+}
+</i18n>
+
+
 <style scoped>
 .explanation-container {
   display: flex;

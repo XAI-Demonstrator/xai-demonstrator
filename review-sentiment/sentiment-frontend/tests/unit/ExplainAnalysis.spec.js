@@ -1,4 +1,4 @@
-import { shallowMount } from '@vue/test-utils'
+import {shallowMount} from '@vue/test-utils'
 import ExplainAnalysis from "@/components/ExplainAnalysis";
 import axios from "axios";
 import flushPromises from 'flush-promises';
@@ -7,10 +7,24 @@ jest.mock('axios');
 
 describe('ExplainAnalysis.vue', () => {
 
-    let wrapper = shallowMount(ExplainAnalysis);
+    let wrapper = shallowMount(ExplainAnalysis, {
+        global: {
+            mocks: {
+                $t: () => {
+                }
+            }
+        }
+    });
 
     beforeEach(() => {
-            wrapper = shallowMount(ExplainAnalysis);
+            wrapper = shallowMount(ExplainAnalysis, {
+                global: {
+                    mocks: {
+                        $t: () => {
+                        }
+                    }
+                }
+            });
         }
     )
 

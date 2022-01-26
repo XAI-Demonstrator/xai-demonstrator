@@ -47,34 +47,27 @@ export default {
   },
   data() {
     return {
-      useCaseTitle: "Stimmung erkennen",
+      useCaseTitle: this.$t('title'),
       introductionTexts: {
-        'movie': 'Wie war der Film, den du zuletzt gesehen hast?',
-        'travel': 'Wie hat dir deine letzte Reise gefallen?'
+        'movie': this.$t('movie-prompt'),
+        'travel': this.$t('travel-prompt')
       },
       defaultReviews: {
-        'movie': 'Die Story war ziemlich vorhersehbar, würde ich nicht empfehlen...',
-        'travel': 'Der Zug kam natürlich zu spät, aber die Aussicht war einmalig!'
+        'movie': this.$t('movie-example'),
+        'travel': this.$t('travel-example')
       },
       infoText: [
         {
-          headline: "Stimmung erkennen",
-          paragraphs: [
-            "Du interagierst mit einer KI, die anhand eines Bewertungstexts vorhersagt, wie viele Sterne das bewertete Produkt erhält. Aber eine KI ist nie perfekt!",
-            "XAI hilft dir, die Einschätzung der KI und ihre Zuverlässigkeit besser zu bewerten."
-          ]
+          headline: this.$t('title'),
+          paragraphs: [this.$t('info1paragraph1'), this.$t('info1paragraph2')]
         },
         {
-          headline: "Was steckt dahinter?",
-          paragraphs: [
-            "Die KI baut auf dem von Google entwickelten BERT-Modell auf und ordnet einem Text einem bis fünf Sterne zu, je nachdem, wie negativ bzw. positiv die Bewertung ausfällt.",
-            "Die Erklärungen werden mit Hilfe von gradientenbasierten XAI-Methoden erzeugt, die den Einfluss einzelner Silben und Wörter auf das Endresultat ermitteln.",
-            "<small>Modell: <a href='https://huggingface.co/nlptown/bert-base-multilingual-uncased-sentiment'>NLPTown bert-base-multilingual-uncased-sentiment</a> via <a href='https://huggingface.co/models'>Hugging Face Model Hub</a>, Erklärungen: <a href='https://captum.ai/'>Captum</a></small>"
-          ]
+          headline: this.$t('info2headline'),
+          paragraphs:  [this.$t('info2paragraph1'), this.$t('info2paragraph2'), this.$t('info2paragraph3')]
         }
       ],
       infoUrl: "https://www.erklaerbare-ki.de/xai-demonstrator/",
-      infoLinkLabel: "Interesse geweckt? Hier gibt’s mehr Infos",
+      infoLinkLabel: this.$t('infoLinkLabel'),
       reviewText: '',
       numberOfStars: null,
       reviewTopic: ['movie', 'travel'][Math.floor(Math.random() * 2)],
@@ -113,6 +106,39 @@ export default {
   }
 }
 </script>
+
+<i18n>
+{
+  "de": {
+    "title": "Stimmung erkennen",
+    "movie-prompt": "Wie war der Film, den du zuletzt gesehen hast?",
+    "movie-example": "Die Story war ziemlich vorhersehbar, würde ich nicht empfehlen...",
+    "travel-prompt": "Wie hat dir deine letzte Reise gefallen?",
+    "travel-example": "Der Zug kam natürlich zu spät, aber die Aussicht war einmalig!",
+    "info1paragraph1": "Du interagierst mit einer KI, die anhand eines Bewertungstexts vorhersagt, wie viele Sterne das bewertete Produkt erhält. Aber eine KI ist nie perfekt!",
+    "info1paragraph2": "XAI hilft dir, die Einschätzung der KI und ihre Zuverlässigkeit besser zu bewerten.",
+    "info2headline": "Was steckt dahinter?",
+    "info2paragraph1": "Die KI baut auf dem von Google entwickelten BERT-Modell auf und ordnet einem Text einem bis fünf Sterne zu, je nachdem, wie negativ bzw. positiv die Bewertung ausfällt.",
+    "info2paragraph2": "Die Erklärungen werden mit Hilfe von gradientenbasierten XAI-Methoden erzeugt, die den Einfluss einzelner Silben und Wörter auf das Endresultat ermitteln.",
+    "info2paragraph3": "<small>Modell: <a href='https://huggingface.co/nlptown/bert-base-multilingual-uncased-sentiment'>NLPTown bert-base-multilingual-uncased-sentiment</a> via <a href='https://huggingface.co/models'>Hugging Face Model Hub</a>, Erklärungen: <a href='https://captum.ai/'>Captum</a></small>",
+    "infoLinkLabel": "Interesse geweckt? Hier gibt’s mehr Infos!"
+  },
+  "en": {
+    "title": "Sentiment Analysis",
+    "movie-prompt": "What did you think about the latest movie you watched?",
+    "movie-example": "The story was pretty predictable, wouldn't recommend it...",
+    "travel-prompt": "Did you enjoy your last trip?",
+    "travel-example": "Of course, the train was late, but the view was spectacular!",
+    "info1paragraph1": "You're interacting with an AI that based on a text can predict how many stars the reviewed product will receive. But an AI is never perfect!",
+    "info1paragraph2": "XAI helps you to understand the AI's decision and assess its reliability.",
+    "info2headline": "What's going on behind the scenes?",
+    "info2paragraph1": "The AI is based on Google's BERT model and assigns a number of stars based on how negative or positive the sentiment of the review is.",
+    "info2paragraph2": "The explanations are generated using gradient-based XAI methods that determine the influence of individual syllables and words on the AI's assessment.",
+    "info2paragraph3": "<small>Model: <a href='https://huggingface.co/nlptown/bert-base-multilingual-uncased-sentiment'>NLPTown bert-base-multilingual-uncased-sentiment</a> via <a href='https://huggingface.co/models'>Hugging Face Model Hub</a>, Explanations: <a href='https://captum.ai/'>Captum</a></small>",
+    "infoLinkLabel": "Want to learn more? (in German)"
+  }
+}
+</i18n>
 
 <style>
 #app {
