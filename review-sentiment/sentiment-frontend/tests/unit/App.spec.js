@@ -1,4 +1,4 @@
-import { mount, shallowMount} from "@vue/test-utils";
+import {mount, shallowMount} from "@vue/test-utils";
 import App from "@/App";
 import axios from "axios";
 import flushPromises from "flush-promises";
@@ -17,14 +17,17 @@ describe('App.vue', () => {
         render: () => {
         },
         methods: {
-            resetComponent: () => {}
+            resetComponent: () => {
+            }
         }
     }
 
     const ExplainAnalysisStub = {
-        render: () => {},
+        render: () => {
+        },
         methods: {
-            resetComponent: () => {}
+            resetComponent: () => {
+            }
         }
     }
 
@@ -36,32 +39,43 @@ describe('App.vue', () => {
             stubs: {
                 AnalyzeReview: AnalyzeReviewStub,
                 ExplainAnalysis: ExplainAnalysisStub
+            },
+            mocks: {
+                $t: () => {}
             }
         }
     });
 
     beforeEach(() => {
-            wrapper = mount(App, {
-                shallow: true,
-                global: {
-                    stubs: {
-                        AnalyzeReview: AnalyzeReviewStub,
-                        ExplainAnalysis: ExplainAnalysisStub
-                    }
+        wrapper = mount(App, {
+            shallow: true,
+            global: {
+                stubs: {
+                    AnalyzeReview: AnalyzeReviewStub,
+                    ExplainAnalysis: ExplainAnalysisStub
+                },
+                mocks: {
+                    $t: () => {}
                 }
-            })
-        }
-    )
+            }
+        })
+    })
 
     it('triggers backend loading after mounting', async () => {
         loader.mockClear()
 
         await shallowMount(App, {
+            global: {
                 stubs: {
                     'analyzer': AnalyzeReviewStub,
                     'explainer': ExplainAnalysisStub
+                },
+                mocks: {
+                    $t: () => {
+                    }
                 }
-            })
+            }
+        })
 
         await flushPromises()
 

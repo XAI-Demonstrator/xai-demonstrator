@@ -4,10 +4,10 @@
             v-if="!numOfStars"
             class="xd-button xd-secondary"
             v-bind:disabled="waitingForPrediction">
-      <label>Wie viele Sterne sollte meine Bewertung erhalten?</label>
+      <label>{{ $t('question') }}</label>
     </button>
     <div class="the-sentiment" v-if="numOfStars">
-      <p>Ich denke, dein Review entspricht</p>
+      <p>{{ $t('answer') }}</p>
       <div class="sentiment-stars">
         <img class="my-star" src="@/assets/star_filled.svg" v-for="star in numOfStars" :key="'pos-' + star" alt="Filled star"/>
         <img class="my-star" src="@/assets/star_blank.svg" v-for="star in (5 - numOfStars)" :key="'neg-' + star" alt="Unfilled star"/>
@@ -55,6 +55,20 @@ export default {
   }
 }
 </script>
+
+<i18n>
+{
+    "de": {
+         "question": "Wie viele Sterne sollte meine Bewertung erhalten?",
+         "answer": "Ich denke, dein Review entspricht"
+    },
+    "en": {
+         "question": "How many stars would you assign to my review?",
+         "answer": "I believe that your review resembles"
+    }
+}
+</i18n>
+
 <style scoped>
 .the-sentiment {
   display: flex;

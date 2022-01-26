@@ -1,12 +1,26 @@
-import { shallowMount } from '@vue/test-utils'
+import {shallowMount} from '@vue/test-utils'
 import BarChart from '@/components/BarChart.vue'
 
 describe('BarChart.vue', () => {
 
-    let wrapper = shallowMount(BarChart);
+    let wrapper = shallowMount(BarChart, {
+        global: {
+            mocks: {
+                $t: () => {
+                }
+            }
+        }
+    });
 
     beforeEach(() => {
-            wrapper = shallowMount(BarChart);
+            wrapper = shallowMount(BarChart, {
+                global: {
+                    mocks: {
+                        $t: () => {
+                        }
+                    }
+                }
+            });
         }
     )
 

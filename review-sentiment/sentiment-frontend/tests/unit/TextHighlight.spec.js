@@ -1,13 +1,27 @@
-import { shallowMount } from '@vue/test-utils'
+import {shallowMount} from '@vue/test-utils'
 import TextHighlight from "@/components/TextHighlight";
 
 
 describe('Component', () => {
 
-    let wrapper = shallowMount(TextHighlight);
+    let wrapper = shallowMount(TextHighlight, {
+        global: {
+            mocks: {
+                $t: () => {
+                }
+            }
+        }
+    });
 
     beforeEach(() => {
-        wrapper = shallowMount(TextHighlight)
+        wrapper = shallowMount(TextHighlight, {
+            global: {
+                mocks: {
+                    $t: () => {
+                    }
+                }
+            }
+        })
     })
 
     it('HSL is calculated', async () => {

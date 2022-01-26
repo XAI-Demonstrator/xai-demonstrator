@@ -1,7 +1,7 @@
 <template>
   <div>
     <p v-if="showIntro && !text" class="intro-text">{{ introductionText }}</p>
-    <p v-if="showIntro && !text" class="intro-text">Gib deine Bewertung ein oder nutze das Beispiel:</p>
+    <p v-if="showIntro && !text" class="intro-text">{{ $t('prompt') }}</p>
     <textarea
         v-bind:placeholder="defaultReview"
         v-model="text"
@@ -31,6 +31,18 @@ export default {
   }
 }
 </script>
+
+<i18n>
+{
+    "de": {
+        "prompt": "Gib deine Bewertung ein oder nutze das Beispiel:"
+    },
+    "en" : {
+        "prompt": "Enter your review or use the example:"
+    }
+}
+</i18n>
+
 <style scoped>
 .intro-text {
   text-align: left;
