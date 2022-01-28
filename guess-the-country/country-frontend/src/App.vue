@@ -178,7 +178,6 @@ export default {
             this.waitingForExplanation = false
             if(this.prediction_city == this.label_city){
                 this.score_ai = this.score_ai + 1
-                //document.cookie = 'AI=' + this.score_ai + '; Secure'
             } else {
                 //document.cookie = 'AI=' + this.score_ai + '; Secure'// Explanation und Prediction ID (visual expection backend) + Label + Methode  
             }
