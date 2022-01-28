@@ -22,7 +22,7 @@
 </template>
 <script>
 export default {
-  name: "Textfield",
+  name: "Notification",
   props: {
       msg: {
           type: String,

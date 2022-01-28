@@ -36,6 +36,7 @@ props: {
 }
 
 .wrapper>.left {
+  text-align: center;
     flex: 2; 
 }
 

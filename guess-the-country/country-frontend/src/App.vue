@@ -7,12 +7,13 @@
         v-bind:title="useCaseTitle"/>
     <main>
         <Score :round="round" :label_country="label_country" :score_user = "score_user"  :score_ai = "score_ai"/>
-        <Textfield :prediction_city="prediction_city" :msg="msg" :label_country="label_country" :label_city="label_city" :user_city_answer="user_city_answer"  :user_country_answer="user_country_answer" :explanation="explanation"/>
-
+        <Notification :prediction_city="prediction_city" :msg="msg" :label_country="label_country" :label_city="label_city" :user_city_answer="user_city_answer"  :user_country_answer="user_country_answer" :explanation="explanation"/>
+        
         <section class="xd-section xd-light">
         <img class="xd-border-secondary;" v-bind:src="this.streetviewimage"/>
         </section>
-        <Selection @city_selected="callbackFunction2" @country_selected="callbackFunction" :label_city="label_city" :label_country="label_country" :user_city_answer="user_city_answer" :user_country_answer="user_country_answer" />
+   
+        <Selection @city_selected="city_selected" @country_selected="country_selected" :label_city="label_city" :label_country="label_country" :user_city_answer="user_city_answer" :user_country_answer="user_country_answer" />
         <Explanation_legend :prediction_city="prediction_city" :explanation="explanation"/>
 
 
@@ -38,7 +39,7 @@
 import axios from 'axios'
 import {UseCaseHeader, FloatingInfoButton, SpinningIndicator, XAIStudioRibbon, GitHubRibbon} from '@xai-demonstrator/xaidemo-ui';
 import Score from '@/components/Score';
-import Textfield from '@/components/Textfield';
+import Notification from '@/components/Notification';
 import Selection from '@/components/Selection';
 import Explanation_legend from './components/Explanation_legend.vue';
 
@@ -51,7 +52,7 @@ export default {
     GitHubRibbon,
     XAIStudioRibbon,
     Score,
-    Textfield,
+    Notification,
     Selection,
     Explanation_legend
   },
@@ -126,13 +127,13 @@ export default {
     this.getStreetview()
   },
   methods: {
-    callbackFunction2(value){
+    city_selected(value){
        this.user_city_answer = value;
         if(this.user_city_answer == this.label_city){
          this.score_user = 1 +  this.score_user
       }
     },
-    callbackFunction(value){
+    country_selected(value){
       this.user_country_answer = value;
       if(this.user_country_answer == this.label_country){
          this.score_user = 1 +  this.score_user
@@ -178,7 +179,6 @@ export default {
             this.waitingForExplanation = false
             if(this.prediction_city == this.label_city){
                 this.score_ai = this.score_ai + 1
-            } else {
             }
       })
       .catch((error) => {
@@ -235,29 +235,67 @@ export default {
 </script>
 
 <style>
-
-/* #app {
+#app {
   display: flex;
   justify-content: space-between;
   position: relative;
   overflow: hidden;
+}
+
+main {
+  display: flex;
   flex-direction: column;
-} */
+}
 
-/* main {
-  flex-grow: 1;
-} */
-
-
-/* @media screen and (min-width: 450px) and (max-height: 650px) {
+@media screen and (max-width: 450px) {
   #app {
-       align-items: center;
+    flex-direction: column;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+}
+
+@media screen and (min-width: 450px) and (max-height: 650px) {
+  #app {
+    flex-direction: column;
+    padding-left: 0;
+    padding-right: 0;
+    overflow: auto;
+    height: 100vh;
+    width: 100vw;
   }
 
   main {
-    width: 450px;
+    flex: 2;
+    max-height: calc(100vh - 54px);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: flex-start;
+    flex-wrap: wrap;
   }
-} */
+
+  main section {
+    order: 2;
+
+  }
+}
+
+@media screen and (min-width: 450px) and (min-height: 650px) {
+
+  #app {
+    flex-direction: column;
+  }
+  main {
+    flex-grow: 1;
+  }
+
+  main section {
+    padding: 0;
+  }
+
+}
 
 img {
   width: 100%;
