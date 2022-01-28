@@ -122,20 +122,6 @@ export default {
     }
   },
   async created() {
-    // if (document.cookie === '') {
-    //   var expires = (new Date(Date.now()+ 86400*1000)).toUTCString();
-
-    //   document.cookie = 'AI=' + this.score_ai + '; expires=' + expires + 86400 + '; Secure'
-    //   document.cookie = 'User=' + this.score_user + '; expires=' + expires + 86400 + '; Secure'
-    // } else {
-    //   this.score_ai = parseInt(document.cookie.split('; ')
-    //     .find(row => row.startsWith('AI='))
-    //     .split('=')[1])
-
-    //   this.score_user = parseInt(document.cookie.split('; ')
-    //     .find(row => row.startsWith('User='))
-    //     .split('=')[1])
-    // } 
     this.getMessage()
     this.getStreetview()
   },
