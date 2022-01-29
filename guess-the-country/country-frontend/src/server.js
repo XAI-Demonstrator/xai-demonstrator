@@ -16,7 +16,7 @@ export function makeServer({environment = "development"} = {}) {
                 {timing: 0})
 
             this.get("/msg", () => ({
-                  data: "Hello World"
+                  data: "Was this Google Streetview photo taken in Germany or in Israel? Challenge yourself with an AI."
             }))
 
             this.post("/explain", () => ({
