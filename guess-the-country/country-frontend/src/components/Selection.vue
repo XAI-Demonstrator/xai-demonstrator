@@ -2,56 +2,35 @@
   <div>
     <section
       v-if="!user_country_answer"
-      class="xd-section xd-light"
-      id="radio_country"
-      style="
-        display: flex;
-        align-content: flex-end;
-        flex-wrap: wrap;
-        align-items: baseline;
-      "
+      class="flex-style xd-section xd-light"
     >
-      <div v-for="country in countrys" :key="country.country">
-        <input name="country" type="radio" v-bind:value="country.country" />
-        <label>{{ country.country }}</label>
+      <div v-for="country in countrys" :key="country.country" class="element">
+        <input
+          type="Button"
+          class="xd-button xd-secondary"
+          v-bind:value="country.country"
+          v-on:click="answer_country(country.country)"
+        />
       </div>
-      <button
-        type="button"
-        class="xd-button xd-secondary"
-        style="width: auto; margin-left: auto"
-        v-on:click="answer_country()"
-      >
-        Was I right?
-      </button>
     </section>
 
     <section
       v-if="user_country_answer && !user_city_answer"
       class="xd-section xd-light"
-      id="radio_city"
-      style="
-        display: flex;
-        align-content: flex-end;
-        flex-wrap: wrap;
-        align-items: baseline;
-      "
+  
     >
       <div v-for="country in countrys" :key="country.citys">
-        <div v-if="country.country == label_country">
-          <div v-for="city in country.citys" :key="city.city">
-            <input name="city" type="radio" v-bind:value="city.city" />
-            <label>{{ city.city }}</label>
+        <div v-if="country.country == label_country" class="flex-style">
+          <div v-for="city in country.citys" :key="city.city" class="element">
+            <input
+          type="Button"
+          class="xd-button xd-secondary"
+          v-bind:value="city.city"
+          v-on:click="answer_city(city.city)"
+        />
           </div>
         </div>
       </div>
-      <button
-        type="button"
-        class="xd-button xd-secondary"
-        style="width: auto; margin-left: auto"
-        v-on:click="answer_city()"
-      >
-        Was I right?
-      </button>
     </section>
   </div>
 </template>
@@ -59,15 +38,15 @@
 export default {
   name: "Selection",
   props: {
-      label_country: {
-          type: String
-      },
-      user_country_answer: {
-        type: String
-      },
-      user_city_answer: {
-        type: String
-      }
+    label_country: {
+      type: String,
+    },
+    user_country_answer: {
+      type: String,
+    },
+    user_city_answer: {
+      type: String,
+    },
   },
   data() {
     return {
@@ -102,31 +81,23 @@ export default {
     };
   },
   methods: {
-    answer_city() {
-      var radios = document.getElementsByName("city");
-
-      for (var i = 0, length = radios.length; i < length; i++) {
-        if (radios[i].checked) {
-          this.$emit("city_selected", radios[i].value );
-          break;
-        }
-      }
+    answer_country(country) {
+      this.$emit("country_selected", country);
     },
-
-    answer_country() {
-      var radios = document.getElementsByName("country");
-
-      for (var i = 0, length = radios.length; i < length; i++) {
-        if (radios[i].checked) {
-          this.$emit("country_selected", radios[i].value);
-          break;
-        }
-      }
+    answer_city(city) {
+      this.$emit("city_selected", city);
     },
   },
 };
 </script>
 <style scoped>
+.element {
+  flex: 1;
+}
+.flex-style {
+display: flex; 
+gap: 10px
+}
 .xd-section:last-child {
   margin-bottom: 12px;
 }
