@@ -75,13 +75,13 @@ jobs:
           - service: review-sentiment
             prefix: sentiment
             memory: 8Gi
-            cpu: 2
-            concurrent: 10
+            cpu: 4
+            concurrent: 6
           - service: visual-inspection
             prefix: inspection
             memory: 2Gi
             cpu: 2
-            concurrent: 20
+            concurrent: 12
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
