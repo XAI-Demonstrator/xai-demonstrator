@@ -1,6 +1,20 @@
 version: '3.7'
 
 services:
+  landing:
+      build:
+        context: .
+        dockerfile: <Below_Directory>/Dockerfile
+      depends_on:
+        - country
+      expose:
+        - 80
+      environment:
+        - VIRTUAL_HOST=gtc.xaidemo.de
+        - VIRTUAL_PORT=80
+        - LETSENCRYPT_HOST=gtc.xaidemo.de
+        - LETSENCRYPT_EMAIL=xai.demonstrator@gmail.com
+      restart: always
 
   country:
     image: ghcr.io/xai-demonstrator/guess-the-country-service:latest
