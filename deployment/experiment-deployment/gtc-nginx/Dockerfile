@@ -1,3 +1,10 @@
+FROM node:14-alpine as builder
+
+RUN mkdir /country
+WORKDIR /country
+COPY ./guess-the-country/country-frontend/ .
+RUN npm install && npm run build -- --mode experiment-deployment
+
 FROM nginx:alpine
 
 COPY ./gtc-nginx/nginx.conf /etc/nginx/nginx.conf
