@@ -6,6 +6,7 @@ import pathlib
 import uuid
 from pydantic import BaseModel
 from xaidemo.tracing import traced
+from xaidemo.tracking.record import record_data
 
 PATH = pathlib.Path(__file__).parent
 
@@ -22,6 +23,7 @@ def prediction(input):
     pre_image = preprocess(image)
     prediction_id = uuid.uuid4()
     label = predict_image(image=pre_image)
+    record_data(key="internal_state", value={"prediction_id": prediction_id, "predicted:class": class_label}) 
     return Prediction(prediction_id=prediction_id,
                       class_label=label)
 

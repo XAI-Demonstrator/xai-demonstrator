@@ -7,7 +7,7 @@ from ..model.predict import model, load_image, preprocess
 from pydantic import BaseModel
 import uuid
 from xaidemo.tracing import traced
-
+from xaidemo.tracking.record import record_data
 
 class Explanation(BaseModel):
     explanation_id: uuid.UUID
@@ -24,6 +24,7 @@ def explain(data):
     encoded_image_string = convert_explanation(explanation)
     encoded_bytes = bytes("data:image/png;base64,",
                           encoding="utf-8") + encoded_image_string
+    record_data(key="internal_state", value={"explanation_id": explain_id})                     
     return Explanation(
         explanation_id=explain_id,
         image=encoded_bytes
