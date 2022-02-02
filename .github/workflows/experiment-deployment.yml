@@ -21,7 +21,7 @@ jobs:
      runs-on: ubuntu-latest
      if: ${{ github.event_name == 'push' || github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
      environment:
-       name: test
+       name: experiment
        url: https://gtc.xaidemo.de/
      steps:
        - uses: actions/checkout@master
