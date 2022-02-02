@@ -63,7 +63,7 @@ jobs:
            script: |
              set -e
              export STREETVIEW_API_KEY=$STREETVIEW_API_KEY
-             cd test-deployment/deployment/test-deployment/
+             cd experiment-deployment/deployment/experiment-deployment/
              sudo -E docker-compose pull
              sudo -E docker-compose up -d
              sleep 10 && rm ~/.test-deployment-lock
