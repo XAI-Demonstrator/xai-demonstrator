@@ -1,0 +1,78 @@
+name: Experiment Deployment
+
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows:
+      - "Guess the Country"
+    branches:
+      - master
+    types:
+      - completed
+  push:
+    branches:
+      - master
+    paths:
+      - 'deployment/experiment-deployment/**'
+      - '!deployment/experiment-deployment/**.md'
+
+jobs:
+  deploy:
+     runs-on: ubuntu-latest
+     if: ${{ github.event_name == 'push' || github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
+     environment:
+       name: test
+       url: https://gtc.xaidemo.de/
+     steps:
+       - uses: actions/checkout@master
+       - name: Wait for lock to release and place lock
+         uses: appleboy/ssh-action@v0.1.4
+         with:
+           host: ${{ secrets.HOST }}
+           username: ${{ secrets.USER }}
+           key: ${{ secrets.SSH_KEY }}
+           script: |
+             set -e
+             # wait for lock
+             while [ -f .experiment-deployment-lock ]; do sleep 1 && echo "awaiting lock" ; done
+             # claim lock
+             echo $GITHUB_RUN_ID >> ~/.experiment-deployment-lock
+             # detect almost-parallel runs of this workflow
+             if [[ `cat ~/.experiment-deployment-lock | wc -l` > 1 ]]; then exit 1; fi
+             # shut down current deployment
+             cd experiment-deployment/deployment/experiment-deployment/ || exit 0
+             sudo docker-compose down
+       - name: Copy docker-compose.yml to test server
+         uses: appleboy/scp-action@v0.1.2
+         with:
+           host: ${{ secrets.HOST }}
+           username: ${{ secrets.USER }}
+           key: ${{ secrets.SSH_KEY }}
+           source: "deployment/experiment-deployment/docker-compose.yml"
+           target: "experiment-deployment"
+           rm: true
+       - name: SSH Remote Commands
+         uses: appleboy/ssh-action@v0.1.4
+         env:
+           STREETVIEW_API_KEY: ${{ secrets.STREETVIEW_API_KEY }}
+         with:
+           host: ${{ secrets.HOST }}
+           username: ${{ secrets.USER }}
+           key: ${{ secrets.SSH_KEY }}
+           envs: STREETVIEW_API_KEY
+           script: |
+             set -e
+             export STREETVIEW_API_KEY=$STREETVIEW_API_KEY
+             cd test-deployment/deployment/test-deployment/
+             sudo -E docker-compose pull
+             sudo -E docker-compose up -d
+             sleep 10 && rm ~/.test-deployment-lock
+       - name: Slack Notification
+         uses: rtCamp/action-slack-notify@v2.2.0
+         env:
+            SLACK_CHANNEL: xai-demonstrator-monitor
+            SLACK_MESSAGE: 'Successfully deployed a new version to https://gtc.xaidemo.de/ :rocket:'
+            SLACK_TITLE: New Test Deployment
+            SLACK_USERNAME: Deployment Monitor
+            SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+            MSG_MINIMAL: true
