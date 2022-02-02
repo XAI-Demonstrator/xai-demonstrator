@@ -72,7 +72,7 @@ jobs:
          env:
             SLACK_CHANNEL: xai-demonstrator-monitor
             SLACK_MESSAGE: 'Successfully deployed a new version to https://gtc.xaidemo.de/ :rocket:'
-            SLACK_TITLE: New Test Deployment
+            SLACK_TITLE: New Experiment Deployment
             SLACK_USERNAME: Deployment Monitor
             SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
             MSG_MINIMAL: true
