@@ -71,7 +71,7 @@ jobs:
         - name: Download all frontends
           uses: actions/download-artifact@v2
           with:
-            path: ./deployment/experiment-deployment/gtc-nginx/frontend
+            path: ./deployment/experiment-deployment/gtc-nginx/
 
   deploy:
      runs-on: ubuntu-latest
