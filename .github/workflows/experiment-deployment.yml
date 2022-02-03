@@ -13,122 +13,122 @@ on:
     branches:
       - master
     paths:
-      - 'deployment/experiment-deployment/**'
-      - '!deployment/experiment-deployment/**.md'
+      - "deployment/experiment-deployment/**"
+      - "!deployment/experiment-deployment/**.md"
 
 jobs:
   build-frontends:
-      strategy:
-        matrix:
-          include:
-            - service: country
-              repo_path: ./guess-the-country/country-frontend
+    strategy:
+      matrix:
+        include:
+          - service: country
+            repo_path: ./guess-the-country/country-frontend
 
-      runs-on: ubuntu-latest
-      steps:
-        - name: Checkout Code
-          uses: actions/checkout@v2
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
 
-        - name: Set Up Node Environment
-          uses: actions/setup-node@v2
-          with:
-            node-version: '14'
+      - name: Set Up Node Environment
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14"
 
-        - uses: actions/cache@v2.1.7
-          with:
-            path: ~/.npm
-            key: ${{ runner.os }}-node-${{ hashFiles('${{ matrix.repo_path }}/package-lock.json') }}
-            restore-keys: |
-              ${{ runner.os }}-node-
+      - uses: actions/cache@v2.1.7
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('${{ matrix.repo_path }}/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
-        - name: Build Frontend
-          run: |
-            set -e
-            cd ${{ matrix.repo_path }}
-            npm install
-            npm run build -- --mode experiment-deployment
-            mv dist ${{ matrix.service }}
+      - name: Build Frontend
+        run: |
+          set -e
+          cd ${{ matrix.repo_path }}
+          npm install
+          npm run build -- --mode experiment-deployment
+          mv dist ${{ matrix.service }}
 
-        - name: Save build artifact
-          uses: actions/upload-artifact@v2
-          with:
-            name: ${{ matrix.service }}
-            path: ${{ matrix.repo_path }}/${{ matrix.service }}
-            retention-days: 3
+      - name: Save build artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.service }}
+          path: ${{ matrix.repo_path }}/${{ matrix.service }}
+          retention-days: 3
 
-    deploy-frontends:
-      needs: build-frontends
-      runs-on: ubuntu-latest
-      steps:
-        - name: Checkout
-          uses: actions/checkout@v2
-        - name: SSH Remote Commands
-          uses: appleboy/ssh-action@v0.1.4
-         with:
-           host: ${{ secrets.HOST }}
-           username: ${{ secrets.USER }}
-           key: ${{ secrets.SSH_KEY }}
-        - name: Download all frontends
-          uses: actions/download-artifact@v2
-          with:
-            path: ./deployment/experiment-deployment/gtc-nginx/
+  deploy-frontends:
+    needs: build-frontends
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: SSH Remote Commands
+        uses: appleboy/ssh-action@v0.1.4
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_KEY }}
+      - name: Download all frontends
+        uses: actions/download-artifact@v2
+        with:
+          path: ./deployment/experiment-deployment/gtc-nginx/
 
   deploy:
-     runs-on: ubuntu-latest
-     if: ${{ github.event_name == 'push' || github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
-     environment:
-       name: experiment
-       url: https://gtc.xaidemo.de/
-     steps:
-       - uses: actions/checkout@master
-       - name: Wait for lock to release and place lock
-         uses: appleboy/ssh-action@v0.1.4
-         with:
-           host: ${{ secrets.HOST }}
-           username: ${{ secrets.USER }}
-           key: ${{ secrets.SSH_KEY }}
-           script: |
-             set -e
-             # wait for lock
-             while [ -f .experiment-deployment-lock ]; do sleep 1 && echo "awaiting lock" ; done
-             # claim lock
-             echo $GITHUB_RUN_ID >> ~/.experiment-deployment-lock
-             # detect almost-parallel runs of this workflow
-             if [[ `cat ~/.experiment-deployment-lock | wc -l` > 1 ]]; then exit 1; fi
-             # shut down current deployment
-             cd experiment-deployment/deployment/experiment-deployment/ || exit 0
-             sudo docker-compose down
-       - name: Copy docker-compose.yml to test server
-         uses: appleboy/scp-action@v0.1.2
-         with:
-           host: ${{ secrets.HOST }}
-           username: ${{ secrets.USER }}
-           key: ${{ secrets.SSH_KEY }}
-           source: "deployment/experiment-deployment/docker-compose.yml"
-           target: "experiment-deployment"
-           rm: true
-       - name: SSH Remote Commands
-         uses: appleboy/ssh-action@v0.1.4
-         env:
-           STREETVIEW_API_KEY: ${{ secrets.STREETVIEW_API_KEY }}
-         with:
-           host: ${{ secrets.HOST }}
-           username: ${{ secrets.USER }}
-           key: ${{ secrets.SSH_KEY }}
-           envs: STREETVIEW_API_KEY
-           script: |
-             set -e
-             export STREETVIEW_API_KEY=$STREETVIEW_API_KEY
-             cd experiment-deployment/deployment/experiment-deployment/
-             sudo -E docker-compose pull
-             sudo -E docker-compose up -d
-             sleep 10 && rm ~/.experiment-deployment-lock
-       - name: Slack Notification
-         uses: rtCamp/action-slack-notify@v2.2.0
-         env:
-            SLACK_CHANNEL: xai-demonstrator-monitor
-            SLACK_MESSAGE: 'Successfully deployed a new version to https://gtc.xaidemo.de/ :rocket:'
-            SLACK_TITLE: New Experiment Deployment
-            SLACK_USERNAME: Deployment Monitor
-            SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-            MSG_MINIMAL: true
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'push' || github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
+    environment:
+      name: experiment
+      url: https://gtc.xaidemo.de/
+    steps:
+      - uses: actions/checkout@master
+      - name: Wait for lock to release and place lock
+        uses: appleboy/ssh-action@v0.1.4
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            set -e
+            # wait for lock
+            while [ -f .experiment-deployment-lock ]; do sleep 1 && echo "awaiting lock" ; done
+            # claim lock
+            echo $GITHUB_RUN_ID >> ~/.experiment-deployment-lock
+            # detect almost-parallel runs of this workflow
+            if [[ `cat ~/.experiment-deployment-lock | wc -l` > 1 ]]; then exit 1; fi
+            # shut down current deployment
+            cd experiment-deployment/deployment/experiment-deployment/ || exit 0
+            sudo docker-compose down
+      - name: Copy docker-compose.yml to test server
+        uses: appleboy/scp-action@v0.1.2
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_KEY }}
+          source: "deployment/experiment-deployment/docker-compose.yml"
+          target: "experiment-deployment"
+          rm: true
+      - name: SSH Remote Commands
+        uses: appleboy/ssh-action@v0.1.4
+        env:
+          STREETVIEW_API_KEY: ${{ secrets.STREETVIEW_API_KEY }}
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_KEY }}
+          envs: STREETVIEW_API_KEY
+          script: |
+            set -e
+            export STREETVIEW_API_KEY=$STREETVIEW_API_KEY
+            cd experiment-deployment/deployment/experiment-deployment/
+            sudo -E docker-compose pull
+            sudo -E docker-compose up -d
+            sleep 10 && rm ~/.experiment-deployment-lock
+      - name: Slack Notification
+        uses: rtCamp/action-slack-notify@v2.2.0
+        env:
+          SLACK_CHANNEL: xai-demonstrator-monitor
+          SLACK_MESSAGE: "Successfully deployed a new version to https://gtc.xaidemo.de/ :rocket:"
+          SLACK_TITLE: New Experiment Deployment
+          SLACK_USERNAME: Deployment Monitor
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          MSG_MINIMAL: true
