@@ -17,6 +17,57 @@ on:
       - '!deployment/experiment-deployment/**.md'
 
 jobs:
+  build-frontends:
+      strategy:
+        matrix:
+          include:
+            - service: country
+              repo_path: ./guess-the-country/country-frontend
+
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout Code
+          uses: actions/checkout@v2
+
+        - name: Set Up Node Environment
+          uses: actions/setup-node@v2
+          with:
+            node-version: '14'
+
+        - uses: actions/cache@v2.1.7
+          with:
+            path: ~/.npm
+            key: ${{ runner.os }}-node-${{ hashFiles('${{ matrix.repo_path }}/package-lock.json') }}
+            restore-keys: |
+              ${{ runner.os }}-node-
+
+        - name: Build Frontend
+          run: |
+            set -e
+            cd ${{ matrix.repo_path }}
+            npm install
+            npm run build -- --mode experiment-deployment
+            mv dist ${{ matrix.service }}
+
+        - name: Save build artifact
+          uses: actions/upload-artifact@v2
+          with:
+            name: ${{ matrix.service }}
+            path: ${{ matrix.repo_path }}/${{ matrix.service }}
+            retention-days: 3
+
+    deploy-frontends:
+      needs: build-frontends
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v2
+
+        - name: Download all frontends
+          uses: actions/download-artifact@v2
+          with:
+            path: ./deployment/experiment-deployment/gtc-nginx/frontend
+
   deploy:
      runs-on: ubuntu-latest
      if: ${{ github.event_name == 'push' || github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
