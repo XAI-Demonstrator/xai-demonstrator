@@ -4,7 +4,7 @@ services:
   nginx:
       build:
         context: .
-        dockerfile: /gtc-nginx/Dockerfile
+        dockerfile: ./gtc-nginx/Dockerfile
       depends_on:
         - country
       expose:

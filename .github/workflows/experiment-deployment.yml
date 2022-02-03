@@ -62,7 +62,12 @@ jobs:
       steps:
         - name: Checkout
           uses: actions/checkout@v2
-
+        - name: SSH Remote Commands
+          uses: appleboy/ssh-action@v0.1.4
+         with:
+           host: ${{ secrets.HOST }}
+           username: ${{ secrets.USER }}
+           key: ${{ secrets.SSH_KEY }}
         - name: Download all frontends
           uses: actions/download-artifact@v2
           with:
