@@ -59,6 +59,9 @@ jobs:
   deploy-frontends:
     needs: build-frontends
     runs-on: ubuntu-latest
+    environment:
+      name: experiment
+      url: https://gtc.xaidemo.de/
     steps:
       - name: Checkout
         uses: actions/checkout@v2
