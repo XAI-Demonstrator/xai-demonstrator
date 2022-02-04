@@ -2,19 +2,19 @@ name: Experiment Deployment
 
 on:
   workflow_dispatch:
-  workflow_run:
-    workflows:
-      - "Guess the Country"
-    branches:
-      - guess-the-country-deployment-experiment-deployment
-    types:
-      - completed
-  push:
-    branches:
-      - guess-the-country-deployment-experiment-deployment
-    paths:
-      - "deployment/experiment-deployment/**"
-      - "!deployment/experiment-deployment/**.md"
+  # workflow_run:
+  #   workflows:
+  #     - "Guess the Country"
+  #   branches:
+  #     - guess-the-country-deployment-experiment-deployment
+  #   types:
+  #     - completed
+  # push:
+  #   branches:
+  #     - guess-the-country-deployment-experiment-deployment
+  #   paths:
+  #     - "deployment/experiment-deployment/**"
+  #     - "!deployment/experiment-deployment/**.md"
 
 jobs:
   build-frontends:
