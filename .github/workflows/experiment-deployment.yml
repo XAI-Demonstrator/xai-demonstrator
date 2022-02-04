@@ -54,7 +54,7 @@ jobs:
         with:
           name: ${{ matrix.service }}
           path: ${{ matrix.repo_path }}/${{ matrix.service }}
-          retention-days: 3
+          retention-days: 1
 
   deploy-frontends:
     needs: build-frontends
