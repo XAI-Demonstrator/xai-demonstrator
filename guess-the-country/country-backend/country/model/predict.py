@@ -44,7 +44,7 @@ def preprocess(img, IMG_SIZE=224):
     img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     # resize image to match model's expected sizing
     img_resize = cv2.resize(img_rgb, (IMG_SIZE, IMG_SIZE))
-    pre_image = img_resize.reshape(-1, IMG_SIZE, IMG_SIZE, 3) / 255
+    pre_image = (img_resize.reshape(-1, IMG_SIZE, IMG_SIZE, 3) / 127.5) - 1
     return pre_image
 
 

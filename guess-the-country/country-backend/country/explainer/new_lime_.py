@@ -9,14 +9,16 @@ from sklearn.linear_model import Lasso, BayesianRidge, LinearRegression
 
 
 def explain_image(img: np.ndarray, seg_method: str, seg_settings: Dict, num_of_samples: int, samples_p: float,
-                  model_: tf.keras.models.Model, threshold: float, volume: int, colour: str) -> np.ndarray:
+                  model_: tf.keras.models.Model, threshold: float, volume: int, colour: str,
+                  transparency: float) -> np.ndarray:
     segment_mask = create_segments(img=img, seg_method=seg_method, settings=seg_settings)
     samples_theo = generate_samples(segment_mask=segment_mask, num_of_samples=num_of_samples, p=samples_p)
     samples_imgs = generate_images(image=img, segment_mask=segment_mask, samples=samples_theo)
-    samples_imgs_predictions = predict_images(images = samples_imgs, model_=model_)
+    samples_imgs_predictions = predict_images(images=samples_imgs, model_=model_)
     weighted_segments = weigh_segments(samples=samples_theo, predictions=samples_imgs_predictions)
     visual_explanation = generate_visual_explanation(weighted_segments=weighted_segments, segment_mask=segment_mask,
-                                                    image=img, threshold=threshold, volume=volume, colour=colour)
+                                                     image=img, threshold=threshold, volume=volume, colour=colour,
+                                                     transparency=transparency)
 
     return visual_explanation
 
@@ -139,7 +141,7 @@ def weigh_segments(samples: np.ndarray, predictions: np.ndarray) -> np.ndarray:
 
 
 def generate_visual_explanation(weighted_segments: np.ndarray, segment_mask: np.ndarray, image: np.ndarray,
-                                threshold: float, volume: int, colour: str) -> np.ndarray:
+                                threshold: float, volume: int, colour: str, transparency:float = 0) -> np.ndarray:
     """Generating image with visual explanation
     Parameters
     ----------
@@ -149,22 +151,26 @@ def generate_visual_explanation(weighted_segments: np.ndarray, segment_mask: np.
     threshold
     volume
     colour
+    transparency
     Returns
     -------
     """
     # set explanation colour
-    colours = {"green": [119, 184, 53], "blue": [38, 55, 173], "red": [173, 38, 38], "white": [255, 255, 255],
+    colours = {"green": [0,255,0], "blue": [38, 55, 173], "red": [173, 38, 38], "white": [255, 255, 255],
                "black": [0, 0, 0]}
     colour = colour.lower()
     if colour not in colours.keys():
         colour = "green"
 
     # handle outliers
+    """
     weighted_segments = np.where(weighted_segments > 1.0, 1, weighted_segments)
     weighted_segments = np.where(weighted_segments < -1.0, -1, weighted_segments)
     # normalize coefficients: coefficient_i ∈ [0.0, 1.0]
     n_weighted_segments = (weighted_segments - weighted_segments.min()) / (
             weighted_segments.max() - weighted_segments.min())
+    """
+    n_weighted_segments = 1/(1+np.exp(-weighted_segments))
 
     # check if volume is bigger than the amount of segments
     max_volume = len(np.unique(segment_mask))
@@ -176,14 +182,13 @@ def generate_visual_explanation(weighted_segments: np.ndarray, segment_mask: np.
     limit = np.sort(np.unique(n_weighted_segments))[-volume]
     n_d_weighted_segments = np.where(n_weighted_segments >= max(limit, threshold), n_weighted_segments,
                                      0)
-    #TODO: find a cleaner solution; ?(Layer, np.where)?
-
     # manipulate the original image (quick and dirty)
     c = np.array(colours[colour])
+    image_c = image.copy()
     indices = np.argwhere(n_d_weighted_segments != 0)
     for i, row in enumerate(segment_mask):
         for j, el in enumerate(row):
             if el in indices:
-                image[i, j] = round(n_d_weighted_segments[el], 1) * c / 255
+                image_c[i, j] = ((round(n_d_weighted_segments[el], 1) * c / 127.5) - 1)
 
-    return image
+    return image_c * transparency + image * (1-transparency)
