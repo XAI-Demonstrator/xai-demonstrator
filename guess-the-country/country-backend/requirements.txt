@@ -1,5 +1,5 @@
 fastapi==0.71.0
-uvicorn==0.16.0
+uvicorn==0.17.4
 
 shapely
 requests
