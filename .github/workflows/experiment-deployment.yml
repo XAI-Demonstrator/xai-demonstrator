@@ -65,16 +65,29 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: SSH Remote Commands
-        uses: appleboy/ssh-action@v0.1.4
+        
+      - name: Set Up Node Environment
+        uses: actions/setup-node@v2
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USER }}
-          key: ${{ secrets.SSH_KEY }}
+          node-version: "14"
+
       - name: Download all frontends
         uses: actions/download-artifact@v2
         with:
-          path: ./deployment/experiment-deployment/gtc-nginx/
+          path: download/
+          
+      - name: Run build task
+        run: npm run build --if-present
+      - name: Deploy to Server
+        uses: easingthemes/ssh-deploy@main
+        env:
+            SSH_PRIVATE_KEY: ${{ secrets.SSH_KEY }}
+            SOURCE: "download/"
+            REMOTE_HOST: ${{ secrets.HOST }}
+            REMOTE_USER: ${{ secrets.USER }}
+            TARGET: "xai-demonstrator/deployment/experiment-deployment/gtc-nginx/"
+        
+        
 
   deploy:
     runs-on: ubuntu-latest
