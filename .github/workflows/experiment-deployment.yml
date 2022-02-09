@@ -139,6 +139,8 @@ jobs:
             sudo -E docker-compose pull
             sudo -E docker-compose up -d
             sleep 10 && rm ~/.experiment-deployment-lock
+            cd gtc-nginx/
+            rm -r country/
       - name: Slack Notification
         uses: rtCamp/action-slack-notify@v2.2.0
         env:
