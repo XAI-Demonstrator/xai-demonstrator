@@ -76,8 +76,6 @@ jobs:
         with:
           path: download/
           
-      - name: Run build task
-        run: npm run build --if-present
       - name: Deploy to Server
         uses: easingthemes/ssh-deploy@main
         env:
@@ -139,8 +137,6 @@ jobs:
             sudo -E docker-compose pull
             sudo -E docker-compose up -d
             sleep 10 && rm ~/.experiment-deployment-lock
-            cd gtc-nginx/
-            rm -r country/
       - name: Slack Notification
         uses: rtCamp/action-slack-notify@v2.2.0
         env:
