@@ -56,33 +56,6 @@ jobs:
           path: ${{ matrix.repo_path }}/${{ matrix.service }}
           retention-days: 1
 
-  # deploy-frontends:
-  #   needs: build-frontends
-  #   runs-on: ubuntu-latest
-  #   environment:
-  #     name: experiment
-  #     url: https://gtc.xaidemo.de/
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v2
-        
-  #     - name: Download all frontends
-  #       uses: actions/download-artifact@v2
-  #       with:
-  #         path: "deployment/experiment-deployment/gtc-nginx/"
-
-  #     - name: Copy build frontend to experiment server
-  #       uses: appleboy/scp-action@v0.1.2
-  #       with:
-  #         host: ${{ secrets.HOST }}
-  #         username: ${{ secrets.USER }}
-  #         key: ${{ secrets.SSH_KEY }}
-  #         source: "deployment/experiment-deployment/gtc-nginx/**"
-  #         target: "experiment-deployment"
-  #         rm: true
-        
-        
-
   deploy:
     needs: build-frontends
     runs-on: ubuntu-latest
