@@ -69,7 +69,7 @@ jobs:
       - name: Download all frontends
         uses: actions/download-artifact@v2
         with:
-          path: download/
+          path: "deployment/experiment-deployment/gtc-nginx/"
 
       - name: Copy docker-compose.yml to test server
         uses: appleboy/scp-action@v0.1.2
@@ -77,13 +77,14 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
-          source: "download/"
-          target: "experiment-deployment/deployment/experiment-deployment/gtc-nginx/"
+          source: "deployment/experiment-deployment/gtc-nginx/**"
+          target: "experiment-deployment"
           rm: true
         
         
 
   deploy-backend:
+    needs: deploy-frontends
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'push' || github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     environment:
