@@ -134,7 +134,6 @@ jobs:
           source: "~/deployment/experiment-deployment/gtc-nginx/**"
           target: "~/experiment-deployment/deployment/experiment-deployment/"
           rm: true
-          strip_components: 3
         
       - name: SSH Remote Commands
         uses: appleboy/ssh-action@v0.1.4
