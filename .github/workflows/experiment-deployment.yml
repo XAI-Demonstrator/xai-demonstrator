@@ -71,15 +71,15 @@ jobs:
         with:
           path: download/
 
-      - name: deploy file to server
-        uses: wlixcc/SFTP-Deploy-Action@v1.0
+      - name: Copy docker-compose.yml to test server
+        uses: appleboy/scp-action@v0.1.2
         with:
+          host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
-          server: ${{ secrets.HOST }}
-          ssh_private_key: ${{ secrets.SSH_KEY }}
-          local_path: './download/*'
-          remote_path: "xai-demonstrator/deployment/experiment-deployment/gtc-nginx/"
-          args: '-o ConnectTimeout=5'
+          key: ${{ secrets.SSH_KEY }}
+          source: "download/"
+          target: "experiment-deployment/deployment/experiment-deployment/gtc-nginx/"
+          rm: true
         
         
 
