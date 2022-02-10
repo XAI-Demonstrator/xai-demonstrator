@@ -132,7 +132,7 @@ jobs:
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
           source: "deployment/experiment-deployment/gtc-nginx/**"
-          target: "experiment-deployment"
+          target: "experiment-deployment/gtc-nginx/"
           rm: true
         
       - name: SSH Remote Commands
