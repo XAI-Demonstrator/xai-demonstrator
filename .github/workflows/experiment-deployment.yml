@@ -123,7 +123,7 @@ jobs:
       - name: Download all frontends
         uses: actions/download-artifact@v2
         with:
-          path: "gtc-nginx/"
+          path: "deployment/experiment-deployment/gtc-nginx/"
 
       - name: Copy build frontend to experiment server
         uses: appleboy/scp-action@v0.1.2
@@ -131,9 +131,10 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
-          source: "gtc-nginx/**"
-          target: "experiment-deployment/deployment/experiment-deployment/gtc-nginx/"
+          source: "eployment/experiment-deployment/gtc-nginx/**"
+          target: "experiment-deployment/deployment/experiment-deployment/"
           rm: true
+          strip_components: 3
         
       - name: SSH Remote Commands
         uses: appleboy/ssh-action@v0.1.4
