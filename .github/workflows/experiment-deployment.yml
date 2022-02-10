@@ -132,7 +132,7 @@ jobs:
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
           source: "deployment/experiment-deployment/gtc-nginx/**"
-          target: "experiment-deployment/deployment/experiment-deployment/"
+          target: "gtc-nginx/"
           rm: true
         
       - name: SSH Remote Commands
@@ -146,6 +146,7 @@ jobs:
           envs: STREETVIEW_API_KEY
           script: |
             set -e
+            mv gtc-nginx/ experiment-deployment/deployment/experiment-deployment/gtc-nginx/
             export STREETVIEW_API_KEY=$STREETVIEW_API_KEY
             cd experiment-deployment/deployment/experiment-deployment/
             sudo -E docker-compose pull
