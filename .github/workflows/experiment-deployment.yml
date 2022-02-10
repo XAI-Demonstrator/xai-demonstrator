@@ -56,40 +56,8 @@ jobs:
           path: ${{ matrix.repo_path }}/${{ matrix.service }}
           retention-days: 1
 
-  deploy-frontends:
-    needs: build-frontends
-    runs-on: ubuntu-latest
-    environment:
-      name: experiment
-      url: https://gtc.xaidemo.de/
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        
-      - name: Set Up Node Environment
-        uses: actions/setup-node@v2
-        with:
-          node-version: "14"
-
-      - name: Download all frontends
-        uses: actions/download-artifact@v2
-        with:
-          path: download/
-          
-      - name: Run build task
-        run: npm run build --if-present
-      - name: Deploy to Server
-        uses: easingthemes/ssh-deploy@main
-        env:
-            SSH_PRIVATE_KEY: ${{ secrets.SSH_KEY }}
-            SOURCE: "download/"
-            REMOTE_HOST: ${{ secrets.HOST }}
-            REMOTE_USER: ${{ secrets.USER }}
-            TARGET: "xai-demonstrator/deployment/experiment-deployment/gtc-nginx/"
-        
-        
-
   deploy:
+    needs: build-frontends
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'push' || github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     environment:
@@ -114,6 +82,7 @@ jobs:
             # shut down current deployment
             cd experiment-deployment/deployment/experiment-deployment/ || exit 0
             sudo docker-compose down
+
       - name: Copy docker-compose.yml to test server
         uses: appleboy/scp-action@v0.1.2
         with:
@@ -123,6 +92,23 @@ jobs:
           source: "deployment/experiment-deployment/docker-compose.yml"
           target: "experiment-deployment"
           rm: true
+
+      - name: Download all frontends
+        uses: actions/download-artifact@v2
+        with:
+          path: "deployment/experiment-deployment/gtc-nginx/"
+
+      - name: Copy build frontend to experiment server
+        uses: appleboy/scp-action@v0.1.2
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_KEY }}
+          source: "deployment/experiment-deployment/gtc-nginx/**"
+          target: "gtc-nginx/"
+          strip_components: 3
+          rm: true
+        
       - name: SSH Remote Commands
         uses: appleboy/ssh-action@v0.1.4
         env:
@@ -134,13 +120,12 @@ jobs:
           envs: STREETVIEW_API_KEY
           script: |
             set -e
+            mv gtc-nginx/ experiment-deployment/deployment/experiment-deployment/gtc-nginx/
             export STREETVIEW_API_KEY=$STREETVIEW_API_KEY
             cd experiment-deployment/deployment/experiment-deployment/
             sudo -E docker-compose pull
             sudo -E docker-compose up -d
             sleep 10 && rm ~/.experiment-deployment-lock
-            cd gtc-nginx/
-            rm -r country/
       - name: Slack Notification
         uses: rtCamp/action-slack-notify@v2.2.0
         env:
