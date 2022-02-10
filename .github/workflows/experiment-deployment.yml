@@ -56,30 +56,30 @@ jobs:
           path: ${{ matrix.repo_path }}/${{ matrix.service }}
           retention-days: 1
 
-  deploy-frontends:
-    needs: build-frontends
-    runs-on: ubuntu-latest
-    environment:
-      name: experiment
-      url: https://gtc.xaidemo.de/
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+  # deploy-frontends:
+  #   needs: build-frontends
+  #   runs-on: ubuntu-latest
+  #   environment:
+  #     name: experiment
+  #     url: https://gtc.xaidemo.de/
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
         
-      - name: Download all frontends
-        uses: actions/download-artifact@v2
-        with:
-          path: "deployment/experiment-deployment/gtc-nginx/"
+  #     - name: Download all frontends
+  #       uses: actions/download-artifact@v2
+  #       with:
+  #         path: "deployment/experiment-deployment/gtc-nginx/"
 
-      - name: Copy docker-compose.yml to test server
-        uses: appleboy/scp-action@v0.1.2
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USER }}
-          key: ${{ secrets.SSH_KEY }}
-          source: "deployment/experiment-deployment/gtc-nginx/**"
-          target: "experiment-deployment"
-          rm: true
+  #     - name: Copy build frontend to experiment server
+  #       uses: appleboy/scp-action@v0.1.2
+  #       with:
+  #         host: ${{ secrets.HOST }}
+  #         username: ${{ secrets.USER }}
+  #         key: ${{ secrets.SSH_KEY }}
+  #         source: "deployment/experiment-deployment/gtc-nginx/**"
+  #         target: "experiment-deployment"
+  #         rm: true
         
         
 
@@ -109,6 +109,7 @@ jobs:
             # shut down current deployment
             cd experiment-deployment/deployment/experiment-deployment/ || exit 0
             sudo docker-compose down
+
       - name: Copy docker-compose.yml to test server
         uses: appleboy/scp-action@v0.1.2
         with:
@@ -118,6 +119,22 @@ jobs:
           source: "deployment/experiment-deployment/docker-compose.yml"
           target: "experiment-deployment"
           rm: true
+
+      - name: Download all frontends
+        uses: actions/download-artifact@v2
+        with:
+          path: "deployment/experiment-deployment/gtc-nginx/"
+
+      - name: Copy build frontend to experiment server
+        uses: appleboy/scp-action@v0.1.2
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_KEY }}
+          source: "deployment/experiment-deployment/gtc-nginx/**"
+          target: "experiment-deployment"
+          rm: true
+        
       - name: SSH Remote Commands
         uses: appleboy/ssh-action@v0.1.4
         env:
