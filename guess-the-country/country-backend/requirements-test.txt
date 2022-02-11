@@ -3,3 +3,5 @@ pytest-cov
 pytest-mock
 coveralls
 pypng
+opencv
+shapely
