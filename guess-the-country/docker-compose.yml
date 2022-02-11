@@ -3,7 +3,5 @@ version: '3.7'
 services:
   country:
     build: .
-    environment:
-      - GOOGLE_MAPS_API_TOKEN=${GOOGLE_MAPS_API_TOKEN}
     ports:
       - 8000:8000
