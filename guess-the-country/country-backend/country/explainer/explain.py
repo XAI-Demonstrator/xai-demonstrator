@@ -7,6 +7,8 @@ from ..model.predict import model, load_image, preprocess
 from pydantic import BaseModel
 import uuid
 from xaidemo.tracing import traced
+from .new_lime_ import explain_image
+
 
 
 class Explanation(BaseModel):
@@ -32,7 +34,7 @@ def explain(data):
 
 @traced
 def convert_explanation(explanation):
-    image = (explanation*255).astype(np.uint8)
+    image = (explanation * 255).astype(np.uint8)
     image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     img_resized = cv2.resize(image_rgb, (448, 448),
                              interpolation=cv2.INTER_CUBIC)
@@ -43,10 +45,5 @@ def convert_explanation(explanation):
 
 @traced
 def explain_cnn(img, model):
-    explainer = lime_image.LimeImageExplainer()
-    #explanation = explainer.explain_instance(img[0].astype('double'), model.predict,  segmentation_fn =  SegmentationAlgorithm('slic', kernel_size=4, max_dist=100, ratio=0.4), top_labels=2, hide_color=False, num_samples=1000)
-    explanation = explainer.explain_instance(img[0].astype(
-        'double'), model.predict,  top_labels=4, hide_color=False, num_features=10000, num_samples=10)
-    temp, mask = explanation.get_image_and_mask(
-        explanation.top_labels[0], positive_only=False, negative_only=False,   num_features=5,  min_weight=0.0, hide_rest=False)
-    return (mark_boundaries(temp, mask))
+    return explain_image(img=img, seg_method="felzenszwalb", seg_settings={}, num_of_samples=200, samples_p=0.5,
+                         model_=model, threshold=0.3, volume=45, colour="red")
