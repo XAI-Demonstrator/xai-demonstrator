@@ -11,7 +11,7 @@
   "dependencies": {
     "@xai-demonstrator/xaidemo-ui": "^0.4.4",
     "core-js": "^3.20.3",
-    "vue": "^3.2.29",
+    "vue": "^3.2.31",
     "vue-i18n": "^9.2.0-beta.29"
   },
   "devDependencies": {
