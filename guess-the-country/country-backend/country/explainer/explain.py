@@ -18,7 +18,7 @@ def explain(data):
     encoded_data = str(data)
     image = load_image(encoded_data)
     pre_image = preprocess(image)
-    explanation = explain_cnn(pre_image, model)
+    explanation = explain_cnn(np.squeeze(pre_image), model)
     explain_id = uuid.uuid4()
     encoded_image_string = convert_explanation(explanation)
     encoded_bytes = bytes("data:image/png;base64,",

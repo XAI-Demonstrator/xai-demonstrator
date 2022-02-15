@@ -88,7 +88,7 @@ def generate_images(image: np.ndarray, segment_mask: np.ndarray, samples: np.nda
     -------
     """
     images = np.zeros((samples.shape[0],) + image.shape)
-    segment_mask = segment_mask.reshape(image.shape[:2] + (1,))
+    segment_mask = segment_mask.reshape(image.shape[:2] + (1,)) # if not np.squeeze() than image.shape[1:3] to fix it
     segment_ids = np.unique(segment_mask)
 
     # TODO: Do not loop (twice)
