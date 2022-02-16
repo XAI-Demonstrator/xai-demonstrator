@@ -1,4 +1,5 @@
 """XAI Demonstrator LIME explainer"""
+import time
 from typing import Dict
 import numpy as np
 import tensorflow as tf
@@ -71,7 +72,7 @@ def generate_samples(segment_mask: np.ndarray, num_of_samples: int, p: float) ->
     """
     num_of_segments = np.max(segment_mask) + 1
     # TODO: Do not loop, but generate entire array in one step
-    org_img_sample = np.ones((1, num_of_segments))
+    org_img_sample = np.ones((1, np.unique(segment_mask).size + 1))
     # append a full 1's sample to generate and predict the original image later on to avoid variance
     return np.append(np.random.binomial(n=1, p=p, size=(num_of_samples, np.unique(segment_mask).size + 1)),
                      org_img_sample, axis=0)
@@ -89,6 +90,7 @@ def generate_images(image: np.ndarray, segment_mask: np.ndarray, samples: np.nda
     Returns
     -------
     """
+
     res = np.ones(shape=(samples.shape[0], segment_mask.shape[0], segment_mask.shape[0]))
     for k in range(segment_mask.shape[0]):
         res[:, :, k] = samples[:, segment_mask[:, k][:]]
