@@ -73,8 +73,10 @@ def generate_samples(segment_mask: np.ndarray, num_of_samples: int, p: float) ->
     # TODO: Do not loop, but generate entire array in one step
     org_img_sample = np.ones((1, num_of_segments))
     # append a full 1's sample to generate and predict the original image later on to avoid variance
-    return np.append(np.array([np.random.binomial(n=1, p=p, size=num_of_segments) for i in range(num_of_samples)]),
+    return np.append(np.random.binomial(n=1, p=p, size=(num_of_samples, np.unique(segment_mask).size + 1)),
                      org_img_sample, axis=0)
+    """return np.append(np.array([np.random.binomial(n=1, p=p,  for i in range(num_of_samples)]),
+                     org_img_sample, axis=0)"""
 
 
 def generate_images(image: np.ndarray, segment_mask: np.ndarray, samples: np.ndarray) -> np.ndarray:
@@ -87,19 +89,10 @@ def generate_images(image: np.ndarray, segment_mask: np.ndarray, samples: np.nda
     Returns
     -------
     """
-    images = np.zeros((samples.shape[0],) + image.shape)
-    segment_mask = segment_mask.reshape(image.shape[:2] + (1,)) # if not np.squeeze() than image.shape[1:3] to fix it
-    segment_ids = np.unique(segment_mask)
-
-    # TODO: Do not loop (twice)
-    for i, sample in enumerate(samples):
-        mask = np.zeros(image.shape)
-        for s_id in segment_ids:
-            if sample[s_id]:
-                mask += segment_mask == s_id
-        images[i] = mask * image
-
-    return images
+    res = np.ones(shape=(samples.shape[0], segment_mask.shape[0], segment_mask.shape[0]))
+    for k in range(segment_mask.shape[0]):
+        res[:, :, k] = samples[:, segment_mask[:, k][:]]
+    return res.reshape((samples.shape[0], segment_mask.shape[0], segment_mask.shape[0], 1)) * image
 
 
 def predict_images(images: np.ndarray, model_: tf.keras.models.Model) -> np.ndarray:
