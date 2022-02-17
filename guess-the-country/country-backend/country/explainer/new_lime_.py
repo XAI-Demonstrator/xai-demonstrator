@@ -7,6 +7,7 @@ from skimage.filters import sobel
 from skimage.segmentation import felzenszwalb, slic, quickshift, watershed
 from sklearn.linear_model import Lasso, BayesianRidge, LinearRegression
 from xaidemo.tracing import traced
+from .config import settings
 
 @traced
 def explain_image(img: np.ndarray, seg_method: str, seg_settings: Dict, num_of_samples: int, samples_p: float,
@@ -75,8 +76,6 @@ def generate_samples(segment_mask: np.ndarray, num_of_samples: int, p: float) ->
     # append a full 1's sample to generate and predict the original image later on to avoid variance
     return np.append(np.random.binomial(n=1, p=p, size=(num_of_samples, np.unique(segment_mask).size + 1)),
                      org_img_sample, axis=0)
-    """return np.append(np.array([np.random.binomial(n=1, p=p,  for i in range(num_of_samples)]),
-                     org_img_sample, axis=0)"""
 
 @traced
 def generate_images(image: np.ndarray, segment_mask: np.ndarray, samples: np.ndarray) -> np.ndarray:
@@ -108,7 +107,7 @@ def predict_images(images: np.ndarray, model_: tf.keras.models.Model) -> np.ndar
     -------
     An array of size (num_of_samples, output_dimension)
     """
-    return model_.predict(images)
+    return model_.predict(images, batch_size=settings.batch_size)
 
 @traced
 def weigh_segments(samples: np.ndarray, predictions: np.ndarray) -> np.ndarray:

@@ -58,6 +58,7 @@ jobs:
          uses: appleboy/ssh-action@v0.1.4
          env:
            STREETVIEW_API_KEY: ${{ secrets.STREETVIEW_API_KEY }}
+           BATCH_SIZE: ${{ secrets.BATCH_SIZE }}
          with:
            host: ${{ secrets.HOST }}
            username: ${{ secrets.USER }}
@@ -66,6 +67,7 @@ jobs:
            script: |
              set -e
              export STREETVIEW_API_KEY=$STREETVIEW_API_KEY
+             export BATCH_SIZE=${BATCH_SIZE}
              cd test-deployment/deployment/test-deployment/
              sudo -E docker-compose pull
              sudo -E docker-compose up -d
