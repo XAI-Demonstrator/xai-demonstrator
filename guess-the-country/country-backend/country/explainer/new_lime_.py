@@ -7,7 +7,7 @@ from skimage.filters import sobel
 from skimage.segmentation import felzenszwalb, slic, quickshift, watershed
 from sklearn.linear_model import Lasso, BayesianRidge, LinearRegression
 from xaidemo.tracing import traced
-from .config import settings
+from ..config import settings
 
 @traced
 def explain_image(img: np.ndarray, seg_method: str, seg_settings: Dict, num_of_samples: int, samples_p: float,
