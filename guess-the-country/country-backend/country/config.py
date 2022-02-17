@@ -7,7 +7,7 @@ class Settings(BaseSettings):
     path_prefix: str = ""
     # Google Maps API access
     google_maps_api_token = ""
-    batch_siz: int = 32
+    batch_size: int = 32
 
 
 settings = Settings()
