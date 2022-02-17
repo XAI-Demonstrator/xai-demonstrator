@@ -1,5 +1,4 @@
 """XAI Demonstrator LIME explainer"""
-import time
 from typing import Dict
 import numpy as np
 import tensorflow as tf
@@ -8,7 +7,7 @@ from skimage.filters import sobel
 from skimage.segmentation import felzenszwalb, slic, quickshift, watershed
 from sklearn.linear_model import Lasso, BayesianRidge, LinearRegression
 
-
+@traced
 def explain_image(img: np.ndarray, seg_method: str, seg_settings: Dict, num_of_samples: int, samples_p: float,
                   model_: tf.keras.models.Model, threshold: float, volume: int, colour: str,
                   transparency: float) -> np.ndarray:
@@ -23,7 +22,7 @@ def explain_image(img: np.ndarray, seg_method: str, seg_settings: Dict, num_of_s
 
     return visual_explanation
 
-
+@traced
 def create_segments(img: np.ndarray, seg_method: str, settings: Dict) -> np.ndarray:
     """
     create segments out of a loaded picture using different methods and settings
@@ -53,7 +52,7 @@ def create_segments(img: np.ndarray, seg_method: str, settings: Dict) -> np.ndar
     else:
         raise ValueError("{} is not a valid segmentation method".format(seg_method))
 
-
+@traced
 def generate_samples(segment_mask: np.ndarray, num_of_samples: int, p: float) -> np.ndarray:
     """
     determine which segments are displayed for each sample
@@ -70,7 +69,6 @@ def generate_samples(segment_mask: np.ndarray, num_of_samples: int, p: float) ->
     samples : np.ndarray
         A two-dimensional array of dimension (num_of_samples, number_of_segments)
     """
-    num_of_segments = np.max(segment_mask) + 1
     # TODO: Do not loop, but generate entire array in one step
     org_img_sample = np.ones((1, np.unique(segment_mask).size + 1))
     # append a full 1's sample to generate and predict the original image later on to avoid variance
@@ -79,7 +77,7 @@ def generate_samples(segment_mask: np.ndarray, num_of_samples: int, p: float) ->
     """return np.append(np.array([np.random.binomial(n=1, p=p,  for i in range(num_of_samples)]),
                      org_img_sample, axis=0)"""
 
-
+@traced
 def generate_images(image: np.ndarray, segment_mask: np.ndarray, samples: np.ndarray) -> np.ndarray:
     """Generating example images with each excluded segments in black
     Parameters
@@ -96,7 +94,7 @@ def generate_images(image: np.ndarray, segment_mask: np.ndarray, samples: np.nda
         res[:, :, k] = samples[:, segment_mask[:, k][:]]
     return res.reshape((samples.shape[0], segment_mask.shape[0], segment_mask.shape[0], 1)) * image
 
-
+@traced
 def predict_images(images: np.ndarray, model_: tf.keras.models.Model) -> np.ndarray:
     """
     Parameters
@@ -111,7 +109,7 @@ def predict_images(images: np.ndarray, model_: tf.keras.models.Model) -> np.ndar
     """
     return model_.predict(images)
 
-
+@traced
 def weigh_segments(samples: np.ndarray, predictions: np.ndarray) -> np.ndarray:
     """Generating list of coefficients to weigh segments
     Parameters
@@ -134,7 +132,7 @@ def weigh_segments(samples: np.ndarray, predictions: np.ndarray) -> np.ndarray:
     model.fit(samples[:-1], p_column)
     return model.coef_
 
-
+@traced
 def generate_visual_explanation(weighted_segments: np.ndarray, segment_mask: np.ndarray, image: np.ndarray,
                                 threshold: float, volume: int, colour: str, transparency:float = 0) -> np.ndarray:
     """Generating image with visual explanation
