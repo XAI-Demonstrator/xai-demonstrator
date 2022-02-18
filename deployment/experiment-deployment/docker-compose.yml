@@ -28,6 +28,7 @@ services:
       - TRACING_EXPORTER=jaeger
       - JAEGER_AGENT_HOST_NAME=jaeger
       - GOOGLE_MAPS_API_TOKEN=${STREETVIEW_API_KEY}
+      - BATCH_SIZE=${BATCH_SIZE}
 
   jaeger:
     image: jaegertracing/all-in-one
