@@ -133,3 +133,21 @@ jobs:
         run: |
           cd ./experiment-tracker
           docker-compose down
+
+      - name: Create container and publish to Registry
+        uses: elgohr/Publish-Docker-Github-Action@3.04
+        with:
+          name: xai-demonstrator/data-collector
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ghcr.io
+          workdir: experiment-tracker/data-collector
+
+      - name: Create container and publish to Registry
+        uses: elgohr/Publish-Docker-Github-Action@3.04
+        with:
+          name: xai-demonstrator/experiment-proxy
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ghcr.io
+          workdir: experiment-tracker/experiment-proxy

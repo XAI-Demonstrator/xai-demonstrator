@@ -29,6 +29,8 @@ services:
       - JAEGER_AGENT_HOST_NAME=jaeger
       - GOOGLE_MAPS_API_TOKEN=${STREETVIEW_API_KEY}
       - BATCH_SIZE=${BATCH_SIZE}
+      - COLLECTOR_URL=http://collector:8000
+      - EXPERIMENT=1  
 
   jaeger:
     image: jaegertracing/all-in-one
@@ -37,6 +39,51 @@ services:
     ports:
       - 16686:16686
     restart: always
+
+  
+  couchdb:
+    image: couchdb
+    expose:
+      - "5984"
+    ports:
+      - "8002:5984"
+    environment:
+      - COUCHDB_USER=${COUCHDB_USER}
+      - COUCHDB_PASSWORD=${COUCHDB_PASSWORD}
+    volumes:
+        - ./dbdata:/opt/couchdb/data
+
+  collector:
+    image: ghcr.io/xai-demonstrator/data-collector:latest
+    depends_on:
+      - couchdb
+    expose:
+      - "8000"
+    ports:
+      - "8001:8000"
+    environment:
+      - DB_HOST=couchdb
+      - DB_PORT=5984
+      - DB_USER=${COUCHDB_USER}
+      - DB_PASSWORD=${COUCHDB_PASSWORD}
+      - SERVICE_NAME=data-collector
+      - TRACING_EXPORTER=jaeger
+      - JAEGER_AGENT_HOST_NAME=jaeger
+
+  proxy:
+    image: ghcr.io/xai-demonstrator/experiment-proxy:latest
+    depends_on:
+      - collector
+    ports:
+      - "8000:8000"
+    environment:
+      - BACKEND_URL=http://country:8000
+      - BACKEND_SERVICE=test-case
+      - COLLECTOR_URL=http://collector:8000
+      - SERVICE_NAME=experiment-proxy
+      - TRACING_EXPORTER=jaeger
+      - JAEGER_AGENT_HOST_NAME=jaeger
+
 
 networks:
   default:
