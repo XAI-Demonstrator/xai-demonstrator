@@ -23,6 +23,22 @@ def explain_image(img: np.ndarray, seg_method: str, seg_settings: Dict, num_of_s
     return visual_explanation
 
 
+#returns indices of segments to be shown in explanation
+def explain_image_for_seg_occ_test(img: np.ndarray, seg_method: str, seg_settings: Dict, num_of_samples: int, samples_p: float,
+                  model_: tf.keras.models.Model, threshold: float, volume: int, colour: str,
+                  transparency: float, segment_mask: np.ndarray) -> np.ndarray:
+    #segment_mask = create_segments(img=img, seg_method=seg_method, settings=seg_settings)
+    samples_theo = generate_samples(segment_mask=segment_mask, num_of_samples=num_of_samples, p=samples_p)
+    samples_imgs = generate_images(image=img, segment_mask=segment_mask, samples=samples_theo)
+    samples_imgs_predictions = predict_images(images=samples_imgs, model_=model_)
+    weighted_segments = weigh_segments(samples=samples_theo, predictions=samples_imgs_predictions)
+    indices = generate_visual_explanation_for_seg_occ_test(weighted_segments=weighted_segments, segment_mask=segment_mask,
+                                                     image=img, threshold=threshold, volume=volume, colour=colour,
+                                                     transparency=transparency)
+
+    return indices
+
+
 def create_segments(img: np.ndarray, seg_method: str, settings: Dict) -> np.ndarray:
     """
     create segments out of a loaded picture using different methods and settings
@@ -40,7 +56,7 @@ def create_segments(img: np.ndarray, seg_method: str, settings: Dict) -> np.ndar
         return felzenszwalb(image=img, scale=250, sigma=0.6, min_size=45)
 
     if seg_method == "slic":
-        return slic(image=img, n_segments=250, compactness=2, convert2lab=True, sigma=1, start_label=1)
+        return slic(image=img, n_segments=250, compactness=2, convert2lab=True, sigma=1, start_label=0)
 
     if seg_method == "quickshift":
         return quickshift(image=img, kernel_size=5, max_dist=6, ratio=0.7)  # mb sigma = 6
@@ -186,10 +202,60 @@ def generate_visual_explanation(weighted_segments: np.ndarray, segment_mask: np.
     c = np.array(colours[colour])
     image_c = image.copy()
     indices = np.argwhere(n_d_weighted_segments != 0)
-    yield indices
+   
     for i, row in enumerate(segment_mask):
         for j, el in enumerate(row):
             if el in indices:
                 image_c[i, j] = ((round(n_d_weighted_segments[el], 1) * c / 127.5) - 1)
 
     return image_c * transparency + image * (1-transparency)
+
+
+def generate_visual_explanation_for_seg_occ_test(weighted_segments: np.ndarray, segment_mask: np.ndarray, image: np.ndarray,
+                                threshold: float, volume: int, colour: str, transparency:float = 0) -> np.ndarray:
+    """Generating image with visual explanation
+    Parameters
+    ----------
+    weighted_segment
+    segment_mask
+    image
+    threshold
+    volume
+    colour
+    transparency
+    Returns
+    -------
+    """
+    # set explanation colour
+    colours = {"green": [0,255,0], "blue": [38, 55, 173], "red": [173, 38, 38], "white": [255, 255, 255],
+               "black": [0, 0, 0]}
+    colour = colour.lower()
+    if colour not in colours.keys():
+        colour = "green"
+
+    # handle outliers
+    """
+    weighted_segments = np.where(weighted_segments > 1.0, 1, weighted_segments)
+    weighted_segments = np.where(weighted_segments < -1.0, -1, weighted_segments)
+    # normalize coefficients: coefficient_i ∈ [0.0, 1.0]
+    n_weighted_segments = (weighted_segments - weighted_segments.min()) / (
+            weighted_segments.max() - weighted_segments.min())
+    """
+    n_weighted_segments = 1/(1+np.exp(-weighted_segments))
+
+    # check if volume is bigger than the amount of segments
+    max_volume = len(np.unique(segment_mask))
+    if volume > max_volume:
+        volume = max_volume
+
+    # differentiate n_weighted_segments with respect to threshold and volume
+    # values less than max(limit, threshold) are set to 0
+    limit = np.sort(np.unique(n_weighted_segments))[-volume]
+    n_d_weighted_segments = np.where(n_weighted_segments >= max(limit, threshold), n_weighted_segments,
+                                     0)
+    # manipulate the original image (quick and dirty)
+    c = np.array(colours[colour])
+    image_c = image.copy()
+    indices = np.argwhere(n_d_weighted_segments != 0)
+    return indices
+   
