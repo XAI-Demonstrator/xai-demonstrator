@@ -186,6 +186,7 @@ def generate_visual_explanation(weighted_segments: np.ndarray, segment_mask: np.
     c = np.array(colours[colour])
     image_c = image.copy()
     indices = np.argwhere(n_d_weighted_segments != 0)
+    yield indices
     for i, row in enumerate(segment_mask):
         for j, el in enumerate(row):
             if el in indices:
