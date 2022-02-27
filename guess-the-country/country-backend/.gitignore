@@ -1,2 +1,7 @@
-country/model/*.model
+country/model/model_*
+country/model/my_model*
+
+*.model
+**/variables/**
+
 .coverage
