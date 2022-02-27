@@ -9,7 +9,7 @@ from xaidemo.tracing import traced
 
 PATH = pathlib.Path(__file__).parent
 
-model = tf.keras.models.load_model(PATH / "my_model")
+model = tf.keras.models.load_model(PATH / "model_mnv_all")
 
 class Prediction(BaseModel):
     prediction_id: uuid.UUID
@@ -49,8 +49,21 @@ def preprocess(img, IMG_SIZE=224):
     return pre_image
 
 
+# multiclass -> deactivate one of both
+
 MODEL_OUTPUT_MAP = ["Tel_Aviv", "Westjerusalem", "Berlin", "Hamburg"]
 
 @traced
 def decode_model_output(output: np.ndarray) -> str:
     return MODEL_OUTPUT_MAP[int(np.argmax(output, axis=1))]
+'''
+#binary -> deactivate one of both
+
+#MODEL_OUTPUT_MAP = ["Germany", "Israel"]
+MODEL_OUTPUT_MAP = ["Berlin", "Hamburg"]
+#MODEL_OUTPUT_MAP = ["Tel_Aviv", "Westjerusalem"]
+
+@traced
+def decode_model_output(output: np.ndarray) -> str:
+    return MODEL_OUTPUT_MAP[0 if output<0.5 else 1]
+'''
