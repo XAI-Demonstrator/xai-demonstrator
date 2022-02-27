@@ -20,6 +20,7 @@ services:
     image: ghcr.io/xai-demonstrator/guess-the-country-service:latest
     depends_on:
       - jaeger
+      - collector
     expose:
       - 8000
     environment:
@@ -74,6 +75,7 @@ services:
     image: ghcr.io/xai-demonstrator/experiment-proxy:latest
     depends_on:
       - collector
+      - country
     ports:
       - "8000:8000"
     environment:
