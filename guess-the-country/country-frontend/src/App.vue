@@ -7,19 +7,11 @@
       v-bind:title="useCaseTitle"
     />
     <main>
-      <Score
-        :round="round"
-        :label_country="label_country"
-        :score_user="score_user"
-        :score_ai="score_ai"
-      />
       <Notification
         :prediction_city="prediction_city"
         :msg="msg"
-        :label_country="label_country"
         :label_city="label_city"
         :user_city_answer="user_city_answer"
-        :user_country_answer="user_country_answer"
         :explanation="explanation"
       />
 
@@ -29,11 +21,8 @@
 
       <Selection
         @city_selected="city_selected"
-        @country_selected="country_selected"
         :label_city="label_city"
-        :label_country="label_country"
         :user_city_answer="user_city_answer"
-        :user_country_answer="user_country_answer"
       />
       <Explanation_legend
         :prediction_city="prediction_city"
@@ -51,7 +40,7 @@
         Explain it to me
       </button>
       <button
-        v-if="explanation"
+        v-if="explanation && round<15"
         type="button"
         class="xd-button xd-secondary"
         id="new"
@@ -91,7 +80,6 @@ import {
   XAIStudioRibbon,
   GitHubRibbon,
 } from "@xai-demonstrator/xaidemo-ui";
-import Score from "@/components/Score";
 import Notification from "@/components/Notification";
 import Selection from "@/components/Selection";
 import Explanation_legend from "./components/Explanation_legend.vue";
@@ -104,7 +92,6 @@ export default {
     SpinningIndicator,
     GitHubRibbon,
     XAIStudioRibbon,
-    Score,
     Notification,
     Selection,
     Explanation_legend,
@@ -120,7 +107,7 @@ export default {
               backend: "Tel_Aviv",
             },
             {
-              city: "Westjerusalem",
+              city: "Jerusalem",
               backend: "Westjerusalem",
             },
           ],
@@ -146,8 +133,6 @@ export default {
       prediction_country: null,
       prediction_city: null,
       label_city: null,
-      label_country: null,
-      user_country_answer: null,
       user_city_answer: null,
       score_ai: 0,
       score_user: 0,
@@ -187,12 +172,6 @@ export default {
         this.score_user = 1 + this.score_user;
       }
     },
-    country_selected(value) {
-      this.user_country_answer = value;
-      if (this.user_country_answer == this.label_country) {
-        this.score_user = 1 + this.score_user;
-      }
-    },
     getMessage() {
       axios
         .get(this.backendUrl + "/msg")
@@ -209,7 +188,6 @@ export default {
         .then((res) => {
           this.streetviewimage = res.data.image;
           let label = this.label_to_label(res.data.class_label);
-          this.label_country = label.country;
           this.label_city = label.city;
         })
         .catch((error) => {
@@ -231,7 +209,6 @@ export default {
         })
         .then((res) => {
           let label = this.label_to_label(res.data.class_label);
-          this.prediction_country = label.country;
           this.prediction_city = label.city;
           this.waitingForExplanation = false;
           if(this.prediction_country == this.label_country){
@@ -277,6 +254,7 @@ export default {
       this.user_country_answer = null;
       this.getStreetview();
       this.round = this.round + 1;
+      console.log(this.round)
     },
 
     label_to_label(prediction) {
