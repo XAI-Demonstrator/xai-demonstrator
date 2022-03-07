@@ -27,7 +27,7 @@ jobs:
        name: test
        url: https://test.xaidemo.de
      steps:
-       - uses: actions/checkout@master
+       - uses: actions/checkout@v3
        - name: Wait for lock to release and place lock
          uses: appleboy/ssh-action@v0.1.4
          with:

@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@master
+        uses: actions/checkout@v3
 
       - name: Set up Node 14
         uses: actions/setup-node@v2
@@ -49,7 +49,7 @@ jobs:
       - test
     steps:
     - name: Checkout code
-      uses: actions/checkout@master
+      uses: actions/checkout@v3
 
     - name: Create container and publish to Registry
       uses: elgohr/Publish-Docker-Github-Action@3.04

@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@master
+        uses: actions/checkout@v3
 
       - name: Set up Node 14
         uses: actions/setup-node@v2
@@ -36,7 +36,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
-      uses: actions/checkout@master
+      uses: actions/checkout@v3
 
     - name: Setup Cloud SDK
       uses: google-github-actions/setup-gcloud@v0.5.1
@@ -56,7 +56,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
-      uses: actions/checkout@master
+      uses: actions/checkout@v3
 
     - name: Setup Cloud SDK
       uses: google-github-actions/setup-gcloud@v0.5.1
