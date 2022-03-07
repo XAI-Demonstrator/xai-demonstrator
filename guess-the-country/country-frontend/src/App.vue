@@ -16,7 +16,8 @@
       />
 
       <section class="xd-section xd-light">
-        <img class="xd-border-secondary;" v-bind:src="this.streetviewimage" />
+        <img v-if="explanation" class="xd-border-secondary;" v-bind:src="this.explainimage" />
+        <img class="xd-border-secondary;" v-bind:src="this.streetviewimage" />  
       </section>
 
       <Selection
@@ -138,6 +139,7 @@ export default {
       score_user: 0,
       msg: "",
       streetviewimage: null,
+      explainimage: null,
       waitingForExplanation: false,
       infoUrl: "https://xai-demonstrator.github.io/#use-case-ii",
       infoLinkLabel: "Interesse geweckt? Hier gibt’s mehr Infos!",
@@ -237,7 +239,7 @@ export default {
           },
         })
         .then((res) => {
-          this.streetviewimage = res.data.image;
+          this.explainimage = res.data.image;
           this.waitingForExplanation = false;
           this.explanation = res.data.explanation_id;
         })
@@ -303,6 +305,7 @@ main {
     width: 100vw;
   }
 
+
   main {
     flex: 2;
     max-height: calc(100vh - 54px);
@@ -324,6 +327,10 @@ main {
   }
   main {
     flex-grow: 1;
+  }
+
+  body {
+    align-items: baseline !important;
   }
 
   main section {
