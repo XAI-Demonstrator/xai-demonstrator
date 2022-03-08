@@ -114,16 +114,20 @@ jobs:
         env:
           STREETVIEW_API_KEY: ${{ secrets.STREETVIEW_API_KEY }}
           BATCH_SIZE: ${{ secrets.BATCH_SIZE }}
+          COUCHDB_USER: ${{ secrets.COUCHDB_USER }}
+          COUCHDB_PASSWORD: ${{ secrets.COUCHDB_PASSWORD }}
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
-          envs: STREETVIEW_API_KEY,BATCH_SIZE
+          envs: STREETVIEW_API_KEY,BATCH_SIZE,COUCHDB_USER,COUCHDB_PASSWORD
           script: |
             set -e
             mv gtc-nginx/ experiment-deployment/deployment/experiment-deployment/gtc-nginx/
             export STREETVIEW_API_KEY=$STREETVIEW_API_KEY
             export BATCH_SIZE=${BATCH_SIZE}
+            export COUCHDB_USER=${COUCHDB_USER}
+            export COUCHDB_PASSWORD=${COUCHDB_PASSWORD}
             cd experiment-deployment/deployment/experiment-deployment/
             sudo -E docker-compose pull
             sudo -E docker-compose up -d
