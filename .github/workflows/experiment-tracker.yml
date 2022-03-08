@@ -1,6 +1,7 @@
 name: Experiment Tracker
 
 on:
+  workflow_dispatch:
   push:
     paths:
       - 'experiment-tracker/**'
