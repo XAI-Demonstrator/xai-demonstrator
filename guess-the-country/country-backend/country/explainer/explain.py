@@ -7,7 +7,6 @@ import uuid
 from xaidemo.tracing import traced
 from .new_lime_ import explain_image
 
-
 class Explanation(BaseModel):
     explanation_id: uuid.UUID
     image: bytes
