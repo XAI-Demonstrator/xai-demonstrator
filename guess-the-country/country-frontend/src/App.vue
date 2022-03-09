@@ -128,7 +128,7 @@ export default {
         },
       ],
       round: 1,
-      useCaseTitle: "Guess the country",
+      useCaseTitle: "Guess the city",
       backendUrl: process.env.VUE_APP_BACKEND_URL,
       explanation: null,
       prediction_country: null,
