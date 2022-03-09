@@ -16,7 +16,7 @@ logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 tracing.set_up()
 
 app = FastAPI(root_path=settings.root_path)
-tracking.instrument(app)
+tracking.instrument_app(app)
 app.include_router(api, prefix=settings.path_prefix)
 app.include_router(vue_frontend(__file__), prefix=settings.path_prefix)
 
