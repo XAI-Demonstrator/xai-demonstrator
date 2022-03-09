@@ -60,6 +60,9 @@ jobs:
           set -e
           cd ./guess-the-country/country-backend
           echo $PWD
+          export EXPERIMENT=1
+          export SERVICE_NAME=test-case
+          export COLLECTOR_URL=http://collector:8000
           pip install -r requirements-test.txt
           pytest -v --cov=country -m "not integration" tests/
           # when on master, pretend to be on branch x-cov-country-backend
