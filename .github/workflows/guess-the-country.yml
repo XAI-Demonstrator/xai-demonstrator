@@ -1,6 +1,7 @@
 name: Guess the Country
 
 on:
+  workflow_dispatch:
   push:
     paths:
       - 'guess-the-country/**'
