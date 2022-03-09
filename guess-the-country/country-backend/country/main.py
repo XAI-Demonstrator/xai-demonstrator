@@ -2,7 +2,7 @@ import logging
 import sys
 
 from fastapi import FastAPI
-from xaidemo import tracing, http_client, tracking
+from xaidemo import tracing, tracking
 
 
 from xaidemo.routers import vue_frontend
