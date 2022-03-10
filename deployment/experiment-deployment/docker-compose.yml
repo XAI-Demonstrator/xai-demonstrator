@@ -52,7 +52,7 @@ services:
       - COUCHDB_USER=${COUCHDB_USER}
       - COUCHDB_PASSWORD=${COUCHDB_PASSWORD}
     volumes:
-        - ./dbdata:/opt/couchdb/data
+        - ./../../../dbdata:/opt/couchdb/data
 
   collector:
     image: ghcr.io/xai-demonstrator/data-collector:latest
