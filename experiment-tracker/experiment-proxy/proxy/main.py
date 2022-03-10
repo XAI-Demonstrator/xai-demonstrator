@@ -20,20 +20,6 @@ http_client.set_up(app)
 backend_timeout = aiohttp.ClientTimeout(settings.backend_timeout)
 
 
-async def post_request(request: Request,
-                       response: Response,
-                       background_tasks: BackgroundTasks,
-                       endpoint: str = Path(...)):
-    return await proxy(request, response, background_tasks, endpoint)
-
-
-async def get_request(request: Request,
-                      response: Response,
-                      background_tasks: BackgroundTasks,
-                      endpoint: str = Path(...)):
-    return await proxy(request, response, background_tasks, endpoint)
-
-
 @app.post("/{endpoint}")
 @app.get("/{endpoint}")
 async def proxy(request: Request,
