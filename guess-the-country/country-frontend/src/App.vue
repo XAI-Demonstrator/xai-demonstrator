@@ -205,10 +205,10 @@ export default {
 
       let form = new FormData();
       form.append("file", blob);
-
       axios
         .post(this.backendUrl + "/explain", form, {
           headers: {
+            'Accept': 'application/json',
             "Content-Type": "multipart/form-data",
           },
         })
