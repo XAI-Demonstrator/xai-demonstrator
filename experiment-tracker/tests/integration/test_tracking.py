@@ -71,7 +71,7 @@ async def test_that_get_request_is_recorded(proxy, collector):
     this_id = str(uuid.uuid4())
 
     async with aiohttp.ClientSession() as session:
-        async with session.get(proxy + "/json") as response:
+        async with session.get(proxy + f"/{this_id}") as response:
             assert response.status == 200
 
         # Wait for the collector to receive the data
