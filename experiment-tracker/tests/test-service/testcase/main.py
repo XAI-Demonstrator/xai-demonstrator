@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, UploadFile, File
 from pydantic import BaseModel
 from xaidemo import tracing, tracking
 
@@ -23,6 +23,12 @@ async def handle_json(request: Request) -> TestResponse:
 async def handle_form(request: Request) -> TestResponse:
     return TestResponse(received="Request with FormData payload.",
                         num_of_keys=len(await request.form()))
+
+
+@app.post("/file")
+async def handle_file(file: UploadFile = File(...)) -> TestResponse:
+    return TestResponse(received=f"Request with file {file.filename}.",
+                        num_of_keys=1)
 
 
 @app.post("/json_with_record")

@@ -1,3 +1,4 @@
+import io
 from json import JSONDecodeError
 from typing import Dict, Any
 
@@ -40,6 +41,12 @@ async def proxy(request: Request,
     else:
         msg = {}
         decoded_request = {}
+
+    if "data" in msg:
+        for key, value in msg["data"].items():
+            if isinstance(value, UploadFile):
+                value.file.seek(0)
+                msg["data"][key] = io.BytesIO(value.file.read())
 
     async with http_client.AioHttpClientSession() as session:
         if request.method == "POST":
@@ -94,10 +101,14 @@ async def parse_content(content_type: bytes, request: Request) -> Dict[str, Any]
 
 
 async def decode_request(msg: Dict[str, Any]) -> Dict[str, Any]:
-    decoded_request = list(msg.values())[0]
-    for key, value in decoded_request.items():
+    decoded_request = {}
+    _request_payload = list(msg.values())[0]
+    for key, value in _request_payload.items():
         if isinstance(value, UploadFile):
+            value.file.seek(0)
             decoded_request[key] = value.file.read().hex(' ', 4)
+        else:
+            decoded_request[key] = value
     return decoded_request
 
 
