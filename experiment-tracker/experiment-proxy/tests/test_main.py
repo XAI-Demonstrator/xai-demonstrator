@@ -151,3 +151,11 @@ def test_that_requests_for_files_are_passed(aiomock, generate_image):
     assert response.status_code == 200
     assert response.headers["Content-Type"] == "text/html"
     assert not aiomock.requests.get(("POST", URL("/record")), [])
+
+
+def test_that_get_request_is_handled(aiomock):
+    aiomock.get("/route", status=200)
+
+    response = client.get("/route")
+
+    assert response.status_code == 200

@@ -33,7 +33,7 @@ async def test_that_files_can_be_sent(proxy, generate_image):
 
 
 @pytest.mark.asyncio
-async def test_that_request_is_recorded(proxy, collector):
+async def test_that_post_request_is_recorded(proxy, collector):
     this_id = str(uuid.uuid4())
 
     async with aiohttp.ClientSession() as session:
@@ -53,6 +53,40 @@ async def test_that_request_is_recorded(proxy, collector):
 
             if "find" in record["data"]["tracked"]["data"]["request"]["decoded"]:
                 if record["data"]["tracked"]["data"]["request"]["decoded"]["find"] == this_id:
+                    break
+        else:
+            raise AssertionError("Did not find entry")
+
+        id_ = record["id"]
+
+        async with session.get(collector + f"/get/{id_}") as response:
+            assert response.status == 200
+            single_record = await response.json()
+
+        assert record == single_record
+
+
+@pytest.mark.asyncio
+async def test_that_get_request_is_recorded(proxy, collector):
+    this_id = str(uuid.uuid4())
+
+    async with aiohttp.ClientSession() as session:
+        async with session.get(proxy + f"/{this_id}") as response:
+            assert response.status == 200
+
+        # Wait for the collector to receive the data
+        await asyncio.sleep(10)
+
+        async with session.get(collector + "/dump") as response:
+            assert response.status == 200
+            dump = await response.json()
+
+        for record in dump["records"]:
+            if "tracked" not in record["data"]:
+                continue
+
+            if "backend" in record["data"]:
+                if record["data"]["backend"]["data"]["msg"] == this_id:
                     break
         else:
             raise AssertionError("Did not find entry")

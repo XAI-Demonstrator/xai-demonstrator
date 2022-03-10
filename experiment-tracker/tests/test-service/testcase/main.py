@@ -32,4 +32,11 @@ async def handle_json(request: Request) -> TestResponse:
                         num_of_keys=len(await request.json()))
 
 
+@app.get("/{some_id}")
+async def handle_resource_request(some_id: str):
+    tracking.record_data("backend", {"msg": some_id})
+    return TestResponse(received=f"Received GET request at {some_id}.",
+                        num_of_keys=0)
+
+
 tracing.instrument_app(app)

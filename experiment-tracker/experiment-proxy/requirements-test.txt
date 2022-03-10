@@ -3,5 +3,5 @@ pytest-asyncio
 pytest-env
 pytest-cov
 coveralls
-aioresponses==0.7.2
+aioresponses==0.7.3
 pypng
