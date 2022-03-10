@@ -3,7 +3,7 @@ numpy
 pydantic
 
 fastapi==0.71.0
-uvicorn==0.16.0
+uvicorn==0.17.5
 aiofiles==0.8.0
 python-multipart==0.0.5
 lime==0.2.0.1
