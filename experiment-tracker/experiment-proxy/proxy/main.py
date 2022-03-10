@@ -20,11 +20,26 @@ http_client.set_up(app)
 backend_timeout = aiohttp.ClientTimeout(settings.backend_timeout)
 
 
+async def post_request(request: Request,
+                       response: Response,
+                       background_tasks: BackgroundTasks,
+                       endpoint: str = Path(...)):
+    return await proxy(request, response, background_tasks, endpoint)
+
+
+async def get_request(request: Request,
+                      response: Response,
+                      background_tasks: BackgroundTasks,
+                      endpoint: str = Path(...)):
+    return await proxy(request, response, background_tasks, endpoint)
+
+
 @app.post("/{endpoint}")
+@app.get("/{endpoint}")
 async def proxy(request: Request,
                 response: Response,
                 background_tasks: BackgroundTasks,
-                endpoint: str = Path(...)):
+                endpoint: str):
     # NOTE: We need to first consume the stream once and cache the body
     # The form parsing calls request.stream() which does not store the result in request._body,
     # but checks whether request._body exists and returns it instead of attempting to consume
@@ -41,9 +56,16 @@ async def proxy(request: Request,
         decoded_request = {}
 
     async with http_client.AioHttpClientSession() as session:
-        async with session.post(settings.backend_url + "/" + endpoint,
-                                timeout=backend_timeout,
-                                **msg) as proxy_response:
+        if request.method == "POST":
+            call_method = session.post
+        elif request.method == "GET":
+            call_method = session.get
+        else:
+            raise NotImplementedError
+
+        async with call_method(settings.backend_url + "/" + endpoint,
+                               timeout=backend_timeout,
+                               **msg) as proxy_response:
             response.status_code = proxy_response.status
             response.init_headers(proxy_response.headers)
             response.body = await proxy_response.read()
