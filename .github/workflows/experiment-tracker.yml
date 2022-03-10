@@ -135,7 +135,13 @@ jobs:
           cd ./experiment-tracker
           docker-compose down
 
-      - name: Create container and publish to Registry
+  build-collector:
+    runs-on: ubuntu-latest
+    needs:
+      - integration-tests
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - name: Create data-collector container and publish to Registry
         uses: elgohr/Publish-Docker-Github-Action@3.04
         with:
           name: xai-demonstrator/data-collector
@@ -144,7 +150,13 @@ jobs:
           registry: ghcr.io
           workdir: experiment-tracker/data-collector
 
-      - name: Create container and publish to Registry
+  build-proxy:
+    runs-on: ubuntu-latest
+    needs:
+      - integration-tests
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - name: Create experiment-proxy container and publish to Registry
         uses: elgohr/Publish-Docker-Github-Action@3.04
         with:
           name: xai-demonstrator/experiment-proxy
