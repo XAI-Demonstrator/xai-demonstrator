@@ -43,7 +43,7 @@ services:
 
   
   couchdb:
-    image: couchdb
+    build: ./database
     expose:
       - "5984"
     ports:
