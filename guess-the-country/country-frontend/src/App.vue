@@ -180,7 +180,8 @@ export default {
       axios
         .post(this.backendUrl + "/predict", form, {
           headers: {
-            "Content-Type": "multipart/form-data",
+            "Accept": "application/json",
+            "Content-Type": "multipart/form-data"
           },
         })
         .then((res) => {
