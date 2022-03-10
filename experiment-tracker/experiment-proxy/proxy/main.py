@@ -25,7 +25,7 @@ backend_timeout = aiohttp.ClientTimeout(settings.backend_timeout)
 async def proxy(request: Request,
                 response: Response,
                 background_tasks: BackgroundTasks,
-                endpoint: str):
+                endpoint: str = Path(...)):
     # NOTE: We need to first consume the stream once and cache the body
     # The form parsing calls request.stream() which does not store the result in request._body,
     # but checks whether request._body exists and returns it instead of attempting to consume
