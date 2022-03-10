@@ -3,8 +3,8 @@
       <section  v-if="explanation" 
                class="xd-section xd-light" id="legend">
         <ul class="legend">
-          <li><span class="positiv"></span> {{ prediction_city }}</li>
-          <li><span class="negativ"></span> Other classes </li>
+          <li><span class="positiv"></span> Pixels that significantly determine AI's guess:</li>
+          <li>{{ prediction_city }}</li>
         </ul>
       </section>
     </div>
@@ -47,7 +47,7 @@ export default {
 }
 
 .legend .positiv {
-  background-color: #63fe45;
+  background-color: rgb(215, 102, 255);
 }
 
 </style>
