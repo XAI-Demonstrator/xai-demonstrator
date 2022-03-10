@@ -26,7 +26,7 @@ async def explain_api(file: UploadFile = File(...)):
 @api.get("/msg")
 def home():
     return {
-        "data": "Was this Google Streetview photo taken in Tel-Aviv or Berlin? Challenge yourself with an AI."
+        "data": "Your guess: Where has this Google Streetview picture been taken?"
     }
 
 

@@ -3,7 +3,7 @@
     <GitHubRibbon url="https://github.com/xai-demonstrator/xai-demonstrator" />
     <XAIStudioRibbon url="https://www.xai-studio.de" />
     <UseCaseHeader
-      v-bind:standalone="!Boolean(backendUrl)"
+      v-bind:standalone="Boolean(true)"
       v-bind:title="useCaseTitle"
     />
     <main>
@@ -38,7 +38,7 @@
         v-on:click="explain()"
       >
         <!-- v-show -->
-        Explain it to me
+        Why the AI guesses
       </button>
       <button
         v-if="explanation && round<15"
@@ -50,25 +50,20 @@
         Next round
       </button>
       <button
-        :disabled="!user_city_answer"
-        v-if="!prediction_city"
+        v-if="!prediction_city && user_city_answer"
         type="button"
         class="xd-button xd-secondary"
         id="submit"
         v-on:click="submitFile()"
       >
-        What the AI says
+        What the AI guesses
       </button>
       <SpinningIndicator
         class="indicator"
         v-bind:visible="waitingForExplanation"
       />
     </main>
-    <FloatingInfoButton
-      v-bind:info-text="infoText"
-      v-bind:info-url="infoUrl"
-      v-bind:link-label="infoLinkLabel"
-    />
+
   </div>
 </template>
 
@@ -76,7 +71,6 @@
 import axios from "axios";
 import {
   UseCaseHeader,
-  FloatingInfoButton,
   SpinningIndicator,
   XAIStudioRibbon,
   GitHubRibbon,
@@ -89,7 +83,6 @@ export default {
   name: "App",
   components: {
     UseCaseHeader,
-    FloatingInfoButton,
     SpinningIndicator,
     GitHubRibbon,
     XAIStudioRibbon,
@@ -128,7 +121,7 @@ export default {
         },
       ],
       round: 1,
-      useCaseTitle: "Guess the city",
+      useCaseTitle: "Guess the City",
       backendUrl: process.env.VUE_APP_BACKEND_URL,
       explanation: null,
       prediction_country: null,
@@ -141,26 +134,7 @@ export default {
       streetviewimage: null,
       explainimage: null,
       waitingForExplanation: false,
-      infoUrl: "https://xai-demonstrator.github.io/#use-case-ii",
-      infoLinkLabel: "Interesse geweckt? Hier gibt’s mehr Infos!",
-      infoText: [
-        {
-          headline: "Land erkennen",
-          paragraphs: [
-            "Du interagierst mit einer KI, die ein Google Streetview Foto einer Stadt zuordnen kann. Aber eine KI ist nie perfekt!",
-            "Durch die Wahl verschiedener Bilder entdeckst du, für welche  die KI zuverlässig ist, aber insbesondere auch, wo sie an ihre Grenzen stößt.",
-            "Die automatisch erzeugten Erklärungen helfen dir, zu verstehen, wie die KI vorgeht und warum sie manchmal falsche Schlüsse zieht.",
-          ],
-        },
-        {
-          headline: "Was steckt dahinter?",
-          paragraphs: [
-            "Die KI ist ein tiefes neuronales Netz, das 1000 verschiedene Objekte erkennen kann.",
-            "Die Erklärungen werden mit der XAI-Methode <em><abbr>LIME</abbr></em> (<strong>L</strong>ocal <strong>I</strong>nterpretable <strong>M</strong>odel-Agnostic <strong>E</strong>xplanations) generiert. Die Erklärung entspricht einer graphischen Hervorhebung von Bildbereichen, die für die Entscheidung der KI besonders relevant sind.",
-            "<small>Modell: Neuronales Netz auf Basis von <a href='https://www.tensorflow.org/api_docs/python/tf/keras/applications/mobilenet_v2'>MobileNetV2 for Keras</a>, Erklärungen: <a href='https://github.com/marcotcr/lime'>LIME</a><br />Bild: Melinda Pack (Unsplash), <a href='https://creativecommons.org/publicdomain/zero/1.0/deed.en'>CC0</a> 1.0, via <a href='https://commons.wikimedia.org/wiki/File:Camera_keys_notebook_coffee_(Unsplash).jpg'>Wikimedia Commons</a></small>",
-          ],
-        },
-      ],
+     
     };
   },
   async created() {
@@ -275,6 +249,7 @@ export default {
 </script>
 
 <style>
+
 #app {
   display: flex;
   justify-content: space-between;

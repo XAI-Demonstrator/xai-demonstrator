@@ -5,10 +5,10 @@
             {{ msg }}
          </section>   
       <section v-show="user_city_answer && !prediction_city">
-        <p class="short-text">Your answer: {{user_city_answer}}</p>
+        <p class="short-text">Your guess: {{user_city_answer}}</p>
       </section>
       <section v-show="prediction_city">
-        <p class="short-text">The AI predicts: {{prediction_city}}</p>
+        <p class="short-text">The AI's guess: {{prediction_city}}</p>
       </section>
     
       </section>
