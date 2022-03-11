@@ -5,6 +5,7 @@
     <UseCaseHeader
       v-bind:standalone="Boolean(true)"
       v-bind:title="useCaseTitle"
+      v-bind:study="Boolean(true)"
     />
     <main>
       <Notification
@@ -250,6 +251,9 @@ export default {
 </script>
 
 <style>
+.header-icon{
+  visibility: hidden;
+}
 
 #app {
   display: flex;
