@@ -3,7 +3,7 @@
       <section  v-if="explanation" 
                class="xd-section xd-light" id="legend">
         <ul class="legend">
-          <li><span class="positiv"></span> Pixels that significantly determine AI's guess:</li>
+          <li><span class="positiv"></span> Pixels that significantly determine the AI’s guess:</li>
           <li>{{ prediction_city }}</li>
         </ul>
       </section>
