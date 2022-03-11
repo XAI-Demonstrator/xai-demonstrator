@@ -138,7 +138,7 @@ def test_that_response_is_recorded(aiomock):
 def test_that_files_in_payload_are_handled(aiomock, generate_image):
     aiomock.post("/route", status=200)
 
-    response = client.post("/route", data={"file": generate_image(128, 64)})
+    response = client.post("/route", files={"file": generate_image(128, 64)})
 
     assert response.status_code == 200
 

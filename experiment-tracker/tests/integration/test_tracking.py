@@ -26,7 +26,7 @@ async def test_that_form_calls_work(proxy):
 @pytest.mark.asyncio
 async def test_that_files_can_be_sent(proxy, generate_image):
     async with aiohttp.ClientSession() as session:
-        async with session.post(proxy + "/form", data={"image": generate_image(100, 100)}) as response:
+        async with session.post(proxy + "/file", data={"file": generate_image(100, 100)}) as response:
             assert response.status == 200
             msg = await response.json()
             assert msg["num_of_keys"] == 1
