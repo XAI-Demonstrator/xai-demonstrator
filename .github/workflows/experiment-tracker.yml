@@ -148,7 +148,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: ghcr.io
-          workdir: xai-demonstrator/experiment-tracker/data-collector
+          workdir: xai-demonstrator/data-collector
 
   build-proxy:
     runs-on: ubuntu-latest
@@ -163,4 +163,5 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: ghcr.io
-          workdir: xai-demonstrator/experiment-tracker/experiment-proxy
+          workdir: xai-demonstrator/experiment-proxy
+
