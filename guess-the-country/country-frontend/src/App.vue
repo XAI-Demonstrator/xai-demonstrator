@@ -32,7 +32,7 @@
       />
 
       <button
-        v-if="prediction_city && explanation == null"
+        v-if="prediction_city && explanation == null && !treatment"
         type="button"
         class="xd-button xd-secondary"
         id="explain"
@@ -42,7 +42,7 @@
         Why the AI guesses
       </button>
       <button
-        v-if="explanation && round<17"
+        v-if="(explanation || (treatment && prediction_city) ) && round<16"
         type="button"
         class="xd-button xd-secondary"
         id="new"
@@ -90,6 +90,13 @@ export default {
     Notification,
     Selection,
     Explanation_legend,
+  },
+  computed: {
+    treatment () {
+      const uri = window.location.search.substring(1);
+      let params = new URLSearchParams(uri);
+      return params.has("treatment")
+    }
   },
   data() {
     return {
@@ -235,8 +242,7 @@ export default {
       score_user: this.score_user,
       score_ai: this.score_ai
        });
-      axios
-        .post(this.backendUrl + "/score",json)
+      axios.post(this.backendUrl + "/score",json)
       this.round = this.round + 1;
       console.log(this.round)
     },
