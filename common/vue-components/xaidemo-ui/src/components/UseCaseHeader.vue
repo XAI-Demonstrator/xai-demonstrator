@@ -6,7 +6,7 @@
       </a>
     </div>
     <div class="header-title">{{ title }}</div>
-    <div class="header-icon" v-if="!study">
+    <div class="header-icon">
       <a v-bind:href="reloadUrl">
         <img svg-inline src="../assets/reload.svg" alt="Reload"/>
       </a>
@@ -26,10 +26,6 @@ export default {
       type: String,
       default: ""
     },
-    study: {
-      type: Boolean,
-      default: false
-    }
   },
   computed: {
     reloadUrl() {

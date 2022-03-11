@@ -2,7 +2,7 @@
   <div id="app" class="xd-app">
     <GitHubRibbon url="https://localhost/" />
     <XAIStudioRibbon url="https://www.xai-studio.de" />
-    <UseCaseHeader title="UI Demo Use Case" v-bind:standalone="standalone" v-bind="study"/>
+    <UseCaseHeader title="UI Demo Use Case" v-bind:standalone="standalone"/>
     <main>
       <section class="xd-section xd-light">
         <p>So much content!</p>
@@ -63,7 +63,6 @@ export default {
       standalone: true,
       waiting: false,
       extraSections: 0,
-      study: false,
     }
   }
 }
