@@ -42,7 +42,7 @@
         Why the AI guesses
       </button>
       <button
-        v-if="explanation && round<15"
+        v-if="explanation && round<17"
         type="button"
         class="xd-button xd-secondary"
         id="new"
@@ -231,6 +231,12 @@ export default {
       this.user_city_answer = null;
       this.user_country_answer = null;
       this.getStreetview();
+      const json = JSON.stringify({ round: this.round ,
+      score_user: this.score_user,
+      score_ai: this.score_ai
+       });
+      axios
+        .post(this.backendUrl + "/score",json)
       this.round = this.round + 1;
       console.log(this.round)
     },

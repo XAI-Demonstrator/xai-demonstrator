@@ -29,6 +29,11 @@ def home():
         "data": "Your guess: Where has this Google Streetview picture been taken?"
     }
 
+@api.post("/score")
+def home():
+    return {
+        
+    }
 
 @api.get("/streetview")
 async def streetview():

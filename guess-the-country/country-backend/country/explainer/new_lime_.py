@@ -150,7 +150,7 @@ def generate_visual_explanation(weighted_segments: np.ndarray, segment_mask: np.
     """
     # set explanation colour
     colours = {"green": [0,255,0], "blue": [38, 55, 173], "red": [173, 38, 38], "white": [255, 255, 255],
-               "black": [0, 0, 0]}
+               "black": [0, 0, 0], "violet": [215, 102, 255]}
     colour = colour.lower()
     if colour not in colours.keys():
         colour = "green"
