@@ -56,7 +56,7 @@
         id="submit"
         v-on:click="submitFile()"
       >
-        What the AI guesses
+        What’s the AI’s guess?
       </button>
       <SpinningIndicator
         class="indicator"
@@ -271,31 +271,18 @@ main {
   }
 }
 
-@media screen and (min-width: 450px) and (max-height: 650px) {
-  #app {
-    flex-direction: column;
-    padding-left: 0;
-    padding-right: 0;
-    overflow: auto;
-    height: 100vh;
-    width: 100vw;
+ @media screen and (min-width: 450px) and (max-height: 650px) {
+  #img{
+    width: 40%;
+  }
+  #app{
+    margin-left: 20%;
+    margin-right: 20%;
+    overflow: scroll!important;
   }
 
 
-  main {
-    flex: 2;
-    max-height: calc(100vh - 54px);
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    justify-content: flex-start;
-    flex-wrap: wrap;
-  }
-
-  main section {
-    order: 2;
-  }
-}
+} 
 
 @media screen and (min-width: 450px) and (min-height: 650px) {
   #app {
