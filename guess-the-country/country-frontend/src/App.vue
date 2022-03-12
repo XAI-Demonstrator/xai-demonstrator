@@ -237,13 +237,8 @@ export default {
       this.user_city_answer = null;
       this.user_country_answer = null;
       this.getStreetview();
-      const json = JSON.stringify({ round: this.round ,
-      score_user: this.score_user,
-      score_ai: this.score_ai
-       });
-      axios.post(this.backendUrl + "/score",json)
+      axios.post(this.backendUrl + "/score", {score: this.score_user} )
       this.round = this.round + 1;
-      console.log(this.round)
     },
 
     label_to_label(prediction) {
