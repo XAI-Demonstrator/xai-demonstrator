@@ -283,6 +283,7 @@ main {
     flex-direction: column;
     padding-left: 0;
     padding-right: 0;
+    overflow: scroll!important;
   }
 }
 
