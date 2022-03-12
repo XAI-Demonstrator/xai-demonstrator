@@ -5,7 +5,6 @@
     <UseCaseHeader
       v-bind:standalone="Boolean(true)"
       v-bind:title="useCaseTitle"
-      v-bind:study="Boolean(true)"
     />
     <main>
       <Notification
@@ -32,7 +31,7 @@
       />
 
       <button
-        v-if="prediction_city && explanation == null && !treatment"
+        v-if="prediction_city && explanation == null && !control"
         type="button"
         class="xd-button xd-secondary"
         id="explain"
@@ -42,7 +41,7 @@
         Why the AI guesses
       </button>
       <button
-        v-if="(explanation || (treatment && prediction_city) ) && round<16"
+        v-if="(explanation || (control && prediction_city) ) && round<16"
         type="button"
         class="xd-button xd-secondary"
         id="new"
@@ -92,10 +91,10 @@ export default {
     Explanation_legend,
   },
   computed: {
-    treatment () {
+    control() {
       const uri = window.location.search.substring(1);
       let params = new URLSearchParams(uri);
-      return params.has("treatment")
+      return params.has("control")
     }
   },
   data() {
