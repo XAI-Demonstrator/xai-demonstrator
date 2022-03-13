@@ -30,8 +30,8 @@ def home():
     }
 
 @api.post("/score")
-async def score():
-    return {}
+def score(score_request: ScoreRequest):
+    null
 
 @api.get("/streetview")
 async def streetview():
