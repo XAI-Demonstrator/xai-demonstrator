@@ -31,7 +31,7 @@ def home():
 
 @api.post("/score")
 def score(score_request: ScoreRequest):
-    null
+    pass
 
 @api.get("/streetview")
 async def streetview():
