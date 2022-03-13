@@ -239,6 +239,7 @@ export default {
       this.getStreetview();
       axios.post(this.backendUrl + "/score", {"ai_score": this.score_ai,
       "user_score": this.user_score})
+      this.round = this.round + 1;
     },
 
     label_to_label(prediction) {
