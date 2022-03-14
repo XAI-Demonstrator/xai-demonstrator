@@ -242,7 +242,6 @@ export default {
       "player_score": this.score_user}, {
         headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json',
         }
     })
       this.round = this.round + 1;
