@@ -5,7 +5,7 @@ from .model.predict import prediction
 from .explainer.explain import explain
 from pydantic import BaseModel
 import time
-from typing import List
+from typing import List, Optional
 
 api = APIRouter()
 
@@ -39,29 +39,29 @@ class ScoreRecord(BaseModel):
     # TODO: Add more/different fields
 
 
-@api.post("/predict")
-def predict(file: UploadFile = File(...)):
+@api.post("/predict/")
+def predict(file: UploadFile = File(...),  group: Optional[str] = "treatment"):
     return prediction(file.file.read())
 
 
 # Explain Prediction
-@api.post("/explain")
-async def explain_api(file: UploadFile = File(...)):
+@api.post("/explain/")
+async def explain_api(file: UploadFile = File(...), group: Optional[str] = "treatment"):
     return explain(file.file.read())
 
 
-@api.get("/msg")
-def home():
+@api.get("/msg/")
+def home(group: Optional[str] = "treatment"):
     return {
         "data": "Your guess: Where has this Google Streetview picture been taken?"
     }
 
-@api.post("/score")
-def score(score_request: ScoreRequest):
+@api.post("/score/")
+async def score( score_request: ScoreRequest, group: Optional[str] = "treatment"):
     pass
 
-@api.get("/streetview")
-async def streetview():
+@api.get("/streetview/")
+async def streetview(group: Optional[str] = "treatment"):
     return await get_streetview(API_KEY)
 
 
