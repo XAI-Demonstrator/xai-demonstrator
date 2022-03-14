@@ -238,7 +238,7 @@ export default {
       this.user_country_answer = null;
       this.getStreetview();
       axios.post(this.backendUrl + "/score", {"ai_score": this.score_ai,
-      "user_score": this.user_score})
+      "player_score": this.user_score})
       this.round = this.round + 1;
     },
 
