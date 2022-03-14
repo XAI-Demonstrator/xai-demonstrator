@@ -29,7 +29,7 @@ async def explain_api(file: UploadFile = File(...)):
 
 
 @api.get("/msg")
-def home(group: Optional[str] = "treatment"):
+def home():
     return {
         "data": "Your guess: Where has this Google Streetview picture been taken?"
     }
