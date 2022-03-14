@@ -35,7 +35,8 @@ def home():
     }
 
 @api.post("/score")
-async def score( score_request: ScoreRequest):
+async def score(score_request: ScoreRequest):
+    print(score_request)
     pass
 
 @api.get("/streetview")
