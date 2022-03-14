@@ -3,7 +3,9 @@ from .config import settings
 from .streetview.collect import get_streetview
 from .model.predict import prediction
 from .explainer.explain import explain
-
+from pydantic import BaseModel
+import time
+from typing import List
 
 api = APIRouter()
 
@@ -11,6 +13,31 @@ api = APIRouter()
 # 25,000 image requests per 24 hours
 # See https://developers.google.com/maps/documentation/streetview/
 API_KEY = settings.google_maps_api_token
+
+class ExperimentRecord(BaseModel):
+    player_id: str
+    created_at: float = time.time()
+    images: List[str] = []
+
+
+class RequestRecord(BaseModel):
+    player_id: str
+    created_at: float = time.time()
+    route: str
+    image_hash: str
+
+
+class ScoreRequest(BaseModel):
+    ai_score: int
+    player_score: int
+
+
+class ScoreRecord(BaseModel):
+    player_id: str
+    created_at: float = time.time()
+    ai_score: int
+    # TODO: Add more/different fields
+
 
 @api.post("/predict")
 def predict(file: UploadFile = File(...)):
