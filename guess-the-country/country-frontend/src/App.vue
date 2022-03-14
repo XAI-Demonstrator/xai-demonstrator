@@ -157,7 +157,7 @@ export default {
     },
     getMessage() {
       axios
-        .get(this.backendUrl + "/msg/")
+        .get(this.backendUrl + "/msg")
         .then((res) => {
           this.msg = res.data.data;
         })
@@ -167,7 +167,7 @@ export default {
     },
     getStreetview() {
       axios
-        .get(this.backendUrl + "/streetview/")
+        .get(this.backendUrl + "/streetview")
         .then((res) => {
           this.streetviewimage = res.data.image;
           let label = this.label_to_label(res.data.class_label);
@@ -185,7 +185,7 @@ export default {
       form.append("file", blob);
 
       axios
-        .post(this.backendUrl + "/predict/", form, {
+        .post(this.backendUrl + "/predict", form, {
           headers: {
             "Accept": "application/json",
             "Content-Type": "multipart/form-data"
@@ -214,7 +214,7 @@ export default {
       let form = new FormData();
       form.append("file", blob);
       axios
-        .post(this.backendUrl + "/explain/", form, {
+        .post(this.backendUrl + "/explain", form, {
           headers: {
             'Accept': 'application/json',
             "Content-Type": "multipart/form-data",
@@ -237,7 +237,7 @@ export default {
       this.user_city_answer = null;
       this.user_country_answer = null;
       this.getStreetview();
-      axios.post(this.backendUrl + "/score/", 
+      axios.post(this.backendUrl + "/score", 
       {"ai_score": this.score_ai,
       "player_score": this.score_user})
       this.round = this.round + 1;
