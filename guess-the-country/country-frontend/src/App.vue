@@ -239,7 +239,12 @@ export default {
       this.getStreetview();
       axios.post(this.backendUrl + "/score", 
       {"ai_score": this.score_ai,
-      "player_score": this.score_user})
+      "player_score": this.score_user}, {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        }
+    })
       this.round = this.round + 1;
     },
 
