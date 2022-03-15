@@ -38,7 +38,7 @@
         v-on:click="explain()"
       >
         <!-- v-show -->
-        Why the AI guesses
+        Why the AI made that guess
       </button>
       <button
         v-if="(explanation || (control && prediction_city) ) && round<16"
