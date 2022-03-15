@@ -1,11 +1,11 @@
 <template>
   <div class="wrapper">
     <section class="left xd-section xd-light">
-        <p>Round: {{round}}</p>
+        <p>Round: {{round}} / 10</p>
   </section>
-    <section class="right row xd-section xd-light">
+ <!--   <section class="right row xd-section xd-light">
       <p>Score - You: {{score_user}} AI: {{score_ai}}</p>
-  </section>
+  </section> --->
   </div>
 </template>
 <script>
@@ -37,12 +37,12 @@ props: {
 
 .wrapper>.left {
   text-align: center;
-    flex: 2; 
+    flex: 4; 
 }
 
 .wrapper>.right{
  text-align: center;
- flex: 8;
+ flex: 6;
 
 }
 

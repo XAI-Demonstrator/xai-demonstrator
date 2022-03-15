@@ -6,6 +6,11 @@
       v-bind:standalone="Boolean(true)"
       v-bind:title="useCaseTitle"
     />
+    <Score
+      v-bind:round="this.round"
+      v-bind:score_user="this.score_user"
+      v-bind:score_ai="this.score_ai"
+    />
     <main>
       <Notification
         :prediction_city="prediction_city"
@@ -41,7 +46,7 @@
         Why the AI made that guess
       </button>
       <button
-        v-if="(explanation || (control && prediction_city) ) && round<16"
+        v-if="(explanation || (control && prediction_city) ) && round<10"
         type="button"
         class="xd-button xd-secondary"
         id="new"
@@ -74,10 +79,12 @@ import {
   SpinningIndicator,
   XAIStudioRibbon,
   GitHubRibbon,
-} from "@xai-demonstrator/xaidemo-ui";
+} 
+from "@xai-demonstrator/xaidemo-ui";
 import Notification from "@/components/Notification";
 import Selection from "@/components/Selection";
 import Explanation_legend from "./components/Explanation_legend.vue";
+import Score from "./components/Score.vue";
 
 export default {
   name: "App",
@@ -89,6 +96,7 @@ export default {
     Notification,
     Selection,
     Explanation_legend,
+    Score
   },
   computed: {
     control() {
