@@ -79,7 +79,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - BACKEND_URL=http://country:8000
+      - BACKEND_URL=http://backend:8000
       - BACKEND_SERVICE=test-case
       - COLLECTOR_URL=http://collector:8000
       - SERVICE_NAME=experiment-proxy
