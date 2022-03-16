@@ -109,7 +109,6 @@ export default {
       const uri = window.location.search.substring(1)
       let params = new URLSearchParams(uri);
       if(params.has("player")){
-          console.log("HA")
           let player_id = params.get("player")
           console.log(player_id)
           return player_id +  this.url
