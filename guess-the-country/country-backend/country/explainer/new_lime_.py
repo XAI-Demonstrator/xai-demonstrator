@@ -42,7 +42,7 @@ def create_segments(img: np.ndarray, seg_method: str, settings: Dict) -> np.ndar
         return felzenszwalb(image=img, scale=250, sigma=0.6, min_size=45)
 
     if seg_method == "slic":
-        return slic(image=img, n_segments=250, compactness=2, convert2lab=True, sigma=1, start_label=1)
+        return slic(image=img, n_segments=250, compactness=2, convert2lab=True, sigma=1, start_label=0)
 
     if seg_method == "quickshift":
         return quickshift(image=img, kernel_size=5, max_dist=6, ratio=0.7)  # mb sigma = 6
