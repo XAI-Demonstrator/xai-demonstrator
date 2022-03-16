@@ -111,7 +111,7 @@ export default {
       if(params.has("player")){
           let player_id = params.get("player")
           console.log(player_id +  this.url)
-          return player_id +  this.url
+          return "/"+player_id +  this.url
       }
       else{
         return this.url
