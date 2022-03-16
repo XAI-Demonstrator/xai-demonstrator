@@ -103,8 +103,24 @@ export default {
       const uri = window.location.search.substring(1);
       let params = new URLSearchParams(uri);
       return params.has("control")
+    },
+    backendUrl: {
+      get: function(){
+      const uri = window.location.search.substring(1)
+      let params = new URLSearchParams(uri);
+      if(params.has("player")){
+          console.log("HA")
+          let player_id = params.get("player")
+          console.log(player_id)
+          return player_id +  this.url
+      }
+      else{
+        return this.url
+      }
+      }
     }
   },
+
   data() {
     return {
       countrys: [
@@ -135,9 +151,9 @@ export default {
           ],
         },
       ],
+      url: process.env.VUE_APP_BACKEND_URL,
       round: 1,
       useCaseTitle: "Guess the City",
-      backendUrl: process.env.VUE_APP_BACKEND_URL,
       explanation: null,
       prediction_country: null,
       prediction_city: null,
@@ -247,11 +263,7 @@ export default {
       this.getStreetview();
       axios.post(this.backendUrl + "/score", 
       {"ai_score": this.score_ai,
-      "player_score": this.score_user}, {
-        headers: {
-            'Accept': 'application/json',
-        }
-    })
+      "player_score": this.score_user})
       this.round = this.round + 1;
     },
 
