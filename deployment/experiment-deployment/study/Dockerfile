@@ -1,6 +1,6 @@
 FROM python:3.9-slim
 
-WORKDIR /
+WORKDIR /study
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends git \
@@ -12,6 +12,6 @@ RUN pip install --upgrade pip \
     && pip install -r /requirements.txt \
     && rm -rf /root/.cache/pip
 
-COPY backend /backend
+COPY /gtc-study-backend/backend /backend
 
 CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000"]
