@@ -7,6 +7,7 @@ services:
         dockerfile: ./gtc-nginx/Dockerfile
       depends_on:
         - country
+        - study
       expose:
         - 80
       environment:
@@ -15,6 +16,24 @@ services:
         - LETSENCRYPT_HOST=gtc.xaidemo.de
         - LETSENCRYPT_EMAIL=xai.demonstrator@gmail.com
       restart: always
+
+  study:
+    build:
+        context: .
+        dockerfile: ./study/Dockerfile
+    depends_on:
+      - collector
+    expose:
+      - 8000
+    environment:
+      - ROOT_PATH=/api/study
+      - SERVICE_NAME=study-backend-service
+      - COLLECTOR_URL=http://collector:8000
+      - EXPERIMENT=1
+      - DB_HOST=couchdb
+      - DB_PORT=5984
+      - DB_USER=${COUCHDB_USER}
+      - DB_PASSWORD=${COUCHDB_PASSWORD}  
 
   country:
     image: ghcr.io/xai-demonstrator/guess-the-country-service:latest
@@ -76,6 +95,7 @@ services:
     depends_on:
       - collector
       - country
+      - study
     ports:
       - "8000:8000"
     environment:

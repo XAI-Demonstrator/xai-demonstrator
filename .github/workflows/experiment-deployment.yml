@@ -119,7 +119,18 @@ jobs:
           target: "database/"
           strip_components: 3
           rm: true
-        
+
+      - name: Copy study docker to experiment server
+        uses: appleboy/scp-action@v0.1.2
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_KEY }}
+          source: "deployment/experiment-deployment/study/**"
+          target: "study/"
+          strip_components: 3
+          rm: true  
+
       - name: SSH Remote Commands
         uses: appleboy/ssh-action@v0.1.4
         env:
@@ -136,6 +147,8 @@ jobs:
             set -e
             mv gtc-nginx/ experiment-deployment/deployment/experiment-deployment/gtc-nginx/
             mv database/ experiment-deployment/deployment/experiment-deployment/database/
+            mv study/ experiment-deployment/deployment/experiment-deployment/study/
+            cp -R /gtc-study-backend experiment-deployment/deployment/experiment-deployment/study/
             export STREETVIEW_API_KEY=$STREETVIEW_API_KEY
             export BATCH_SIZE=${BATCH_SIZE}
             export COUCHDB_USER=${COUCHDB_USER}
