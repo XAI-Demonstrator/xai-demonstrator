@@ -110,8 +110,8 @@ export default {
       let params = new URLSearchParams(uri);
       if(params.has("player")){
           let player_id = params.get("player")
-          console.log(this.url  + "/ "+ player_id)
-          return this.url  + "/ "+ player_id
+          console.log(this.url  + "/"+ player_id)
+          return this.url  + "/"+ player_id
       }
       else{
         return this.url
