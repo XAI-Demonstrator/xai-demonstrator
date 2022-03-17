@@ -31,8 +31,8 @@ services:
       - SERVICE_NAME=study-backend-service
       - COLLECTOR_URL=http://collector:8000
       - EXPERIMENT=1
-      - DB_HOST=localhost
-      - DB_PORT=8002
+      - DB_HOST=couchdb
+      - DB_PORT=5984
       - DB_USER=${COUCHDB_USER}
       - DB_PASSWORD=${COUCHDB_PASSWORD}  
 
