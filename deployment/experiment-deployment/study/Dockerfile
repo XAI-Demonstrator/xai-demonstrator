@@ -7,11 +7,11 @@ RUN apt-get update \
     && apt-get purge -y --auto-remove \
     && rm -rf /var/lib/apt/lists/*
 
-COPY .study/requirements.txt /requirements.txt
+COPY ./study/requirements.txt /requirements.txt
 RUN pip install --upgrade pip \
     && pip install -r /requirements.txt \
     && rm -rf /root/.cache/pip
 
-COPY .study/gtc-study-backend/backend /backend
+COPY ./study/gtc-study-backend/backend /backend
 
 CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000"]
