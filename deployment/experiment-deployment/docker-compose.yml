@@ -35,6 +35,8 @@ services:
       - DB_PORT=5984
       - DB_USER=${COUCHDB_USER}
       - DB_PASSWORD=${COUCHDB_PASSWORD}  
+    volumes:
+        - ./../../../images:/images/
 
   country:
     image: ghcr.io/xai-demonstrator/guess-the-country-service:latest
@@ -51,7 +53,8 @@ services:
       - GOOGLE_MAPS_API_TOKEN=${STREETVIEW_API_KEY}
       - BATCH_SIZE=${BATCH_SIZE}
       - COLLECTOR_URL=http://collector:8000
-      - EXPERIMENT=1  
+      - EXPERIMENT=1
+        
 
   jaeger:
     image: jaegertracing/all-in-one
