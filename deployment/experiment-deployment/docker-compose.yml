@@ -22,6 +22,7 @@ services:
         context: .
         dockerfile: ./study/Dockerfile
     depends_on:
+      - couchdb
       - collector
     expose:
       - 8000
