@@ -110,7 +110,6 @@ export default {
       let params = new URLSearchParams(uri);
       if(params.has("player")){
           let player_id = params.get("player")
-          console.log(this.url  + "/"+ player_id)
           return this.url  + "/"+ player_id
       }
       else{
@@ -262,7 +261,13 @@ export default {
       this.getStreetview();
       axios.post(this.backendUrl + "/score", 
       {"ai_score": this.score_ai,
-      "player_score": this.score_user})
+      "player_score": this.score_user,
+      "rounds": this.round}).then((res) => {
+        console.log(res)
+        })
+        .catch((error) => {
+          console.error(error);
+        });
       this.round = this.round + 1;
     },
 
