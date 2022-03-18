@@ -7,9 +7,12 @@
       v-bind:title="useCaseTitle"
     />
     <Score
-      v-bind:round="this.round"
-      v-bind:score_user="this.score_user"
-      v-bind:score_ai="this.score_ai"
+      :round="this.round"
+      :score_user="this.score_user"
+      :score_ai="this.score_ai"
+      :explanation="this.explanation"
+      :control="control"
+      :prediction_city="this.prediction_city"
     />
     <main>
       <Notification
@@ -19,7 +22,7 @@
         :user_city_answer="user_city_answer"
         :explanation="explanation"
       />
-
+     
       <section class="xd-section xd-light">
         <img v-if="explanation" class="xd-border-secondary;" v-bind:src="this.explainimage" />
         <img class="xd-border-secondary;" v-bind:src="this.streetviewimage" />  
@@ -217,11 +220,7 @@ export default {
           let label = this.label_to_label(res.data.class_label);
           this.prediction_city = label.city;
           this.waitingForExplanation = false;
-          if(this.prediction_country == this.label_country){
-             this.score_ai = this.score_ai + 1;
-          }
-
-          if (this.prediction_city == this.label_city) {
+            if (this.prediction_city == this.label_city) {
             this.score_ai = this.score_ai + 1;
           }
         })

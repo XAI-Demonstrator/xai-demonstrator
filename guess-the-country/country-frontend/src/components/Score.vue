@@ -1,7 +1,11 @@
 <template>
   <div class="wrapper">
-    <section class="left xd-section xd-light">
-        <p>Round: {{round}} / 10</p>
+ 
+   <section v-if="(this.explanation && this.round==10 )|| ( this.control && this.prediction_city && this.round==10)" class="left xd-section xd-light">
+        <p class="short-text">Now you can finish the game!</p>
+    </section>
+       <section v-else class="left xd-section xd-light">
+        <p>Round: {{round}}/10</p>
   </section>
  <!--   <section class="right row xd-section xd-light">
       <p>Score - You: {{score_user}} AI: {{score_ai}}</p>
@@ -21,7 +25,16 @@ props: {
       },
       round: {
         type: Number,
-      }
+      },
+      explanation: {
+        type: String
+      },
+      control:{
+        type: Boolean
+      },
+      prediction_city:{
+        type: String
+      },
 }
 }
 </script>
