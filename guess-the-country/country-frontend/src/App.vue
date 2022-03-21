@@ -223,6 +223,16 @@ export default {
             if (this.prediction_city == this.label_city) {
             this.score_ai = this.score_ai + 1;
           }
+
+        axios.post(this.backendUrl + "/score", 
+          {"ai_score": this.score_ai,
+          "player_score": this.score_user,
+          "rounds": this.round}).then((res) => {
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+
         })
         .catch((error) => {
           console.error(error);
@@ -258,15 +268,6 @@ export default {
       this.user_city_answer = null;
       this.user_country_answer = null;
       this.getStreetview();
-      axios.post(this.backendUrl + "/score", 
-      {"ai_score": this.score_ai,
-      "player_score": this.score_user,
-      "rounds": this.round}).then((res) => {
-        console.log(res)
-        })
-        .catch((error) => {
-          console.error(error);
-        });
       this.round = this.round + 1;
     },
 
