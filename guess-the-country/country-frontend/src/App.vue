@@ -294,20 +294,20 @@ export default {
 }
 
 #app {
-  display: flex;
+ /* display: flex; */
   justify-content: space-between;
   position: relative;
   overflow: hidden;
 }
 
 main {
-  display: flex;
+  /* display: flex; */
   flex-direction: column;
 }
 
 @media screen and (max-width: 450px) {
   #app {
-    display: block;
+    /* display: flex; */
     flex-direction: column;
     padding-left: 0;
     padding-right: 0;
@@ -320,6 +320,7 @@ main {
     width: 40%;
   }
   #app{
+
     margin-left: 20%;
     margin-right: 20%;
     overflow: scroll!important;
