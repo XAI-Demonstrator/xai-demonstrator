@@ -294,14 +294,14 @@ export default {
 }
 
 #app {
- /* display: flex; */
+  display: flex;
   justify-content: space-between;
   position: relative;
   overflow: hidden;
 }
 
 main {
-  /* display: flex; */
+  display: block;
   flex-direction: column;
 }
 
