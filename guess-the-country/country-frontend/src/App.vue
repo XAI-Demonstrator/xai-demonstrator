@@ -6,7 +6,8 @@
       v-bind:standalone="Boolean(true)"
       v-bind:title="useCaseTitle"
     />
-    <Score
+    <main>
+      <Score
       :round="this.round"
       :score_user="this.score_user"
       :score_ai="this.score_ai"
@@ -14,7 +15,7 @@
       :control="control"
       :prediction_city="this.prediction_city"
     />
-    <main>
+
       <Notification
         :prediction_city="prediction_city"
         :msg="msg"
