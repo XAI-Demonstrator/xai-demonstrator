@@ -306,6 +306,7 @@ main {
 
 @media screen and (max-width: 450px) {
   #app {
+    display: block;
     flex-direction: column;
     padding-left: 0;
     padding-right: 0;
