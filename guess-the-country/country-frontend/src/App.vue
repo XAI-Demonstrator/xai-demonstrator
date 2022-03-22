@@ -228,6 +228,7 @@ export default {
           {"ai_score": this.score_ai,
           "player_score": this.score_user,
           "rounds": this.round}).then((res) => {
+            print(res)
             })
             .catch((error) => {
               console.error(error);
