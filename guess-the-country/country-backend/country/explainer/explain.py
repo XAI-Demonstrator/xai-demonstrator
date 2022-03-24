@@ -41,5 +41,5 @@ def convert_explanation(explanation):
 
 @traced
 def explain_cnn(img, model):
-    return explain_image(img=img, seg_method="slic", seg_settings={}, num_of_samples=700, samples_p=0.5,
+    return explain_image(img=img, seg_method="felzenszwalb", seg_settings={}, num_of_samples=500, samples_p=0.9,
                          model_=model, threshold=0.5, volume=20, colour="violet", transparency=0.7)
