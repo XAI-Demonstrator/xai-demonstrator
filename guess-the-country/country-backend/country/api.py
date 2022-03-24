@@ -44,3 +44,12 @@ async def streetview():
     return await get_streetview(API_KEY)
 
 
+@api.get("/final_score")
+def final_score():
+    """Return dummy value"""
+    return {
+    "ai_score": 0,
+    "player_score": 0,
+    "rounds": 1
+}
+

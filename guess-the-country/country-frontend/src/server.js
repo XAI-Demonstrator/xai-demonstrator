@@ -14,6 +14,12 @@ export function makeServer({environment = "development"} = {}) {
                 class_id: 4
             }),
                 {timing: 0})
+            
+            this.get("/final_score", () => ({
+                "ai_score": 0,
+                "player_score": 0,
+                "rounds": 1
+            }))
 
             this.get("/msg", () => ({
                   data: "Was this Google Streetview photo taken in Germany or in Israel? Challenge yourself with an AI."

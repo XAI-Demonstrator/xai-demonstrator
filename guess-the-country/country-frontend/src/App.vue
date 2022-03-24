@@ -173,8 +173,23 @@ export default {
   async created() {
     this.getMessage();
     this.getStreetview();
+    this.getValues();
   },
   methods: {
+    getValues(){
+          axios
+        .get(this.backendUrl + "/final_score")
+        .then((res) => {
+          console.log(res)
+          this.round = res.data.rounds;
+          this.score_ai = res.data.ai_score;
+          this.score_user = res.data.player_score
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    
+    },
     city_selected(value) {
       this.user_city_answer = value;
       if (this.user_city_answer == this.label_city) {
