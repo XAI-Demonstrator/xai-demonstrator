@@ -1,14 +1,18 @@
 <template>
   <div>
-      <section v-show="!explanation" class="xd-section xd-light" style="height:55px">
+      <section v-show="!explanation" class="xd-section xd-light" >
          <section v-show="!user_city_answer">
             {{ msg }}
          </section>   
       <section v-show="user_city_answer && !prediction_city">
-        <p class="short-text">Your guess: {{user_city_answer}}</p>
+        <p class="short-text">Your guess is: {{user_city_answer}}</p>
       </section>
-      <section v-show="prediction_city">
-        <p class="short-text">The AI’s guess is: {{prediction_city}}</p>
+      <section v-show="prediction_city && control">
+        <p class="short-text">My guess is: {{prediction_city}}</p>
+      </section>
+        <section v-show="prediction_city && !control">
+        <p>My guess is: {{prediction_city}}
+        <br>In particular the colored area below has helped me to form my guess.</p>
       </section>
     
       </section>
@@ -31,9 +35,9 @@ export default {
       prediction_city: {
         type: String
       },
-      explanation: {
-
-      }
+  control:{
+        type: Boolean
+      },
   },
 
  data() {

@@ -22,11 +22,12 @@
         :label_city="label_city"
         :user_city_answer="user_city_answer"
         :explanation="explanation"
+        :control="control"
       />
      
       <section class="xd-section xd-light">
         <img v-if="explanation" class="xd-border-secondary;" v-bind:src="this.explainimage" />
-        <img class="xd-border-secondary;" v-bind:src="this.streetviewimage" />  
+        <img v-if="!explanation" class="xd-border-secondary;" v-bind:src="this.streetviewimage" />  
       </section>
 
       <Selection
@@ -34,20 +35,16 @@
         :label_city="label_city"
         :user_city_answer="user_city_answer"
       />
-      <Explanation_legend
-        :prediction_city="prediction_city"
-        :explanation="explanation"
-      />
 
       <button
-        v-if="prediction_city && explanation == null && !control"
+        v-if="!prediction_city && user_city_answer &&!control"
         type="button"
         class="xd-button xd-secondary"
         id="explain"
         v-on:click="explain()"
       >
         <!-- v-show -->
-        Why the AI made that guess
+        What do you guess, AI?
       </button>
       <button
         v-if="(explanation || (control && prediction_city) ) && round<10"
@@ -59,13 +56,13 @@
         Next round
       </button>
       <button
-        v-if="!prediction_city && user_city_answer"
+        v-if="!prediction_city && user_city_answer && control"
         type="button"
         class="xd-button xd-secondary"
         id="submit"
         v-on:click="submitFile()"
       >
-        What’s the AI’s guess?
+         What do you guess, AI?
       </button>
       <SpinningIndicator
         class="indicator"
@@ -87,7 +84,6 @@ import {
 from "@xai-demonstrator/xaidemo-ui";
 import Notification from "@/components/Notification";
 import Selection from "@/components/Selection";
-import Explanation_legend from "./components/Explanation_legend.vue";
 import Score from "./components/Score.vue";
 
 export default {
@@ -99,7 +95,6 @@ export default {
     XAIStudioRibbon,
     Notification,
     Selection,
-    Explanation_legend,
     Score
   },
   computed: {
@@ -256,11 +251,14 @@ export default {
         });
     },
     explain() {
+      this.submitFile()
       this.waitingForExplanation = true;
+
       const blob = new Blob([this.streetviewimage]);
 
       let form = new FormData();
       form.append("file", blob);
+
       axios
         .post(this.backendUrl + "/explain", form, {
           headers: {
