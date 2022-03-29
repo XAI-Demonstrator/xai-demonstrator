@@ -47,7 +47,7 @@
         What do you guess, AI?
       </button>
       <button
-        v-if="(explanation || (control && prediction_city) ) && round<10"
+        v-if="(explanation || (control && prediction_city) ) && round<11"
         type="button"
         class="xd-button xd-secondary"
         id="new"
