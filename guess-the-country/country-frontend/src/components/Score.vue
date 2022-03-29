@@ -5,7 +5,7 @@
         <p class="short-text">Now you can finish the game!</p>
     </section>
        <section v-else class="left xd-section xd-light">
-        <p>Round: {{round}}/10</p>
+        <p>Round: {{round}}/11</p>
   </section>
  <!--   <section class="right row xd-section xd-light">
       <p>Score - You: {{score_user}} AI: {{score_ai}}</p>
