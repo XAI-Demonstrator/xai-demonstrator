@@ -193,7 +193,7 @@ export default {
         });
     },
     async getValues() {
-      axios
+     await axios
         .get(this.backendUrl + "/final_score")
         .then((res) => {
           console.log(res);
