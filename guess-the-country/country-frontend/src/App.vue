@@ -170,8 +170,11 @@ export default {
   },
   async created() {
     this.getMessage();
-    await this.getValues()
-    this.getStreetview()
+    this.getValues()
+    .then(() => {
+        this.getStreetview();
+    })
+   
   },
   methods: {
     postValues() {
@@ -183,12 +186,13 @@ export default {
         })
         .then((res) => {
           console.log(res);
+
         })
         .catch((error) => {
           console.error(error);
         });
     },
-    getValues() {
+    async getValues() {
       axios
         .get(this.backendUrl + "/final_score")
         .then((res) => {
