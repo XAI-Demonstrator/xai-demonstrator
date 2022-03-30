@@ -168,10 +168,10 @@ export default {
       waitingForExplanation: false,
     };
   },
-  async created() {
-    this.getMessage();
-  await  this.getValues();
-    this.getStreetview();
+  created() {
+  this.getMessage();
+  this.getValues();
+  this.getStreetview();
   },
   methods: {
     postValues() {
