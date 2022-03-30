@@ -8,13 +8,13 @@
     />
     <main>
       <Score
-      :round="this.round"
-      :score_user="this.score_user"
-      :score_ai="this.score_ai"
-      :explanation="this.explanation"
-      :control="control"
-      :prediction_city="this.prediction_city"
-    />
+        :round="this.round"
+        :score_user="this.score_user"
+        :score_ai="this.score_ai"
+        :explanation="this.explanation"
+        :control="control"
+        :prediction_city="this.prediction_city"
+      />
 
       <Notification
         :prediction_city="prediction_city"
@@ -24,10 +24,18 @@
         :explanation="explanation"
         :control="control"
       />
-     
+
       <section class="xd-section xd-light">
-        <img v-if="explanation" class="xd-border-secondary;" v-bind:src="this.explainimage" />
-        <img v-if="!explanation" class="xd-border-secondary;" v-bind:src="this.streetviewimage" />  
+        <img
+          v-if="explanation"
+          class="xd-border-secondary;"
+          v-bind:src="this.explainimage"
+        />
+        <img
+          v-if="!explanation"
+          class="xd-border-secondary;"
+          v-bind:src="this.streetviewimage"
+        />
       </section>
 
       <Selection
@@ -37,7 +45,7 @@
       />
 
       <button
-        v-if="!prediction_city && user_city_answer &&!control"
+        v-if="!prediction_city && user_city_answer && !control"
         type="button"
         class="xd-button xd-secondary"
         id="explain"
@@ -47,7 +55,7 @@
         What do you guess, AI?
       </button>
       <button
-        v-if="(explanation || (control && prediction_city) ) && round<11"
+        v-if="(explanation || (control && prediction_city)) && round < 11"
         type="button"
         class="xd-button xd-secondary"
         id="new"
@@ -62,14 +70,13 @@
         id="submit"
         v-on:click="submitFile()"
       >
-         What do you guess, AI?
+        What do you guess, AI?
       </button>
       <SpinningIndicator
         class="indicator"
         v-bind:visible="waitingForExplanation"
       />
     </main>
-
   </div>
 </template>
 
@@ -80,8 +87,7 @@ import {
   SpinningIndicator,
   XAIStudioRibbon,
   GitHubRibbon,
-} 
-from "@xai-demonstrator/xaidemo-ui";
+} from "@xai-demonstrator/xaidemo-ui";
 import Notification from "@/components/Notification";
 import Selection from "@/components/Selection";
 import Score from "./components/Score.vue";
@@ -95,27 +101,26 @@ export default {
     XAIStudioRibbon,
     Notification,
     Selection,
-    Score
+    Score,
   },
   computed: {
     control() {
       const uri = window.location.search.substring(1);
       let params = new URLSearchParams(uri);
-      return params.has("control")
+      return params.has("control");
     },
     backendUrl: {
-      get: function(){
-      const uri = window.location.search.substring(1)
-      let params = new URLSearchParams(uri);
-      if(params.has("player")){
-          let player_id = params.get("player")
-          return this.url  + "/"+ player_id
-      }
-      else{
-        return this.url
-      }
-      }
-    }
+      get: function () {
+        const uri = window.location.search.substring(1);
+        let params = new URLSearchParams(uri);
+        if (params.has("player")) {
+          let player_id = params.get("player");
+          return this.url + "/" + player_id;
+        } else {
+          return this.url;
+        }
+      },
+    },
   },
 
   data() {
@@ -152,7 +157,6 @@ export default {
       round: 1,
       useCaseTitle: "Guess the City",
       explanation: null,
-      prediction_country: null,
       prediction_city: null,
       label_city: null,
       user_city_answer: null,
@@ -162,7 +166,6 @@ export default {
       streetviewimage: null,
       explainimage: null,
       waitingForExplanation: false,
-     
     };
   },
   async created() {
@@ -171,25 +174,39 @@ export default {
     this.getValues();
   },
   methods: {
-    getValues(){
-          axios
-        .get(this.backendUrl + "/final_score")
+    postValues() {
+      axios
+        .post(this.backendUrl + "/score", {
+          ai_score: this.score_ai,
+          player_score: this.score_user,
+          rounds: this.round,
+        })
         .then((res) => {
-          console.log(res)
-          this.round = res.data.rounds;
-          this.score_ai = res.data.ai_score;
-          this.score_user = res.data.player_score
+          console.log(res);
         })
         .catch((error) => {
           console.error(error);
         });
-    
+    },
+    getValues() {
+      axios
+        .get(this.backendUrl + "/final_score")
+        .then((res) => {
+          console.log(res);
+          this.round = res.data.rounds;
+          this.score_ai = res.data.ai_score;
+          this.score_user = res.data.player_score;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     },
     city_selected(value) {
       this.user_city_answer = value;
       if (this.user_city_answer == this.label_city) {
         this.score_user = 1 + this.score_user;
       }
+      this.postValues()
     },
     getMessage() {
       axios
@@ -203,7 +220,11 @@ export default {
     },
     getStreetview() {
       axios
-        .get(this.backendUrl + "/streetview")
+        .post(this.backendUrl + "/streetview", {
+          ai_score: this.score_ai,
+          player_score: this.score_user,
+          rounds: this.round,
+        } )
         .then((res) => {
           this.streetviewimage = res.data.image;
           let label = this.label_to_label(res.data.class_label);
@@ -223,35 +244,25 @@ export default {
       axios
         .post(this.backendUrl + "/predict", form, {
           headers: {
-            "Accept": "application/json",
-            "Content-Type": "multipart/form-data"
+            Accept: "application/json",
+            "Content-Type": "multipart/form-data",
           },
         })
         .then((res) => {
           let label = this.label_to_label(res.data.class_label);
           this.prediction_city = label.city;
           this.waitingForExplanation = false;
-            if (this.prediction_city == this.label_city) {
+          if (this.prediction_city == this.label_city) {
             this.score_ai = this.score_ai + 1;
           }
-
-        axios.post(this.backendUrl + "/score", 
-          {"ai_score": this.score_ai,
-          "player_score": this.score_user,
-          "rounds": this.round}).then((res) => {
-            console.log(res)
-            })
-            .catch((error) => {
-              console.error(error);
-            });
-
+          this.postValues();
         })
         .catch((error) => {
           console.error(error);
         });
     },
     explain() {
-      this.submitFile()
+      this.submitFile();
       this.waitingForExplanation = true;
 
       const blob = new Blob([this.streetviewimage]);
@@ -262,7 +273,7 @@ export default {
       axios
         .post(this.backendUrl + "/explain", form, {
           headers: {
-            'Accept': 'application/json',
+            Accept: "application/json",
             "Content-Type": "multipart/form-data",
           },
         })
@@ -279,11 +290,9 @@ export default {
     restart() {
       this.explanation = null;
       this.prediction_city = null;
-      this.prediction_country = null;
       this.user_city_answer = null;
-      this.user_country_answer = null;
-      this.getStreetview();
       this.round = this.round + 1;
+      this.getStreetview();
     },
 
     label_to_label(prediction) {
@@ -302,7 +311,7 @@ export default {
 </script>
 
 <style>
-.header-icon{
+.header-icon {
   visibility: hidden;
 }
 
@@ -324,23 +333,20 @@ main {
     flex-direction: column;
     padding-left: 0;
     padding-right: 0;
-    overflow: scroll!important;
+    overflow: scroll !important;
   }
 }
 
- @media screen and (min-width: 450px) and (max-height: 650px) {
-  #img{
+@media screen and (min-width: 450px) and (max-height: 650px) {
+  #img {
     width: 40%;
   }
-  #app{
-
+  #app {
     margin-left: 20%;
     margin-right: 20%;
-    overflow: scroll!important;
+    overflow: scroll !important;
   }
-
-
-} 
+}
 
 @media screen and (min-width: 450px) and (min-height: 650px) {
   #app {

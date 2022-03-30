@@ -15,6 +15,7 @@ API_KEY = settings.google_maps_api_token
 class ScoreRequest(BaseModel):
     ai_score: int
     player_score: int
+    rounds: int
 
 
 @api.post("/predict")
@@ -39,8 +40,8 @@ async def score(score_request: ScoreRequest):
     print(score_request)
     pass
 
-@api.get("/streetview")
-async def streetview():
+@api.post("/streetview")
+async def streetview(score_request: ScoreRequest):
     return await get_streetview(API_KEY)
 
 
