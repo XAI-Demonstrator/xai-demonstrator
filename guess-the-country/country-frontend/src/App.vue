@@ -168,10 +168,10 @@ export default {
       waitingForExplanation: false,
     };
   },
-  created() {
-  this.getMessage();
-  this.getValues();
-  this.getStreetview();
+  async created() {
+    this.getMessage();
+    this.getValues().then( this.getStreetview() )
+
   },
   methods: {
     postValues() {
@@ -288,10 +288,10 @@ export default {
     },
 
     restart() {
-      this.round = this.round + 1;
       this.explanation = null;
       this.prediction_city = null;
       this.user_city_answer = null;
+
       this.getStreetview();
     },
 
