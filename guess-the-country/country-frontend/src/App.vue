@@ -292,7 +292,6 @@ export default {
       this.explanation = null;
       this.prediction_city = null;
       this.user_city_answer = null;
-      this.round = this.round + 1;
       this.getStreetview();
     },
 
