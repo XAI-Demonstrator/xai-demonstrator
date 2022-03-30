@@ -170,8 +170,8 @@ export default {
   },
   async created() {
     this.getMessage();
-    this.getValues().then( this.getStreetview() )
-
+    await this.getValues()
+    this.getStreetview()
   },
   methods: {
     postValues() {
