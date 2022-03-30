@@ -167,8 +167,8 @@ export default {
   },
   async created() {
     this.getMessage();
+  await  this.getValues();
     this.getStreetview();
-    this.getValues();
   },
   methods: {
     getValues(){
@@ -251,7 +251,8 @@ export default {
         });
     },
     explain() {
-      this.submitFile()
+      this.submitFile();
+
       this.waitingForExplanation = true;
 
       const blob = new Blob([this.streetviewimage]);
@@ -277,11 +278,11 @@ export default {
     },
 
     restart() {
+      this.round = this.round + 1;
       this.explanation = null;
       this.prediction_city = null;
       this.prediction_country = null;
       this.user_city_answer = null;
-      this.user_country_answer = null;
       this.getStreetview();
       this.round = this.round + 1;
     },
