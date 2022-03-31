@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
  
-   <section v-if="(this.explanation && this.round==11 )|| ( this.control && this.prediction_city && this.round==11)" class="left xd-section xd-light">
+   <section v-if="(this.user_city_answer && this.round==11)" class="left xd-section xd-light">
         <p class="short-text">Now you can finish the game!</p>
     </section>
        <section v-else class="left xd-section xd-light">
@@ -26,15 +26,9 @@ props: {
       round: {
         type: Number,
       },
-      explanation: {
-        type: String
-      },
-      control:{
-        type: Boolean
-      },
-      prediction_city:{
-        type: String
-      },
+ user_city_answer: {
+   type: String
+ }
 }
 }
 </script>

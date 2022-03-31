@@ -12,7 +12,7 @@
       </section>
         <section v-show="prediction_city && !control">
         <p>My guess is: {{prediction_city}}
-        <br>In particular the colored area below has helped me to form my guess.</p>
+        <br>In particular, the colored areas below have helped me form my guess. </p>
       </section>
     
       </section>

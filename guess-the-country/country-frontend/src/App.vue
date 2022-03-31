@@ -11,9 +11,7 @@
         :round="this.round"
         :score_user="this.score_user"
         :score_ai="this.score_ai"
-        :explanation="this.explanation"
-        :control="control"
-        :prediction_city="this.prediction_city"
+        :user_city_answer="this.user_city_answer"
       />
 
       <Notification
@@ -45,7 +43,7 @@
       />
 
       <button
-        v-if="!prediction_city && user_city_answer && !control"
+        v-if="!prediction_city && user_city_answer && !control && round != 11"
         type="button"
         class="xd-button xd-secondary"
         id="explain"
@@ -64,7 +62,7 @@
         Next round
       </button>
       <button
-        v-if="!prediction_city && user_city_answer && control"
+        v-if="!prediction_city && user_city_answer && control && round != 11"
         type="button"
         class="xd-button xd-secondary"
         id="submit"
@@ -200,6 +198,7 @@ export default {
           this.round = res.data.rounds;
           this.score_ai = res.data.ai_score;
           this.score_user = res.data.player_score;
+              console.log(1)
         })
         .catch((error) => {
           console.error(error);
@@ -223,6 +222,7 @@ export default {
         });
     },
     getStreetview() {
+      console.log(2)
       axios
         .post(this.backendUrl + "/streetview", {
           ai_score: this.score_ai,
