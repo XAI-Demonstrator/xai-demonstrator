@@ -167,11 +167,10 @@ export default {
     };
   },
   async created() {
-    this.getMessage();
-    this.getValues()
-    .then(() => {
-        this.getStreetview();
-    })
+  this.getMessage();
+  //this.getValues()
+  this.getStreetview();
+
    
   },
   methods: {
@@ -194,11 +193,9 @@ export default {
      await axios
         .get(this.backendUrl + "/final_score")
         .then((res) => {
-          console.log(res);
           this.round = res.data.rounds;
           this.score_ai = res.data.ai_score;
           this.score_user = res.data.player_score;
-              console.log(1)
         })
         .catch((error) => {
           console.error(error);
@@ -222,7 +219,6 @@ export default {
         });
     },
     getStreetview() {
-      console.log(2)
       axios
         .post(this.backendUrl + "/streetview", {
           ai_score: this.score_ai,
