@@ -50,7 +50,7 @@ jobs:
           mv dist ${{ matrix.service }}
 
       - name: Save build artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.service }}
           path: ${{ matrix.repo_path }}/${{ matrix.service }}
