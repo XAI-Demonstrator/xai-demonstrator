@@ -94,7 +94,7 @@ jobs:
           rm: true
 
       - name: Download all frontends
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           path: "deployment/experiment-deployment/gtc-nginx/"
 
