@@ -10,9 +10,12 @@ const download = (url, path, callback) => {
     })
 }
 
-const url = 'https://storage.googleapis.com/xai-demo-assets/visual-inspection/images/table.jpg'
+const url1 = 'https://storage.googleapis.com/xai-demo-assets/visual-inspection/images/table.jpg'
 const dir = './src/assets/'
-const filename = 'table.jpg'
+const filename1 = 'table.jpg'
+
+const url2 = 'https://storage.googleapis.com/xai-demo-assets/visual-inspection/images/desk.jpeg'
+const filename2 = 'desk.jpg'
 
 fsp.stat(dir).catch(async (err) => {
     if (err.message.includes('no such file or directory')) {
@@ -20,8 +23,12 @@ fsp.stat(dir).catch(async (err) => {
     }
 });
 
-fsp.stat(dir + filename).catch(async (err) => {
-    download(url, dir + filename, () => {
-        console.log('✅ Downloaded image files(s) from xai-demonstrator-assets!')
+fsp.stat(dir+filename1, dir + filename2).catch(async (err) => {
+    download(url1, dir + filename1, () => {
     })
+
+    download(url2, dir + filename2, () => {
+    })
+    console.log('✅ Downloaded image files(s) from xai-demonstrator-assets!')
+
 })
