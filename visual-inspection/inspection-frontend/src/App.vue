@@ -135,7 +135,8 @@ export default {
         paragraphs: [this.$t('info2paragraph1'), this.$t('info2paragraph2'), this.$t('info2paragraph3')]
       }],
       backendUrl: process.env.VUE_APP_BACKEND_URL,
-      img: require('./assets/desk.jpg') // other use case image: change .jpg-part to any other file from assets/
+      img: require('./assets/' + process.env.VUE_APP_IMAGE_FILE)
+
     }
   },
   computed: {
