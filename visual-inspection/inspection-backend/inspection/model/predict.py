@@ -14,6 +14,7 @@ from ..config import settings
 class Prediction(BaseModel):
     prediction_id: uuid.UUID
     class_label: str
+    probability: float
 
 
 @traced
@@ -34,10 +35,10 @@ def predict_class(model_input: np.ndarray,
                   model_: tf.keras.Model = model,
                   decode_label_: Callable[[np.ndarray], str] = decode_label) -> str:
     prediction = model_.predict(model_input)
-
+    probability = round(prediction.max()*100,2)
     class_label = decode_label_(prediction, language)
 
-    return class_label
+    return class_label, probability
 
 
 @traced
@@ -52,7 +53,8 @@ def predict(image_file: IO[bytes], language: Optional[str] = None) -> Prediction
 
     model_input = preprocess(input_img)
 
-    class_label = predict_class(model_input, language)
+    class_label, probability = predict_class(model_input, language)
 
     return Prediction(prediction_id=prediction_id,
-                      class_label=class_label)
+                      class_label=class_label,
+                      probability = probability)

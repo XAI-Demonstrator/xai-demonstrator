@@ -2,7 +2,7 @@
   <div class="inspector">
     <MultiBounce v-if="!prediction"
                  v-bind:numberOfDots="3"/>
-    <p v-show="prediction && currentPrediction">{{ $t('answer', { object: prediction }) }}</p>
+    <p v-show="prediction && currentPrediction">{{ $t('answer1')}} {{this.probability}} {{ $t('answer2', { object: prediction })}}</p>
   </div>
 </template>
 
@@ -24,6 +24,7 @@ export default {
   methods: {
     async predict(blob) {
       this.prediction = null;
+      this.probability = null;
 
       while (this.cancelTokens.length > 0) {
         this.cancelTokens.pop().cancel()
@@ -41,6 +42,7 @@ export default {
       })
           .then(response => {
             this.prediction = response.data.class_label
+            this.probability = response.data.probability
             this.$emit('inspection-completed')
           })
           .catch(error => {
@@ -51,6 +53,7 @@ export default {
   data() {
     return {
       prediction: null,
+      probability: null,
       backendUrl: process.env.VUE_APP_BACKEND_URL,
       cancelTokens: []
     }
@@ -60,8 +63,14 @@ export default {
 
 <i18n>
 {
-  "de": { "answer": "„Das ist {object}“"},
-  "en": { "answer": "\"This is {object}\""}
+  "de": {
+     "answer1": "„Das ist zu {percentage}",
+     "answer2": " % {object}“"
+  },
+  "en": { 
+    "answer1": "\"This is with a probability of", 
+    "answer2": " % {object}\""
+    }
 }
 </i18n>
 
