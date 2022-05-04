@@ -57,10 +57,10 @@ git clone https://github.com/XAI-Demonstrator/xai-demonstrator.git
 ## Prepare for frontend development
 
 ### Install Node.js
-The _XAI Demonstrator_'s frontends require the [Node.js JavaScript runtime](https://nodejs.org/en/).
+The _XAI Demonstrator_'s frontends require the [Node.js JavaScript runtime](https://nodejs.org/en/) version 14.
 
-- **macOS**: `brew install node@12`
-- **Windows**: Download the installer from [the official website](https://nodejs.org/dist/latest-v12.x/ )
+- **macOS**: `brew install node@14`
+- **Windows**: Download the installer from [the official website](https://nodejs.org/dist/latest-v14.x/ )
 
 !!! note "Recommendation: Use a Node.js Version Manager 💡"
 
