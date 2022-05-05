@@ -50,6 +50,17 @@
         </div>
       </section>
 
+      <section>
+        <div>
+          <div id="left">
+            <KISettings ref="configurator"/>
+          </div>
+          <div id="rigth">
+            <KISettings ref="configurator"/>
+          </div>
+        </div>
+      </section>
+
     </main>
     <FloatingInfoButton class="info-button"
                         v-bind:info-url="infoUrl"
@@ -64,6 +75,7 @@ import 'vue-advanced-cropper/dist/style.css'
 import InspectImage from "@/components/InspectImage";
 import ExplainInspection from "@/components/ExplainInspection";
 import ExplanationStencil from "@/components/ExplanationStencil";
+import KISettings from "@/components/KISettings";
 import {FloatingInfoButton, UseCaseHeader, XAIStudioRibbon, GitHubRibbon} from '@xai-demonstrator/xaidemo-ui';
 import {debounce} from "debounce";
 
@@ -80,6 +92,7 @@ export default {
     ExplainInspection,
     UseCaseHeader,
     FloatingInfoButton,
+    KISettings,
     XAIStudioRibbon,
     GitHubRibbon
   },
