@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="explanation-request">
-      <button v-if="showExplainButton === 'true'" class="xd-button xd-secondary"
+      <button class="xd-button xd-secondary"
               v-show="!waitingForExplanation"
               v-bind:disabled="!predictionReady"
               v-on:click="buttonClicked">
@@ -76,7 +76,6 @@ export default {
   },
   data() {
     return {
-      showExplainButton: process.env.VUE_APP_SHOW_EXPLAIN_BUTTON,
       explanation: null,
       waitingForExplanation: false,
       backendUrl: process.env.VUE_APP_BACKEND_URL
