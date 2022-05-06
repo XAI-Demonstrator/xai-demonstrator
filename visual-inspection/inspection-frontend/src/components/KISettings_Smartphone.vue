@@ -1,5 +1,4 @@
 <template>
-
     <div class="configurator_smartphone" align = 'left'>
         <h2>Kategorie A</h2>
         <p style = "text-align:center">Anzahl</p>
@@ -20,25 +19,43 @@
         </div>
  -->
     </div>
-
-
-
-
 </template>
 
 <script>
-    export default {
-        name: "KISettings",
-        components: {
+export default {
+  name: "KISettings",
+  components: {},
+  props: ['id'],
+  data() {
+    return {
+      img: require('../assets/table.jpg'),
+      selection_amount1: 'Keine',
+      selection_amount2: '15',
+      selection_amount3: '200',
+      selection_label1: 'Handy',
+      selection_label2: 'Stift',
+      selection_label3: 'Tasse',
+
+      conf: {
+        id1: {
+          amount: ["0", "15", "200"],
+          labels: ["Handy", "Tasse"]
         },
-        data(){
-            return{
-                img: require('../assets/25_Handys.jpg'),
-                selection_anzahl: '0',
-                selection_label: 'Handy'
-            }
+        "id2": {
+          "amount": ["15", "200"],
+          "labels": ["Stift", "Tasse"]
+        },
+        data() {
+          return {
+            img: require('../assets/25_Handys.jpg'),
+            selection_anzahl: '0',
+            selection_label: 'Handy'
+          }
         }
+      }
     }
+  }
+}
 </script>
 
 <style scoped>
@@ -62,6 +79,7 @@
   display: inline-block;
   text-align: left;
 }
+
 .checkboxgroup label {
   display: block;
 }
