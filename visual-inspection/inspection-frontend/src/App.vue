@@ -51,15 +51,15 @@
       </section>
 
       <section>
-        <div class="configuration-menu">
-          <div class="config" id="smartphone">
-            <KISettings_Smartphone ref="configurator_smartphone"/>
+        <div class="configurator-menu">
+          <div id="left">
+            <KISettings_Smartphone id="id1" ref="configurator"/>
           </div>
-          <div class="config" id="pencil">
-            <KISettings_Pencil ref="configurator_pencil"/>
+          <div id="rigth">
+            <KISettings_Pencil id="id2" ref="configurator"/>
           </div>
-          <div class="config" id="cup">
-            <KISettings_Cup ref="configurator_cup"/>
+          <div id="right">
+            <KISettings_Cup id="id3" ref="configurator"/>
           </div>
         </div>
       </section>
@@ -79,8 +79,8 @@ import InspectImage from "@/components/InspectImage";
 import ExplainInspection from "@/components/ExplainInspection";
 import ExplanationStencil from "@/components/ExplanationStencil";
 import KISettings_Smartphone from "@/components/KISettings_Smartphone";
-import KISettings_Pencil from "@/components/KISettings_Pencil";
-import KISettings_Cup from "@/components/KISettings_Cup";
+import KISettings_Pencil from "./components/KISettings_Pencil";
+import KISettings_Cup from "./components/KISettings_Cup";
 import {FloatingInfoButton, UseCaseHeader, XAIStudioRibbon, GitHubRibbon} from '@xai-demonstrator/xaidemo-ui';
 import {debounce} from "debounce";
 /* https://forum.vuejs.org/t/vue-received-a-component-which-was-made-a-reactive-object/119004/2 */
@@ -235,15 +235,8 @@ main section {
   border-radius: 3px;
 }
 
-.configuration-menu {
+.configurator-menu{
   display: flex;
-  margin-top: 8px;
-}
-
-.config {
-  border-radius: 50px;
-  padding: 0;
-  margin: 1px;
 }
 
 @media screen and (max-width: 450px) {
