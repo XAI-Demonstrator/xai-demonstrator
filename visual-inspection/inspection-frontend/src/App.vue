@@ -51,12 +51,15 @@
       </section>
 
       <section>
-        <div>
-          <div id="left">
-            <KISettings ref="configurator"/>
+        <div class="configuration-menu">
+          <div class="config" id="smartphone">
+            <KISettings_Smartphone ref="configurator_smartphone"/>
           </div>
-          <div id="rigth">
-            <KISettings ref="configurator"/>
+          <div class="config" id="pencil">
+            <KISettings_Pencil ref="configurator_pencil"/>
+          </div>
+          <div class="config" id="cup">
+            <KISettings_Cup ref="configurator_cup"/>
           </div>
         </div>
       </section>
@@ -75,15 +78,15 @@ import 'vue-advanced-cropper/dist/style.css'
 import InspectImage from "@/components/InspectImage";
 import ExplainInspection from "@/components/ExplainInspection";
 import ExplanationStencil from "@/components/ExplanationStencil";
-import KISettings from "@/components/KISettings";
+import KISettings_Smartphone from "@/components/KISettings_Smartphone";
+import KISettings_Pencil from "@/components/KISettings_Pencil";
+import KISettings_Cup from "@/components/KISettings_Cup";
 import {FloatingInfoButton, UseCaseHeader, XAIStudioRibbon, GitHubRibbon} from '@xai-demonstrator/xaidemo-ui';
 import {debounce} from "debounce";
-
 /* https://forum.vuejs.org/t/vue-received-a-component-which-was-made-a-reactive-object/119004/2 */
 const componentMap = {
   stencil: ExplanationStencil
 }
-
 export default {
   name: 'App',
   components: {
@@ -92,7 +95,9 @@ export default {
     ExplainInspection,
     UseCaseHeader,
     FloatingInfoButton,
-    KISettings,
+    KISettings_Smartphone,
+    KISettings_Pencil,
+    KISettings_Cup,
     XAIStudioRibbon,
     GitHubRibbon
   },
@@ -211,7 +216,6 @@ main {
   flex-direction: column;
   align-items: center;
 }
-
 main section {
   width: 100%;
   margin: 0;
@@ -221,16 +225,25 @@ main section {
   align-items: center;
   justify-content: center;
 }
-
 #image-container {
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-
 .cropper * {
   border-radius: 3px;
+}
+
+.configuration-menu {
+  display: flex;
+  margin-top: 8px;
+}
+
+.config {
+  border-radius: 50px;
+  padding: 0;
+  margin: 1px;
 }
 
 @media screen and (max-width: 450px) {
@@ -239,24 +252,19 @@ main section {
     padding-left: 0;
     padding-right: 0;
   }
-
   #image-container {
     width: 100%;
     max-width: 100vw;
     padding: 12px 0;
   }
-
   .cropper {
     max-width: 100vw;
   }
-
   .cropper * {
     border-radius: 0;
   }
 }
-
 @media screen and (min-width: 450px) and (max-height: 650px) {
-
   #app {
     flex-direction: column;
     padding-left: 0;
@@ -265,69 +273,53 @@ main section {
     height: 100vh;
     width: 100vw;
   }
-
   main {
     flex: 1;
     max-height: calc(100vh - 54px);
-
     display: flex;
     flex-direction: column;
     align-items: flex-end;
     justify-content: flex-start;
     flex-wrap: wrap;
   }
-
   main section {
     width: 40%;
     order: 2;
     margin-bottom: 12px;
   }
-
   main section:last-of-type {
     margin-bottom: 0;
   }
-
   #image-container {
     max-height: calc(100vh - 54px);
     width: 60%;
-
     align-self: flex-start;
     order: 1;
-
     justify-content: center;
     align-items: flex-start;
   }
-
   .cropper {
     max-height: calc(100vh - 54px);
   }
-
 }
-
 @media screen and (min-width: 450px) and (min-height: 650px) {
-
   #app {
     flex-direction: column;
   }
-
   main {
     flex-grow: 1;
   }
-
   main section {
     padding: 0;
   }
-
   #image-container {
     margin-top: 8px;
     margin-bottom: 8px;
     width: 100%;
     max-width: 450px;
   }
-
   .cropper {
     max-width: calc(450px - 16px);
   }
-
 }
 </style>
