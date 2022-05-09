@@ -1,4 +1,4 @@
-fastapi==0.75.0
+fastapi==0.76.0
 pydantic
 python-multipart
 aiohttp
