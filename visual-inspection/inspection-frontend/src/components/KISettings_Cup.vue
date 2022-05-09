@@ -1,7 +1,8 @@
 <template>
 
-    <div class="configurator_cup" align = 'left'>
-        <h2>Kategorie C</h2>
+    <div class="configurators" align = 'left'>
+        <h3>Kategorie C</h3>
+        <img class="config_picture" src="../assets/25_Tassen.jpg">
         <p style = "text-align:center">Anzahl</p>
 
         <div class = checkboxgroup>
@@ -45,9 +46,10 @@
 .configurator_cup {
   border: 2px solid powderblue;
   color: black;
-  width: 150px;
+  width: 140px;
   height: 400px;
   background-color: #EFFBF8;
+  border-radius: 10px;
 }
 .image {
     max-height: 100%;

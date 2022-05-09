@@ -52,13 +52,13 @@
 
       <section>
         <div class="configurator-menu">
-          <div id="left">
+          <div id="smartphone_config" class="configurators">
             <KISettings_Smartphone id="id1" ref="configurator"/>
           </div>
-          <div id="rigth">
+          <div id="pencil_config" class="configurators">
             <KISettings_Pencil id="id2" ref="configurator"/>
           </div>
-          <div id="right">
+          <div id="cup_config" class="configurators">
             <KISettings_Cup id="id3" ref="configurator"/>
           </div>
         </div>
@@ -235,8 +235,34 @@ main section {
   border-radius: 3px;
 }
 
-.configurator-menu{
+.configurator-menu {
   display: flex;
+}
+
+.configurators {
+  margin: 5px;
+  border-radius: 25px;
+  width: 140px;
+  height: 400px;
+}
+
+.config_picture {
+  width: 130px ;
+}
+
+#smartphone_config {
+  background-color: #E2E6EC;
+  box-shadow: #E2E6EC 2px 2px;
+}
+
+#pencil_config {
+  background-color: #F1DEDB;
+  box-shadow: #F1DEDB 2px 2px;
+}
+
+#cup_config {
+  background-color: #EFFBF8;
+  box-shadow: #EFFBF8 2px 2px;
 }
 
 @media screen and (max-width: 450px) {

@@ -1,7 +1,8 @@
 <template>
 
-  <div className="configurator_pencil" align='left'>
-    <h2>Kategorie B</h2>
+  <div class="configurators" align='left'>
+    <h3>Kategorie B</h3>
+    <img class="config_picture" src="../assets/25_Stifte.jpg">
     <p style="text-align:center">Anzahl</p>
 
     <div className=checkboxgroup>
@@ -42,9 +43,10 @@ export default {
 .configurator_pencil {
   border: 2px solid powderblue;
   color: black;
-  width: 150px;
+  width: 140px;
   height: 400px;
   background-color: #F1DEDB;
+  border-radius: 10px;
 }
 
 .image {

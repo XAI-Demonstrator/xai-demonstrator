@@ -1,24 +1,48 @@
 <template>
-    <div class="configurator_smartphone" align = 'left'>
-        <h2>Kategorie A</h2>
-        <p style = "text-align:center">Anzahl</p>
+  <div  class="configurators" align='left'>
+    <h3>Kategorie A</h3>
+    <img class="config_picture" src="../assets/25_Handys.jpg">
+    <p style="text-align:center">Anzahl</p>
 
-        <div class = checkboxgroup>
-        <label><input type = "radio" v-model="selection_anzahl" value="0">Keine</label>
-        <label><input type = "radio" v-model="selection_anzahl" value="15">15</label>
-        <label><input type = "radio" v-model="selection_anzahl" value="200">200</label>
-        </div>
-        <p style = "text-align:center">Label</p>
-        <div class = checkboxgroup>
-        <label><input type = "radio" v-model="selection_label" value="Handy">Handy</label>
-        <label><input type = "radio" v-model="selection_label" value="Tasse">Tasse</label>
-        </div>
-      <!--
-        <div class="image">
-            <img v-bind:src="img" alt = "Alt Text" >
-        </div>
- -->
+    <div v-if="id === 'id1'" class=checkboxgroup>
+      <label><input type="radio" v-model="selection_amount1"
+                    value=this.conf[id][amount][0]>{{ conf[id]["amount"][0] }}</label>
+      <label><input type="radio" v-model="selection_amount1"
+                    value="conf[id][amount][1]">{{ conf[id]["amount"][1] }}</label>
+      <label><input type="radio" v-model="selection_amount1"
+                    value="conf[id][amount][2]">{{ conf[id]["amount"][2] }}</label>
+     </div>
+
+    <div v-if="id === 'id2'" class=checkboxgroup>
+      <label><input type="radio" v-model="selection_amount2"
+                    value="conf[id][amount][0]">{{ conf[id]["amount"][0] }}</label>
+      <label><input type="radio" v-model="selection_amount2"
+                    value="conf[id][amount][1]">{{ conf[id]["amount"][1] }}</label>
     </div>
+
+    <div v-if="id === 'id3'" class=checkboxgroup>
+      <label><input type="radio" v-model="selection_amount3"
+                    value="conf[id][amount][0]">{{ conf[id]["amount"][0] }}</label>
+      <label><input type="radio" v-model="selection_amount3"
+                    value="conf[id][amount][1]">{{ conf[id]["amount"][1] }}</label>
+    </div>
+
+
+    <p style="text-align:center">Label</p>
+    <div v-if="id === 'id1'" class=checkboxgroup>
+      <label><input type="radio" v-model="selection_label1" value="conf[id][labels][0]">{{conf[id]["labels"][0]}}</label>
+      <label><input type="radio" v-model="selection_label1" value="conf[id][labels][1]">{{conf[id]["labels"][1]}}</label>
+    </div>
+
+    <div v-if="id === 'id2'" class=checkboxgroup>
+      <label><input type="radio" v-model="selection_label2" value='conf[id][labels][0]'>{{conf[id]["labels"][0]}}</label>
+      <label><input type="radio" v-model="selection_label2" value='conf[id][labels][1]'>{{conf[id]["labels"][1]}}</label>
+    </div>
+
+    <div v-if="id === 'id3'" class=checkboxgroup>
+      <label><input type="radio" v-model="selection_label3" value="conf[id][labels][0]">{{conf[id]["labels"][0]}}</label>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -62,10 +86,12 @@ export default {
 .configurator_smartphone {
   border: 2px solid powderblue;
   color: black;
-  width: 150px;
+  width: 140px;
   height: 400px;
-  background-color: #E2E6EC;
+  border-radius: 10px;
+
 }
+
 .image {
     max-height: 100%;
     height: 1%;
