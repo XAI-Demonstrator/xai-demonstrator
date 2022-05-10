@@ -53,13 +53,13 @@
       <section>
         <div class="configurator-menu">
           <div id="smartphone_config" class="configurators">
-            <KISettings_Smartphone id="id1" ref="configurator"/>
+            <KISettings_Smartphone  ref="configurator"/>
           </div>
           <div id="pencil_config" class="configurators">
-            <KISettings_Pencil id="id2" ref="configurator"/>
+            <KISettings_Pencil  ref="configurator"/>
           </div>
           <div id="cup_config" class="configurators">
-            <KISettings_Cup id="id3" ref="configurator"/>
+            <KISettings_Cup  ref="configurator"/>
           </div>
         </div>
       </section>

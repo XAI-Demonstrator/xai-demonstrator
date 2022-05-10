@@ -6,26 +6,26 @@
         <p style = "text-align:center">Anzahl</p>
 
         <div class = checkboxgroup>
-      <!--  <label><input type = "radio" v-model="selection_anzahl" value="0">Keine</label> -->
-        <label><input type = "radio" v-model="selection_anzahl" value="15" checked="checked">
+      <!--  <label><input type = "radio" v-model="selection_anzahl_cup" value="0">Keine</label> -->
+        <label><input type = "radio" v-model="selection_amount_cup" value="15" checked="checked">
           <span> 15</span>
         </label>
-        <label><input type = "radio" v-model="selection_anzahl" value="200" >
+        <label><input type = "radio" v-model="selection_amount_cup" value="200" >
           <span> 200</span>
         </label>
         </div>
         <p style = "text-align:center">Label</p>
         <div class = checkboxgroup>
-       <!-- <label><input type = "radio" v-model="selection_label" value="Handy">Handy</label> -->
-        <label><input type = "radio" v-model="selection_label" value="Tasse" checked="checked">
+        <label><input type = "radio" v-model="selection_label_cup" value="Tasse" checked="checked">
           <span> Tasse</span>
         </label>
         </div>
-      <!--
-        <div class="image">
-            <img v-bind:src="img" alt = "Alt Text" >
-        </div>
-         -->
+
+      <br>
+      {{selection_amount_cup}}
+      {{selection_label_cup}}
+
+
     </div>
 
 
@@ -41,8 +41,8 @@
         data(){
             return{
                 img: require('../assets/table.jpg'),
-                selection_anzahl: '0',
-                selection_label: 'Handy'
+                selection_amount_cup: '15',
+                selection_label_cup: 'Tasse'
             }
         }
     }

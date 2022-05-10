@@ -7,13 +7,13 @@
     <p style="text-align:center">Anzahl</p>
 
     <div className=checkboxgroup>
-    <!--  <label><input type="radio" v-model="selection_anzahl" value="0">Keine</label> -->
+    <!--  <label><input type="radio" v-model="selection_amount_pencil" value="0">Keine</label> -->
       <div  class=checkboxgroup align="left">
-      <label><input type="radio" name="radio" align="left" v-model="selection_anzahl"
+      <label><input type="radio" name="radio" align="left" v-model="selection_amount_pencil"
                     value=15>
         <span>15</span>
       </label>
-      <label><input type="radio" name="radio" v-model="selection_anzahl"
+      <label><input type="radio" name="radio" v-model="selection_amount_pencil"
                     value="200" checked="checked">
         <span> 200</span>
       </label>
@@ -22,10 +22,10 @@
     </div>
     <p style="text-align:center">Label</p>
     <div className=checkboxgroup>
-      <label><input type="radio" name="radio" v-model="selection_label" value="Stift">
+      <label><input type="radio" name="radio" v-model="selection_label_pencil" value="Stift">
         <span> Stift</span>
       </label>
-      <label><input type="radio" name="radio" v-model="selection_label" value="Tasse">
+      <label><input type="radio" name="radio" v-model="selection_label_pencil" value="Tasse">
         <span> Tasse</span>
       </label>
     </div>
@@ -34,6 +34,9 @@
           <img v-bind:src="img" alt = "Alt Text" >
       </div>
        -->
+    <br>
+    {{selection_amount_pencil}}
+    {{selection_label_pencil}}
   </div>
 
 
@@ -46,8 +49,8 @@ export default {
   data() {
     return {
       img: require('../assets/table.jpg'),
-      selection_anzahl: '0',
-      selection_label: 'Handy'
+      selection_amount_pencil: '15',
+      selection_label_pencil: 'Stift'
     }
   }
 }
