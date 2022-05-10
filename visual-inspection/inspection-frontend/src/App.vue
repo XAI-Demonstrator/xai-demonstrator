@@ -3,15 +3,22 @@
     <GitHubRibbon url="https://github.com/xai-demonstrator/xai-demonstrator"/>
     <XAIStudioRibbon url="https://www.xai-studio.de"/>
     <UseCaseHeader
+        v-if="!showConfiguration"
         v-bind:standalone="!Boolean(backendUrl)"
-        v-bind:title="$t('title')"/>
+        v-bind:title="$t('titleInspection')"/>
+    <UseCaseHeader
+        v-else
+        v-bind:standalone="!Boolean(backendUrl)"
+        v-bind:title="$t('titleConfiguration')"/>
+
     <main>
       <section>
         <div class="xd-section xd-light">
-          <p>{{ $t('howto') }}</p>
+          <p v-if="!showConfiguration">{{ $t('howtoInspect') }}</p>
+          <p v-else>{{ $t('howtoConfigurate') }}</p>
         </div>
       </section>
-      <div id="image-container">
+      <div v-show = "!showConfiguration" id="image-container">
         <Cropper ref="cropper" class="cropper" :src="img" @change="imageChanged"
                  :min-width="20" :min-height="20"
                  :stencil-component="explanationStencil"
@@ -40,7 +47,7 @@
 
       <section>
         <div class="xd-section xd-light">
-          <InspectImage ref="inspector"
+          <InspectImage v-if="!showConfiguration" ref="inspector"
                         v-bind:current-prediction="currentPrediction"
                         v-on:inspection-completed="inspectionCompleted"/>
           <ExplainInspection ref="explainer"
@@ -50,7 +57,7 @@
         </div>
       </section>
 
-      <section>
+      <section v-show="showConfiguration">
         <div class="configurator-menu">
           <div id="smartphone_config" class="configurators">
             <KISettings_Smartphone  ref="configurator"/>
@@ -64,7 +71,14 @@
         </div>
       </section>
 
+    <GoToConfiguration v-show= "!showConfiguration" ref="explainer"
+                            v-on:click="changeP()" />
+
+    <GoToInspection v-show="showConfiguration" ref="explainer"
+                             v-on:click="changeP()"/>
+
     </main>
+
     <FloatingInfoButton class="info-button"
                         v-bind:info-url="infoUrl"
                         v-bind:info-text="infoText"
@@ -81,6 +95,8 @@ import ExplanationStencil from "@/components/ExplanationStencil";
 import KISettings_Smartphone from "@/components/KISettings_Smartphone";
 import KISettings_Pencil from "./components/KISettings_Pencil";
 import KISettings_Cup from "./components/KISettings_Cup";
+import GoToConfiguration from "./components/GoToConfiguration";
+import GoToInspection from "./components/GoToInspection";
 import {FloatingInfoButton, UseCaseHeader, XAIStudioRibbon, GitHubRibbon} from '@xai-demonstrator/xaidemo-ui';
 import {debounce} from "debounce";
 /* https://forum.vuejs.org/t/vue-received-a-component-which-was-made-a-reactive-object/119004/2 */
@@ -95,6 +111,8 @@ export default {
     ExplainInspection,
     UseCaseHeader,
     FloatingInfoButton,
+    GoToConfiguration,
+    GoToInspection,
     KISettings_Smartphone,
     KISettings_Pencil,
     KISettings_Cup,
@@ -102,6 +120,9 @@ export default {
     GitHubRibbon
   },
   methods: {
+     async changeP() {
+      this.showConfiguration = !this.showConfiguration
+    },
     async imageChanged({canvas}) {
       if (!this.waitingForExplanation) {
         this.currentPrediction = false;
@@ -136,6 +157,7 @@ export default {
   },
   data() {
     return {
+      showConfiguration: false,
       currentPrediction: false,
       currentExplanation: false,
       waitingForExplanation: false,
@@ -175,8 +197,10 @@ export default {
 <i18n>
 {
   "de": {
-    "title": "Gegenstände erkennen",
-    "howto": "Wähle einen Bildausschnitt und die KI bestimmt den Gegenstand.",
+    "titleInspection": "Gegenstände erkennen",
+    "titleConfiguration": "KI trainieren",
+    "howtoInspect": "Wähle einen Bildausschnitt und die KI bestimmt den Gegenstand.",
+    "howToConfigurate": "Wähle die Daten für das Training der KI aus.",
     "info1headline": "Gegenstände erkennen",
     "info1paragraph1": "Du interagierst mit einer KI, die einen Gegenstand in einem Bildausschnitt erkennen kann. Aber eine KI ist nie perfekt!",
     "info1paragraph2": "Durch die Wahl verschiedener Bildausschnitte entdeckst du, für welche Bereiche die KI zuverlässig ist, aber insbesondere auch, wo sie an ihre Grenzen stößt.",
@@ -188,8 +212,10 @@ export default {
     "infoLinkLabel": "Interesse geweckt? Hier gibt’s mehr Infos!"
   },
   "en": {
-    "title": "Detect Objects",
-    "howto": "Select a part of the image and the AI will identify the object.",
+    "titleInspection": "Detect Objects",
+    "titleConfiguration": "Train AI",
+    "howtoInspect": "Select a part of the image and the AI will identify the object.",
+    "howtoConfigurate": "Select data to train the AI.",
     "info1headline": "Detect objects",
     "info1paragraph1": "You are interacting with an AI that can detect objects in images. But an AI is never perfect!",
     "info1paragraph2": "By selecting different parts of the image, you can discover for which of these parts the AI is reliable and, perhaps more importantly, for which it is not.",
