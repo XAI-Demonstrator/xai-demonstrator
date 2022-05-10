@@ -3,9 +3,9 @@
     <MultiBounce v-if="!prediction"
                  v-bind:numberOfDots="3"/>
      <p v-if="show_probability_percentage"
-        v-show="prediction && currentPrediction">{{ $t('answer1', {percentage: probability}, {object: prediction}) }}</p>
+        v-show="prediction && currentPrediction">{{ $t('answer_with_probability', {percentage: probability, object: prediction}) }}</p>
      <p v-else 
-        v-show="prediction && currentPrediction">{{ $t('answer2', {object: prediction}) }}</p>
+        v-show="prediction && currentPrediction">{{ $t('answer_without_probability', {object: prediction}) }}</p>
   </div>
 </template>
 
@@ -59,7 +59,7 @@ export default {
       probability: null,
       backendUrl: process.env.VUE_APP_BACKEND_URL,
       cancelTokens: [],
-      show_probability_percentage: process.env.VUE_APP_SHOW_PROBABILITY_PERCENTAGE
+      show_probability_percentage: JSON.parse(process.env.VUE_APP_SHOW_PROBABILITY_PERCENTAGE)
     }
   }
 }
@@ -68,12 +68,12 @@ export default {
 <i18n>
 {
   "de": {
-     "answer1": "„Das ist zu {percentage} % {object}“",
-     "answer2": "„Das ist {object}“"
+     "answer_with_probability": "„Das ist zu {percentage} % {object}“",
+     "answer_without_probability": "„Das ist {object}“"
   },
   "en": { 
-    "answer1": "\"This is with a probability of {percentage} % {object}\"",
-    "answer2": "\"This is {object}\""
+    "answer_with_probability": "\"This is with a probability of {percentage} % {object}\"",
+    "answer_without_probability": "\"This is {object}\""
     }
 }
 </i18n>

@@ -41,7 +41,7 @@ def test_that_a_prediction_is_generated(generate_image):
 
 def test_that_input_is_saved(generate_image, mocker, tmp_path):
     predict.settings.log_path = tmp_path
-    mocker.patch.object(predict, "predict_class", return_value="myclass")
+    mocker.patch.object(predict, "predict_class", return_value=("myclass", 0.8))
 
     img = generate_image(112, 112)
 
