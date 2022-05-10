@@ -244,10 +244,18 @@ main section {
   border-radius: 25px;
   width: 140px;
   height: 400px;
+  text-align: left;
+}
+
+.category_headline {
+  text-align: center;
 }
 
 .config_picture {
-  width: 130px ;
+  width: 135px;
+  float: left;
+  margin-top: 6px;
+  margin-bottom: 6px;
 }
 
 #smartphone_config {
@@ -265,6 +273,61 @@ main section {
   box-shadow: #EFFBF8 2px 2px;
 }
 
+/*The following Code is for getting Radio-Buttons with a square design
+  instead of the old-school Radio-Buttons. It is based on the following StackOverflow-Thread;
+  https://stackoverflow.com/questions/24516958/styling-radio-buttons-into-a-square*/
+input {
+  display: none;
+}
+
+label {
+  display: inline-block;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+label span {
+  position: relative;
+  line-height: 22px;
+}
+
+label span:before,
+label span:after {
+  content: '';
+}
+
+
+label span:before {
+  border: 1px solid #222021;
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+label span:after {
+  background: #222021;
+  width: 14px;
+  height: 14px;
+  position: absolute;
+  top: 2px;
+  left: 4px;
+  transition: 300ms;
+  opacity: 0;
+}
+
+label input:checked+span:after {
+  opacity: 1;
+}
+/*
+body {
+  background: #fbfbfb;
+  font-family: Arial;
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.7);
+}
+*/
 @media screen and (max-width: 450px) {
   #app {
     flex-direction: column;

@@ -1,19 +1,33 @@
 <template>
 
-  <div class="configurators" align='left'>
-    <h3>Kategorie B</h3>
+
+  <div class="configurators" align='center'>
+    <h3 class="category_headline">Kategorie B</h3>
     <img class="config_picture" src="../assets/25_Stifte.jpg">
     <p style="text-align:center">Anzahl</p>
 
     <div className=checkboxgroup>
     <!--  <label><input type="radio" v-model="selection_anzahl" value="0">Keine</label> -->
-      <label><input type="radio" v-model="selection_anzahl" value="15">15</label>
-      <label><input type="radio" v-model="selection_anzahl" value="200">200</label>
+      <div  class=checkboxgroup align="left">
+      <label><input type="radio" name="radio" align="left" v-model="selection_anzahl"
+                    value=15>
+        <span>15</span>
+      </label>
+      <label><input type="radio" name="radio" v-model="selection_anzahl"
+                    value="200" checked="checked">
+        <span> 200</span>
+      </label>
+     </div>
+
     </div>
     <p style="text-align:center">Label</p>
     <div className=checkboxgroup>
-      <label><input type="radio" v-model="selection_label" value="Handy">Stift</label>
-      <label><input type="radio" v-model="selection_label" value="Tasse">Tasse</label>
+      <label><input type="radio" name="radio" v-model="selection_label" value="Stift">
+        <span> Stift</span>
+      </label>
+      <label><input type="radio" name="radio" v-model="selection_label" value="Tasse">
+        <span> Tasse</span>
+      </label>
     </div>
     <!--
       <div class="image">

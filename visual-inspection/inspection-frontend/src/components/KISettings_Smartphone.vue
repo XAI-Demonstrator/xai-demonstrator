@@ -1,28 +1,38 @@
 <template>
-  <div  class="configurators" align='left'>
-    <h3>Kategorie A</h3>
-    <img class="config_picture" src="../assets/25_Handys.jpg">
+  <div  class="configurators">
+    <h3 class="category_headline">Kategorie A</h3>
+    <img align="left" class="config_picture" src="../assets/25_Handys.jpg">
     <p style="text-align:center">Anzahl</p>
 
-    <div v-if="id === 'id1'" class=checkboxgroup>
-      <label><input type="radio" v-model="selection_amount1"
-                    value=this.conf[id][amount][0]>{{ conf[id]["amount"][0] }}</label>
-      <label><input type="radio" v-model="selection_amount1"
-                    value="conf[id][amount][1]">{{ conf[id]["amount"][1] }}</label>
-      <label><input type="radio" v-model="selection_amount1"
-                    value="conf[id][amount][2]">{{ conf[id]["amount"][2] }}</label>
+    <div v-if="id === 'id1'" class=checkboxgroup align="left">
+      <label><input type="radio" name="radio" align="left" v-model="selection_amount1"
+                    value=this.conf[id][amount][0] checked="checked">
+        <span> {{ conf[id]["amount"][0] }}</span>
+      </label>
+      <label><input type="radio" name="radio" v-model="selection_amount1"
+                    value="conf[id][amount][1]">
+        <span> {{ conf[id]["amount"][1] }}</span>
+      </label>
+      <label><input type="radio" name="radio" v-model="selection_amount1"
+                    value="conf[id][amount][2]">
+        <span> {{ conf[id]["amount"][2] }}</span>
+      </label>
      </div>
 
     <div v-if="id === 'id2'" class=checkboxgroup>
-      <label><input type="radio" v-model="selection_amount2"
-                    value="conf[id][amount][0]">{{ conf[id]["amount"][0] }}</label>
-      <label><input type="radio" v-model="selection_amount2"
-                    value="conf[id][amount][1]">{{ conf[id]["amount"][1] }}</label>
+      <label><input type="radio" name="radio" v-model="selection_amount2"
+                    value="conf[id][amount][0]" checked="checked">
+        <span> {{ conf[id]["amount"][0] }}</span>
+      </label>
+      <label><input type="radio" name="radio" v-model="selection_amount2"
+                    value="conf[id][amount][1]">
+        <span> {{ conf[id]["amount"][1] }}</span>
+      </label>
     </div>
 
     <div v-if="id === 'id3'" class=checkboxgroup>
       <label><input type="radio" v-model="selection_amount3"
-                    value="conf[id][amount][0]">{{ conf[id]["amount"][0] }}</label>
+                    value="conf[id][amount][0]" checked="checked">{{ conf[id]["amount"][0] }}</label>
       <label><input type="radio" v-model="selection_amount3"
                     value="conf[id][amount][1]">{{ conf[id]["amount"][1] }}</label>
     </div>
@@ -30,17 +40,21 @@
 
     <p style="text-align:center">Label</p>
     <div v-if="id === 'id1'" class=checkboxgroup>
-      <label><input type="radio" v-model="selection_label1" value="conf[id][labels][0]">{{conf[id]["labels"][0]}}</label>
-      <label><input type="radio" v-model="selection_label1" value="conf[id][labels][1]">{{conf[id]["labels"][1]}}</label>
+      <label><input type="radio" v-model="selection_label1" value="conf[id][labels][0]" checked="checked">
+        <span> {{conf[id]["labels"][0]}}</span>
+      </label>
+      <label><input type="radio" v-model="selection_label1" value="conf[id][labels][1]">
+        <span>{{conf[id]["labels"][1]}}</span>
+      </label>
     </div>
 
     <div v-if="id === 'id2'" class=checkboxgroup>
-      <label><input type="radio" v-model="selection_label2" value='conf[id][labels][0]'>{{conf[id]["labels"][0]}}</label>
+      <label><input type="radio" v-model="selection_label2" value='conf[id][labels][0]' checked="checked">{{conf[id]["labels"][0]}}</label>
       <label><input type="radio" v-model="selection_label2" value='conf[id][labels][1]'>{{conf[id]["labels"][1]}}</label>
     </div>
 
     <div v-if="id === 'id3'" class=checkboxgroup>
-      <label><input type="radio" v-model="selection_label3" value="conf[id][labels][0]">{{conf[id]["labels"][0]}}</label>
+      <label><input type="radio" v-model="selection_label3" value="conf[id][labels][0]" checked="checked">{{conf[id]["labels"][0]}}</label>
     </div>
   </div>
 </template>

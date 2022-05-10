@@ -1,19 +1,25 @@
 <template>
 
-    <div class="configurators" align = 'left'>
-        <h3>Kategorie C</h3>
+    <div class="configurators">
+        <h3 class="category_headline">Kategorie C</h3>
         <img class="config_picture" src="../assets/25_Tassen.jpg">
         <p style = "text-align:center">Anzahl</p>
 
         <div class = checkboxgroup>
       <!--  <label><input type = "radio" v-model="selection_anzahl" value="0">Keine</label> -->
-        <label><input type = "radio" v-model="selection_anzahl" value="15">15</label>
-        <label><input type = "radio" v-model="selection_anzahl" value="200">200</label>
+        <label><input type = "radio" v-model="selection_anzahl" value="15" checked="checked">
+          <span> 15</span>
+        </label>
+        <label><input type = "radio" v-model="selection_anzahl" value="200" >
+          <span> 200</span>
+        </label>
         </div>
         <p style = "text-align:center">Label</p>
         <div class = checkboxgroup>
        <!-- <label><input type = "radio" v-model="selection_label" value="Handy">Handy</label> -->
-        <label><input type = "radio" v-model="selection_label" value="Tasse">Tasse</label>
+        <label><input type = "radio" v-model="selection_label" value="Tasse" checked="checked">
+          <span> Tasse</span>
+        </label>
         </div>
       <!--
         <div class="image">
