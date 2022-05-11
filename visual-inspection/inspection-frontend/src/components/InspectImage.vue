@@ -2,7 +2,10 @@
   <div class="inspector">
     <MultiBounce v-if="!prediction"
                  v-bind:numberOfDots="3"/>
-    <p v-show="prediction && currentPrediction">{{ $t('answer', { object: prediction }) }}</p>
+     <p v-if="show_probability_percentage"
+        v-show="prediction && currentPrediction">{{ $t('answer_with_probability', {percentage: probability, object: prediction}) }}</p>
+     <p v-else 
+        v-show="prediction && currentPrediction">{{ $t('answer_without_probability', {object: prediction}) }}</p>
   </div>
 </template>
 
@@ -24,6 +27,7 @@ export default {
   methods: {
     async predict(blob) {
       this.prediction = null;
+      this.probability = null;
 
       while (this.cancelTokens.length > 0) {
         this.cancelTokens.pop().cancel()
@@ -41,6 +45,7 @@ export default {
       })
           .then(response => {
             this.prediction = response.data.class_label
+            this.probability = response.data.probability
             this.$emit('inspection-completed')
           })
           .catch(error => {
@@ -51,8 +56,10 @@ export default {
   data() {
     return {
       prediction: null,
+      probability: null,
       backendUrl: process.env.VUE_APP_BACKEND_URL,
-      cancelTokens: []
+      cancelTokens: [],
+      show_probability_percentage: JSON.parse(process.env.VUE_APP_SHOW_PROBABILITY_PERCENTAGE)
     }
   }
 }
@@ -60,8 +67,14 @@ export default {
 
 <i18n>
 {
-  "de": { "answer": "„Das ist {object}“"},
-  "en": { "answer": "\"This is {object}\""}
+  "de": {
+     "answer_with_probability": "„Das ist zu {percentage} % {object}“",
+     "answer_without_probability": "„Das ist {object}“"
+  },
+  "en": { 
+    "answer_with_probability": "\"This is with a probability of {percentage} % {object}\"",
+    "answer_without_probability": "\"This is {object}\""
+    }
 }
 </i18n>
 
