@@ -54,6 +54,7 @@
                              v-bind:prediction-ready="currentPrediction"
                              v-on:explanation-requested="explanationRequested"
                              v-on:explanation-received="explanationReceived"/>
+          <ConfigureModel ref="configurator"/>
         </div>
       </section>
 
@@ -66,7 +67,7 @@
             <KISettings_Pencil  ref="configurator"/>
           </div>
           <div id="cup_config" class="configurators">
-            <KISettings_Cup  ref="configurator"/>
+            <KISettings_Cup  v-bind:amounts= "['a', 'b']" ref="configurator"/>
           </div>
         </div>
       </section>

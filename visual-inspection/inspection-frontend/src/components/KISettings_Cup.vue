@@ -6,14 +6,11 @@
         <p style = "text-align:center">Anzahl</p>
 
         <div class = checkboxgroup>
-      <!--  <label><input type = "radio" v-model="selection_anzahl_cup" value="0">Keine</label> -->
-        <label><input type = "radio" name="amount_cup" v-model="selection_amount_cup" value="15" checked="checked">
-          <span> 15</span>
-        </label>
-        <label><input type = "radio" name="amount_cup" v-model="selection_amount_cup" value="200" >
-          <span> 200</span>
-        </label>
+ 
+        <label v-for="amount in amounts" v-bind:key="amount"> <input type = "radio" name="amount" v-model="selection_amount" v-bind:value="amount" >
+          <span> {{amount}}</span></label>
         </div>
+
         <p style = "text-align:center">Label</p>
         <div class = checkboxgroup>
         <label><input type = "radio" name="data_cup" v-model="selection_label_cup" value="Tasse" checked="checked">
@@ -36,13 +33,23 @@
 <script>
     export default {
         name: "KISettings",
+        props: {
+            amounts: {
+              type: Array,
+              default:()=> ['0', '15', '200'],
+            },
+            labels: {
+              type: Array, 
+              default:()=> ['Handy', 'Tasse', 'Smartphone']
+            },
+        },
         components: {
         },
         data(){
             return{
                 img: require('../assets/table.jpg'),
                 selection_amount_cup: '15',
-                selection_label_cup: 'Tasse'
+                selection_label_cup: 'Tasse',
             }
         }
     }
