@@ -7,16 +7,16 @@
 
         <div class = checkboxgroup>
       <!--  <label><input type = "radio" v-model="selection_anzahl_cup" value="0">Keine</label> -->
-        <label><input type = "radio" v-model="selection_amount_cup" value="15" checked="checked">
+        <label><input type = "radio" name="amount_cup" v-model="selection_amount_cup" value="15" checked="checked">
           <span> 15</span>
         </label>
-        <label><input type = "radio" v-model="selection_amount_cup" value="200" >
+        <label><input type = "radio" name="amount_cup" v-model="selection_amount_cup" value="200" >
           <span> 200</span>
         </label>
         </div>
         <p style = "text-align:center">Label</p>
         <div class = checkboxgroup>
-        <label><input type = "radio" v-model="selection_label_cup" value="Tasse" checked="checked">
+        <label><input type = "radio" name="data_cup" v-model="selection_label_cup" value="Tasse" checked="checked">
           <span> Tasse</span>
         </label>
         </div>

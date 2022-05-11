@@ -5,15 +5,15 @@
     <p style="text-align:center">Anzahl</p>
 
     <div class=checkboxgroup align="left">
-      <label><input type="radio" name="radio" align="left" v-model="selection_amount_smartphone"
+      <label><input type="radio" name="amount_smartphone" align="left" v-model="selection_amount_smartphone"
                     value="0" checked="checked">
         <span> 0 </span>
       </label>
-      <label><input type="radio" name="radio" v-model="selection_amount_smartphone"
+      <label><input type="radio" name="amount_smartphone" v-model="selection_amount_smartphone"
                     value="15">
         <span> 15 </span>
       </label>
-      <label><input type="radio" name="radio" v-model="selection_amount_smartphone"
+      <label><input type="radio" name="amount_smartphone" v-model="selection_amount_smartphone"
                     value="200">
         <span> 200 </span>
       </label>
@@ -24,10 +24,10 @@
 
     <p style="text-align:center">Label</p>
     <div class=checkboxgroup>
-      <label><input type="radio" v-model="selection_label_smartphone" value="Handy" checked="checked">
+      <label><input type="radio" name="data_smartphone" v-model="selection_label_smartphone" value="Handy" checked="checked">
         <span> Handy</span>
       </label>
-      <label><input type="radio" v-model="selection_label_smartphone" value="Tasse">
+      <label><input type="radio" name="data_smartphone" v-model="selection_label_smartphone" value="Tasse">
         <span> Tasse </span>
       </label>
     </div>

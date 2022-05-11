@@ -9,12 +9,12 @@
     <div className=checkboxgroup>
     <!--  <label><input type="radio" v-model="selection_amount_pencil" value="0">Keine</label> -->
       <div  class=checkboxgroup align="left">
-      <label><input type="radio" name="radio" align="left" v-model="selection_amount_pencil"
-                    value=15>
+      <label><input type="radio" name="amount_pencil"  align="left" v-model="selection_amount_pencil"
+                    value=15 checked="checked">
         <span>15</span>
       </label>
-      <label><input type="radio" name="radio" v-model="selection_amount_pencil"
-                    value="200" checked="checked">
+      <label><input type="radio" name="amount_pencil" v-model="selection_amount_pencil"
+                    value="200" >
         <span> 200</span>
       </label>
      </div>
@@ -22,10 +22,10 @@
     </div>
     <p style="text-align:center">Label</p>
     <div className=checkboxgroup>
-      <label><input type="radio" name="radio" v-model="selection_label_pencil" value="Stift">
+      <label><input type="radio" name="data_pencil" v-model="selection_label_pencil" value="Stift">
         <span> Stift</span>
       </label>
-      <label><input type="radio" name="radio" v-model="selection_label_pencil" value="Tasse">
+      <label><input type="radio" name="data_pencil" v-model="selection_label_pencil" value="Tasse">
         <span> Tasse</span>
       </label>
     </div>
