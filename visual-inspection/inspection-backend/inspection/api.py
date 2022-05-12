@@ -12,8 +12,9 @@ api = APIRouter()
 
 
 @api.post("/predict")
-def predict_object(file: UploadFile = File(...), language: Optional[str] = Form(None)) -> Prediction:
-    return predict(file.file, language)
+def predict_object(file: UploadFile = File(...), language: Optional[str] = Form(None),
+                   model_id: Optional[str] = "my_model") -> Prediction:
+    return predict(image_file=file.file, language=language, model_id=model_id)
 
 
 # TODO: Allow non-nested settings

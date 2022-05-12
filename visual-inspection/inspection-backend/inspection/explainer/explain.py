@@ -10,7 +10,7 @@ from pydantic import BaseModel
 from xaidemo.tracing import add_span_attributes, traced
 
 from .explainers.lime_ import lime_explanation
-from ..model.model import model
+from ..model.model import models
 from ..model.predict import preprocess
 
 EXPLAINERS = {
@@ -40,7 +40,7 @@ class Explanation(BaseModel):
 def explain(image_file: IO[bytes],
             method: str,
             settings: Union[None, Dict[str, Any]] = None,
-            model_: tf.keras.models.Model = model) -> Explanation:
+            model_: tf.keras.models.Model = models["basis_model"]) -> Explanation:
     settings = settings or {}
     explanation_id = uuid.uuid4()
 

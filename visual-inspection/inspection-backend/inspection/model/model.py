@@ -1,6 +1,7 @@
 import json
-import pathlib
 from typing import Optional
+import os
+import pathlib
 
 import tensorflow as tf
 
@@ -15,12 +16,19 @@ with open(PATH / "german_labels.json") as json_file:
 with open(PATH / "english_labels.json") as json_file:
     ENGLISH_LABELS = json.load(json_file)
 
+
 try:
-    model = tf.keras.models.load_model(PATH / "my_model")
+    m = [PATH /str("models")/ str(model) for model in os.listdir(PATH/"models")]  # get names of model directories /model_ids
+    print(m)
+    models = {}
+    list(map(lambda x, y: models.update({x: y}), m, list(map(tf.keras.models.load_model, m))))
+
 except IOError:
     raise IOError('Cannot find custom model. Run download_model.sh once to obtain it.')
 
-
+print("Done")
+print(models)
+print(type(models))
 def decode_predictions(prediction):
     if len(prediction.shape) != 2 or prediction.shape[1] != 1001:
         raise ValueError('`decode_predictions` expects '
