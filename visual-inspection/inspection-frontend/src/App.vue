@@ -61,13 +61,32 @@
       <section v-show="showConfiguration">
         <div class="configurator-menu">
           <div id="smartphone_config" class="configurators">
-            <KISettings_Smartphone  ref="configurator"/>
+            <KISettings v-bind:amounts= "['0', '15', '200']"
+                        v-bind:header="'Kategorie A'"
+                        v-bind:labels="['Handy', 'Tasse']"
+                        v-bind:pic_filename="'25_Handys.jpg'"
+                        v-bind:name_radio_amount="'smartphone_amount'"
+                        v-bind:name_radio_label="'smartphone_label'"
+                        ref="configurator"/>
           </div>
           <div id="pencil_config" class="configurators">
-            <KISettings_Pencil  ref="configurator"/>
+            <KISettings v-bind:amounts="['15', '200']"
+                        v-bind:header="'Kategorie B'"
+                        v-bind:labels="['Stift', 'Tasse']"
+                        v-bind:pic_filename="'25_Stifte.jpg'"
+                        v-bind:rad_name="'rad_pen'"
+                        v-bind:name_radio_amount="'pencil_amount'"
+                        v-bind:name_radio_label="'pencil_label'"
+                        ref="configurator"/>
           </div>
           <div id="cup_config" class="configurators">
-            <KISettings_Cup  v-bind:amounts= "['a', 'b']" ref="configurator"/>
+            <KISettings  v-bind:amounts= "['15', '200']"
+                         v-bind:header="'Kategorie C'"
+                         v-bind:labels="['Tasse']"
+                         v-bind:pic_filename="'25_Tassen.jpg'"
+                         v-bind:name_radio_amount="'cup_amount'"
+                         v-bind:name_radio_label="'cup_label'"
+                         ref="configurator"/>
           </div>
         </div>
       </section>
@@ -93,9 +112,7 @@ import 'vue-advanced-cropper/dist/style.css'
 import InspectImage from "@/components/InspectImage";
 import ExplainInspection from "@/components/ExplainInspection";
 import ExplanationStencil from "@/components/ExplanationStencil";
-import KISettings_Smartphone from "@/components/KISettings_Smartphone";
-import KISettings_Pencil from "./components/KISettings_Pencil";
-import KISettings_Cup from "./components/KISettings_Cup";
+import KISettings from "./components/KISettings";
 import GoToConfiguration from "./components/GoToConfiguration";
 import GoToInspection from "./components/GoToInspection";
 import {FloatingInfoButton, UseCaseHeader, XAIStudioRibbon, GitHubRibbon} from '@xai-demonstrator/xaidemo-ui';
@@ -114,9 +131,7 @@ export default {
     FloatingInfoButton,
     GoToConfiguration,
     GoToInspection,
-    KISettings_Smartphone,
-    KISettings_Pencil,
-    KISettings_Cup,
+    KISettings,
     XAIStudioRibbon,
     GitHubRibbon
   },
