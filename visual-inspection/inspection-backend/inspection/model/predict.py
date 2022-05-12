@@ -1,11 +1,11 @@
 import uuid
-from typing import Callable, IO, Optional
+from typing import Callable, IO, Optional, Tuple
 import numpy as np
 import tensorflow as tf
 from PIL import Image
 from pydantic import BaseModel
 from xaidemo.tracing import add_span_attributes, traced
-from .model import decode_label, models
+from .model import decode_label, get_model, default_model
 from ..config import settings
 
 
@@ -30,9 +30,9 @@ def preprocess(img: Image) -> np.ndarray:
 @traced
 def predict_class(model_input: np.ndarray,
                   language: Optional[str] = None,
-                  model_: tf.keras.Model = model,
-                  decode_label_: Callable[[np.ndarray], str] = decode_label) -> str:
-    prediction = model_.predict(model_input)
+                  model: tf.keras.Model = default_model,
+                  decode_label_: Callable[[np.ndarray], str] = decode_label) -> Tuple[str, float]:
+    prediction = model.predict(model_input)
     probability = round(prediction.max() * 100, 2)
     class_label = decode_label_(prediction, language)
 
@@ -40,7 +40,9 @@ def predict_class(model_input: np.ndarray,
 
 
 @traced
-def predict(image_file: IO[bytes], model_id: str, language: Optional[str] = None, ) -> Prediction:
+def predict(image_file: IO[bytes], language: Optional[str] = None, model_id: Optional[str] = None) -> Prediction:
+    model = get_model(model_id)
+
     prediction_id = uuid.uuid4()
     add_span_attributes({"prediction.id": str(prediction_id)})
 
@@ -51,8 +53,9 @@ def predict(image_file: IO[bytes], model_id: str, language: Optional[str] = None
 
     model_input = preprocess(input_img)
 
-    class_label, probability = predict_class(model_input=model_input, language=language,
-                                             model_=models[model_id])  # calling the wanted model by its id
+    class_label, probability = predict_class(model_input=model_input,
+                                             language=language,
+                                             model_=model)
 
     return Prediction(prediction_id=prediction_id,
                       class_label=class_label,
