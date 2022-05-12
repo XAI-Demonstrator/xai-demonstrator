@@ -5,6 +5,8 @@ import pathlib
 
 import tensorflow as tf
 
+from ..config import settings
+
 PATH = pathlib.Path(__file__).parent
 
 with open(PATH / "original_labels.json") as json_file:
@@ -37,7 +39,7 @@ def _load_models() -> Dict[str, tf.keras.models.Model]:
 
 MODELS = _load_models()
 
-default_model = MODELS["my-model"]
+default_model = MODELS[settings.default_model]
 
 
 def get_model(model_id: str) -> tf.keras.models.Model:
