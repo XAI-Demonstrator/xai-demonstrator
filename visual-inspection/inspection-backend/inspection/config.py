@@ -7,7 +7,7 @@ class Settings(BaseSettings):
     root_path: str = ""
     path_prefix: str = ""
     # Model configuration
-    default_model: str = "my-model"
+    default_model: str = "my_model"
     # Explanation configuration
     default_explainer: str = "lime"
     # Monitoring

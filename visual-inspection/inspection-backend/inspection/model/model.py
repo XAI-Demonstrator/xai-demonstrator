@@ -1,11 +1,13 @@
 import json
 from typing import Optional, Dict
-import os
 import pathlib
+import logging
 
 import tensorflow as tf
 
 from ..config import settings
+
+logger = logging.getLogger()
 
 PATH = pathlib.Path(__file__).parent
 
@@ -20,19 +22,21 @@ with open(PATH / "english_labels.json") as json_file:
 
 
 def _load_models() -> Dict[str, tf.keras.models.Model]:
-    try:
-        m = [PATH / str("models") / str(model) for model in
-             os.listdir(PATH / "models")]  # get names of model directories /model_ids
-        print(m)
-        models = {}
-        list(map(lambda x, y: models.update({x: y}), m, list(map(tf.keras.models.load_model, m))))
 
-    except IOError:
-        raise IOError('Cannot find custom model. Run download_model.sh once to obtain it.')
+    models = {}
 
-    print("Done")
-    print(models)
-    print(type(models))
+    for model_path in (PATH / "models").iterdir():
+        model_id = model_path.name
+
+        try:
+            model_obj = tf.keras.models.load_model(model_path)
+        except IOError:
+            logger.error(f"Failed to load model at {model_path}")
+        else:
+            models[model_id] = model_obj
+
+    if not models:
+        raise ValueError('Cannot find/load a single custom model. Run download_model.sh once to obtain them.')
 
     return models
 

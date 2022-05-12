@@ -12,7 +12,8 @@ api = APIRouter()
 
 
 @api.post("/predict")
-def predict_object(file: UploadFile = File(...), language: Optional[str] = Form(None),
+def predict_object(file: UploadFile = File(...),
+                   language: Optional[str] = Form(None),
                    model_id: Optional[str] = Form(None)) -> Prediction:
     return predict(image_file=file.file, language=language, model_id=model_id)
 
@@ -20,6 +21,7 @@ def predict_object(file: UploadFile = File(...), language: Optional[str] = Form(
 # TODO: Allow non-nested settings
 class ExplanationRequest(BaseModel):
     method: str = _settings.default_explainer
+    model_id: str = _settings.default_model
     settings: Dict[str, Dict[str, Union[StrictInt, StrictFloat, StrictBool,
                                         int, float, bool,
                                         str]]]
@@ -39,6 +41,7 @@ class ExplanationRequest(BaseModel):
 @api.post("/explain")
 def explain_classification(file: UploadFile = File(...),
                            method: Optional[str] = Form(None),
+                           model_id: Optional[str] = Form(None),
                            settings: Optional[str] = Form(None)) -> Explanation:
     if settings is not None:
         if method is None:
@@ -48,13 +51,15 @@ def explain_classification(file: UploadFile = File(...),
 
     settings = settings or "{}"
     method = method or _settings.default_explainer
+    model_id = model_id or _settings.default_model
 
     try:
         request = ExplanationRequest.parse_raw('{"settings":' + settings + '}')
         request.method = method
+        request.model_id = model_id
     except ValidationError as errors_out:
         raise HTTPException(
             status_code=HTTP_422_UNPROCESSABLE_ENTITY, detail=errors_out.errors()
         )
 
-    return explain(file.file, method=request.method, settings=request.settings)
+    return explain(file.file, method=request.method, model_id=model_id, settings=request.settings)

@@ -1,16 +1,16 @@
 import base64
 import io
 import uuid
-from typing import Any, Dict, IO, Tuple, Union
+from typing import Any, Dict, IO, Tuple, Union, Optional
 
 import numpy as np
-import tensorflow as tf
 from PIL import Image
+from fastapi import HTTPException
 from pydantic import BaseModel
 from xaidemo.tracing import add_span_attributes, traced
 
 from .explainers.lime_ import lime_explanation
-from ..model.model import models
+from ..model.model import get_model, default_model
 from ..model.predict import preprocess
 
 EXPLAINERS = {
@@ -40,8 +40,17 @@ class Explanation(BaseModel):
 def explain(image_file: IO[bytes],
             method: str,
             settings: Union[None, Dict[str, Any]] = None,
-            model_: tf.keras.models.Model = models["basis_model"]) -> Explanation:
+            model_id: Optional[str] = None) -> Explanation:
     settings = settings or {}
+
+    if model_id is not None:
+        try:
+            model = get_model(model_id)
+        except KeyError as e:
+            raise HTTPException(status_code=404, detail=str(e))
+    else:
+        model = default_model
+
     explanation_id = uuid.uuid4()
 
     add_span_attributes({"explanation.id": str(explanation_id), "explanation.method": method})
@@ -49,7 +58,7 @@ def explain(image_file: IO[bytes],
     input_image = Image.open(image_file)
     explainer_input = preprocess(input_image)[0]
 
-    raw_image = EXPLAINERS[method](explainer_input, model_, **settings)
+    raw_image = EXPLAINERS[method](explainer_input, model, **settings)
 
     return Explanation(explanation_id=explanation_id,
                        image=generate_output_image(raw_image, input_image.size))

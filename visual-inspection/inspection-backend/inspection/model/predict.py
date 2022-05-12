@@ -64,7 +64,7 @@ def predict(image_file: IO[bytes], language: Optional[str] = None, model_id: Opt
 
     class_label, probability = predict_class(model_input=model_input,
                                              language=language,
-                                             model_=model)
+                                             model=model)
 
     return Prediction(prediction_id=prediction_id,
                       class_label=class_label,
