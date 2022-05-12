@@ -1,5 +1,5 @@
 import json
-from typing import Optional
+from typing import Optional, Dict
 import os
 import pathlib
 
@@ -17,18 +17,36 @@ with open(PATH / "english_labels.json") as json_file:
     ENGLISH_LABELS = json.load(json_file)
 
 
-try:
-    m = [PATH /str("models")/ str(model) for model in os.listdir(PATH/"models")]  # get names of model directories /model_ids
-    print(m)
-    models = {}
-    list(map(lambda x, y: models.update({x: y}), m, list(map(tf.keras.models.load_model, m))))
+def _load_models() -> Dict[str, tf.keras.models.Model]:
+    try:
+        m = [PATH / str("models") / str(model) for model in
+             os.listdir(PATH / "models")]  # get names of model directories /model_ids
+        print(m)
+        models = {}
+        list(map(lambda x, y: models.update({x: y}), m, list(map(tf.keras.models.load_model, m))))
 
-except IOError:
-    raise IOError('Cannot find custom model. Run download_model.sh once to obtain it.')
+    except IOError:
+        raise IOError('Cannot find custom model. Run download_model.sh once to obtain it.')
 
-print("Done")
-print(models)
-print(type(models))
+    print("Done")
+    print(models)
+    print(type(models))
+
+    return models
+
+
+MODELS = _load_models()
+
+default_model = MODELS["my-model"]
+
+
+def get_model(model_id: str) -> tf.keras.models.Model:
+    try:
+        return MODELS[model_id]
+    except KeyError:
+        raise KeyError(f"Unknown model id {model_id}. Available models are: {list(MODELS.keys())}")
+
+
 def decode_predictions(prediction):
     if len(prediction.shape) != 2 or prediction.shape[1] != 1001:
         raise ValueError('`decode_predictions` expects '

@@ -1,10 +1,13 @@
 import uuid
 from typing import Callable, IO, Optional, Tuple
+
+from fastapi import HTTPException
 import numpy as np
 import tensorflow as tf
 from PIL import Image
 from pydantic import BaseModel
 from xaidemo.tracing import add_span_attributes, traced
+
 from .model import decode_label, get_model, default_model
 from ..config import settings
 
@@ -31,7 +34,7 @@ def preprocess(img: Image) -> np.ndarray:
 def predict_class(model_input: np.ndarray,
                   language: Optional[str] = None,
                   model: tf.keras.Model = default_model,
-                  decode_label_: Callable[[np.ndarray], str] = decode_label) -> Tuple[str, float]:
+                  decode_label_: Callable[[np.ndarray, str], Optional[str]] = decode_label) -> Tuple[str, float]:
     prediction = model.predict(model_input)
     probability = round(prediction.max() * 100, 2)
     class_label = decode_label_(prediction, language)
@@ -41,7 +44,13 @@ def predict_class(model_input: np.ndarray,
 
 @traced
 def predict(image_file: IO[bytes], language: Optional[str] = None, model_id: Optional[str] = None) -> Prediction:
-    model = get_model(model_id)
+    if model_id is not None:
+        try:
+            model = get_model(model_id)
+        except KeyError as e:
+            raise HTTPException(status_code=404, detail=str(e))
+    else:
+        model = default_model
 
     prediction_id = uuid.uuid4()
     add_span_attributes({"prediction.id": str(prediction_id)})
