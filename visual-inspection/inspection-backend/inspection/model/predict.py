@@ -1,7 +1,6 @@
 import uuid
 from typing import Callable, IO, Optional, Tuple
 
-from fastapi import HTTPException
 import numpy as np
 import tensorflow as tf
 from PIL import Image
@@ -43,14 +42,8 @@ def predict_class(model_input: np.ndarray,
 
 
 @traced
-def predict(image_file: IO[bytes], language: Optional[str] = None, model_id: Optional[str] = None) -> Prediction:
-    if model_id is not None:
-        try:
-            model = get_model(model_id)
-        except KeyError as e:
-            raise HTTPException(status_code=404, detail=str(e))
-    else:
-        model = default_model
+def predict(image_file: IO[bytes], model_id: str, language: Optional[str] = None) -> Prediction:
+    model = get_model(model_id)
 
     prediction_id = uuid.uuid4()
     add_span_attributes({"prediction.id": str(prediction_id)})

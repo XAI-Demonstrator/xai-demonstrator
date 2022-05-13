@@ -1,9 +1,11 @@
 import json
-from typing import Optional, Dict
-import pathlib
 import logging
+import pathlib
+from typing import Optional, Dict
 
 import tensorflow as tf
+from fastapi import HTTPException
+from starlette.status import HTTP_404_NOT_FOUND
 
 from ..config import settings
 
@@ -22,7 +24,6 @@ with open(PATH / "english_labels.json") as json_file:
 
 
 def _load_models() -> Dict[str, tf.keras.models.Model]:
-
     models = {}
 
     for model_path in (PATH / "models").iterdir():
@@ -50,7 +51,8 @@ def get_model(model_id: str) -> tf.keras.models.Model:
     try:
         return MODELS[model_id]
     except KeyError:
-        raise KeyError(f"Unknown model id {model_id}. Available models are: {list(MODELS.keys())}")
+        raise HTTPException(status_code=HTTP_404_NOT_FOUND,
+                            detail=f"Unknown model id {model_id}. Available models are: {list(MODELS.keys())}")
 
 
 def decode_predictions(prediction):
@@ -67,7 +69,7 @@ def decode_predictions(prediction):
 def decode_label(prediction, language: Optional[str] = None):
     original_label = decode_predictions(prediction)
     if language is not None and language[:2] == "en":
-        return ENGLISH_LABELS[original_label] if original_label in ENGLISH_LABELS\
+        return ENGLISH_LABELS[original_label] if original_label in ENGLISH_LABELS \
             else "a " + original_label.replace("_", " ")
     else:
         return GERMAN_LABELS[original_label] if original_label in GERMAN_LABELS else original_label

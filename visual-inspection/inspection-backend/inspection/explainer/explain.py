@@ -5,7 +5,6 @@ from typing import Any, Dict, IO, Tuple, Union, Optional
 
 import numpy as np
 from PIL import Image
-from fastapi import HTTPException
 from pydantic import BaseModel
 from xaidemo.tracing import add_span_attributes, traced
 
@@ -38,22 +37,16 @@ class Explanation(BaseModel):
 
 @traced
 def explain(image_file: IO[bytes],
+            model_id: str,
             method: str,
-            settings: Union[None, Dict[str, Any]] = None,
-            model_id: Optional[str] = None) -> Explanation:
+            settings: Union[None, Dict[str, Any]] = None) -> Explanation:
     settings = settings or {}
-
-    if model_id is not None:
-        try:
-            model = get_model(model_id)
-        except KeyError as e:
-            raise HTTPException(status_code=404, detail=str(e))
-    else:
-        model = default_model
+    model = get_model(model_id)
 
     explanation_id = uuid.uuid4()
-
-    add_span_attributes({"explanation.id": str(explanation_id), "explanation.method": method})
+    add_span_attributes({"explanation.id": str(explanation_id),
+                         "explanation.method": method,
+                         "explanation.model": model_id})
 
     input_image = Image.open(image_file)
     explainer_input = preprocess(input_image)[0]

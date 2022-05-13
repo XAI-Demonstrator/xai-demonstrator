@@ -15,6 +15,7 @@ api = APIRouter()
 def predict_object(file: UploadFile = File(...),
                    language: Optional[str] = Form(None),
                    model_id: Optional[str] = Form(None)) -> Prediction:
+    model_id = model_id or _settings.default_model
     return predict(image_file=file.file, language=language, model_id=model_id)
 
 
@@ -55,11 +56,12 @@ def explain_classification(file: UploadFile = File(...),
 
     try:
         request = ExplanationRequest.parse_raw('{"settings":' + settings + '}')
-        request.method = method
-        request.model_id = model_id
     except ValidationError as errors_out:
         raise HTTPException(
             status_code=HTTP_422_UNPROCESSABLE_ENTITY, detail=errors_out.errors()
         )
+    else:
+        request.method = method
+        request.model_id = model_id
 
-    return explain(file.file, method=request.method, model_id=model_id, settings=request.settings)
+    return explain(file.file, model_id=model_id, method=request.method, settings=request.settings)
