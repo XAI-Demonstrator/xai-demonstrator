@@ -22,7 +22,9 @@ def test_that_broken_model_is_handled_gracefully(mocker, tmp_path):
     broken_model_dir = models_dir / "some-empty-model-dir"
     broken_model_dir.mkdir()
 
-    mocker.patch.object(model, "PATH", tmp_path)
+    p = mocker.patch.object(model, "PATH")
+    p.return_value = tmp_path
+
     m = mocker.patch.object(model, "tf")
     m.side_effect = IOError
 

@@ -1,9 +1,7 @@
 .coverage
 htmlcov/
 log/
-inspection/model/models/
-inspection/model/models/my_model
-inspection/model/models/my_model2
-inspection/model/my_model
 
+inspection/model/models/**
+inspection/model/my_model/**
 inspection/static
