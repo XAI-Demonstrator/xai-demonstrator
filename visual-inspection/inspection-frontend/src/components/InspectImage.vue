@@ -2,7 +2,6 @@
   <div class="inspector">
     <MultiBounce v-if="!prediction"
                  v-bind:numberOfDots="3"/>
-    <!--<p> {{this.model_id}}</p>-->
     <p v-show="prediction && currentPrediction">{{ $t('answer', {object: prediction}) }}</p>
   </div>
 </template>

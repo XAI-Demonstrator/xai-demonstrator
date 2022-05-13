@@ -14,8 +14,8 @@
     <main>
       <section>
         <div class="xd-section xd-light">
-          <p v-if="!showConfiguration">{{ $t('howtoInspect') }}</p>
-          <p v-else>{{ $t('howtoConfigurate') }}</p>
+          <p v-if="!showConfiguration">{{ $t('howToInspect') }}</p>
+          <p v-else>{{ $t('howToConfigurate') }}</p>
         </div>
       </section>
       <div v-show = "!showConfiguration" id="image-container">
@@ -223,7 +223,7 @@ export default {
   "de": {
     "titleInspection": "Gegenstände erkennen",
     "titleConfiguration": "KI trainieren",
-    "howtoInspect": "Wähle einen Bildausschnitt und die KI bestimmt den Gegenstand.",
+    "howToInspect": "Wähle einen Bildausschnitt und die KI bestimmt den Gegenstand.",
     "howToConfigurate": "Wähle die Daten für das Training der KI aus.",
     "info1headline": "Gegenstände erkennen",
     "info1paragraph1": "Du interagierst mit einer KI, die einen Gegenstand in einem Bildausschnitt erkennen kann. Aber eine KI ist nie perfekt!",
@@ -238,8 +238,8 @@ export default {
   "en": {
     "titleInspection": "Detect Objects",
     "titleConfiguration": "Train AI",
-    "howtoInspect": "Select a part of the image and the AI will identify the object.",
-    "howtoConfigurate": "Select data to train the AI.",
+    "howToInspect": "Select a part of the image and the AI will identify the object.",
+    "howToConfigurate": "Select data to train the AI.",
     "info1headline": "Detect objects",
     "info1paragraph1": "You are interacting with an AI that can detect objects in images. But an AI is never perfect!",
     "info1paragraph2": "By selecting different parts of the image, you can discover for which of these parts the AI is reliable and, perhaps more importantly, for which it is not.",
