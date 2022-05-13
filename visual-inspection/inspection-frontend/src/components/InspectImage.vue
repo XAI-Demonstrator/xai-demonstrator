@@ -3,7 +3,7 @@
     <MultiBounce v-if="!prediction"
                  v-bind:numberOfDots="3"/>
     <!--<p> {{this.model_id}}</p>-->
-    <p v-show="prediction && currentPrediction">{{ $t('answer', { object: prediction }) }}</p>
+    <p v-show="prediction && currentPrediction">{{ $t('answer', {object: prediction}) }}</p>
   </div>
 </template>
 
@@ -17,7 +17,7 @@ export default {
     MultiBounce
   },
   props: {
-    model_id : null,
+    model_id: null,
     currentPrediction: {
       type: Boolean,
       value: false
@@ -63,8 +63,12 @@ export default {
 
 <i18n>
 {
-  "de": { "answer": "„Das ist {object}“"},
-  "en": { "answer": "\"This is {object}\""}
+  "de": {
+    "answer": "„Das ist {object}“"
+  },
+  "en": {
+    "answer": "\"This is {object}\""
+  }
 }
 </i18n>
 

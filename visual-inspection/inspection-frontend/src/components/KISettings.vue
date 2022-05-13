@@ -42,6 +42,14 @@
     export default {
         name: "KISettings",
         props: {
+            default_amount: {
+              type: String,
+              default:()=> null
+            },
+            default_label:{
+              type: String,
+              default:()=> null
+            },
             amounts: {
               type: Array,
               default:()=> ['0', '15', '200'],
@@ -71,8 +79,8 @@
         },
         data(){
             return{
-                selection_amount: '0',
-                selection_label: 'Tasse',
+                selection_amount: this.default_amount,
+                selection_label: this.default_label,
             }
         }
     }

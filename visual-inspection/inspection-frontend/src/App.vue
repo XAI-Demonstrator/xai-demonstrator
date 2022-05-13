@@ -68,6 +68,8 @@
                         v-bind:pic_filename="'25_Handys.jpg'"
                         v-bind:name_radio_amount="'smartphone_amount'"
                         v-bind:name_radio_label="'smartphone_label'"
+                        v-bind:default_amount="0"
+                        v-bind:default_label= "'Handy'"
                         ref="configurator"/>
           </div>
           <div id="pencil_config" class="configurators">
@@ -78,6 +80,8 @@
                         v-bind:rad_name="'rad_pen'"
                         v-bind:name_radio_amount="'pencil_amount'"
                         v-bind:name_radio_label="'pencil_label'"
+                        v-bind:default_amount="15"
+                        v-bind:default_label="'Stift'"
                         ref="configurator"/>
           </div>
           <div id="cup_config" class="configurators">
@@ -87,6 +91,8 @@
                          v-bind:pic_filename="'25_Tassen.jpg'"
                          v-bind:name_radio_amount="'cup_amount'"
                          v-bind:name_radio_label="'cup_label'"
+                         v-bind:default_amount="15"
+                         v-bind:default_label="'Tasse'"
                          ref="configurator"/>
           </div>
         </div>
