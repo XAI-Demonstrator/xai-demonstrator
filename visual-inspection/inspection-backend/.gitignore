@@ -2,5 +2,6 @@
 htmlcov/
 log/
 inspection/model/my_model
+inspection/model/models/
 
 inspection/static

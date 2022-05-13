@@ -48,6 +48,7 @@
       <section>
         <div class="xd-section xd-light">
           <InspectImage v-if="!showConfiguration" ref="inspector"
+                        v-bind:model_id="model_id"
                         v-bind:current-prediction="currentPrediction"
                         v-on:inspection-completed="inspectionCompleted"/>
           <ExplainInspection ref="explainer"
@@ -173,6 +174,7 @@ export default {
   },
   data() {
     return {
+      model_id: "TestId",
       showConfiguration: false,
       currentPrediction: false,
       currentExplanation: false,

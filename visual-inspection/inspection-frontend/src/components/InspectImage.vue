@@ -2,6 +2,7 @@
   <div class="inspector">
     <MultiBounce v-if="!prediction"
                  v-bind:numberOfDots="3"/>
+    <!--<p> {{this.model_id}}</p>-->
     <p v-show="prediction && currentPrediction">{{ $t('answer', { object: prediction }) }}</p>
   </div>
 </template>
@@ -16,6 +17,7 @@ export default {
     MultiBounce
   },
   props: {
+    model_id : null,
     currentPrediction: {
       type: Boolean,
       value: false
@@ -35,6 +37,7 @@ export default {
       const form = new FormData();
       form.append('file', blob);
       form.append('language', this.$i18n.locale)
+      form.append('model_id', this.model_id)
 
       await axios.post(this.backendUrl + '/predict', form, {
         cancelToken: source.token
