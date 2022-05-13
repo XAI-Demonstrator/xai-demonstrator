@@ -1,7 +1,7 @@
 import base64
 import io
 import uuid
-from typing import Any, Dict, IO, Tuple, Union, Optional
+from typing import Any, Dict, IO, Tuple, Union
 
 import numpy as np
 from PIL import Image
@@ -9,7 +9,7 @@ from pydantic import BaseModel
 from xaidemo.tracing import add_span_attributes, traced
 
 from .explainers.lime_ import lime_explanation
-from ..model.model import get_model, default_model
+from ..model.model import get_model
 from ..model.predict import preprocess
 
 EXPLAINERS = {
