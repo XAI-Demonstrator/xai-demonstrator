@@ -16,7 +16,9 @@ export default {
     MultiBounce
   },
   props: {
-    model_id: null,
+    model_id: {
+      type: String
+    },
     currentPrediction: {
       type: Boolean,
       value: false

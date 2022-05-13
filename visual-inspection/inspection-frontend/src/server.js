@@ -20,10 +20,14 @@ export function makeServer({environment = "development"} = {}) {
                     if (request.requestBody.get("language") === "en") {
                         locale = "en"
                     }
+                    let label = labels[locale][Math.floor(Math.random() * labels[locale].length)]
+                    if (request.requestBody.get("model_id") === "model_0_15_15") {
+                        label = 'Digital Education'
+                    }
 
                     return {
                         prediction_id: 'abc',
-                        class_label: labels[locale][Math.floor(Math.random() * labels[locale].length)],
+                        class_label: label,
                         class_id: 4
                     }
                 },

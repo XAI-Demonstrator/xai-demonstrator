@@ -48,7 +48,7 @@
       <section>
         <div class="xd-section xd-light">
           <InspectImage v-if="!showConfiguration" ref="inspector"
-                        v-bind:model_id="model_id"
+                        v-bind:model_id="modelID"
                         v-bind:current-prediction="currentPrediction"
                         v-on:inspection-completed="inspectionCompleted"/>
           <ExplainInspection ref="explainer"
@@ -66,34 +66,27 @@
                         v-bind:header="'Kategorie A'"
                         v-bind:labels="['Handy', 'Tasse']"
                         v-bind:pic_filename="'25_Handys.jpg'"
-                        v-bind:name_radio_amount="'smartphone_amount'"
-                        v-bind:name_radio_label="'smartphone_label'"
-                        v-bind:default_amount="0"
-                        v-bind:default_label= "'Handy'"
-                        ref="configurator"/>
+                        v-bind:store_key="'smartphone'"
+                        ref="smartphone"/>
+            
           </div>
           <div id="pencil_config" class="configurators">
             <KISettings v-bind:amounts="['15', '200']"
                         v-bind:header="'Kategorie B'"
                         v-bind:labels="['Stift', 'Tasse']"
                         v-bind:pic_filename="'25_Stifte.jpg'"
-                        v-bind:rad_name="'rad_pen'"
-                        v-bind:name_radio_amount="'pencil_amount'"
-                        v-bind:name_radio_label="'pencil_label'"
-                        v-bind:default_amount="15"
-                        v-bind:default_label="'Stift'"
-                        ref="configurator"/>
+                        v-bind:store_key="'pencil'"
+                        ref="pencil"/>
+          
           </div>
           <div id="cup_config" class="configurators">
             <KISettings  v-bind:amounts= "['15', '200']"
                          v-bind:header="'Kategorie C'"
                          v-bind:labels="['Tasse']"
                          v-bind:pic_filename="'25_Tassen.jpg'"
-                         v-bind:name_radio_amount="'cup_amount'"
-                         v-bind:name_radio_label="'cup_label'"
-                         v-bind:default_amount="15"
-                         v-bind:default_label="'Tasse'"
-                         ref="configurator"/>
+                         v-bind:store_key="'cup'"
+                         ref="cup"/>
+         
           </div>
         </div>
       </section>
@@ -104,6 +97,10 @@
     <GoToInspection v-show="showConfiguration" ref="explainer"
                              v-on:click="changeP()"/>
 
+    <p>Smartphone: {{this.store.smartphone.amount}} {{this.store.smartphone.label}}</p>
+    <p>Pencil: {{this.store.pencil.amount}} {{this.store.pencil.label}}</p>
+    <p>Cup: {{this.store.cup.amount}} {{this.store.cup.label}}</p>
+    <p>{{modelID}}</p>
     </main>
 
     <FloatingInfoButton class="info-button"
@@ -124,6 +121,8 @@ import GoToConfiguration from "./components/GoToConfiguration";
 import GoToInspection from "./components/GoToInspection";
 import {FloatingInfoButton, UseCaseHeader, XAIStudioRibbon, GitHubRibbon} from '@xai-demonstrator/xaidemo-ui';
 import {debounce} from "debounce";
+import { store } from './store.js'
+
 /* https://forum.vuejs.org/t/vue-received-a-component-which-was-made-a-reactive-object/119004/2 */
 const componentMap = {
   stencil: ExplanationStencil
@@ -199,12 +198,26 @@ export default {
         paragraphs: [this.$t('info2paragraph1'), this.$t('info2paragraph2'), this.$t('info2paragraph3')]
       }],
       backendUrl: process.env.VUE_APP_BACKEND_URL,
-      img: require('./assets/table.jpg')
+      img: require('./assets/table.jpg'),
+      store
     }
   },
   computed: {
     explanationStencil() {
       return componentMap['stencil']
+    },
+    modelID() {
+      var id = 'model_'
+      id += this.store.smartphone.amount
+      if (this.store.smartphone.label==='Tasse') {
+        id += 'T'
+      }
+      id += '_' + this.store.pencil.amount
+      if (this.store.pencil.label==='Tasse') {
+        id += 'T'
+      }
+      id += '_' + this.store.cup.amount
+      return id
     }
   },
   created() {

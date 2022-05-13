@@ -8,8 +8,7 @@
         <div class = checkboxgroup>
  
         <label v-for="(amount, index) in amounts" v-bind:key="amount"> <input type = "radio"
-                                                                              v-bind:name="name_radio_amount"
-                                                                              v-model="selection_amount"
+                                                                              v-model="store[store_key].amount"
                                                                               v-bind:value="amount"
                                                                               v-bind:checked="index === 0">
           <span> {{amount}}</span></label>
@@ -19,18 +18,11 @@
         <div class = checkboxgroup>
 
         <label v-for="(label, index) in labels" v-bind:key="label"> <input type = "radio"
-                                                                           v-bind:name="name_radio_label"
-                                                                           v-model="selection_label"
+                                                                           v-model="store[store_key].label"
                                                                            v-bind:value="label"
                                                                            v-bind:checked="index === 0">
           <span> {{label}}</span></label>
         </div>
-
-      <br>
-      {{selection_amount}}
-      {{selection_label}}
-
-
     </div>
 
 
@@ -39,17 +31,11 @@
 </template>
 
 <script>
+    import { store } from '../store.js'
+
     export default {
         name: "KISettings",
         props: {
-            default_amount: {
-              type: String,
-              default:()=> null
-            },
-            default_label:{
-              type: String,
-              default:()=> null
-            },
             amounts: {
               type: Array,
               default:()=> ['0', '15', '200'],
@@ -66,21 +52,15 @@
               type: String,
               default: "25_Handys.jpg"
           },
-          name_radio_amount: {
-              type:String,
-              default: 'smartphone_amount'
-          },
-          name_radio_label: {
-              type:String,
-              default: 'smartphone_label'
+          store_key: {
+              type:String
           }
         },
         components: {
         },
         data(){
             return{
-                selection_amount: this.default_amount,
-                selection_label: this.default_label,
+                store,
             }
         }
     }
