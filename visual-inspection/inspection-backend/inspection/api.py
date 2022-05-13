@@ -51,8 +51,6 @@ def explain_classification(file: UploadFile = File(...),
             )
 
     settings = settings or "{}"
-    method = method or _settings.default_explainer
-    model_id = model_id or _settings.default_model
 
     try:
         request = ExplanationRequest.parse_raw('{"settings":' + settings + '}')
@@ -61,7 +59,7 @@ def explain_classification(file: UploadFile = File(...),
             status_code=HTTP_422_UNPROCESSABLE_ENTITY, detail=errors_out.errors()
         )
     else:
-        request.method = method
-        request.model_id = model_id
+        request.method = method or request.method
+        request.model_id = model_id or request.model_id
 
-    return explain(file.file, model_id=model_id, method=request.method, settings=request.settings)
+    return explain(file.file, model_id=request.model_id, method=request.method, settings=request.settings)
