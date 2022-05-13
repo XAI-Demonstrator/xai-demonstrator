@@ -49,7 +49,7 @@ jobs:
         run: |
           set -e
           cd ./visual-inspection/inspection-backend
-          ./download_model.sh
+          ./download_models.sh my_model
 
       - name: Run unit tests with pytest
         env:
@@ -149,7 +149,7 @@ jobs:
       run: |
         set -e
         cd ./visual-inspection/inspection-backend
-        ./download_model.sh
+        ./download_models.sh my_model
 
     - name: Run integration tests with pytest
       env:
