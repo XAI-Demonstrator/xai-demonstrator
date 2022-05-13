@@ -170,8 +170,22 @@ jobs:
 
     - name: Create container and publish to Registry
       uses: elgohr/Publish-Docker-Github-Action@v4
+      env:
+        MODEL_IDS: my_model
       with:
         name: xai-demonstrator/visual-inspection-service
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+        registry: ghcr.io
+        workdir: visual-inspection/
+        buildargs: MODEL_IDS
+
+    - name: Create container and publish to Registry
+      uses: elgohr/Publish-Docker-Github-Action@v4
+      env:
+        MODEL_IDS: my_model
+      with:
+        name: xai-demonstrator/digital-education-service
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
         registry: ghcr.io

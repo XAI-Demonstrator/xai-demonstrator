@@ -1,10 +1,11 @@
 FROM node:14-alpine as builder
+ARG FLAVOR="visual-inspection"
 ARG MODEL_IDS="my_model"
 
 WORKDIR /
 
 COPY ./inspection-frontend/ .
-RUN npm install && npm run build
+RUN npm install && npm run build -- --mode ${FLAVOR}
 
 RUN apk --no-cache add curl bash unzip
 COPY inspection-backend/download_models.sh /download_models.sh

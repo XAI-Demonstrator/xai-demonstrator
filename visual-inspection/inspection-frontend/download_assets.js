@@ -23,12 +23,14 @@ fsp.stat(dir).catch(async (err) => {
     }
 });
 
-fsp.stat(dir+filename1, dir + filename2).catch(async (err) => {
+fsp.stat(dir + filename1).catch(async (err) => {
     download(url1, dir + filename1, () => {
     })
+})
 
+fsp.stat(dir + filename2).catch(async (err) => {
     download(url2, dir + filename2, () => {
     })
-    console.log('✅ Downloaded image files(s) from xai-demonstrator-assets!')
-
 })
+
+console.log('✅ Downloaded image files(s) from xai-demonstrator-assets!')
