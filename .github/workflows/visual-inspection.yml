@@ -1,6 +1,7 @@
 name: Visual Inspection
 
 on:
+  workflow_dispatch:
   push:
     paths:
       - 'visual-inspection/**'
@@ -172,22 +173,24 @@ jobs:
       uses: elgohr/Publish-Docker-Github-Action@v4
       env:
         MODEL_IDS: my_model
+        FLAVOR: visual-inspection
       with:
         name: xai-demonstrator/visual-inspection-service
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
         registry: ghcr.io
         workdir: visual-inspection/
-        buildargs: MODEL_IDS
+        buildargs: MODEL_IDS,FLAVOR
 
     - name: Create digital-education container and publish to Registry
       uses: elgohr/Publish-Docker-Github-Action@v4
       env:
         MODEL_IDS: my_model
+        FLAVOR: digital-education
       with:
         name: xai-demonstrator/digital-education-service
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
         registry: ghcr.io
         workdir: visual-inspection/
-        buildargs: MODEL_IDS
+        buildargs: MODEL_IDS,FLAVOR
