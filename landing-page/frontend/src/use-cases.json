@@ -5,7 +5,9 @@
     "inspection-title": "Gegenstände erkennen",
     "inspection-description": "Finde heraus, woran die KI Gegenstände auf Bildern erkennt!",
     "country-title": "Guess the Country",
-    "country-description": "Kannst du besser als die KI zwischen Tel-Aviv und Berlin unterscheiden?"
+    "country-description": "Kannst du besser als die KI zwischen Tel-Aviv und Berlin unterscheiden?",
+    "education-title": "Digital Education",
+    "education-description": "Trainiere eine KI!"
   },
   "en": {
     "sentiment-title": "Sentiment Analysis",
@@ -13,6 +15,8 @@
     "inspection-title": "Object Detection",
     "inspection-description": "Discover how the AI detects objects in an image!",
     "country-title": "Guess the Country",
-    "country-description": "Can you beat the AI at distinguishing Tel-Aviv from Berlin?"
+    "country-description": "Can you beat the AI at distinguishing Tel-Aviv from Berlin?",
+    "education-title": "Digital Education",
+    "education-description": "Train the AI!"
   }
 }
