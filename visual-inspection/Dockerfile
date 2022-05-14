@@ -5,7 +5,7 @@ ARG MODEL_IDS="my_model"
 WORKDIR /
 
 COPY ./inspection-frontend/ .
-RUN npm install && npm run build -- --mode ${FLAVOR}
+RUN npm install && export NODE_ENV=production && npm run build -- --mode ${FLAVOR}
 
 RUN apk --no-cache add curl bash unzip
 COPY inspection-backend/download_models.sh /download_models.sh
