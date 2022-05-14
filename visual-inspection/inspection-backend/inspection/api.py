@@ -12,13 +12,17 @@ api = APIRouter()
 
 
 @api.post("/predict")
-def predict_object(file: UploadFile = File(...), language: Optional[str] = Form(None)) -> Prediction:
-    return predict(file.file, language)
+def predict_object(file: UploadFile = File(...),
+                   language: Optional[str] = Form(None),
+                   model_id: Optional[str] = Form(None)) -> Prediction:
+    model_id = model_id or _settings.default_model
+    return predict(image_file=file.file, language=language, model_id=model_id)
 
 
 # TODO: Allow non-nested settings
 class ExplanationRequest(BaseModel):
     method: str = _settings.default_explainer
+    model_id: str = _settings.default_model
     settings: Dict[str, Dict[str, Union[StrictInt, StrictFloat, StrictBool,
                                         int, float, bool,
                                         str]]]
@@ -38,6 +42,7 @@ class ExplanationRequest(BaseModel):
 @api.post("/explain")
 def explain_classification(file: UploadFile = File(...),
                            method: Optional[str] = Form(None),
+                           model_id: Optional[str] = Form(None),
                            settings: Optional[str] = Form(None)) -> Explanation:
     if settings is not None:
         if method is None:
@@ -46,14 +51,15 @@ def explain_classification(file: UploadFile = File(...),
             )
 
     settings = settings or "{}"
-    method = method or _settings.default_explainer
 
     try:
         request = ExplanationRequest.parse_raw('{"settings":' + settings + '}')
-        request.method = method
     except ValidationError as errors_out:
         raise HTTPException(
             status_code=HTTP_422_UNPROCESSABLE_ENTITY, detail=errors_out.errors()
         )
+    else:
+        request.method = method or request.method
+        request.model_id = model_id or request.model_id
 
-    return explain(file.file, method=request.method, settings=request.settings)
+    return explain(file.file, model_id=request.model_id, method=request.method, settings=request.settings)

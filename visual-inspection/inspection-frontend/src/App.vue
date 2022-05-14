@@ -4,15 +4,18 @@
     <XAIStudioRibbon url="https://www.xai-studio.de"/>
     <UseCaseHeader
         v-bind:standalone="!Boolean(backendUrl)"
-        v-bind:title="$t('title')"/>
+        v-bind:title="(enableModelConfiguration && showConfiguration) ? $t('titleConfiguration') : $t('title')"/>
+
     <main>
       <section>
         <div class="xd-section xd-light">
-          <p>{{ $t('howto') }}</p>
+          <p>{{ (enableModelConfiguration && showConfiguration) ? $t('howToConfigure') : $t('howToInspect') }}</p>
         </div>
       </section>
-      <div id="image-container">
-        <Cropper ref="cropper" class="cropper" :src="img" @change="imageChanged"
+
+      <div id="image-container" v-show="!enableModelConfiguration || !showConfiguration">
+        <Cropper ref="cropper" class="cropper"
+                 :src="img" @change="imageChanged"
                  :min-width="20" :min-height="20"
                  :stencil-component="explanationStencil"
                  :debounce="false"
@@ -38,20 +41,35 @@
                }"/>
       </div>
 
-      <section>
+      <section v-show="!enableModelConfiguration || !showConfiguration">
         <div class="xd-section xd-light">
           <InspectImage ref="inspector"
+                        v-bind:model_id="modelID"
                         v-bind:current-prediction="currentPrediction"
                         v-on:inspection-completed="inspectionCompleted"/>
-          <ExplainInspection v-if="showExplainButton" ref="explainer"
+          <ExplainInspection v-if="enableExplanations" ref="explainer"
                              v-bind:prediction-ready="currentPrediction"
                              v-on:explanation-requested="explanationRequested"
                              v-on:explanation-received="explanationReceived"/>
         </div>
       </section>
 
+      <div id="config-container" v-if="enableModelConfiguration && showConfiguration">
+        <ConfigureModel ref="configuration"/>
+      </div>
+
+      <section v-if="enableModelConfiguration">
+        <div class="xd-section xd-light">
+          <button class="xd-button xd-secondary" @click="toggleConfiguration"
+                  v-bind:disabled="!showConfiguration && !currentPrediction">
+            {{ showConfiguration ? $t('switchToInspection') : $t('switchToConfiguration') }}
+          </button>
+        </div>
+      </section>
     </main>
+
     <FloatingInfoButton class="info-button"
+                        v-show="!enableModelConfiguration || !showConfiguration"
                         v-bind:info-url="infoUrl"
                         v-bind:info-text="infoText"
                         v-bind:link-label="$t('infoLinkLabel')"/>
@@ -64,26 +82,34 @@ import 'vue-advanced-cropper/dist/style.css'
 import InspectImage from "@/components/InspectImage";
 import ExplainInspection from "@/components/ExplainInspection";
 import ExplanationStencil from "@/components/ExplanationStencil";
+import ConfigureModel from "@/components/ConfigureModel";
 import {FloatingInfoButton, UseCaseHeader, XAIStudioRibbon, GitHubRibbon} from '@xai-demonstrator/xaidemo-ui';
 import {debounce} from "debounce";
+import {modelConfig} from '@/modelConfig.js'
 
 /* https://forum.vuejs.org/t/vue-received-a-component-which-was-made-a-reactive-object/119004/2 */
 const componentMap = {
   stencil: ExplanationStencil
 }
-
 export default {
   name: 'App',
   components: {
     Cropper,
     InspectImage,
     ExplainInspection,
+    ConfigureModel,
     UseCaseHeader,
     FloatingInfoButton,
     XAIStudioRibbon,
     GitHubRibbon
   },
   methods: {
+    async toggleConfiguration() {
+      this.showConfiguration = !this.showConfiguration
+      if (!this.showConfiguration && !this.currentPrediction) {
+        await this.requestInspection(this.$refs.cropper.getResult().canvas)
+      }
+    },
     async imageChanged({canvas}) {
       if (!this.waitingForExplanation) {
         this.currentPrediction = false;
@@ -118,6 +144,7 @@ export default {
   },
   data() {
     return {
+      showConfiguration: false,
       currentPrediction: false,
       currentExplanation: false,
       waitingForExplanation: false,
@@ -134,15 +161,27 @@ export default {
         headline: this.$t('info2headline'),
         paragraphs: [this.$t('info2paragraph1'), this.$t('info2paragraph2'), this.$t('info2paragraph3')]
       }],
+      modelConfig: modelConfig,
+      /* CONFIGURATION */
       backendUrl: process.env.VUE_APP_BACKEND_URL,
-      img: require('./assets/' + process.env.VUE_APP_IMAGE_FILE),
-      showExplainButton: JSON.parse(process.env.VUE_APP_SHOW_EXPLAIN_BUTTON)
-
+      img: require('@/assets/' + process.env.VUE_APP_IMAGE_FILE),
+      /* FEATURE FLAGS */
+      enableExplanations: JSON.parse(process.env.VUE_APP_ENABLE_EXPLANATIONS),
+      enableModelConfiguration: JSON.parse(process.env.VUE_APP_ENABLE_MODEL_CONFIGURATION)
     }
   },
   computed: {
     explanationStencil() {
       return componentMap['stencil']
+    },
+    modelID() {
+      return modelConfig.getModelId()
+    }
+  },
+  watch: {
+    modelID() {
+      this.currentPrediction = false
+      this.currentExplanation = false
     }
   },
   created() {
@@ -160,7 +199,11 @@ export default {
 {
   "de": {
     "title": "Gegenstände erkennen",
-    "howto": "Wähle einen Bildausschnitt und die KI bestimmt den Gegenstand.",
+    "titleConfiguration": "KI trainieren",
+    "howToInspect": "Wähle einen Bildausschnitt und die KI bestimmt den Gegenstand.",
+    "howToConfigure": "Wähle die Daten für das Training der KI aus.",
+    "switchToConfiguration": "Trainiere die KI",
+    "switchToInspection": "KI trainieren und zurückkehren",
     "info1headline": "Gegenstände erkennen",
     "info1paragraph1": "Du interagierst mit einer KI, die einen Gegenstand in einem Bildausschnitt erkennen kann. Aber eine KI ist nie perfekt!",
     "info1paragraph2": "Durch die Wahl verschiedener Bildausschnitte entdeckst du, für welche Bereiche die KI zuverlässig ist, aber insbesondere auch, wo sie an ihre Grenzen stößt.",
@@ -173,7 +216,11 @@ export default {
   },
   "en": {
     "title": "Detect Objects",
-    "howto": "Select a part of the image and the AI will identify the object.",
+    "titleConfiguration": "Train AI",
+    "howToInspect": "Select a part of the image and the AI will identify the object.",
+    "howToConfigure": "Select data to train the AI.",
+    "switchToConfiguration": "Train the AI",
+    "switchToInspection": "Train the AI and return",
     "info1headline": "Detect objects",
     "info1paragraph1": "You are interacting with an AI that can detect objects in images. But an AI is never perfect!",
     "info1paragraph2": "By selecting different parts of the image, you can discover for which of these parts the AI is reliable and, perhaps more importantly, for which it is not.",
@@ -192,7 +239,6 @@ export default {
   display: flex;
   justify-content: space-between;
   position: relative;
-  overflow: hidden;
 }
 
 main {
@@ -232,7 +278,14 @@ main section {
   #image-container {
     width: 100%;
     max-width: 100vw;
-    padding: 12px 0;
+    padding: 0;
+    margin-bottom: 12px;
+  }
+
+  #config-container {
+    width: 100%;
+    padding: 0 8px;
+    margin-bottom: 12px;
   }
 
   .cropper {
@@ -242,10 +295,13 @@ main section {
   .cropper * {
     border-radius: 0;
   }
+
+  main section {
+    margin-bottom: 12px;
+  }
 }
 
 @media screen and (min-width: 450px) and (max-height: 650px) {
-
   #app {
     flex-direction: column;
     padding-left: 0;
@@ -258,7 +314,6 @@ main section {
   main {
     flex: 1;
     max-height: calc(100vh - 54px);
-
     display: flex;
     flex-direction: column;
     align-items: flex-end;
@@ -279,22 +334,22 @@ main section {
   #image-container {
     max-height: calc(100vh - 54px);
     width: 60%;
-
     align-self: flex-start;
     order: 1;
-
     justify-content: center;
     align-items: flex-start;
+  }
+
+  #config-container {
+    order: 3;
   }
 
   .cropper {
     max-height: calc(100vh - 54px);
   }
-
 }
 
 @media screen and (min-width: 450px) and (min-height: 650px) {
-
   #app {
     flex-direction: column;
   }
@@ -305,18 +360,22 @@ main section {
 
   main section {
     padding: 0;
+    margin-bottom: 8px;
   }
 
   #image-container {
-    margin-top: 8px;
     margin-bottom: 8px;
     width: 100%;
     max-width: 450px;
   }
 
+  #config-container {
+    width: 100%;
+    margin-bottom: 8px;
+  }
+
   .cropper {
     max-width: calc(450px - 16px);
   }
-
 }
 </style>

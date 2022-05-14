@@ -1,6 +1,11 @@
 .coverage
 htmlcov/
 log/
+
 inspection/model/my_model
+inspection/model/models/
 
 inspection/static
+
+*.h5
+*.pb

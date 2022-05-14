@@ -4,13 +4,12 @@ import uuid
 from typing import Any, Dict, IO, Tuple, Union
 
 import numpy as np
-import tensorflow as tf
 from PIL import Image
 from pydantic import BaseModel
 from xaidemo.tracing import add_span_attributes, traced
 
 from .explainers.lime_ import lime_explanation
-from ..model.model import model
+from ..model.model import get_model
 from ..model.predict import preprocess
 
 EXPLAINERS = {
@@ -38,18 +37,21 @@ class Explanation(BaseModel):
 
 @traced
 def explain(image_file: IO[bytes],
+            model_id: str,
             method: str,
-            settings: Union[None, Dict[str, Any]] = None,
-            model_: tf.keras.models.Model = model) -> Explanation:
+            settings: Union[None, Dict[str, Any]] = None) -> Explanation:
     settings = settings or {}
-    explanation_id = uuid.uuid4()
+    model = get_model(model_id)
 
-    add_span_attributes({"explanation.id": str(explanation_id), "explanation.method": method})
+    explanation_id = uuid.uuid4()
+    add_span_attributes({"explanation.id": str(explanation_id),
+                         "explanation.method": method,
+                         "explanation.model": model_id})
 
     input_image = Image.open(image_file)
     explainer_input = preprocess(input_image)[0]
 
-    raw_image = EXPLAINERS[method](explainer_input, model_, **settings)
+    raw_image = EXPLAINERS[method](explainer_input, model, **settings)
 
     return Explanation(explanation_id=explanation_id,
                        image=generate_output_image(raw_image, input_image.size))

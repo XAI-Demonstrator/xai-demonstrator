@@ -2,10 +2,15 @@
   <div class="inspector">
     <MultiBounce v-if="!prediction"
                  v-bind:numberOfDots="3"/>
-     <p v-if="show_probability_percentage"
-        v-show="prediction && currentPrediction">{{ $t('answer_with_probability', {percentage: probability, object: prediction}) }}</p>
-     <p v-else 
-        v-show="prediction && currentPrediction">{{ $t('answer_without_probability', {object: prediction}) }}</p>
+    <p v-if="displayProbability"
+       v-show="prediction && currentPrediction">{{
+        $t('answer_with_probability', {
+          percentage: Math.round(probability),
+          object: prediction
+        })
+      }}</p>
+    <p v-else
+       v-show="prediction && currentPrediction">{{ $t('answer_without_probability', {object: prediction}) }}</p>
   </div>
 </template>
 
@@ -19,6 +24,9 @@ export default {
     MultiBounce
   },
   props: {
+    model_id: {
+      type: String
+    },
     currentPrediction: {
       type: Boolean,
       value: false
@@ -39,6 +47,11 @@ export default {
       const form = new FormData();
       form.append('file', blob);
       form.append('language', this.$i18n.locale)
+      if (this.enableModelConfiguration) {
+        /* TODO */
+        console.log("Usually, I would request the model " + this.model_id + " but it's not uploaded yet.")
+        form.append('model_id', "my_model")
+      }
 
       await axios.post(this.backendUrl + '/predict', form, {
         cancelToken: source.token
@@ -59,7 +72,9 @@ export default {
       probability: null,
       backendUrl: process.env.VUE_APP_BACKEND_URL,
       cancelTokens: [],
-      show_probability_percentage: JSON.parse(process.env.VUE_APP_SHOW_PROBABILITY_PERCENTAGE)
+      /* FEATURE FLAGS */
+      enableModelConfiguration: JSON.parse(process.env.VUE_APP_ENABLE_MODEL_CONFIGURATION),
+      displayProbability: JSON.parse(process.env.VUE_APP_DISPLAY_PROBABILITY)
     }
   }
 }
@@ -68,13 +83,13 @@ export default {
 <i18n>
 {
   "de": {
-     "answer_with_probability": "„Das ist zu {percentage} % {object}“",
-     "answer_without_probability": "„Das ist {object}“"
+    "answer_with_probability": "„Das ist zu {percentage}% {object}“",
+    "answer_without_probability": "„Das ist {object}“"
   },
-  "en": { 
-    "answer_with_probability": "\"This is with a probability of {percentage} % {object}\"",
+  "en": {
+    "answer_with_probability": "\"This is {object} with a probability of {percentage}%\"",
     "answer_without_probability": "\"This is {object}\""
-    }
+  }
 }
 </i18n>
 

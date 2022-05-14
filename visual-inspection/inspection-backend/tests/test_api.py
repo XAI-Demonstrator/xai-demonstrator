@@ -43,4 +43,28 @@ def test_that_language_is_passed(generate_image, mocker):
     response = client.post("/predict", files={"file": generate_image(200, 300)}, data={"language": "en"})
 
     assert response.status_code == 200
-    assert p.call_args[0][1] == "en"
+    args, kwargs = p.call_args_list[0]
+    assert "language" in kwargs
+    assert kwargs["language"] == "en"
+
+
+def test_that_model_id_is_passed_for_prediction(generate_image, mocker):
+    p = mocker.patch.object(api, "predict")
+
+    response = client.post("/predict", files={"file": generate_image(200, 300)}, data={"model_id": "this-is-a-model"})
+
+    assert response.status_code == 200
+    args, kwargs = p.call_args_list[0]
+    assert "model_id" in kwargs
+    assert kwargs["model_id"] == "this-is-a-model"
+
+
+def test_that_model_id_is_passed_for_explanation(generate_image, mocker):
+    p = mocker.patch.object(api, "explain")
+
+    response = client.post("/explain", files={"file": generate_image(200, 300)}, data={"model_id": "this-is-a-model"})
+
+    assert response.status_code == 200
+    args, kwargs = p.call_args_list[0]
+    assert "model_id" in kwargs
+    assert kwargs["model_id"] == "this-is-a-model"

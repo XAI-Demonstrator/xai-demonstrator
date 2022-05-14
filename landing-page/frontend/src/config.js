@@ -22,6 +22,13 @@ const config = {
             description: "country-description",
             route: "/country/",
             include: parse(process.env.VUE_APP_COUNTRY, false)
+        },
+        {
+            logo: require('@/assets/inspection-eye.svg'),
+            title: "education-title",
+            description: "education-description",
+            route: "/education/",
+            include: parse(process.env.VUE_APP_EDUCATION, false)
         }
     ]
 }
