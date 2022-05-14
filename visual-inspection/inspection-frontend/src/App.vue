@@ -47,7 +47,7 @@
                         v-bind:model_id="modelID"
                         v-bind:current-prediction="currentPrediction"
                         v-on:inspection-completed="inspectionCompleted"/>
-          <ExplainInspection ref="explainer"
+          <ExplainInspection v-if="showExplainButton" ref="explainer"
                              v-bind:prediction-ready="currentPrediction"
                              v-on:explanation-requested="explanationRequested"
                              v-on:explanation-received="explanationReceived"/>
@@ -162,8 +162,9 @@ export default {
         paragraphs: [this.$t('info2paragraph1'), this.$t('info2paragraph2'), this.$t('info2paragraph3')]
       }],
       backendUrl: process.env.VUE_APP_BACKEND_URL,
-      img: require('./assets/table.jpg'),
-      modelConfig: modelConfig
+      modelConfig: modelConfig,
+      img: require('./assets/' + process.env.VUE_APP_IMAGE_FILE),
+      showExplainButton: JSON.parse(process.env.VUE_APP_SHOW_EXPLAIN_BUTTON)
     }
   },
   computed: {
