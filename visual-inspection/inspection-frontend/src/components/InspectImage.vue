@@ -48,9 +48,7 @@ export default {
       form.append('file', blob);
       form.append('language', this.$i18n.locale)
       if (this.enableModelConfiguration) {
-        /* TODO */
-        console.log("Usually, I would request the model " + this.model_id + " but it's not uploaded yet.")
-        form.append('model_id', "my_model")
+        form.append('model_id', this.model_id)
       }
 
       await axios.post(this.backendUrl + '/predict', form, {

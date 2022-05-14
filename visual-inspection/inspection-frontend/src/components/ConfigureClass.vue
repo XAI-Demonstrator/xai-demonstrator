@@ -4,7 +4,7 @@
 
     <div class="configuration">
       <div class="image">
-        <img v-bind:alt="className" class="config_picture" :src="require(`@/assets/table.jpg`)">
+        <img v-bind:alt="className" class="config_picture" :src="require(`@/assets/${image}`)">
       </div>
 
       <div class="options">
