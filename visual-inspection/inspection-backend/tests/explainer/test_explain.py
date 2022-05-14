@@ -1,7 +1,10 @@
-import pytest
 import base64
-from PIL import Image
 import io
+
+import pytest
+from PIL import Image
+
+from inspection.config import settings
 from inspection.explainer import explain
 
 
@@ -10,7 +13,9 @@ def test_that_an_explanation_is_generated(generate_image):
     image_size = (200, 200)
     input_img = generate_image(*image_size)
 
-    output_img_bytes = explain.explain(input_img, method="lime").image
+    output_img_bytes = explain.explain(input_img,
+                                       model_id=settings.default_model,
+                                       method=settings.default_explainer).image
     img_data = base64.b64decode(output_img_bytes[22:])
     output_img = Image.open(io.BytesIO(img_data))
 

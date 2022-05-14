@@ -49,7 +49,7 @@ jobs:
         run: |
           set -e
           cd ./visual-inspection/inspection-backend
-          ./download_model.sh
+          ./download_models.sh my_model
 
       - name: Run unit tests with pytest
         env:
@@ -149,7 +149,7 @@ jobs:
       run: |
         set -e
         cd ./visual-inspection/inspection-backend
-        ./download_model.sh
+        ./download_models.sh my_model
 
     - name: Run integration tests with pytest
       env:
@@ -170,8 +170,22 @@ jobs:
 
     - name: Create container and publish to Registry
       uses: elgohr/Publish-Docker-Github-Action@v4
+      env:
+        MODEL_IDS: my_model
       with:
         name: xai-demonstrator/visual-inspection-service
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+        registry: ghcr.io
+        workdir: visual-inspection/
+        buildargs: MODEL_IDS
+
+    - name: Create container and publish to Registry
+      uses: elgohr/Publish-Docker-Github-Action@v4
+      env:
+        MODEL_IDS: my_model
+      with:
+        name: xai-demonstrator/digital-education-service
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
         registry: ghcr.io

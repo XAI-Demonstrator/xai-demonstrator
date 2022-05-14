@@ -20,6 +20,15 @@ def test_language_fallback(generate_image):
     assert response.status_code == 200
 
 
+def test_that_invalid_model_returns_informative_404(generate_image, mocker):
+    mocker.patch("inspection.model.model.MODELS", {"existing-model": None})
+
+    response = client.post("/predict", files={"file": generate_image(50, 50)}, data={"model_id": "missing-model"})
+
+    assert response.status_code == 404
+    assert "existing-model" in response.text
+
+
 @pytest.mark.integration
 def test_that_explanation_succeeds(generate_image):
     r = client.post("/explain", files={"file": generate_image(110, 224)})

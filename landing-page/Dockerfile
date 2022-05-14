@@ -13,7 +13,7 @@ RUN npm install && npm run build -- --mode test-deployment
 RUN mkdir /inspection
 WORKDIR /inspection
 COPY ./visual-inspection/inspection-frontend/ .
-RUN npm install && npm run build -- --mode test-deployment
+RUN npm install && npm run build -- --mode visual-inspection.test-deployment
 
 RUN mkdir /country
 WORKDIR /country
