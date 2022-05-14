@@ -1,27 +1,36 @@
 <template>
-  <div class="configurators">
-    <h3 class="category_headline">{{ $t('category') + ' ' + className }}</h3>
-<!--    <img v-bind:alt="className" class="config_picture" :src="require(`@/assets/${image}`)">-->
-    <p style="text-align:center">{{ $t('amount') }}</p>
+  <div class="main xd-section xd-light">
+    <h3>{{ $t('category') + ' ' + className }}</h3>
 
-    <div class=checkboxgroup>
+    <div class="configuration">
+      <div class="image">
+        <img v-bind:alt="className" class="config_picture" :src="require(`@/assets/camera.jpg`)">
+      </div>
 
-      <label v-for="(amount, index) in amounts" v-bind:key="amount">
-        <input type="radio"
-               v-bind:value="amount"
-               v-model="modelConfig[classKey].amount"
-               v-bind:name="'amounts-' + classKey + '-' + index">
-        {{ amount }} </label>
-    </div>
+      <div class="options">
 
-    <p style="text-align:center">{{ $t('label') }}</p>
-    <div class=checkboxgroup>
-      <label v-for="(label, index) in labels" v-bind:key="label">
-        <input type="radio"
-               v-model="modelConfig[classKey].label"
-               v-bind:name="'labels-'  + classKey + '-' + index"
-               v-bind:value="label">
-        {{ $t(label) }}</label>
+        <div class="group">
+          <strong> {{ $t('amount') }}</strong>
+          <label v-for="(amount, index) in amounts" v-bind:key="amount">
+            <input type="radio"
+                   v-bind:value="amount"
+                   v-model="modelConfig[classKey].amount"
+                   v-bind:name="'amounts-' + classKey + '-' + index">
+            <span>{{ amount }}</span> </label>
+        </div>
+
+        <div class="group">
+          <strong> {{ $t('label') }}</strong>
+          <label v-for="(label, index) in labels" v-bind:key="label">
+            <input type="radio"
+                   v-model="modelConfig[classKey].label"
+                   v-bind:name="'labels-'  + classKey + '-' + index"
+                   v-bind:value="label">
+            <span>{{ label }}</span></label>
+        </div>
+
+      </div>
+
     </div>
   </div>
 </template>
@@ -78,117 +87,125 @@ export default {
 </i18n>
 
 <style scoped>
-/*.configurator_cup {*/
-/*  border: 2px solid powderblue;*/
-/*  color: black;*/
-/*  width: 140px;*/
-/*  height: 400px;*/
-/*  background-color: #EFFBF8;*/
-/*  border-radius: 10px;*/
-/*}*/
+.main {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+}
 
-/*.image {*/
-/*  max-height: 100%;*/
-/*  height: 100%;*/
-/*  width: 100%;*/
-/*  align-self: flex-start;*/
-/*  order: 1;*/
-/*  justify-content: center;*/
-/*  align-items: flex-start;*/
-/*}*/
+.main h3 {
+  margin-bottom: 4px;
+}
 
-/*.checkboxgroup {*/
-/*  display: inline-block;*/
-/*  text-align: left;*/
-/*}*/
+.configuration {
+  display: flex;
+  flex-direction: row;
+}
 
-/*.checkboxgroup label {*/
-/*  display: block;*/
-/*}*/
+.image {
+  width: 50%;
+}
 
-/*.configurator-menu {*/
-/*  display: flex;*/
-/*}*/
+.image img {
+  max-width: 200px;
+}
 
-/*.configurators {*/
-/*  margin: 5px;*/
-/*  border-radius: 25px;*/
-/*  width: 140px;*/
-/*  height: 400px;*/
-/*  text-align: left;*/
-/*}*/
+.options {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
 
-/*.category_headline {*/
-/*  text-align: center;*/
-/*}*/
+.group {
+  display: flex;
+  flex-direction: column;
+}
 
-/*.config_picture {*/
-/*  width: 135px;*/
-/*  float: left;*/
-/*  margin-top: 6px;*/
-/*  margin-bottom: 6px;*/
-/*}*/
+@media screen and (max-width: 450px) {
+  .main {
+    margin-bottom: 12px;
+  }
 
-/*#smartphone_config {*/
-/*  background-color: #E2E6EC;*/
-/*  box-shadow: #E2E6EC 2px 2px;*/
-/*}*/
+  .configuration {
+    justify-content: space-between;
+  }
 
-/*#pencil_config {*/
-/*  background-color: #F1DEDB;*/
-/*  box-shadow: #F1DEDB 2px 2px;*/
-/*}*/
+  .image img {
+    max-width: 150px;
+  }
+}
 
-/*#cup_config {*/
-/*  background-color: #EFFBF8;*/
-/*  box-shadow: #EFFBF8 2px 2px;*/
-/*}*/
+@media screen and (min-width: 450px) and (max-height: 650px) {
+  .main {
+    margin-right: 8px;
+    max-width: 100vw;
+    width: 300px;
+  }
 
-/*!*The following Code is for getting Radio-Buttons with a square design*/
-/*  instead of the old-school Radio-Buttons. It is based on the following StackOverflow-Thread;*/
-/*  https://stackoverflow.com/questions/24516958/styling-radio-buttons-into-a-square*!*/
-/*input {*/
-/*  display: none;*/
-/*}*/
+  .image img {
+    width: 100%;
+    max-height: 150px;
+  }
 
-/*label {*/
-/*  display: inline-block;*/
-/*  padding: 5px 10px;*/
-/*  cursor: pointer;*/
-/*}*/
+  .configuration {
+    height: 100%;
+  }
+}
 
-/*label span {*/
-/*  position: relative;*/
-/*  line-height: 22px;*/
-/*}*/
+@media screen and (min-width: 450px) and (min-height: 650px) {
+  .main {
+    margin-bottom: 8px;
+  }
 
-/*label span:before,*/
-/*label span:after {*/
-/*  content: '';*/
-/*}*/
+  .configuration {
+    justify-content: space-between;
+  }
 
+}
 
-/*label span:before {*/
-/*  border: 1px solid #222021;*/
-/*  width: 20px;*/
-/*  height: 20px;*/
-/*  margin-right: 10px;*/
-/*  display: inline-block;*/
-/*  vertical-align: top;*/
-/*}*/
+/*  https://stackoverflow.com/questions/24516958/styling-radio-buttons-into-a-square* */
+input {
+  display: none;
+}
 
-/*label span:after {*/
-/*  background: #222021;*/
-/*  width: 14px;*/
-/*  height: 14px;*/
-/*  position: absolute;*/
-/*  top: 2px;*/
-/*  left: 4px;*/
-/*  transition: 300ms;*/
-/*  opacity: 0;*/
-/*}*/
+label {
+  display: inline-block;
+  padding: 5px 10px;
+  cursor: pointer;
+}
 
-/*label input:checked + span:after {*/
-/*  opacity: 1;*/
-/*}*/
+label span {
+  position: relative;
+}
+
+label span:before,
+label span:after {
+  content: '';
+}
+
+label span:before {
+  border: 1px solid #323232;
+  border-radius: 3px;
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+label span:after {
+  background: #323232;
+  border-radius: 3px;
+  width: 22px;
+  height: 22px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: 300ms;
+  opacity: 0;
+}
+
+label input:checked + span:after {
+  opacity: 1;
+}
 </style>

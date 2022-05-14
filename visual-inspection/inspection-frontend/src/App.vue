@@ -54,9 +54,9 @@
         </div>
       </section>
 
-      <section v-if="enableModelConfiguration && showConfiguration">
+      <div id="config-container" v-if="enableModelConfiguration && showConfiguration">
         <ConfigureModel ref="configuration"/>
-      </section>
+      </div>
 
       <section v-if="enableModelConfiguration">
         <div class="xd-section xd-light">
@@ -69,6 +69,7 @@
     </main>
 
     <FloatingInfoButton class="info-button"
+                        v-show="!enableModelConfiguration || !showConfiguration"
                         v-bind:info-url="infoUrl"
                         v-bind:info-text="infoText"
                         v-bind:link-label="$t('infoLinkLabel')"/>
@@ -238,7 +239,6 @@ export default {
   display: flex;
   justify-content: space-between;
   position: relative;
-  overflow: hidden;
 }
 
 main {
@@ -246,6 +246,7 @@ main {
   flex-direction: column;
   align-items: center;
 }
+
 main section {
   width: 100%;
   margin: 0;
@@ -255,12 +256,14 @@ main section {
   align-items: center;
   justify-content: center;
 }
+
 #image-container {
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
 }
+
 .cropper * {
   border-radius: 3px;
 }
@@ -271,15 +274,24 @@ main section {
     padding-left: 0;
     padding-right: 0;
   }
+
   #image-container {
     width: 100%;
     max-width: 100vw;
     padding: 0;
     margin-bottom: 12px;
   }
+
+  #config-container {
+    width: 100%;
+    padding: 0 8px;
+    margin-bottom: 12px;
+  }
+
   .cropper {
     max-width: 100vw;
   }
+
   .cropper * {
     border-radius: 0;
   }
@@ -288,6 +300,7 @@ main section {
     margin-bottom: 12px;
   }
 }
+
 @media screen and (min-width: 450px) and (max-height: 650px) {
   #app {
     flex-direction: column;
@@ -297,6 +310,7 @@ main section {
     height: 100vh;
     width: 100vw;
   }
+
   main {
     flex: 1;
     max-height: calc(100vh - 54px);
@@ -306,14 +320,17 @@ main section {
     justify-content: flex-start;
     flex-wrap: wrap;
   }
+
   main section {
     width: 40%;
     order: 2;
     margin-bottom: 12px;
   }
+
   main section:last-of-type {
     margin-bottom: 0;
   }
+
   #image-container {
     max-height: calc(100vh - 54px);
     width: 60%;
@@ -322,26 +339,41 @@ main section {
     justify-content: center;
     align-items: flex-start;
   }
+
+  #config-container {
+    order: 3;
+  }
+
   .cropper {
     max-height: calc(100vh - 54px);
   }
 }
+
 @media screen and (min-width: 450px) and (min-height: 650px) {
   #app {
     flex-direction: column;
   }
+
   main {
     flex-grow: 1;
   }
+
   main section {
     padding: 0;
     margin-bottom: 8px;
   }
+
   #image-container {
     margin-bottom: 8px;
     width: 100%;
     max-width: 450px;
   }
+
+  #config-container {
+    width: 100%;
+    margin-bottom: 8px;
+  }
+
   .cropper {
     max-width: calc(450px - 16px);
   }
