@@ -35,6 +35,8 @@ jobs:
           set -e
           cd ./experiment-tracker/experiment-proxy
           echo $PWD
+          pip install --upgrade pip
+          pip install wheel
           pip install -r requirements.txt
 
       - name: Run unit tests with pytest
@@ -80,6 +82,8 @@ jobs:
           set -e
           cd ./experiment-tracker/data-collector
           echo $PWD
+          pip install --upgrade pip
+          pip install wheel
           pip install -r requirements.txt
 
       - name: Run unit tests with pytest
