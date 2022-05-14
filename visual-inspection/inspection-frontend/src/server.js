@@ -27,6 +27,7 @@ export function makeServer({environment = "development"} = {}) {
 
                     return {
                         prediction_id: 'abc',
+                        probability: (Math.random() * 100).toFixed(6),
                         class_label: label,
                         class_id: 4
                     }

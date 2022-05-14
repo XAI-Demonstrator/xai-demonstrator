@@ -5,7 +5,7 @@
     <p v-if="displayProbability"
        v-show="prediction && currentPrediction">{{
         $t('answer_with_probability', {
-          percentage: probability,
+          percentage: Math.round(probability),
           object: prediction
         })
       }}</p>
@@ -81,11 +81,11 @@ export default {
 <i18n>
 {
   "de": {
-    "answer_with_probability": "„Das ist zu {percentage} % {object}“",
+    "answer_with_probability": "„Das ist zu {percentage}% {object}“",
     "answer_without_probability": "„Das ist {object}“"
   },
   "en": {
-    "answer_with_probability": "\"This is with a probability of {percentage} % {object}\"",
+    "answer_with_probability": "\"This is {object} with a probability of {percentage}%\"",
     "answer_without_probability": "\"This is {object}\""
   }
 }

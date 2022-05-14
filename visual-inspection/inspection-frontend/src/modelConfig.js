@@ -21,7 +21,7 @@ export const modelConfig = reactive({
 
 export const availableModels = {
     smartphone: {
-        amounts: ["0", "200"],
+        amounts: ["0", "15", "200"],
         labels: ["smartphone", "cup"],
         image: "25_Handys.jpg",
         name: "A"

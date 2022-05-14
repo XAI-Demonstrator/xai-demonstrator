@@ -160,9 +160,10 @@ export default {
         headline: this.$t('info2headline'),
         paragraphs: [this.$t('info2paragraph1'), this.$t('info2paragraph2'), this.$t('info2paragraph3')]
       }],
-      backendUrl: process.env.VUE_APP_BACKEND_URL,
       modelConfig: modelConfig,
-      img: require('./assets/' + process.env.VUE_APP_IMAGE_FILE),
+      /* CONFIGURATION */
+      backendUrl: process.env.VUE_APP_BACKEND_URL,
+      img: require('@/assets/' + process.env.VUE_APP_IMAGE_FILE),
       /* FEATURE FLAGS */
       enableExplanations: JSON.parse(process.env.VUE_APP_ENABLE_EXPLANATIONS),
       enableModelConfiguration: JSON.parse(process.env.VUE_APP_ENABLE_MODEL_CONFIGURATION)
@@ -177,8 +178,7 @@ export default {
     }
   },
   watch: {
-    modelID(newValue) {
-      console.log(newValue)
+    modelID() {
       this.currentPrediction = false
       this.currentExplanation = false
     }
