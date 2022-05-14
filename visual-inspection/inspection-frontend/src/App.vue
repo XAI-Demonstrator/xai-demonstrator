@@ -4,16 +4,16 @@
     <XAIStudioRibbon url="https://www.xai-studio.de"/>
     <UseCaseHeader
         v-bind:standalone="!Boolean(backendUrl)"
-        v-bind:title="showConfiguration ? $t('titleConfiguration') : $t('title')"/>
+        v-bind:title="(enableModelConfiguration && showConfiguration) ? $t('titleConfiguration') : $t('title')"/>
 
     <main>
       <section>
         <div class="xd-section xd-light">
-          <p>{{ showConfiguration ? $t('howToConfigure') : $t('howToInspect') }}</p>
+          <p>{{ (enableModelConfiguration && showConfiguration) ? $t('howToConfigure') : $t('howToInspect') }}</p>
         </div>
       </section>
 
-      <div id="image-container" v-show="!showConfiguration">
+      <div id="image-container" v-show="!enableModelConfiguration || !showConfiguration">
         <Cropper ref="cropper" class="cropper"
                  :src="img" @change="imageChanged"
                  :min-width="20" :min-height="20"
@@ -41,24 +41,24 @@
                }"/>
       </div>
 
-      <section v-show="!showConfiguration">
+      <section v-show="!enableModelConfiguration || !showConfiguration">
         <div class="xd-section xd-light">
           <InspectImage ref="inspector"
                         v-bind:model_id="modelID"
                         v-bind:current-prediction="currentPrediction"
                         v-on:inspection-completed="inspectionCompleted"/>
-          <ExplainInspection v-if="showExplainButton" ref="explainer"
+          <ExplainInspection v-if="enableExplanations" ref="explainer"
                              v-bind:prediction-ready="currentPrediction"
                              v-on:explanation-requested="explanationRequested"
                              v-on:explanation-received="explanationReceived"/>
         </div>
       </section>
 
-      <section v-if="showConfiguration">
+      <section v-if="enableModelConfiguration && showConfiguration">
         <ConfigureModel ref="configuration"/>
       </section>
 
-      <section>
+      <section v-if="enableModelConfiguration">
         <div class="xd-section xd-light">
           <button class="xd-button xd-secondary" @click="toggleConfiguration"
                   v-bind:disabled="!showConfiguration && !currentPrediction">
@@ -82,7 +82,6 @@ import InspectImage from "@/components/InspectImage";
 import ExplainInspection from "@/components/ExplainInspection";
 import ExplanationStencil from "@/components/ExplanationStencil";
 import ConfigureModel from "@/components/ConfigureModel";
-
 import {FloatingInfoButton, UseCaseHeader, XAIStudioRibbon, GitHubRibbon} from '@xai-demonstrator/xaidemo-ui';
 import {debounce} from "debounce";
 import {modelConfig} from '@/modelConfig.js'
@@ -164,7 +163,9 @@ export default {
       backendUrl: process.env.VUE_APP_BACKEND_URL,
       modelConfig: modelConfig,
       img: require('./assets/' + process.env.VUE_APP_IMAGE_FILE),
-      showExplainButton: JSON.parse(process.env.VUE_APP_SHOW_EXPLAIN_BUTTON)
+      /* FEATURE FLAGS */
+      enableExplanations: JSON.parse(process.env.VUE_APP_ENABLE_EXPLANATIONS),
+      enableModelConfiguration: JSON.parse(process.env.VUE_APP_ENABLE_MODEL_CONFIGURATION)
     }
   },
   computed: {
