@@ -168,7 +168,7 @@ jobs:
         coveralls --service=github --srcdir=visual-inspection/inspection-backend
         coveralls --service=github --finish
 
-    - name: Create container and publish to Registry
+    - name: Create visual-inspection container and publish to Registry
       uses: elgohr/Publish-Docker-Github-Action@v4
       env:
         MODEL_IDS: my_model
@@ -180,7 +180,7 @@ jobs:
         workdir: visual-inspection/
         buildargs: MODEL_IDS
 
-    - name: Create container and publish to Registry
+    - name: Create digital-education container and publish to Registry
       uses: elgohr/Publish-Docker-Github-Action@v4
       env:
         MODEL_IDS: my_model
@@ -190,3 +190,4 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
         registry: ghcr.io
         workdir: visual-inspection/
+        buildargs: MODEL_IDS
