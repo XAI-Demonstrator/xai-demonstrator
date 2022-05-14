@@ -3,23 +3,19 @@
     <GitHubRibbon url="https://github.com/xai-demonstrator/xai-demonstrator"/>
     <XAIStudioRibbon url="https://www.xai-studio.de"/>
     <UseCaseHeader
-        v-if="!showConfiguration"
         v-bind:standalone="!Boolean(backendUrl)"
-        v-bind:title="$t('titleInspection')"/>
-    <UseCaseHeader
-        v-else
-        v-bind:standalone="!Boolean(backendUrl)"
-        v-bind:title="$t('titleConfiguration')"/>
+        v-bind:title="showConfiguration ? $t('titleConfiguration') : $t('title')"/>
 
     <main>
       <section>
         <div class="xd-section xd-light">
-          <p v-if="!showConfiguration">{{ $t('howToInspect') }}</p>
-          <p v-else>{{ $t('howToConfigurate') }}</p>
+          <p>{{ showConfiguration ? $t('howToConfigure') : $t('howToInspect') }}</p>
         </div>
       </section>
-      <div v-show = "!showConfiguration" id="image-container">
-        <Cropper ref="cropper" class="cropper" :src="img" @change="imageChanged"
+
+      <div id="image-container" v-show="!showConfiguration">
+        <Cropper ref="cropper" class="cropper"
+                 :src="img" @change="imageChanged"
                  :min-width="20" :min-height="20"
                  :stencil-component="explanationStencil"
                  :debounce="false"
@@ -45,9 +41,9 @@
                }"/>
       </div>
 
-      <section>
+      <section v-show="!showConfiguration">
         <div class="xd-section xd-light">
-          <InspectImage v-if="!showConfiguration" ref="inspector"
+          <InspectImage ref="inspector"
                         v-bind:model_id="modelID"
                         v-bind:current-prediction="currentPrediction"
                         v-on:inspection-completed="inspectionCompleted"/>
@@ -55,52 +51,21 @@
                              v-bind:prediction-ready="currentPrediction"
                              v-on:explanation-requested="explanationRequested"
                              v-on:explanation-received="explanationReceived"/>
-          <ConfigureModel ref="configurator"/>
         </div>
       </section>
 
-      <section v-show="showConfiguration">
-        <div class="configurator-menu">
-          <div id="smartphone_config" class="configurators">
-            <KISettings v-bind:amounts= "['0', '15', '200']"
-                        v-bind:header="'Kategorie A'"
-                        v-bind:labels="['Handy', 'Tasse']"
-                        v-bind:pic_filename="'25_Handys.jpg'"
-                        v-bind:store_key="'smartphone'"
-                        ref="smartphone"/>
-            
-          </div>
-          <div id="pencil_config" class="configurators">
-            <KISettings v-bind:amounts="['15', '200']"
-                        v-bind:header="'Kategorie B'"
-                        v-bind:labels="['Stift', 'Tasse']"
-                        v-bind:pic_filename="'25_Stifte.jpg'"
-                        v-bind:store_key="'pencil'"
-                        ref="pencil"/>
-          
-          </div>
-          <div id="cup_config" class="configurators">
-            <KISettings  v-bind:amounts= "['15', '200']"
-                         v-bind:header="'Kategorie C'"
-                         v-bind:labels="['Tasse']"
-                         v-bind:pic_filename="'25_Tassen.jpg'"
-                         v-bind:store_key="'cup'"
-                         ref="cup"/>
-         
-          </div>
-        </div>
+      <section v-if="showConfiguration">
+        <ConfigureModel ref="configuration"/>
       </section>
 
-    <GoToConfiguration v-show= "!showConfiguration" ref="explainer"
-                            v-on:click="changeP()" />
-
-    <GoToInspection v-show="showConfiguration" ref="explainer"
-                             v-on:click="changeP()"/>
-
-    <p>Smartphone: {{this.store.smartphone.amount}} {{this.store.smartphone.label}}</p>
-    <p>Pencil: {{this.store.pencil.amount}} {{this.store.pencil.label}}</p>
-    <p>Cup: {{this.store.cup.amount}} {{this.store.cup.label}}</p>
-    <p>{{modelID}}</p>
+      <section>
+        <div class="xd-section xd-light">
+          <button class="xd-button xd-secondary" @click="toggleConfiguration"
+                  v-bind:disabled="!showConfiguration && !currentPrediction">
+            {{ showConfiguration ? $t('switchToInspection') : $t('switchToConfiguration') }}
+          </button>
+        </div>
+      </section>
     </main>
 
     <FloatingInfoButton class="info-button"
@@ -116,12 +81,11 @@ import 'vue-advanced-cropper/dist/style.css'
 import InspectImage from "@/components/InspectImage";
 import ExplainInspection from "@/components/ExplainInspection";
 import ExplanationStencil from "@/components/ExplanationStencil";
-import KISettings from "./components/KISettings";
-import GoToConfiguration from "./components/GoToConfiguration";
-import GoToInspection from "./components/GoToInspection";
+import ConfigureModel from "@/components/ConfigureModel";
+
 import {FloatingInfoButton, UseCaseHeader, XAIStudioRibbon, GitHubRibbon} from '@xai-demonstrator/xaidemo-ui';
 import {debounce} from "debounce";
-import { store } from './store.js'
+import {modelConfig} from '@/modelConfig.js'
 
 /* https://forum.vuejs.org/t/vue-received-a-component-which-was-made-a-reactive-object/119004/2 */
 const componentMap = {
@@ -133,17 +97,18 @@ export default {
     Cropper,
     InspectImage,
     ExplainInspection,
+    ConfigureModel,
     UseCaseHeader,
     FloatingInfoButton,
-    GoToConfiguration,
-    GoToInspection,
-    KISettings,
     XAIStudioRibbon,
     GitHubRibbon
   },
   methods: {
-     async changeP() {
+    async toggleConfiguration() {
       this.showConfiguration = !this.showConfiguration
+      if (!this.showConfiguration && !this.currentPrediction) {
+        await this.requestInspection(this.$refs.cropper.getResult().canvas)
+      }
     },
     async imageChanged({canvas}) {
       if (!this.waitingForExplanation) {
@@ -179,7 +144,6 @@ export default {
   },
   data() {
     return {
-      model_id: "TestId",
       showConfiguration: false,
       currentPrediction: false,
       currentExplanation: false,
@@ -199,7 +163,7 @@ export default {
       }],
       backendUrl: process.env.VUE_APP_BACKEND_URL,
       img: require('./assets/table.jpg'),
-      store
+      modelConfig: modelConfig
     }
   },
   computed: {
@@ -207,17 +171,14 @@ export default {
       return componentMap['stencil']
     },
     modelID() {
-      var id = 'model_'
-      id += this.store.smartphone.amount
-      if (this.store.smartphone.label==='Tasse') {
-        id += 'T'
-      }
-      id += '_' + this.store.pencil.amount
-      if (this.store.pencil.label==='Tasse') {
-        id += 'T'
-      }
-      id += '_' + this.store.cup.amount
-      return id
+      return modelConfig.getModelId()
+    }
+  },
+  watch: {
+    modelID(newValue) {
+      console.log(newValue)
+      this.currentPrediction = false
+      this.currentExplanation = false
     }
   },
   created() {
@@ -234,10 +195,12 @@ export default {
 <i18n>
 {
   "de": {
-    "titleInspection": "Gegenstände erkennen",
+    "title": "Gegenstände erkennen",
     "titleConfiguration": "KI trainieren",
     "howToInspect": "Wähle einen Bildausschnitt und die KI bestimmt den Gegenstand.",
-    "howToConfigurate": "Wähle die Daten für das Training der KI aus.",
+    "howToConfigure": "Wähle die Daten für das Training der KI aus.",
+    "switchToConfiguration": "Trainiere die KI",
+    "switchToInspection": "KI trainieren und zurückkehren",
     "info1headline": "Gegenstände erkennen",
     "info1paragraph1": "Du interagierst mit einer KI, die einen Gegenstand in einem Bildausschnitt erkennen kann. Aber eine KI ist nie perfekt!",
     "info1paragraph2": "Durch die Wahl verschiedener Bildausschnitte entdeckst du, für welche Bereiche die KI zuverlässig ist, aber insbesondere auch, wo sie an ihre Grenzen stößt.",
@@ -249,10 +212,12 @@ export default {
     "infoLinkLabel": "Interesse geweckt? Hier gibt’s mehr Infos!"
   },
   "en": {
-    "titleInspection": "Detect Objects",
+    "title": "Detect Objects",
     "titleConfiguration": "Train AI",
     "howToInspect": "Select a part of the image and the AI will identify the object.",
-    "howToConfigurate": "Select data to train the AI.",
+    "howToConfigure": "Select data to train the AI.",
+    "switchToConfiguration": "Train the AI",
+    "switchToInspection": "Train the AI and return",
     "info1headline": "Detect objects",
     "info1paragraph1": "You are interacting with an AI that can detect objects in images. But an AI is never perfect!",
     "info1paragraph2": "By selecting different parts of the image, you can discover for which of these parts the AI is reliable and, perhaps more importantly, for which it is not.",
@@ -298,99 +263,6 @@ main section {
   border-radius: 3px;
 }
 
-.configurator-menu {
-  display: flex;
-}
-
-.configurators {
-  margin: 5px;
-  border-radius: 25px;
-  width: 140px;
-  height: 400px;
-  text-align: left;
-}
-
-.category_headline {
-  text-align: center;
-}
-
-.config_picture {
-  width: 135px;
-  float: left;
-  margin-top: 6px;
-  margin-bottom: 6px;
-}
-
-#smartphone_config {
-  background-color: #E2E6EC;
-  box-shadow: #E2E6EC 2px 2px;
-}
-
-#pencil_config {
-  background-color: #F1DEDB;
-  box-shadow: #F1DEDB 2px 2px;
-}
-
-#cup_config {
-  background-color: #EFFBF8;
-  box-shadow: #EFFBF8 2px 2px;
-}
-
-/*The following Code is for getting Radio-Buttons with a square design
-  instead of the old-school Radio-Buttons. It is based on the following StackOverflow-Thread;
-  https://stackoverflow.com/questions/24516958/styling-radio-buttons-into-a-square*/
-input {
-  display: none;
-}
-
-label {
-  display: inline-block;
-  padding: 5px 10px;
-  cursor: pointer;
-}
-
-label span {
-  position: relative;
-  line-height: 22px;
-}
-
-label span:before,
-label span:after {
-  content: '';
-}
-
-
-label span:before {
-  border: 1px solid #222021;
-  width: 20px;
-  height: 20px;
-  margin-right: 10px;
-  display: inline-block;
-  vertical-align: top;
-}
-
-label span:after {
-  background: #222021;
-  width: 14px;
-  height: 14px;
-  position: absolute;
-  top: 2px;
-  left: 4px;
-  transition: 300ms;
-  opacity: 0;
-}
-
-label input:checked+span:after {
-  opacity: 1;
-}
-/*
-body {
-  background: #fbfbfb;
-  font-family: Arial;
-  font-weight: bold;
-  color: rgba(0, 0, 0, 0.7);
-}
-*/
 @media screen and (max-width: 450px) {
   #app {
     flex-direction: column;
@@ -400,13 +272,18 @@ body {
   #image-container {
     width: 100%;
     max-width: 100vw;
-    padding: 12px 0;
+    padding: 0;
+    margin-bottom: 12px;
   }
   .cropper {
     max-width: 100vw;
   }
   .cropper * {
     border-radius: 0;
+  }
+
+  main section {
+    margin-bottom: 12px;
   }
 }
 @media screen and (min-width: 450px) and (max-height: 650px) {
@@ -456,9 +333,9 @@ body {
   }
   main section {
     padding: 0;
+    margin-bottom: 8px;
   }
   #image-container {
-    margin-top: 8px;
     margin-bottom: 8px;
     width: 100%;
     max-width: 450px;
