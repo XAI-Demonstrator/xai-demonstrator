@@ -55,6 +55,22 @@ def get_model(model_id: str) -> tf.keras.models.Model:
                             detail=f"Unknown model id {model_id}. Available models are: {list(MODELS.keys())}")
 
 
+def decode_predictions_diEd(prediction):
+    if prediction.shape != (1, 3) or prediction.shape[1] != 1001:
+        raise ValueError('`decode_predictions` expects '
+                         'a batch of predictions '
+                         '(i.e. a 1D/2D array of shape (1, 3))/(samples, 1001). '
+                         'Found array with shape: ' + str(prediction.shape))
+
+    top_indices = prediction.argmax()
+    label = {
+        0: "cellular_telephone",
+        1: "pencil",
+        2: "cup"
+    }
+    return label[prediction.argmax()] if prediction == (1, 3) else CLASS_INDEX.get(str(top_indices))[1]
+
+
 def decode_predictions(prediction):
     if len(prediction.shape) != 2 or prediction.shape[1] != 1001:
         raise ValueError('`decode_predictions` expects '
