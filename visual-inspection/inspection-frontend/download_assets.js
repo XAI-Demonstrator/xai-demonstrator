@@ -21,7 +21,7 @@ fsp.stat(dir).catch(async (err) => {
 const baseUrl = "https://storage.googleapis.com/xai-demo-assets/visual-inspection/images/"
 const assets = [
     'table.jpg',
-    'desk_small.jpg',
+    'desk.jpg',
     'pencils.jpg',
     'cups.jpg',
     'smartphones.jpg'
