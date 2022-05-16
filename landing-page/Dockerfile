@@ -32,7 +32,10 @@ COPY ./landing-page/nginx.conf /etc/nginx/nginx.conf
 RUN rm -rf /usr/share/nginx/html/*
 
 COPY --from=builder /frontend/dist/ /usr/share/nginx/html
-RUN mkdir /usr/share/nginx/html/sentiment && mkdir /usr/share/nginx/html/inspection && mkdir /usr/share/nginx/html/country
+RUN mkdir /usr/share/nginx/html/sentiment \
+    && mkdir /usr/share/nginx/html/inspection \
+    && mkdir /usr/share/nginx/html/country \
+    && mkdir /usr/share/nginx/html/education
 COPY --from=builder /sentiment/dist/ /usr/share/nginx/html/sentiment
 COPY --from=builder /inspection/dist/ /usr/share/nginx/html/inspection
 COPY --from=builder /education/dist/ /usr/share/nginx/html/education
