@@ -63,12 +63,12 @@ def decode_predictions_diEd(prediction):
                          'Found array with shape: ' + str(prediction.shape))
 
     top_indices = prediction.argmax()
-    label = {
+
+    return {
         0: "cellular_telephone",
         1: "pencil",
         2: "cup"
-    }
-    return label[prediction.argmax()] if prediction == (1, 3) else CLASS_INDEX.get(str(top_indices))[1]
+    }[prediction.argmax()] if prediction == (1, 3) else CLASS_INDEX.get(str(top_indices))[1]
 
 
 def decode_predictions(prediction):
