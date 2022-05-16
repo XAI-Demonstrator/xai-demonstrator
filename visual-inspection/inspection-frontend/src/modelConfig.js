@@ -23,19 +23,19 @@ export const availableModels = {
     smartphone: {
         amounts: ["0", "15", "200"],
         labels: ["smartphone", "cup"],
-        image: "25_Handys.jpg",
+        image: "smartphones.jpg",
         name: "A"
     },
     pencil: {
         amounts: ["15", "200"],
         labels: ["pencil", "cup"],
-        image: "25_Stifte.jpg",
+        image: "pencils.jpg",
         name: "B"
     },
     cup: {
         amounts: ["15", "200"],
         labels: ["cup"],
-        image: "25_Tassen.jpg",
+        image: "cups.jpg",
         name: "C"
     }
 }

@@ -23,11 +23,11 @@ with open(PATH / "english_labels.json") as json_file:
     ENGLISH_LABELS = json.load(json_file)
 
 
-def _load_models() -> Dict[str, tf.keras.models.Model]:
+def _load_models(path: pathlib.Path = PATH) -> Dict[str, tf.keras.models.Model]:
     models = {}
 
-    for model_path in (PATH / "models").iterdir():
-        model_id = model_path.name
+    for model_path in (path / "models").iterdir():
+        model_id = model_path.with_suffix('').name
 
         try:
             model_obj = tf.keras.models.load_model(model_path)
