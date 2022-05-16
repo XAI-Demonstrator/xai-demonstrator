@@ -183,7 +183,7 @@ jobs:
     - name: Create digital-education container and publish to Registry
       uses: elgohr/Publish-Docker-Github-Action@v4
       env:
-        MODEL_IDS: my_model
+        MODEL_IDS: model_0_15T_15 model_0_15T_200 model_0_15_15 model_0_15_200 model_0_200T_15 model_0_200T_200 model_0_200_15 model_0_200_200 model_15T_15T_15 model_15T_15T_200 model_15T_15_15 model_15T_15_200 model_15T_200T_15 model_15T_200T_200 model_15T_200_15 model_15T_200_200 model_15_15T_15 model_15_15T_200 model_15_15_15 model_15_15_200 model_15_200T_15 model_15_200T_200 model_15_200_15 model_15_200_200 model_200T_15T_15 model_200T_15T_200 model_200T_15_15 model_200T_15_200 model_200T_200T_15 model_200T_200T_200 model_200T_200_15 model_200T_200_200 model_200_15T_15 model_200_15T_200 model_200_15_15 model_200_15_200 model_200_200T_15 model_200_200T_200 model_200_200_15 model_200_200_200
       with:
         name: xai-demonstrator/digital-education-service
         username: ${{ github.actor }}
