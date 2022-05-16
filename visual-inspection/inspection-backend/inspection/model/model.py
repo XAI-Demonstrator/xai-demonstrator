@@ -22,6 +22,8 @@ with open(PATH / "german_labels.json") as json_file:
 with open(PATH / "english_labels.json") as json_file:
     ENGLISH_LABELS = json.load(json_file)
 
+DIGITAL_EDUCATION_LABELS = {0: "cellular_telephone", 1: "pencil", 2: "cup"}
+
 
 def _load_models(path: pathlib.Path = PATH) -> Dict[str, tf.keras.models.Model]:
     models = {}
@@ -55,20 +57,14 @@ def get_model(model_id: str) -> tf.keras.models.Model:
                             detail=f"Unknown model id {model_id}. Available models are: {list(MODELS.keys())}")
 
 
-def decode_predictions_diEd(prediction):
-    if prediction.shape != (1, 3) or prediction.shape[1] != 1001:
+def decode_predictions_diEd(prediction) -> str:
+    if prediction.shape != (3,) and prediction.shape[1] != 1001:
         raise ValueError('`decode_predictions` expects '
                          'a batch of predictions '
                          '(i.e. a 1D/2D array of shape (1, 3))/(samples, 1001). '
                          'Found array with shape: ' + str(prediction.shape))
 
-    top_indices = prediction.argmax()
-
-    return {
-        0: "cellular_telephone",
-        1: "pencil",
-        2: "cup"
-    }[prediction.argmax()] if prediction == (1, 3) else CLASS_INDEX.get(str(top_indices))[1]
+    return DIGITAL_EDUCATION_LABELS[prediction.argmax()] if prediction == (3,) else CLASS_INDEX.get(str(prediction.argmax()))[1]
 
 
 def decode_predictions(prediction):
