@@ -114,6 +114,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+  margin-left: 12px;
 }
 
 .group {
@@ -127,12 +128,13 @@ export default {
   }
 
   .configuration {
-    justify-content: space-between;
+    justify-content: left;
   }
 
   .image img {
     max-width: 150px;
   }
+
 }
 
 @media screen and (min-width: 450px) and (max-height: 650px) {
@@ -158,7 +160,7 @@ export default {
   }
 
   .configuration {
-    justify-content: space-between;
+    justify-content: left;
   }
 
 }
