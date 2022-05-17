@@ -57,7 +57,7 @@ def get_model(model_id: str) -> tf.keras.models.Model:
                             detail=f"Unknown model id {model_id}. Available models are: {list(MODELS.keys())}")
 
 
-def decode_predictions_diEd(prediction) -> str:
+def decode_predictions(prediction) -> str:
     if prediction.shape != (3,) and prediction.shape[1] != 1001:
         raise ValueError('`decode_predictions` expects '
                          'a batch of predictions '
@@ -65,17 +65,6 @@ def decode_predictions_diEd(prediction) -> str:
                          'Found array with shape: ' + str(prediction.shape))
 
     return DIGITAL_EDUCATION_LABELS[prediction.argmax()] if prediction == (3,) else CLASS_INDEX.get(str(prediction.argmax()))[1]
-
-
-def decode_predictions(prediction):
-    if len(prediction.shape) != 2 or prediction.shape[1] != 1001:
-        raise ValueError('`decode_predictions` expects '
-                         'a batch of predictions '
-                         '(i.e. a 2D array of shape (samples, 1001)). '
-                         'Found array with shape: ' + str(prediction.shape))
-
-    top_indices = prediction.argmax()
-    return CLASS_INDEX.get(str(top_indices))[1]
 
 
 def decode_label(prediction, language: Optional[str] = None):
