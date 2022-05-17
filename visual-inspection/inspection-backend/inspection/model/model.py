@@ -64,7 +64,7 @@ def decode_predictions(prediction) -> str:
                          '(i.e. a 1D/2D array of shape (1, 3))/(samples, 1001). '
                          'Found array with shape: ' + str(prediction.shape))
 
-    return DIGITAL_EDUCATION_LABELS[prediction.argmax()] if prediction == (3,) else CLASS_INDEX.get(str(prediction.argmax()))[1]
+    return DIGITAL_EDUCATION_LABELS[prediction.argmax()] if prediction.shape == (3,) else CLASS_INDEX.get(str(prediction.argmax()))[1]
 
 
 def decode_label(prediction, language: Optional[str] = None):
