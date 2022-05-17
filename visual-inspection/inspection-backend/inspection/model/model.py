@@ -14,13 +14,15 @@ logger = logging.getLogger()
 PATH = pathlib.Path(__file__).parent
 
 with open(PATH / "original_labels.json") as json_file:
-    CLASS_INDEX = json.load(json_file)
+    IMAGENET_LABELS = json.load(json_file)
 
 with open(PATH / "german_labels.json") as json_file:
     GERMAN_LABELS = json.load(json_file)
 
 with open(PATH / "english_labels.json") as json_file:
     ENGLISH_LABELS = json.load(json_file)
+
+DIGITAL_EDUCATION_LABELS = {0: "cellular_telephone", 1: "pencil", 2: "cup"}
 
 
 def _load_models(path: pathlib.Path = PATH) -> Dict[str, tf.keras.models.Model]:
@@ -55,19 +57,21 @@ def get_model(model_id: str) -> tf.keras.models.Model:
                             detail=f"Unknown model id {model_id}. Available models are: {list(MODELS.keys())}")
 
 
-def decode_predictions(prediction):
-    if len(prediction.shape) != 2 or prediction.shape[1] != 1001:
-        raise ValueError('`decode_predictions` expects '
-                         'a batch of predictions '
-                         '(i.e. a 2D array of shape (samples, 1001)). '
+def decode_prediction(prediction) -> str:
+    if len(prediction.shape) != 2 or prediction.shape[0] != 1 or \
+            (prediction.shape[1] != 3 and prediction.shape[1] != 1001):
+        raise ValueError('`decode_predictions` expects a single prediction '
+                         '(i.e., a 2D array of shape (1, 3) or (1, 1001). '
                          'Found array with shape: ' + str(prediction.shape))
 
-    top_indices = prediction.argmax()
-    return CLASS_INDEX.get(str(top_indices))[1]
+    if prediction.shape[1] == 3:
+        return DIGITAL_EDUCATION_LABELS[prediction.argmax()]
+    else:
+        return IMAGENET_LABELS.get(str(prediction.argmax()))[1]
 
 
 def decode_label(prediction, language: Optional[str] = None):
-    original_label = decode_predictions(prediction)
+    original_label = decode_prediction(prediction)
     if language is not None and language[:2] == "en":
         return ENGLISH_LABELS[original_label] if original_label in ENGLISH_LABELS \
             else "a " + original_label.replace("_", " ")
