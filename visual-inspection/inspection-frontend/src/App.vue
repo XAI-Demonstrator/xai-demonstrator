@@ -69,7 +69,7 @@
     </main>
 
     <FloatingInfoButton class="info-button"
-                        v-show="!enableModelConfiguration || !showConfiguration"
+                        v-if="!enableModelConfiguration"
                         v-bind:info-url="infoUrl"
                         v-bind:info-text="infoText"
                         v-bind:link-label="$t('infoLinkLabel')"/>

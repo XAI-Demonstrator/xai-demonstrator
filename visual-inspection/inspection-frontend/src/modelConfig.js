@@ -7,7 +7,7 @@ export const modelConfig = reactive({
     getModelId() {
       let id = "model_"
       id += this.smartphone.amount
-      if (this.smartphone.label === "cup") {
+      if (this.smartphone.label === "cup" && this.smartphone.amount !== "0") {
         id += "T"
       }
       id += "_" + this.pencil.amount
