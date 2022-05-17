@@ -1,6 +1,7 @@
+import numpy as np
 import pytest
-from fastapi import HTTPException
 import tensorflow as tf
+from fastapi import HTTPException
 
 from inspection.model import model
 
@@ -51,3 +52,33 @@ def test_that_we_can_load_hdf5_models(tmp_path):
 
     assert (models_dir / "my_h5_model.h5").exists()
     assert "my_h5_model" in model._load_models(tmp_path)
+
+
+def test_that_imagenet_decoder_works():
+    prediction = np.zeros((1, 1001))
+    prediction[0, 1] = 1.0
+
+    label = model.decode_prediction(prediction)
+
+    assert label == "goldfish"
+
+
+def test_that_digital_education_decoder_works():
+    prediction = np.zeros((1, 3))
+    prediction[0, 1] = 1.0
+
+    label = model.decode_prediction(prediction)
+
+    assert label == "pencil"
+
+
+def test_that_unknown_prediction_shape_raises_friendly_exception():
+    prediction = np.zeros((1, 44))
+
+    with pytest.raises(ValueError):
+        _ = model.decode_prediction(prediction)
+
+    prediction = np.zeros((5, 1001))
+
+    with pytest.raises(ValueError):
+        _ = model.decode_prediction(prediction)
