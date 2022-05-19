@@ -9,7 +9,7 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "@octokit/core": "^3.5.1"
+    "@octokit/core": "^3.6.0"
   },
   "type": "module"
 }
