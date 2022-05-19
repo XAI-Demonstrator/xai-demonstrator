@@ -4,4 +4,4 @@ pytest-cov
 pytest-env
 pytest-mock
 coveralls
-aioresponses==0.7.2
+aioresponses==0.7.3
