@@ -10,24 +10,24 @@
   },
   "dependencies": {
     "@xai-demonstrator/xaidemo-ui": "^0.4.4",
-    "core-js": "^3.20.3",
-    "vue": "^3.2.29",
-    "vue-i18n": "^9.2.0-beta.29"
+    "core-js": "^3.22.5",
+    "vue": "^3.2.33",
+    "vue-i18n": "^9.2.0-beta.35"
   },
   "devDependencies": {
-    "@intlify/vue-i18n-loader": "^4.1.0",
-    "@vue/cli-plugin-babel": "^4.5.15",
-    "@vue/cli-plugin-eslint": "^4.5.15",
-    "@vue/cli-plugin-unit-jest": "^4.5.15",
-    "@vue/cli-service": "^4.5.15",
-    "@vue/compiler-sfc": "^3.2.29",
-    "@vue/test-utils": "^2.0.0-rc.18",
+    "@intlify/vue-i18n-loader": "^4.2.0",
+    "@vue/cli-plugin-babel": "^4.5.17",
+    "@vue/cli-plugin-eslint": "^4.5.17",
+    "@vue/cli-plugin-unit-jest": "^4.5.17",
+    "@vue/cli-service": "^4.5.17",
+    "@vue/compiler-sfc": "^3.2.33",
+    "@vue/test-utils": "^2.0.0-rc.21",
     "axios": "^0.24.0",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.32.0",
     "eslint-plugin-vue": "^7.20.0",
     "flush-promises": "^1.0.2",
-    "miragejs": "^0.1.43",
+    "miragejs": "^0.1.44",
     "vue-jest": "^5.0.0-alpha.10"
   },
   "eslintConfig": {
