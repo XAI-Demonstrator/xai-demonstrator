@@ -15,7 +15,7 @@
   },
   "devDependencies": {
     "@intlify/vue-i18n-loader": "^4.2.0",
-    "@vue/cli-plugin-babel": "^4.5.17",
+    "@vue/cli-plugin-babel": "^5.0.4",
     "@vue/cli-plugin-eslint": "^4.5.17",
     "@vue/cli-service": "^4.5.17",
     "@vue/compiler-sfc": "^3.2.33",
