@@ -4,6 +4,7 @@ module.exports = {
         "./jest.setup.js",
     ],
     transform: {
-        "^.+\\.vue$": "vue-jest",
+        "^.+.js$": "babel-jest",
+        ".*.(vue)$": "@vue/vue3-jest"
     },
 }

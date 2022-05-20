@@ -24,12 +24,12 @@ describe('modelConfig.js', () => {
         modelConfig.smartphone.label = "cup"
 
         modelConfig.pencil.amount = "22"
-        modelConfig.pencil.label = "pencil"
+        modelConfig.pencil.label = "cup"
 
         modelConfig.cup.amount = "15"
         modelConfig.cup.label = "cup"
 
-        expect(modelConfig.getModelId()).toBe('model_0_22_15')
+        expect(modelConfig.getModelId()).toBe('model_0_22T_15')
     })
 
 })
