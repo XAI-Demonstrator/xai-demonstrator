@@ -26,7 +26,7 @@
                    v-model="modelConfig[classKey].label"
                    v-bind:name="'labels-'  + classKey + '-' + index"
                    v-bind:value="label">
-            <span>{{ label }}</span></label>
+            <span>{{ $t(label) }}</span></label>
         </div>
 
       </div>
