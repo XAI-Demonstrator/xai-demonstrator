@@ -3,7 +3,6 @@
     <MultiBounce  v-if="time < 100"
                  v-bind:numberOfDots="3"/>
     </div>
-
 </template>
 
 <script>
@@ -21,7 +20,7 @@ export default {
   created() {
     var intval = setInterval(() => {
       if(this.time < 100)
-        this.time += .92;
+        this.time += .95;
       else
         clearInterval(intval);
     }, 10);
