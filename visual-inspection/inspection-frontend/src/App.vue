@@ -65,7 +65,7 @@
           </button>
         </div>
       </section>
-        <loadingBar v-if="showLoadingBar && !currentPrediction" ref="loadingBar" v-on:loading-done="loadingDone" />
+        <loadingBar v-if="false" ref="loadingBar"/> <!-- showLoadingBar -->
     </main>
 
     <FloatingInfoButton class="info-button"
@@ -107,11 +107,20 @@ export default {
   },
   methods: {
     async toggleConfiguration() {
-      if (this.showLoadingBar == null){
+      if (this.showLoadingBar == null && !this.showConfiguration){
         this.showLoadingBar = true
       }
+      if (this.showConfiguration && !this.currentPrediction){
+        let count = 0
+        while(count < 2000000){
+          count += .01
+        }
+        this.showLoadingBar = !this.showLoadingBar;
+      }else{
+        this.showLoadingBar = !this.showLoadingBar
+      }
+
       this.showConfiguration = !this.showConfiguration
-      this.showLoadingBar = !this.showLoadingBar
       if (!this.showConfiguration && !this.currentPrediction) {
         await this.requestInspection(this.$refs.cropper.getResult().canvas)
       }
