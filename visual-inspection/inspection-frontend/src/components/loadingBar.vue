@@ -15,7 +15,7 @@ export default {
   name: "loadingBar",
   data: () => {
     return {
-      time: 0,
+      time: 0
     }
   },
   created() {
@@ -24,10 +24,7 @@ export default {
         this.time += .92;
       else
         clearInterval(intval);
-        this.$emit('loading-done', true)
     }, 10);
   }
 }
 </script>
-
-

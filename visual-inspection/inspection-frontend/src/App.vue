@@ -5,7 +5,6 @@
     <UseCaseHeader
         v-bind:standalone="!Boolean(backendUrl)"
         v-bind:title="(enableModelConfiguration && showConfiguration) ? $t('titleConfiguration') : $t('title')"/>
-
     <main>
       <section>
         <div class="xd-section xd-light">
@@ -66,6 +65,7 @@
           </button>
         </div>
       </section>
+        <loadingBar v-if="showLoadingBar" ref="loadingBar" v-on:loading-done="loadingDone" />
     </main>
 
     <FloatingInfoButton class="info-button"
@@ -86,6 +86,7 @@ import ConfigureModel from "@/components/ConfigureModel";
 import {FloatingInfoButton, UseCaseHeader, XAIStudioRibbon, GitHubRibbon} from '@xai-demonstrator/xaidemo-ui';
 import {debounce} from "debounce";
 import {modelConfig} from '@/modelConfig.js'
+import loadingBar from "./components/loadingBar";
 
 /* https://forum.vuejs.org/t/vue-received-a-component-which-was-made-a-reactive-object/119004/2 */
 const componentMap = {
@@ -95,6 +96,7 @@ export default {
   name: 'App',
   components: {
     Cropper,
+    loadingBar,
     InspectImage,
     ExplainInspection,
     ConfigureModel,
@@ -105,6 +107,10 @@ export default {
   },
   methods: {
     async toggleConfiguration() {
+      if (this.showLoadingBar == null){
+        this.showLoadingBar = true
+      }
+      this.showLoadingBar = !this.showLoadingBar
       this.showConfiguration = !this.showConfiguration
       if (!this.showConfiguration && !this.currentPrediction) {
         await this.requestInspection(this.$refs.cropper.getResult().canvas)
@@ -144,6 +150,7 @@ export default {
   },
   data() {
     return {
+      showLoadingBar: null,
       showConfiguration: false,
       currentPrediction: false,
       currentExplanation: false,
