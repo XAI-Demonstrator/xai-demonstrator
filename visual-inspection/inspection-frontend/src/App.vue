@@ -105,10 +105,7 @@ export default {
   methods: {
     async toggleConfiguration() {
       if (this.showConfiguration && !this.currentPrediction){
-        let count = 0
-        while(count < 2000000){
-          count += .01
-        }
+        await new Promise(resolve => setTimeout(resolve, 500));
       }
       this.showConfiguration = !this.showConfiguration
       if (!this.showConfiguration && !this.currentPrediction) {
