@@ -69,6 +69,12 @@
     </main>
 
     <FloatingInfoButton class="info-button"
+                        v-if="enableModelConfiguration"
+                        v-bind:info-url="infoUrl"
+                        v-bind:info-text="infoTextDigitalEducation"
+                        v-bind:link-label="$t('infoLinkLabel')"
+    />
+    <FloatingInfoButton class="info-button"
                         v-if="!enableModelConfiguration"
                         v-bind:info-url="infoUrl"
                         v-bind:info-text="infoText"
@@ -154,6 +160,13 @@ export default {
         height: 100
       },
       infoUrl: "https://www.erklaerbare-ki.de/xai-demonstrator/",
+      infoTextDigitalEducation: [{
+        headline: this.$t('info1headline'),
+        paragraphs: [this.$t('info1paragraph1'), this.$t('info1paragraph2'), this.$t('info1paragraph4')]
+      }, {
+        headline: this.$t('info2headline'),
+        paragraphs: [this.$t('info2paragraph3')]
+      }],
       infoText: [{
         headline: this.$t('info1headline'),
         paragraphs: [this.$t('info1paragraph1'), this.$t('info1paragraph2'), this.$t('info1paragraph3')]
@@ -207,6 +220,7 @@ export default {
     "info1headline": "Gegenstände erkennen",
     "info1paragraph1": "Du interagierst mit einer KI, die einen Gegenstand in einem Bildausschnitt erkennen kann. Aber eine KI ist nie perfekt!",
     "info1paragraph2": "Durch die Wahl verschiedener Bildausschnitte entdeckst du, für welche Bereiche die KI zuverlässig ist, aber insbesondere auch, wo sie an ihre Grenzen stößt.",
+    "info1paragraph4": "Bei der Verwendung von verschieden trainierter Modelle, erkennst du wie ein Modell beschaffen sein muss, um gute Vorhersagen zu liefern.",
     "info1paragraph3": "Die automatisch erzeugten Erklärungen helfen dir, zu verstehen, wie die KI vorgeht und warum sie manchmal falsche Schlüsse zieht.",
     "info2headline": "Was steckt dahinter?",
     "info2paragraph1": "Die KI ist ein tiefes neuronales Netz, das 1001 verschiedene Objekte erkennen kann.",
