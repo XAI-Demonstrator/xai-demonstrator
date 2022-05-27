@@ -5,7 +5,6 @@
     <UseCaseHeader
         v-bind:standalone="!Boolean(backendUrl)"
         v-bind:title="(enableModelConfiguration && showConfiguration) ? $t('titleConfiguration') : $t('title')"/>
-
     <main>
       <section>
         <div class="xd-section xd-light">
@@ -105,6 +104,9 @@ export default {
   },
   methods: {
     async toggleConfiguration() {
+      if (this.showConfiguration && !this.currentPrediction){
+        await new Promise(resolve => setTimeout(resolve, 500));
+      }
       this.showConfiguration = !this.showConfiguration
       if (!this.showConfiguration && !this.currentPrediction) {
         await this.requestInspection(this.$refs.cropper.getResult().canvas)
