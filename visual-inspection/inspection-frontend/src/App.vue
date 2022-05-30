@@ -165,14 +165,14 @@ export default {
         paragraphs: [this.$t('info1paragraph1'), this.$t('info1paragraph2'), this.$t('info1paragraph4')]
       }, {
         headline: this.$t('info2headline'),
-        paragraphs: [this.$t('info2paragraph3')]
+        paragraphs: [this.$t('info2paragraph3'), this.$t('info2paragraph5digitalEducation')]
       }],
       infoText: [{
         headline: this.$t('info1headline'),
         paragraphs: [this.$t('info1paragraph1'), this.$t('info1paragraph2'), this.$t('info1paragraph3')]
       }, {
         headline: this.$t('info2headline'),
-        paragraphs: [this.$t('info2paragraph1'), this.$t('info2paragraph2'), this.$t('info2paragraph3')]
+        paragraphs: [this.$t('info2paragraph1'), this.$t('info2paragraph2'), this.$t('info2paragraph3'), this.$t('info2paragraph4'), this.$t('info2paragraph5')]
       }],
       modelConfig: modelConfig,
       /* CONFIGURATION */
@@ -220,12 +220,15 @@ export default {
     "info1headline": "Gegenstände erkennen",
     "info1paragraph1": "Du interagierst mit einer KI, die einen Gegenstand in einem Bildausschnitt erkennen kann. Aber eine KI ist nie perfekt!",
     "info1paragraph2": "Durch die Wahl verschiedener Bildausschnitte entdeckst du, für welche Bereiche die KI zuverlässig ist, aber insbesondere auch, wo sie an ihre Grenzen stößt.",
-    "info1paragraph4": "Welchen Einfluss ein Modell auf die Vorhersagen hat, erkennst du durch die Verwendung verschieden trainierter Modelle. Achte hierbei auf die Sicherheit mit welcher die KI Vorhersagen trifft.",
+    "info1paragraph4": "Du kannst selbst die Trainingsdaten für die KI auswählen und entdecken, wie sich die Zuverlässigkeit der KI verändert.",
     "info1paragraph3": "Die automatisch erzeugten Erklärungen helfen dir, zu verstehen, wie die KI vorgeht und warum sie manchmal falsche Schlüsse zieht.",
     "info2headline": "Was steckt dahinter?",
     "info2paragraph1": "Die KI ist ein tiefes neuronales Netz, das 1001 verschiedene Objekte erkennen kann.",
     "info2paragraph2": "Die Erklärungen werden mit der XAI-Methode <em><abbr>LIME</abbr></em> (<strong>L</strong>ocal <strong>I</strong>nterpretable <strong>M</strong>odel-Agnostic <strong>E</strong>xplanations) generiert. Die Erklärung entspricht einer graphischen Hervorhebung von Bildbereichen, die für die Entscheidung der KI besonders relevant sind.",
-    "info2paragraph3": "<small>Modell: Neuronales Netz auf Basis von <a href='https://www.tensorflow.org/api_docs/python/tf/keras/applications/mobilenet_v2'>MobileNetV2 for Keras</a>, Erklärungen: <a href='https://github.com/marcotcr/lime'>LIME</a><br />Bild: Melinda Pack (Unsplash), <a href='https://creativecommons.org/publicdomain/zero/1.0/deed.en'>CC0</a> 1.0, via <a href='https://commons.wikimedia.org/wiki/File:Camera_keys_notebook_coffee_(Unsplash).jpg'>Wikimedia Commons</a></small>",
+    "info2paragraph3": "<small>Modell: Neuronales Netz auf Basis von <a href='https://www.tensorflow.org/api_docs/python/tf/keras/applications/mobilenet_v2'>MobileNetV2 for Keras</a>",
+    "info2paragraph4": "<small>Erklärungen: <a href='https://github.com/marcotcr/lime'>LIME</a><br />",
+    "info2paragraph5": "<small>Bild: Melinda Pack (Unsplash), <a href='https://creativecommons.org/publicdomain/zero/1.0/deed.en'>CC0</a> 1.0, via <a href='https://commons.wikimedia.org/wiki/File:Camera_keys_notebook_coffee_(Unsplash).jpg'>Wikimedia Commons</a></small>",
+    "info2paragraph5digitalEducation": "<small>Bilder: Open Source / <a href='https://www.pexels.com/license'>Pexels</a>",
     "infoLinkLabel": "Interesse geweckt? Hier gibt’s mehr Infos!"
   },
   "en": {
