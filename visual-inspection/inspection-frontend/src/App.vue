@@ -4,6 +4,7 @@
     <XAIStudioRibbon url="https://www.xai-studio.de"/>
     <UseCaseHeader
         v-bind:standalone="!Boolean(backendUrl)"
+        v-bind:reload="false"
         v-bind:title="(enableModelConfiguration && showConfiguration) ? $t('titleConfiguration') : $t('title')"/>
     <main>
       <section>
