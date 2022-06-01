@@ -7,7 +7,7 @@
     </div>
     <div class="header-title">{{ title }}</div>
     <div class="header-icon">
-      <a v-bind:href="reloadUrl">
+      <a v-bind:href="reloadUrl" v-if="reload">
         <img svg-inline src="../assets/reload.svg" alt="Reload"/>
       </a>
     </div>
@@ -19,6 +19,10 @@ export default {
   name: "UseCaseHeader",
   props: {
     standalone: {
+      type: Boolean,
+      default: true
+    },
+    reload: {
       type: Boolean,
       default: true
     },
