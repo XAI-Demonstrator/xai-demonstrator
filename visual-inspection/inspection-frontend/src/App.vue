@@ -4,6 +4,7 @@
     <XAIStudioRibbon url="https://www.xai-studio.de"/>
     <UseCaseHeader
         v-bind:standalone="!Boolean(backendUrl)"
+        v-bind:reload="enableReload"
         v-bind:title="(enableModelConfiguration && showConfiguration) ? $t('titleConfiguration') : $t('title')"/>
     <main>
       <section>
@@ -182,7 +183,8 @@ export default {
       img: require('@/assets/' + process.env.VUE_APP_IMAGE_FILE),
       /* FEATURE FLAGS */
       enableExplanations: JSON.parse(process.env.VUE_APP_ENABLE_EXPLANATIONS),
-      enableModelConfiguration: JSON.parse(process.env.VUE_APP_ENABLE_MODEL_CONFIGURATION)
+      enableModelConfiguration: JSON.parse(process.env.VUE_APP_ENABLE_MODEL_CONFIGURATION),
+      enableReload: JSON.parse(process.env.VUE_APP_ENABLE_RELOAD)
     }
   },
   computed: {
