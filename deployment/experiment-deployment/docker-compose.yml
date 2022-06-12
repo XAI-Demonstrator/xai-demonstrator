@@ -1,12 +1,12 @@
-version: '3.7'
+version: '3.8'
 
 services:
   nginx:
       build:
         context: .
-        dockerfile: ./gtc-nginx/Dockerfile
+        dockerfile: ./nginx-frontend/Dockerfile
       depends_on:
-        - country
+        - education
         - study
       expose:
         - 80
@@ -22,7 +22,6 @@ services:
         context: .
         dockerfile: ./study/Dockerfile
     depends_on:
-      - couchdb
       - collector
     expose:
       - 8000
@@ -30,30 +29,21 @@ services:
       - ROOT_PATH=/api/study
       - SERVICE_NAME=study-backend-service
       - COLLECTOR_URL=http://collector:8000
-      - EXPERIMENT=1
-      - DB_HOST=couchdb
-      - DB_PORT=5984
-      - DB_USER=${COUCHDB_USER}
-      - DB_PASSWORD=${COUCHDB_PASSWORD}  
+      - EXPERIMENT=1 
     volumes:
         - ./../../../images:/images/
 
-  country:
-    image: ghcr.io/xai-demonstrator/guess-the-country-service:latest
+  education:      
+    image: ghcr.io/xai-demonstrator/digital-education-service:latest
     depends_on:
       - jaeger
-      - collector
     expose:
       - 8000
     environment:
-      - ROOT_PATH=/api/country
-      - SERVICE_NAME=country-service
+      - ROOT_PATH=/api/education
+      - SERVICE_NAME=education-service
       - TRACING_EXPORTER=jaeger
       - JAEGER_AGENT_HOST_NAME=jaeger
-      - GOOGLE_MAPS_API_TOKEN=${STREETVIEW_API_KEY}
-      - BATCH_SIZE=${BATCH_SIZE}
-      - COLLECTOR_URL=http://collector:8000
-      - EXPERIMENT=1
         
 
   jaeger:
@@ -64,18 +54,6 @@ services:
       - 16686:16686
     restart: always
 
-  
-  couchdb:
-    build: ./database
-    expose:
-      - "5984"
-    ports:
-      - "8002:5984"
-    environment:
-      - COUCHDB_USER=${COUCHDB_USER}
-      - COUCHDB_PASSWORD=${COUCHDB_PASSWORD}
-    volumes:
-        - ./../../../dbdata:/opt/couchdb/data
 
   collector:
     image: ghcr.io/xai-demonstrator/data-collector:latest
@@ -86,10 +64,6 @@ services:
     ports:
       - "8001:8000"
     environment:
-      - DB_HOST=couchdb
-      - DB_PORT=5984
-      - DB_USER=${COUCHDB_USER}
-      - DB_PASSWORD=${COUCHDB_PASSWORD}
       - SERVICE_NAME=data-collector
       - TRACING_EXPORTER=jaeger
       - JAEGER_AGENT_HOST_NAME=jaeger
@@ -98,12 +72,12 @@ services:
     image: ghcr.io/xai-demonstrator/experiment-proxy:latest
     depends_on:
       - collector
-      - country
+      - education
       - study
     ports:
       - "8000:8000"
     environment:
-      - BACKEND_URL=http://country:8000
+      - BACKEND_URL=http://education:8000
       - BACKEND_SERVICE=test-case
       - COLLECTOR_URL=http://collector:8000
       - SERVICE_NAME=experiment-proxy

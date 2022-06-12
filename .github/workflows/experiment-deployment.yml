@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   workflow_run:
     workflows:
-      - "Guess the Country"
+      - "Visual Inspection"
     branches:
       - master
     types:
@@ -21,8 +21,8 @@ jobs:
     strategy:
       matrix:
         include:
-          - service: country
-            repo_path: ./guess-the-country/country-frontend
+          - service: education
+            repo_path: ./visual-inspection/inspection-frontend
 
     runs-on: ubuntu-latest
     steps:
@@ -96,7 +96,7 @@ jobs:
       - name: Download all frontends
         uses: actions/download-artifact@v3
         with:
-          path: "deployment/experiment-deployment/gtc-nginx/"
+          path: "deployment/experiment-deployment/nginx-frontend/"
 
       - name: Copy build frontend to experiment server
         uses: appleboy/scp-action@v0.1.2
@@ -104,21 +104,11 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
-          source: "deployment/experiment-deployment/gtc-nginx/**"
-          target: "gtc-nginx/"
+          source: "deployment/experiment-deployment/nginx-frontend/**"
+          target: "nginx-frontend/"
           strip_components: 3
           rm: true
 
-      - name: Copy couchdb to experiment server
-        uses: appleboy/scp-action@v0.1.2
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USER }}
-          key: ${{ secrets.SSH_KEY }}
-          source: "deployment/experiment-deployment/database/**"
-          target: "database/"
-          strip_components: 3
-          rm: true
 
       - name: Copy study docker to experiment server
         uses: appleboy/scp-action@v0.1.2
