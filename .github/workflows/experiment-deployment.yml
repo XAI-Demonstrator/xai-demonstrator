@@ -46,7 +46,7 @@ jobs:
           set -e
           cd ${{ matrix.repo_path }}
           npm install
-          npm run build -- --mode experiment-deployment
+          npm run build -- --mode digital-education.test-deployment
           mv dist ${{ matrix.service }}
 
       - name: Save build artifact
@@ -106,6 +106,17 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           source: "deployment/experiment-deployment/nginx-frontend/**"
           target: "nginx-frontend/"
+          strip_components: 3
+          rm: true
+
+      - name: Copy couchdb to experiment server
+        uses: appleboy/scp-action@v0.1.2
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_KEY }}
+          source: "deployment/experiment-deployment/database/**"
+          target: "database/"
           strip_components: 3
           rm: true
 
