@@ -46,7 +46,7 @@ jobs:
           set -e
           cd ${{ matrix.repo_path }}
           npm install
-          npm run build -- --mode digital-education.test-deployment
+          npm run build -- --mode digital-education.experiment-deployment
           mv dist ${{ matrix.service }}
 
       - name: Save build artifact
