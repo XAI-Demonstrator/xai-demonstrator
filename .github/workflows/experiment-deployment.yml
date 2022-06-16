@@ -46,7 +46,7 @@ jobs:
           set -e
           cd ${{ matrix.repo_path }}
           npm install
-          npm run build -- --mode digital-education.test-deployment
+          npm run build -- --mode digital-education.experiment-deployment
           mv dist ${{ matrix.service }}
 
       - name: Save build artifact
@@ -135,23 +135,19 @@ jobs:
       - name: SSH Remote Commands
         uses: appleboy/ssh-action@v0.1.4
         env:
-          STREETVIEW_API_KEY: ${{ secrets.STREETVIEW_API_KEY }}
-          BATCH_SIZE: ${{ secrets.BATCH_SIZE }}
           COUCHDB_USER: ${{ secrets.COUCHDB_USER }}
           COUCHDB_PASSWORD: ${{ secrets.COUCHDB_PASSWORD }}
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
-          envs: STREETVIEW_API_KEY,BATCH_SIZE,COUCHDB_USER,COUCHDB_PASSWORD
+          envs: COUCHDB_USER,COUCHDB_PASSWORD
           script: |
             set -e
             mv gtc-nginx/ experiment-deployment/deployment/experiment-deployment/gtc-nginx/
             mv database/ experiment-deployment/deployment/experiment-deployment/database/
             mv study/ experiment-deployment/deployment/experiment-deployment/study/
             cp -R gtc-study-backend/ experiment-deployment/deployment/experiment-deployment/study/
-            export STREETVIEW_API_KEY=$STREETVIEW_API_KEY
-            export BATCH_SIZE=${BATCH_SIZE}
             export COUCHDB_USER=${COUCHDB_USER}
             export COUCHDB_PASSWORD=${COUCHDB_PASSWORD}
             cd experiment-deployment/deployment/experiment-deployment/
