@@ -125,7 +125,7 @@ jobs:
       - name: Spin up experiment tracker
         run: |
           cd ./experiment-tracker
-          docker-compose --env-file .env.test up -d
+          docker-compose --env-file .env.test up --scale test=3 -d
           sleep 30
 
       - name: Run integration tests

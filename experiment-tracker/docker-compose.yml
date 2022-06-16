@@ -47,7 +47,7 @@ services:
     expose:
       - "8000"
     ports:
-      - "8003:8000"
+      - "8003-8010:8000"
     depends_on:
       - proxy
     environment:
