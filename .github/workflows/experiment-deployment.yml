@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   workflow_run:
     workflows:
-      - "Guess the Country"
+      - "Visual Inspection"
     branches:
       - master
     types:
@@ -21,8 +21,8 @@ jobs:
     strategy:
       matrix:
         include:
-          - service: country
-            repo_path: ./guess-the-country/country-frontend
+          - service: education
+            repo_path: ./visual-inspection/inspection-frontend
 
     runs-on: ubuntu-latest
     steps:
@@ -46,7 +46,7 @@ jobs:
           set -e
           cd ${{ matrix.repo_path }}
           npm install
-          npm run build -- --mode experiment-deployment
+          npm run build -- --mode digital-education.experiment-deployment
           mv dist ${{ matrix.service }}
 
       - name: Save build artifact
@@ -62,7 +62,7 @@ jobs:
     if: ${{ github.event_name == 'push' || github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     environment:
       name: experiment
-      url: https://gtc.xaidemo.de/
+      url: https://education.xaidemo.de/
     steps:
       - uses: actions/checkout@v3
       - name: Wait for lock to release and place lock
@@ -96,7 +96,7 @@ jobs:
       - name: Download all frontends
         uses: actions/download-artifact@v3
         with:
-          path: "deployment/experiment-deployment/gtc-nginx/"
+          path: "deployment/experiment-deployment/nginx-frontend/"
 
       - name: Copy build frontend to experiment server
         uses: appleboy/scp-action@v0.1.2
@@ -104,8 +104,8 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
-          source: "deployment/experiment-deployment/gtc-nginx/**"
-          target: "gtc-nginx/"
+          source: "deployment/experiment-deployment/nginx-frontend/**"
+          target: "nginx-frontend/"
           strip_components: 3
           rm: true
 
@@ -118,50 +118,33 @@ jobs:
           source: "deployment/experiment-deployment/database/**"
           target: "database/"
           strip_components: 3
-          rm: true
-
-      - name: Copy study docker to experiment server
-        uses: appleboy/scp-action@v0.1.2
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USER }}
-          key: ${{ secrets.SSH_KEY }}
-          source: "deployment/experiment-deployment/study/**"
-          target: "study/"
-          strip_components: 3
           rm: true  
 
       - name: SSH Remote Commands
         uses: appleboy/ssh-action@v0.1.4
         env:
-          STREETVIEW_API_KEY: ${{ secrets.STREETVIEW_API_KEY }}
-          BATCH_SIZE: ${{ secrets.BATCH_SIZE }}
           COUCHDB_USER: ${{ secrets.COUCHDB_USER }}
           COUCHDB_PASSWORD: ${{ secrets.COUCHDB_PASSWORD }}
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
-          envs: STREETVIEW_API_KEY,BATCH_SIZE,COUCHDB_USER,COUCHDB_PASSWORD
+          envs: COUCHDB_USER,COUCHDB_PASSWORD
           script: |
             set -e
-            mv gtc-nginx/ experiment-deployment/deployment/experiment-deployment/gtc-nginx/
+            mv nginx-frontend/ experiment-deployment/deployment/experiment-deployment/nginx-frontend/
             mv database/ experiment-deployment/deployment/experiment-deployment/database/
-            mv study/ experiment-deployment/deployment/experiment-deployment/study/
-            cp -R gtc-study-backend/ experiment-deployment/deployment/experiment-deployment/study/
-            export STREETVIEW_API_KEY=$STREETVIEW_API_KEY
-            export BATCH_SIZE=${BATCH_SIZE}
             export COUCHDB_USER=${COUCHDB_USER}
             export COUCHDB_PASSWORD=${COUCHDB_PASSWORD}
             cd experiment-deployment/deployment/experiment-deployment/
             sudo -E docker-compose pull
-            sudo -E docker-compose up --build -d
+            sudo -E docker-compose up --build --scale education=3 -d
             sleep 10 && rm ~/.experiment-deployment-lock
       - name: Slack Notification
         uses: rtCamp/action-slack-notify@v2.2.0
         env:
           SLACK_CHANNEL: xai-demonstrator-monitor
-          SLACK_MESSAGE: "Successfully deployed a new version to https://gtc.xaidemo.de/ :rocket:"
+          SLACK_MESSAGE: "Successfully deployed a new version to https://education.xaidemo.de/ :rocket:"
           SLACK_TITLE: New Experiment Deployment
           SLACK_USERNAME: Deployment Monitor
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
