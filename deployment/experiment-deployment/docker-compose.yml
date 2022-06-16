@@ -74,12 +74,11 @@ services:
     depends_on:
       - collector
       - education
-      - study
     ports:
       - "8000:8000"
     environment:
       - BACKEND_URL=http://education:8000
-      - BACKEND_SERVICE=test-case
+      - BACKEND_SERVICE=education-service
       - COLLECTOR_URL=http://collector:8000
       - SERVICE_NAME=experiment-proxy
       - TRACING_EXPORTER=jaeger
