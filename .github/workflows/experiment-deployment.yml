@@ -138,7 +138,7 @@ jobs:
             export COUCHDB_PASSWORD=${COUCHDB_PASSWORD}
             cd experiment-deployment/deployment/experiment-deployment/
             sudo -E docker-compose pull
-            sudo -E docker-compose up --build --scale education=3 -d
+            sudo -E docker-compose up --build --scale education=5 proxy=3 -d
             sleep 10 && rm ~/.experiment-deployment-lock
       - name: Slack Notification
         uses: rtCamp/action-slack-notify@v2.2.0

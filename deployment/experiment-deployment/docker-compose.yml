@@ -8,7 +8,7 @@ services:
       depends_on:
         - education
       expose:
-        - 80
+        - "80"
       environment:
         - VIRTUAL_HOST=education.xaidemo.de
         - VIRTUAL_PORT=80
@@ -22,7 +22,7 @@ services:
       - jaeger
       - collector
     expose:
-      - 8000
+      - "8000"
     environment:
       - ROOT_PATH=/api/education
       - SERVICE_NAME=education-service
@@ -34,9 +34,9 @@ services:
   jaeger:
     image: jaegertracing/all-in-one
     expose:
-      - 6831
+      - "6831"
     ports:
-      - 16686:16686
+      - "16686:16686"
     restart: always
 
   couchdb:
@@ -44,7 +44,7 @@ services:
     expose:
       - "5984"
     ports:
-      - "8002:5984"
+      - "8001:5984"
     environment:
       - COUCHDB_USER=${COUCHDB_USER}
       - COUCHDB_PASSWORD=${COUCHDB_PASSWORD}
@@ -58,7 +58,7 @@ services:
     expose:
       - "8000"
     ports:
-      - "8001:8000"
+      - "8000:8000"
     environment:
       - DB_HOST=couchdb
       - DB_PORT=5984
@@ -73,8 +73,8 @@ services:
     depends_on:
       - collector
       - education
-    ports:
-      - "8000:8000"
+    expose:
+      - "8000"
     environment:
       - BACKEND_URL=http://education:8000
       - BACKEND_SERVICE=education-service
