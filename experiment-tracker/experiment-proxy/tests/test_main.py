@@ -1,6 +1,7 @@
 import io
 import json
 
+import aiohttp.client_exceptions
 import aioresponses
 import png
 import pytest
@@ -159,3 +160,11 @@ def test_that_get_request_is_handled(aiomock):
     response = client.get("/route")
 
     assert response.status_code == 200
+
+
+def test_that_unavailable_backend_service_is_handled_gracefully(aiomock):
+    aiomock.post("/route", exception=aiohttp.client_exceptions.ClientError)
+
+    response = client.get("/route")
+
+    assert response.status_code == 502

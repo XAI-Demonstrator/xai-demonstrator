@@ -3,10 +3,11 @@ from json import JSONDecodeError
 from typing import Dict, Any
 
 import aiohttp
+from aiohttp.client_exceptions import ClientError
 from fastapi import FastAPI, Response, Path, Request, BackgroundTasks, HTTPException
 from multipart.multipart import parse_options_header
 from starlette.datastructures import UploadFile
-from starlette.status import HTTP_400_BAD_REQUEST, HTTP_406_NOT_ACCEPTABLE
+from starlette.status import HTTP_400_BAD_REQUEST, HTTP_406_NOT_ACCEPTABLE, HTTP_502_BAD_GATEWAY
 from xaidemo import tracing, http_client
 from xaidemo.tracking.record import send_record
 
@@ -55,14 +56,18 @@ async def proxy(request: Request,
         else:
             raise NotImplementedError
 
-        async with call_method(settings.backend_url + "/" + endpoint,
-                               timeout=backend_timeout,
-                               **msg) as proxy_response:
-            response = Response()
-            response.status_code = proxy_response.status
-            response.init_headers(proxy_response.headers)
-            response.body = await proxy_response.read()
-            decoded_response = await decode_response(response, proxy_response)
+        try:
+            async with call_method(settings.backend_url + "/" + endpoint,
+                                   timeout=backend_timeout,
+                                   **msg) as proxy_response:
+                response = Response()
+                response.status_code = proxy_response.status
+                response.init_headers(proxy_response.headers)
+                response.body = await proxy_response.read()
+                decoded_response = await decode_response(response, proxy_response)
+        except ClientError as e:
+            raise HTTPException(status_code=HTTP_502_BAD_GATEWAY,
+                                detail=f"Call to backend service {settings.backend_url} failed: {e}")
 
     if response.headers["content-type"] == "application/json":
         tracked_data = TrackedData(request=RequestData(raw=body.hex(' ', 4),
