@@ -35,7 +35,7 @@
     "eslint-plugin-vue": "^7.20.0",
     "flush-promises": "^1.0.2",
     "jest": "^27.1.0",
-    "miragejs": "^0.1.44",
+    "miragejs": "^0.1.45",
     "request": "^2.88.2",
     "sass": "^1.52.1",
     "sass-loader": "^10.2.1"
