@@ -12,6 +12,7 @@
         :score_user="this.score_user"
         :score_ai="this.score_ai"
         :user_city_answer="this.user_city_answer"
+        :nr_of_rounds="this.nr_of_rounds"
       />
 
       <Notification
@@ -43,7 +44,7 @@
       />
 
       <button
-        v-if="!prediction_city && user_city_answer && !control && round != 11"
+        v-if="!prediction_city && user_city_answer && !control && round != nr_of_rounds"
         type="button"
         class="xd-button xd-secondary"
         id="explain"
@@ -53,7 +54,7 @@
         What do you guess, AI?
       </button>
       <button
-        v-if="(explanation || (control && prediction_city)) && round < 11"
+        v-if="(explanation || (control && prediction_city)) && round < nr_of_rounds"
         type="button"
         class="xd-button xd-secondary"
         id="new"
@@ -62,7 +63,7 @@
         Next round
       </button>
       <button
-        v-if="!prediction_city && user_city_answer && control && round != 11"
+        v-if="!prediction_city && user_city_answer && control && round != nr_of_rounds"
         type="button"
         class="xd-button xd-secondary"
         id="submit"
@@ -152,6 +153,7 @@ export default {
         },
       ],
       url: process.env.VUE_APP_BACKEND_URL,
+      nr_of_rounds: JSON.parse(process.env.VUE_APP_NR_OF_ROUNDS),
       round: 1,
       useCaseTitle: "Guess the City",
       explanation: null,
