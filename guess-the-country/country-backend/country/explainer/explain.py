@@ -1,4 +1,6 @@
 import base64
+import logging
+
 import cv2
 import numpy as np
 from ..model.predict import model, load_image, preprocess
@@ -6,6 +8,9 @@ from pydantic import BaseModel
 import uuid
 from xaidemo.tracing import traced
 from .new_lime_ import explain_image
+import tensorflow as tf
+from visualime.explain import explain_classification, render_explanation
+
 
 class Explanation(BaseModel):
     explanation_id: uuid.UUID
@@ -17,7 +22,7 @@ def explain(data):
     encoded_data = str(data)
     image = load_image(encoded_data)
     pre_image = preprocess(image)
-    explanation = explain_cnn(np.squeeze(pre_image), model)
+    explanation = explain_cnn(pre_image, model)
     explain_id = uuid.uuid4()
     encoded_image_string = convert_explanation(explanation)
     encoded_bytes = bytes("data:image/png;base64,",
@@ -30,7 +35,7 @@ def explain(data):
 
 @traced
 def convert_explanation(explanation):
-    image = ((explanation + 1) * 127.5).astype(np.uint8)
+    image = np.array(explanation)
     image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     img_resized = cv2.resize(image_rgb, (448, 448),
                              interpolation=cv2.INTER_CUBIC)
@@ -40,6 +45,13 @@ def convert_explanation(explanation):
 
 
 @traced
-def explain_cnn(img, model):
-    return explain_image(img=img, seg_method="felzenszwalb", seg_settings={}, num_of_samples=500, samples_p=0.9,
-                         model_=model, threshold=0.5, volume=20, colour="violet", transparency=0.7)
+def explain_cnn(image, model):
+    def _predict_fn(img):
+        IMG_SIZE = 224
+        return model.predict(
+            tf.keras.applications.mobilenet_v2.preprocess_input(img.reshape(-1, IMG_SIZE, IMG_SIZE, 3)))
+
+    segment_mask, segment_weights = explain_classification(image=image, segmentation_method="felzenszwalb",
+                                                           predict_fn=_predict_fn, num_of_samples=275, p=0.75)
+
+    return render_explanation(image, segment_mask, segment_weights, positive="violet", coverage=0.05, opacity=0.2)
