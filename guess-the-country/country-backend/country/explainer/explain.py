@@ -1,13 +1,10 @@
 import base64
-import logging
-
 import cv2
 import numpy as np
 from ..model.predict import model, load_image, preprocess
 from pydantic import BaseModel
 import uuid
 from xaidemo.tracing import traced
-from .new_lime_ import explain_image
 import tensorflow as tf
 from visualime.explain import explain_classification, render_explanation
 
