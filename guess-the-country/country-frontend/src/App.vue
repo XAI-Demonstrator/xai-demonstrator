@@ -44,11 +44,12 @@
       />
 
       <button
-        v-if="!prediction_city && user_city_answer && !control && round != nr_of_rounds"
+        v-if="!prediction_city && user_city_answer && !control && round <= nr_of_rounds"
         type="button"
         class="xd-button xd-secondary"
         id="explain"
         v-on:click="explain()"
+
       >
         <!-- v-show -->
         What do you guess, AI?
