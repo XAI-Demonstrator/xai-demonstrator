@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
- 
-   <section v-if="(this.user_city_answer && this.round==this.nr_of_rounds)" class="left xd-section xd-light">
+ <!-- remove "+1" to show text --->
+   <section v-if="(this.user_city_answer && this.round==this.nr_of_rounds+1)" class="left xd-section xd-light">
         <p class="short-text">Now you can finish the game!</p>
     </section>
        <section v-else class="left xd-section xd-light">
