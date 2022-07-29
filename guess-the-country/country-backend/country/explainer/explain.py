@@ -1,7 +1,7 @@
 import base64
 import cv2
 import numpy as np
-from ..model.predict import model, load_image, preprocess
+from ..model.predict import model, load_image, preprocess, IMG_SIZE
 from pydantic import BaseModel
 import uuid
 from xaidemo.tracing import traced
@@ -44,7 +44,6 @@ def convert_explanation(explanation):
 @traced
 def explain_cnn(image, model):
     def _predict_fn(img):
-        IMG_SIZE = 224
         return model.predict(
             tf.keras.applications.mobilenet_v2.preprocess_input(img.reshape(-1, IMG_SIZE, IMG_SIZE, 3)))
 
