@@ -1,5 +1,3 @@
-import logging
-
 import cv2
 import numpy as np
 import tensorflow as tf
@@ -37,7 +35,7 @@ def load_image(encoded_data):
 
 @traced
 def predict_image(image):
-    prediction = model.predict(image[None, :, :, :])
+    prediction = model.predict(image)
     result = decode_model_output(prediction)
     return result
 
@@ -46,7 +44,9 @@ def preprocess(img):
     img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     # resize image to match model's expected sizing
     img_resize = cv2.resize(img_rgb, (IMG_SIZE, IMG_SIZE))
-    return img_resize
+    image = tf.keras.applications.mobilenet_v2.preprocess_input(img_resize)
+    pre_image = image.reshape(-1, IMG_SIZE, IMG_SIZE, 3)
+    return pre_image
 
 
 MODEL_OUTPUT_MAP = ["Tel_Aviv", "Westjerusalem", "Berlin", "Hamburg"]

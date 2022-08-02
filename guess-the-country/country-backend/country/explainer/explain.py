@@ -1,7 +1,7 @@
 import base64
 import cv2
 import numpy as np
-from ..model.predict import model, load_image, preprocess, IMG_SIZE
+from ..model.predict import model, load_image, IMG_SIZE
 from pydantic import BaseModel
 import uuid
 from xaidemo.tracing import traced
@@ -13,12 +13,18 @@ class Explanation(BaseModel):
     explanation_id: uuid.UUID
     image: bytes
 
+@traced
+def preprocess(img):
+    img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    # resize image to match model's expected sizing
+    img_resize = cv2.resize(img_rgb, (IMG_SIZE, IMG_SIZE))
+    return img_resize  # .shape=(224, 224, 3), .dtype='uint8'
 
 @traced
 def explain(data):
     encoded_data = str(data)
     image = load_image(encoded_data)
-    pre_image = preprocess(image)
+    pre_image = preprocess(img=image) # klappt wieder, nur die Frage ob das nicht ZU reundant ist.TODO
     explanation = explain_cnn(pre_image, model)
     explain_id = uuid.uuid4()
     encoded_image_string = convert_explanation(explanation)

@@ -11,6 +11,6 @@ numpy
 tensorflow-cpu==2.9.0
 python-multipart
 pydantic
-visualime
+visualime==0.0.2
 
 git+https://github.com/xai-demonstrator/xai-demonstrator.git@318ad17a9ebf2760f4f23b45cfdc29d18d393ec4#egg=xaidemo&subdirectory=common/backend-utils
