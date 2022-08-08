@@ -1,20 +1,19 @@
 <template>
   <div>
       <section v-show="!explanation" class="xd-section xd-light" >
-         <section v-show="!user_city_answer">
+        <section v-show="!user_city_answer">
             {{ msg }}
-         </section>   
-      <section v-show="user_city_answer && !prediction_city">
-        <p class="short-text">Your guess is: {{user_city_answer}}</p>
-      </section>
-      <section v-show="prediction_city && control">
-        <p class="short-text">My guess is: {{prediction_city}}</p>
-      </section>
+        </section>   
+        <section v-show="user_city_answer && !prediction_city">
+          <p class="short-text">Your guess is: {{user_city_answer}}</p>
+        </section>
+        <section v-show="prediction_city && control">
+          <p class="short-text">My guess is: {{prediction_city}}</p>
+        </section>
         <section v-show="prediction_city && !control">
-        <p>My guess is: {{prediction_city}}
-        <br>In particular, the colored areas below have helped me form my guess. </p>
-      </section>
-    
+          <p>My guess is: {{prediction_city}}
+          <br>In particular, the colored areas below have helped me form my guess. </p>
+        </section>
       </section>
   </div>
 </template>
