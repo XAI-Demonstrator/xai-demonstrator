@@ -21,6 +21,7 @@
         :user_city_answer="user_city_answer"
         :explanation="explanation"
         :control="control"
+        :sequence_mode="sequence_mode"
       />
 
       <section class="xd-section xd-light">
@@ -35,25 +36,30 @@
           v-bind:src="this.streetviewimage"
         />
       </section>
-
       <Selection
         @city_selected="city_selected"
         :label_city="label_city"
         :user_city_answer="user_city_answer"
+        :sequence_mode="sequence_mode"
+        :prediction_city="prediction_city"
       />
-
-      <button
-        v-if="!prediction_city && user_city_answer && !control && round != 11"
+      <!-- what do you guess, AI Button - treatment group --> <!-- basic ergänzen -->
+      <button  
+        v-if="sequence_mode==='classic'&&!prediction_city && user_city_answer && !control && round != 11
+              ||sequence_mode==='recommender'&& !prediction_city && !control && round != 11
+              ||sequence_mode==='basic'&& x &&!control && round != 11" 
         type="button"
         class="xd-button xd-secondary"
         id="explain"
         v-on:click="explain()"
       >
-        <!-- v-show -->
         What do you guess, AI?
       </button>
+      <!-- next button --> <!-- basic ergänzen -->
       <button
-        v-if="(explanation || (control && prediction_city)) && round < 11"
+        v-if="sequence_mode==='classic'&&(explanation || (control && prediction_city)) && round < 11
+              || sequence_mode==='recommender' && user_city_answer && round < 11
+              || sequence_mode==='basic'"
         type="button"
         class="xd-button xd-secondary"
         id="new"
@@ -61,8 +67,11 @@
       >
         Next round
       </button>
+      <!-- what do you guess, AI Button - control group --> <!-- basic ergänzen -->
       <button
-        v-if="!prediction_city && user_city_answer && control && round != 11"
+        v-if="sequence_mode==='classic' && !prediction_city && user_city_answer && control && round != 11
+              ||sequence_mode==='recommender'&& !prediction_city && !control && round != 11
+              ||sequence_mode==='basic'&& x &&!control && round != 11"
         type="button"
         class="xd-button xd-secondary"
         id="submit"
@@ -70,6 +79,7 @@
       >
         What do you guess, AI?
       </button>
+
       <SpinningIndicator
         class="indicator"
         v-bind:visible="waitingForExplanation"
@@ -164,6 +174,7 @@ export default {
       streetviewimage: null,
       explainimage: null,
       waitingForExplanation: false,
+      sequence_mode: process.env.VUE_APP_IMAGE_SEQUENCE_MODE,
     };
   },
   async created() {

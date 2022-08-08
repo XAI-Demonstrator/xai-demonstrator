@@ -2,8 +2,9 @@
   <div>
     <section
       class="xd-section xd-light"
-      v-if="!user_city_answer"
-    >
+      v-if="sequence_mode==='classic'&&!user_city_answer
+            || sequence_mode==='recommender'&&prediction_city&&!user_city_answer
+            || sequence_mode==='basic'" > <!-- ergänzen-->
           <div v-for="city in cities" :key="city.city" class="element">
             <input
           type="Button"
@@ -20,6 +21,12 @@ export default {
   name: "Selection",
   props: {
     user_city_answer: {
+      type: String,
+    },
+    sequence_mode: {
+      type: String,
+    },
+    prediction_city: {
       type: String,
     },
   },

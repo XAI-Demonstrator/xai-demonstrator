@@ -1,16 +1,28 @@
 <template>
   <div>
       <section v-show="!explanation" class="xd-section xd-light" >
-        <section v-show="!user_city_answer">
-            {{ msg }}
+        <!-- Question -->
+        <section v-show="sequence_mode==='classic'&&!user_city_answer
+                  || sequence_mode==='recommender'&&!prediction_city
+                  || sequence_mode==='basic'">  <!--ergänzen-->
+            {{ msg }} 
         </section>   
-        <section v-show="user_city_answer && !prediction_city">
+        <!-- User guess -->
+        <section v-show="sequence_mode==='classic'&&user_city_answer && !prediction_city
+                  || sequence_mode==='recommender'&&user_city_answer
+                  || sequence_mode==='basic'">  <!--ergänzen-->
           <p class="short-text">Your guess is: {{user_city_answer}}</p>
         </section>
-        <section v-show="prediction_city && control">
+        <!-- control group (without explanation), AI guess -->
+        <section v-show="sequence_mode==='classic'&&prediction_city && control
+                  || sequence_mode==='recommender'&& prediction_city&&!user_city_answer && control
+                  || sequence_mode==='basic'"> <!--ergänzen-->
           <p class="short-text">My guess is: {{prediction_city}}</p>
         </section>
-        <section v-show="prediction_city && !control">
+        <!-- treatment group (with explanation), AI guess -->
+        <section v-show="prediction_city && !control
+                  || sequence_mode==='recommender' &&prediction_city&&!user_city_answer && !control
+                  || sequence_mode==='basic'"> <!--ergänzen--> 
           <p>My guess is: {{prediction_city}}
           <br>In particular, the colored areas below have helped me form my guess. </p>
         </section>
@@ -34,9 +46,12 @@ export default {
       prediction_city: {
         type: String
       },
-  control:{
+      control:{
         type: Boolean
       },
+      sequence_mode: {
+        type: String
+      }
   },
 
  data() {
