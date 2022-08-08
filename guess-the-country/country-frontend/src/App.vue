@@ -70,8 +70,8 @@
       <!-- what do you guess, AI Button - control group --> <!-- basic ergänzen -->
       <button
         v-if="sequence_mode==='classic' && !prediction_city && user_city_answer && control && round != 11
-              ||sequence_mode==='recommender'&& !prediction_city && !control && round != 11
-              ||sequence_mode==='basic'&& x &&!control && round != 11"
+              ||sequence_mode==='recommender'&& !prediction_city && control && round != 11
+              ||sequence_mode==='basic'&& x &&control && round != 11"
         type="button"
         class="xd-button xd-secondary"
         id="submit"
