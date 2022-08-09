@@ -5,7 +5,8 @@
         <section v-show="sequence_mode==='classic'&&!user_city_answer
                   || sequence_mode==='recommender'&&!prediction_city
                   || sequence_mode==='basic'&&!user_city_answer">  
-            {{ msg }} 
+          <p v-show= "sequence_mode==='classic'">Your guess: Where has this Google Streetview picture been taken?</p>
+          <p v-show= "sequence_mode==='basic'||sequence_mode==='recommender'">Where has this Google Streetview picture been taken?</p>
         </section>   
         <!-- User guess -->
         <section v-show="sequence_mode==='classic'&&user_city_answer && !prediction_city
@@ -23,6 +24,7 @@
                   || sequence_mode==='recommender' &&prediction_city&&!user_city_answer && !control"> 
           <p>My guess is: {{prediction_city}}
           <br>In particular, the colored areas below have helped me form my guess. </p>
+          <p v-show= "sequence_mode==='recommender'">What is your guess?</p>
         </section>
       </section>
   </div>
