@@ -3,8 +3,8 @@
     <section
       class="xd-section xd-light"
       v-if="sequence_mode==='classic'&&!user_city_answer
-            || sequence_mode==='recommender'&&prediction_city&&!user_city_answer
-            || sequence_mode==='basic'" > <!-- ergänzen-->
+            || sequence_mode==='recommender'&&prediction_city&&!user_city_answer&&explanation
+            || sequence_mode==='basic' && !user_city_answer" > 
           <div v-for="city in cities" :key="city.city" class="element">
             <input
           type="Button"
@@ -28,6 +28,9 @@ export default {
     },
     prediction_city: {
       type: String,
+    },
+    explanation: {
+      type: Object,
     },
   },
   data() {

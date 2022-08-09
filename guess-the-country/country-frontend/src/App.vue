@@ -13,7 +13,6 @@
         :score_ai="this.score_ai"
         :user_city_answer="this.user_city_answer"
       />
-
       <Notification
         :prediction_city="prediction_city"
         :msg="msg"
@@ -23,7 +22,6 @@
         :control="control"
         :sequence_mode="sequence_mode"
       />
-
       <section class="xd-section xd-light">
         <img
           v-if="explanation"
@@ -42,12 +40,12 @@
         :user_city_answer="user_city_answer"
         :sequence_mode="sequence_mode"
         :prediction_city="prediction_city"
+        :explanation="explanation"
       />
-      <!-- what do you guess, AI Button - treatment group --> <!-- basic ergänzen -->
+      <!-- what do you guess, AI Button - treatment group -->
       <button  
         v-if="sequence_mode==='classic'&&!prediction_city && user_city_answer && !control && round != 11
-              ||sequence_mode==='recommender'&& !prediction_city && !control && round != 11
-              ||sequence_mode==='basic'&& x &&!control && round != 11" 
+              ||sequence_mode==='recommender'&& !prediction_city && !control && round != 11" 
         type="button"
         class="xd-button xd-secondary"
         id="explain"
@@ -55,11 +53,11 @@
       >
         What do you guess, AI?
       </button>
-      <!-- next button --> <!-- basic ergänzen -->
+      <!-- next button --> 
       <button
         v-if="sequence_mode==='classic'&&(explanation || (control && prediction_city)) && round < 11
               || sequence_mode==='recommender' && user_city_answer && round < 11
-              || sequence_mode==='basic'"
+              || sequence_mode==='basic' && user_city_answer"
         type="button"
         class="xd-button xd-secondary"
         id="new"
@@ -67,11 +65,10 @@
       >
         Next round
       </button>
-      <!-- what do you guess, AI Button - control group --> <!-- basic ergänzen -->
+      <!-- what do you guess, AI Button - control group -->
       <button
         v-if="sequence_mode==='classic' && !prediction_city && user_city_answer && control && round != 11
-              ||sequence_mode==='recommender'&& !prediction_city && control && round != 11
-              ||sequence_mode==='basic'&& x &&control && round != 11"
+              ||sequence_mode==='recommender'&& !prediction_city && control && round != 11"
         type="button"
         class="xd-button xd-secondary"
         id="submit"
