@@ -20,7 +20,7 @@
           <p class="short-text">My guess is: {{prediction_city}}</p>
         </section>
         <!-- treatment group (with explanation), AI guess -->
-        <section v-show="prediction_city && !control
+        <section v-show=" sequence_mode ==='classic' && prediction_city && !control
                   || sequence_mode==='recommender' &&prediction_city&&!user_city_answer && !control
                   || sequence_mode==='basic'"> <!--ergänzen--> 
           <p>My guess is: {{prediction_city}}
