@@ -1,5 +1,5 @@
 fastapi==0.78.0
-pydantic==1.9.1
+pydantic==1.9.2
 python-multipart==0.0.5
 aiohttp==3.8.1
 uvicorn==0.17.6
