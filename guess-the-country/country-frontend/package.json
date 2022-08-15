@@ -25,7 +25,7 @@
     "@vue/test-utils": "^2.0.2",
     "axios": "^0.24.0",
     "babel-eslint": "^10.1.0",
-    "eslint": "^7.32.0",
+    "eslint": "^8.22.0",
     "eslint-plugin-vue": "^7.20.0",
     "flush-promises": "^1.0.2",
     "miragejs": "^0.1.45",
