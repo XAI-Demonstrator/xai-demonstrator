@@ -24,9 +24,6 @@ npm test
 ```
 
 ## Environment Variables
-VUE_APP_BACKEND_URL=""
-VUE_APP_PUBLIC_PATH="/"
-VUE_APP_IMAGE_SEQUENCE_MODE='classic'
 
 | Variable    | Description                                               | Default Value |
 |-------------|-----------------------------------------------------------|---------------|
