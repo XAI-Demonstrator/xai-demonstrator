@@ -38,7 +38,7 @@ def explain(data):
 
 @traced
 def convert_explanation(explanation):
-    image = np.array(explanation)
+    image = np.array(explanation, dtype="float32")
     image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     img_resized = cv2.resize(image_rgb, (448, 448),
                              interpolation=cv2.INTER_CUBIC)
