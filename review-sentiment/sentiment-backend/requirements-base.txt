@@ -2,7 +2,7 @@ wheel
 numpy
 
 pydantic==1.9.1
-fastapi==0.78.0
+fastapi==0.79.1
 uvicorn==0.17.6
 transformers==4.19.2
 captum==0.5.0
