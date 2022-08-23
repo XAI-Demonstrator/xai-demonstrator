@@ -44,8 +44,7 @@
       />
       <!-- what do you guess, AI Button - treatment group -->
       <button  
-        v-if="sequence_mode==='classic'&&!prediction_city && user_city_answer && !control && round != 11
-              ||sequence_mode==='recommender'&& !prediction_city && !control && round != 11" 
+        v-if="get_WhatAIGuess_ButtonCondition_treatment" 
         type="button"
         class="xd-button xd-secondary"
         id="explain"
@@ -55,9 +54,7 @@
       </button>
       <!-- next button --> 
       <button
-        v-if="sequence_mode==='classic'&&(explanation || (control && prediction_city)) && round < 11
-              || sequence_mode==='recommender' && user_city_answer && round < 11
-              || sequence_mode==='basic' && user_city_answer"
+        v-if="getNextButtonCondition"
         type="button"
         class="xd-button xd-secondary"
         id="new"
@@ -67,8 +64,7 @@
       </button>
       <!-- what do you guess, AI Button - control group -->
       <button
-        v-if="sequence_mode==='classic' && !prediction_city && user_city_answer && control && round != 11
-              ||sequence_mode==='recommender'&& !prediction_city && control && round != 11"
+        v-if="get_WhatAIGuess_ButtonCondition_control"
         type="button"
         class="xd-button xd-secondary"
         id="submit"
@@ -125,6 +121,22 @@ export default {
           return this.url;
         }
       },
+    },
+    getNextButtonCondition() {
+      let next_button_condition = this.sequence_mode === 'classic'&&(this.explanation || (this.control && this.prediction_city)) && this.round < 11
+              || this.sequence_mode==='recommender' && this.user_city_answer && this.round < 11
+              || this.sequence_mode==='basic' && this.user_city_answer
+      return next_button_condition
+    },
+    get_WhatAIGuess_ButtonCondition_treatment() {
+      let ai_guess_button_condition_treatment = this.sequence_mode==='classic'&&!this.prediction_city && this.user_city_answer && !this.control && this.round != 11
+              ||this.sequence_mode==='recommender'&& !this.prediction_city && !this.control && this.round != 11
+      return ai_guess_button_condition_treatment
+    },
+    get_WhatAIGuess_ButtonCondition_control() {
+      let ai_guess_button_condition_control = this.sequence_mode==='classic' && !this.prediction_city && this.user_city_answer && this.control && this.round != 11
+              ||this.sequence_mode==='recommender'&& !this.prediction_city && this.control && this.round != 11
+      return ai_guess_button_condition_control
     },
   },
 

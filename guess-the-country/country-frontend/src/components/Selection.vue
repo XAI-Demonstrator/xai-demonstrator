@@ -2,9 +2,7 @@
   <div>
     <section
       class="xd-section xd-light"
-      v-if="sequence_mode==='classic'&&!user_city_answer
-            || sequence_mode==='recommender'&&prediction_city&&!user_city_answer&&explanation
-            || sequence_mode==='basic' && !user_city_answer" > 
+      v-if="getSelectionCondition" > 
           <div v-for="city in cities" :key="city.city" class="element">
             <input
           type="Button"
@@ -32,6 +30,14 @@ export default {
     explanation: {
       type: Object,
     },
+  },
+  computed: {
+    getSelectionCondition () {
+      let selection_condition = this.sequence_mode==='classic'&&!this.user_city_answer
+            || this.sequence_mode==='recommender'&&this.prediction_city&&!this.user_city_answer&&this.explanation
+            || this.sequence_mode==='basic' && !this.user_city_answer
+      return selection_condition
+    }
   },
   data() {
     return {
