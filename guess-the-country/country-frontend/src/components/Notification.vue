@@ -2,23 +2,23 @@
   <div>
       <section v-show="!explanation" class="xd-section xd-light" >
         <!-- Question -->
-        <section v-show="getQuestionCondition">  
-          <p v-show= "sequence_mode==='classic'">Your guess: Where has this Google Streetview picture been taken?</p>
-          <p v-show= "sequence_mode==='basic'||sequence_mode==='recommender'">Where has this Google Streetview picture been taken?</p>
+        <section v-show="showQuestion">  
+          <p v-if= "sequence_mode==='classic'">Your guess: Where has this Google Streetview picture been taken?</p>
+          <p v-else>Where has this Google Streetview picture been taken?</p>
         </section>   
         <!-- User guess -->
-        <section v-show="getUserGuessCondition">  
+        <section v-show="showUserGuess">  
           <p class="short-text">Your guess is: {{user_city_answer}}</p>
         </section>
         <!-- control group (without explanation), AI guess -->
-        <section v-show="getAIGuessCondition_control"> 
+        <section v-show="showAIGuess&&control"> 
           <p class="short-text">My guess is: {{prediction_city}}</p>
         </section>
         <!-- treatment group (with explanation), AI guess -->
-        <section v-show="getAIGuessCondition_treatment"> 
+        <section v-show="showAIGuess&&!control"> 
           <p>My guess is: {{prediction_city}}
           <br>In particular, the colored areas below have helped me form my guess. </p>
-          <p v-show= "sequence_mode==='recommender'">What is your guess?</p>
+          <p v-if= "sequence_mode==='recommender'">What is your guess?</p>
         </section>
       </section>
   </div>
@@ -49,29 +49,33 @@ export default {
       },
   },
   computed: {
-    getQuestionCondition() {
-      let question_condition = this.sequence_mode==='classic'&&!this.user_city_answer
-                  || this.sequence_mode==='recommender'&&!this.prediction_city
-                  || this.sequence_mode==='basic'&&!this.user_city_answer
-      return question_condition
-    },
-    getUserGuessCondition() {
-      let user_guess_condition = this.sequence_mode==='classic'&&this.user_city_answer && !this.prediction_city
-                  || this.sequence_mode==='recommender'&&this.user_city_answer
-                  || this.sequence_mode==='basic' && this.user_city_answer
-      return user_guess_condition
-    },
-    getAIGuessCondition_control() {
-      let ai_guess_condition_control = this.sequence_mode==='classic'&&this.prediction_city && this.control
-                  || this.sequence_mode==='recommender'&& this.prediction_city&&!this.user_city_answer && this.control
-      return ai_guess_condition_control
-    },
-    getAIGuessCondition_treatment() {
-      let ai_guess_condition_treatment = this.sequence_mode ==='classic' && this.prediction_city && !this.control
-                  || this.sequence_mode==='recommender' &&this.prediction_city&&!this.user_city_answer && !this.control
-      return ai_guess_condition_treatment
-    },
+    showQuestion() {
+      if (this.sequence_mode==='classic'||this.sequence_mode==='basic'){
+        return !this.user_city_answer
+      } else if (this.sequence_mode==='recommender'){
+        return !this.prediction_city
+      } else {
+        return false
+      }
 
+    },
+    showUserGuess() {
+      if (this.sequence_mode==='classic'){
+        return this.user_city_answer && !this.prediction_city
+      } else if (this.sequence_mode==='recommender' || this.sequence_mode==='basic'){
+        return this.user_city_answer
+      } else {
+        return false
+      }
+    },
+    showAIGuess() {
+      if (this.sequence_mode==='classic'){
+        return this.prediction_city 
+      } else if (this.sequence_mode==='recommender'){
+        return this.prediction_city&&!this.user_city_answer 
+      } else 
+        return false
+    },
   },
 
   data() {

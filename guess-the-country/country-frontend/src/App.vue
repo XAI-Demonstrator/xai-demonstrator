@@ -44,7 +44,7 @@
       />
       <!-- what do you guess, AI Button - treatment group -->
       <button  
-        v-if="get_WhatAIGuess_ButtonCondition_treatment" 
+        v-if="showAIGuessButton&&!control&&round!=11" 
         type="button"
         class="xd-button xd-secondary"
         id="explain"
@@ -54,7 +54,7 @@
       </button>
       <!-- next button --> 
       <button
-        v-if="getNextButtonCondition"
+        v-if="showNextButton&& this.round < 11"
         type="button"
         class="xd-button xd-secondary"
         id="new"
@@ -64,7 +64,7 @@
       </button>
       <!-- what do you guess, AI Button - control group -->
       <button
-        v-if="get_WhatAIGuess_ButtonCondition_control"
+        v-if="showAIGuessButton&&control&&round!=11"
         type="button"
         class="xd-button xd-secondary"
         id="submit"
@@ -122,21 +122,23 @@ export default {
         }
       },
     },
-    getNextButtonCondition() {
-      let next_button_condition = this.sequence_mode === 'classic'&&(this.explanation || (this.control && this.prediction_city)) && this.round < 11
-              || this.sequence_mode==='recommender' && this.user_city_answer && this.round < 11
-              || this.sequence_mode==='basic' && this.user_city_answer
-      return next_button_condition
+    showNextButton() {
+      if (this.sequence_mode==='classic'){
+        return this.explanation || (this.control && this.prediction_city)
+      } else if (this.sequence_mode==='recommender'||this.sequence_mode==='basic'){
+        return this.user_city_answer
+      } else {
+        return false
+      }
     },
-    get_WhatAIGuess_ButtonCondition_treatment() {
-      let ai_guess_button_condition_treatment = this.sequence_mode==='classic'&&!this.prediction_city && this.user_city_answer && !this.control && this.round != 11
-              ||this.sequence_mode==='recommender'&& !this.prediction_city && !this.control && this.round != 11
-      return ai_guess_button_condition_treatment
-    },
-    get_WhatAIGuess_ButtonCondition_control() {
-      let ai_guess_button_condition_control = this.sequence_mode==='classic' && !this.prediction_city && this.user_city_answer && this.control && this.round != 11
-              ||this.sequence_mode==='recommender'&& !this.prediction_city && this.control && this.round != 11
-      return ai_guess_button_condition_control
+    showAIGuessButton() {
+      if (this.sequence_mode==='classic'){
+        return !this.prediction_city && this.user_city_answer 
+      } else if (this.sequence_mode==='recommender'){
+        return !this.prediction_city
+      } else {
+        return false
+      }
     },
   },
 

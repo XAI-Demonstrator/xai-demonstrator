@@ -2,7 +2,7 @@
   <div>
     <section
       class="xd-section xd-light"
-      v-if="getSelectionCondition" > 
+      v-if="showSelection" > 
           <div v-for="city in cities" :key="city.city" class="element">
             <input
           type="Button"
@@ -32,11 +32,14 @@ export default {
     },
   },
   computed: {
-    getSelectionCondition () {
-      let selection_condition = this.sequence_mode==='classic'&&!this.user_city_answer
-            || this.sequence_mode==='recommender'&&this.prediction_city&&!this.user_city_answer&&this.explanation
-            || this.sequence_mode==='basic' && !this.user_city_answer
-      return selection_condition
+    showSelection () {
+      if (this.sequence_mode==='classic'||this.sequence_mode==='basic'){
+        return (!this.user_city_answer)
+      } else if (this.sequence_mode==='recommender'){
+        return (this.prediction_city&&!this.user_city_answer&&this.explanation)
+      } else {
+        return false
+      }
     }
   },
   data() {
