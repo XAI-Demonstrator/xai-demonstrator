@@ -31,5 +31,10 @@ npm test
 | `VUE_APP_PUBLIC_PATH`          | Public path                                               | `"/"`         |
 | `VUE_APP_IMAGE_SEQUENCE_MODE` | Mode that determines in which order screens are displayed | `"classic"`   |
 
+### sequence modes ###
+- classic: first, player has to guess, then AI guesses
+- recommender: AI guesses first, then player has to guess
+- basic: only player matches images to cities, no AI or XAI involvement
+
 
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
