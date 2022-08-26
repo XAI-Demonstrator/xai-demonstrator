@@ -13,7 +13,6 @@
         :score_ai="this.score_ai"
         :user_city_answer="this.user_city_answer"
       />
-
       <Notification
         :prediction_city="prediction_city"
         :msg="msg"
@@ -21,8 +20,8 @@
         :user_city_answer="user_city_answer"
         :explanation="explanation"
         :control="control"
+        :sequence_mode="sequence_mode"
       />
-
       <section class="xd-section xd-light">
         <img
           v-if="explanation"
@@ -35,25 +34,27 @@
           v-bind:src="this.streetviewimage"
         />
       </section>
-
       <Selection
         @city_selected="city_selected"
         :label_city="label_city"
         :user_city_answer="user_city_answer"
+        :sequence_mode="sequence_mode"
+        :prediction_city="prediction_city"
+        :explanation="explanation"
       />
-
-      <button
-        v-if="!prediction_city && user_city_answer && !control && round != 11"
+      <!-- what do you guess, AI Button - treatment group -->
+      <button  
+        v-if="showAIGuessButton&&!control&&round!=11" 
         type="button"
         class="xd-button xd-secondary"
         id="explain"
         v-on:click="explain()"
       >
-        <!-- v-show -->
         What do you guess, AI?
       </button>
+      <!-- next button --> 
       <button
-        v-if="(explanation || (control && prediction_city)) && round < 11"
+        v-if="showNextButton&& this.round < 11"
         type="button"
         class="xd-button xd-secondary"
         id="new"
@@ -61,8 +62,9 @@
       >
         Next round
       </button>
+      <!-- what do you guess, AI Button - control group -->
       <button
-        v-if="!prediction_city && user_city_answer && control && round != 11"
+        v-if="showAIGuessButton&&control&&round!=11"
         type="button"
         class="xd-button xd-secondary"
         id="submit"
@@ -70,6 +72,7 @@
       >
         What do you guess, AI?
       </button>
+
       <SpinningIndicator
         class="indicator"
         v-bind:visible="waitingForExplanation"
@@ -119,6 +122,24 @@ export default {
         }
       },
     },
+    showNextButton() {
+      if (this.sequence_mode==='classic'){
+        return this.explanation || (this.control && this.prediction_city)
+      } else if (this.sequence_mode==='recommender'||this.sequence_mode==='basic'){
+        return this.user_city_answer
+      } else {
+        return false
+      }
+    },
+    showAIGuessButton() {
+      if (this.sequence_mode==='classic'){
+        return !this.prediction_city && this.user_city_answer 
+      } else if (this.sequence_mode==='recommender'){
+        return !this.prediction_city
+      } else {
+        return false
+      }
+    },
   },
 
   data() {
@@ -164,6 +185,7 @@ export default {
       streetviewimage: null,
       explainimage: null,
       waitingForExplanation: false,
+      sequence_mode: process.env.VUE_APP_IMAGE_SEQUENCE_MODE,
     };
   },
   async created() {

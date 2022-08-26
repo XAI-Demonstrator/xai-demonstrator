@@ -2,8 +2,7 @@
   <div>
     <section
       class="xd-section xd-light"
-      v-if="!user_city_answer"
-    >
+      v-if="showSelection" > 
           <div v-for="city in cities" :key="city.city" class="element">
             <input
           type="Button"
@@ -22,6 +21,26 @@ export default {
     user_city_answer: {
       type: String,
     },
+    sequence_mode: {
+      type: String,
+    },
+    prediction_city: {
+      type: String,
+    },
+    explanation: {
+      type: Object,
+    },
+  },
+  computed: {
+    showSelection () {
+      if (this.sequence_mode==='classic'||this.sequence_mode==='basic'){
+        return (!this.user_city_answer)
+      } else if (this.sequence_mode==='recommender'){
+        return (this.prediction_city&&!this.user_city_answer&&this.explanation)
+      } else {
+        return false
+      }
+    }
   },
   data() {
     return {
