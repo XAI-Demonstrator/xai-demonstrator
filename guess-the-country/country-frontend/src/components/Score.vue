@@ -1,15 +1,8 @@
 <template>
-  <div class="wrapper">
- 
-   <section v-if="(this.user_city_answer && this.round==11)" class="left xd-section xd-light">
-        <p class="short-text">Now you can finish the game!</p>
-    </section>
-       <section v-else class="left xd-section xd-light">
-        <p>Round: {{round}}/11</p>
-  </section>
- <!--   <section class="right row xd-section xd-light">
-      <p>Score - You: {{score_user}} AI: {{score_ai}}</p>
-  </section> --->
+  <div class="wrapper">    
+   <section  class="left xd-section xd-light">
+        <p>Round: {{round}}/{{nr_of_rounds}}</p>
+   </section>   
   </div>
 </template>
 <script>
@@ -28,7 +21,10 @@ props: {
       },
  user_city_answer: {
    type: String
- }
+ },
+  nr_of_rounds: {
+        type: Number
+  }
 }
 }
 </script>
