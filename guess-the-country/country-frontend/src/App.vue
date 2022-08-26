@@ -1,81 +1,82 @@
 <template>
   <div id="app" class="xd-app">
-    <GitHubRibbon url="https://github.com/xai-demonstrator/xai-demonstrator" />
-    <XAIStudioRibbon url="https://www.xai-studio.de" />
+    <GitHubRibbon url="https://github.com/xai-demonstrator/xai-demonstrator"/>
+    <XAIStudioRibbon url="https://www.xai-studio.de"/>
     <UseCaseHeader
-      v-bind:standalone="Boolean(true)"
-      v-bind:title="useCaseTitle"
+        v-bind:standalone="Boolean(true)"
+        v-bind:title="useCaseTitle"
     />
     <main>
       <Score
-        :round="this.round"
-        :score_user="this.score_user"
-        :score_ai="this.score_ai"
-        :user_city_answer="this.user_city_answer"
+          :round="this.round"
+          :score_user="this.score_user"
+          :score_ai="this.score_ai"
+          :user_city_answer="this.user_city_answer"
+          :nr_of_rounds="this.nr_of_rounds"
       />
       <Notification
-        :prediction_city="prediction_city"
-        :msg="msg"
-        :label_city="label_city"
-        :user_city_answer="user_city_answer"
-        :explanation="explanation"
-        :control="control"
-        :sequence_mode="sequence_mode"
+          :prediction_city="prediction_city"
+          :msg="msg"
+          :label_city="label_city"
+          :user_city_answer="user_city_answer"
+          :explanation="explanation"
+          :control="control"
+          :sequence_mode="sequence_mode"
       />
       <section class="xd-section xd-light">
         <img
-          v-if="explanation"
-          class="xd-border-secondary;"
-          v-bind:src="this.explainimage"
+            v-if="explanation"
+            class="xd-border-secondary;"
+            v-bind:src="this.explainimage"
         />
         <img
-          v-if="!explanation"
-          class="xd-border-secondary;"
-          v-bind:src="this.streetviewimage"
+            v-if="!explanation"
+            class="xd-border-secondary;"
+            v-bind:src="this.streetviewimage"
         />
       </section>
       <Selection
-        @city_selected="city_selected"
-        :label_city="label_city"
-        :user_city_answer="user_city_answer"
-        :sequence_mode="sequence_mode"
-        :prediction_city="prediction_city"
-        :explanation="explanation"
+          @city_selected="city_selected"
+          :label_city="label_city"
+          :user_city_answer="user_city_answer"
+          :sequence_mode="sequence_mode"
+          :prediction_city="prediction_city"
+          :explanation="explanation"
       />
       <!-- what do you guess, AI Button - treatment group -->
-      <button  
-        v-if="showAIGuessButton&&!control&&round!=11" 
-        type="button"
-        class="xd-button xd-secondary"
-        id="explain"
-        v-on:click="explain()"
+      <button
+          v-if="showAIGuessButton&&!control&&round<=nr_of_rounds"
+          type="button"
+          class="xd-button xd-secondary"
+          id="explain"
+          v-on:click="explain()"
       >
         What do you guess, AI?
       </button>
-      <!-- next button --> 
+      <!-- next button -->
       <button
-        v-if="showNextButton&& this.round < 11"
-        type="button"
-        class="xd-button xd-secondary"
-        id="new"
-        v-on:click="restart()"
+          v-if="showNextButton&& this.round < nr_of_rounds"
+          type="button"
+          class="xd-button xd-secondary"
+          id="new"
+          v-on:click="restart()"
       >
         Next round
       </button>
       <!-- what do you guess, AI Button - control group -->
       <button
-        v-if="showAIGuessButton&&control&&round!=11"
-        type="button"
-        class="xd-button xd-secondary"
-        id="submit"
-        v-on:click="submitFile()"
+          v-if="showAIGuessButton&&control&&round!=nr_of_rounds"
+          type="button"
+          class="xd-button xd-secondary"
+          id="submit"
+          v-on:click="submitFile()"
       >
         What do you guess, AI?
       </button>
 
       <SpinningIndicator
-        class="indicator"
-        v-bind:visible="waitingForExplanation"
+          class="indicator"
+          v-bind:visible="waitingForExplanation"
       />
     </main>
   </div>
@@ -123,18 +124,18 @@ export default {
       },
     },
     showNextButton() {
-      if (this.sequence_mode==='classic'){
+      if (this.sequence_mode === 'classic') {
         return this.explanation || (this.control && this.prediction_city)
-      } else if (this.sequence_mode==='recommender'||this.sequence_mode==='basic'){
+      } else if (this.sequence_mode === 'recommender' || this.sequence_mode === 'basic') {
         return this.user_city_answer
       } else {
         return false
       }
     },
     showAIGuessButton() {
-      if (this.sequence_mode==='classic'){
-        return !this.prediction_city && this.user_city_answer 
-      } else if (this.sequence_mode==='recommender'){
+      if (this.sequence_mode === 'classic') {
+        return !this.prediction_city && this.user_city_answer
+      } else if (this.sequence_mode === 'recommender') {
         return !this.prediction_city
       } else {
         return false
@@ -173,6 +174,7 @@ export default {
         },
       ],
       url: process.env.VUE_APP_BACKEND_URL,
+      nr_of_rounds: JSON.parse(process.env.VUE_APP_NR_OF_ROUNDS),
       round: 1,
       useCaseTitle: "Guess the City",
       explanation: null,
@@ -189,39 +191,39 @@ export default {
     };
   },
   async created() {
-  this.getMessage();
-  //this.getValues()
-  this.getStreetview();
+    this.getMessage();
+    //this.getValues()
+    this.getStreetview();
 
-   
+
   },
   methods: {
     postValues() {
       axios
-        .post(this.backendUrl + "/score", {
-          ai_score: this.score_ai,
-          player_score: this.score_user,
-          rounds: this.round,
-        })
-        .then((res) => {
-          console.log(res);
+          .post(this.backendUrl + "/score", {
+            ai_score: this.score_ai,
+            player_score: this.score_user,
+            rounds: this.round,
+          })
+          .then((res) => {
+            console.log(res);
 
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+          })
+          .catch((error) => {
+            console.error(error);
+          });
     },
     async getValues() {
-     await axios
-        .get(this.backendUrl + "/final_score")
-        .then((res) => {
-          this.round = res.data.rounds;
-          this.score_ai = res.data.ai_score;
-          this.score_user = res.data.player_score;
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+      await axios
+          .get(this.backendUrl + "/final_score")
+          .then((res) => {
+            this.round = res.data.rounds;
+            this.score_ai = res.data.ai_score;
+            this.score_user = res.data.player_score;
+          })
+          .catch((error) => {
+            console.error(error);
+          });
     },
     city_selected(value) {
       this.user_city_answer = value;
@@ -232,29 +234,29 @@ export default {
     },
     getMessage() {
       axios
-        .get(this.backendUrl + "/msg")
-        .then((res) => {
-          this.msg = res.data.data;
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+          .get(this.backendUrl + "/msg")
+          .then((res) => {
+            this.msg = res.data.data;
+          })
+          .catch((error) => {
+            console.error(error);
+          });
     },
     getStreetview() {
       axios
-        .post(this.backendUrl + "/streetview", {
-          ai_score: this.score_ai,
-          player_score: this.score_user,
-          rounds: this.round,
-        } )
-        .then((res) => {
-          this.streetviewimage = res.data.image;
-          let label = this.label_to_label(res.data.class_label);
-          this.label_city = label.city;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+          .post(this.backendUrl + "/streetview", {
+            ai_score: this.score_ai,
+            player_score: this.score_user,
+            rounds: this.round,
+          })
+          .then((res) => {
+            this.streetviewimage = res.data.image;
+            let label = this.label_to_label(res.data.class_label);
+            this.label_city = label.city;
+          })
+          .catch((error) => {
+            console.log(error);
+          });
     },
     submitFile() {
       this.waitingForExplanation = true;
@@ -264,24 +266,24 @@ export default {
       form.append("file", blob);
 
       axios
-        .post(this.backendUrl + "/predict", form, {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((res) => {
-          let label = this.label_to_label(res.data.class_label);
-          this.prediction_city = label.city;
-          this.waitingForExplanation = false;
-          if (this.prediction_city == this.label_city) {
-            this.score_ai = this.score_ai + 1;
-          }
-          this.postValues();
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+          .post(this.backendUrl + "/predict", form, {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "multipart/form-data",
+            },
+          })
+          .then((res) => {
+            let label = this.label_to_label(res.data.class_label);
+            this.prediction_city = label.city;
+            this.waitingForExplanation = false;
+            if (this.prediction_city == this.label_city) {
+              this.score_ai = this.score_ai + 1;
+            }
+            this.postValues();
+          })
+          .catch((error) => {
+            console.error(error);
+          });
     },
     explain() {
       this.submitFile();
@@ -293,20 +295,20 @@ export default {
       form.append("file", blob);
 
       axios
-        .post(this.backendUrl + "/explain", form, {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((res) => {
-          this.explainimage = res.data.image;
-          this.waitingForExplanation = false;
-          this.explanation = res.data.explanation_id;
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+          .post(this.backendUrl + "/explain", form, {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "multipart/form-data",
+            },
+          })
+          .then((res) => {
+            this.explainimage = res.data.image;
+            this.waitingForExplanation = false;
+            this.explanation = res.data.explanation_id;
+          })
+          .catch((error) => {
+            console.error(error);
+          });
     },
 
     restart() {
@@ -363,6 +365,7 @@ main {
   #img {
     width: 40%;
   }
+
   #app {
     margin-left: 20%;
     margin-right: 20%;
@@ -374,6 +377,7 @@ main {
   #app {
     flex-direction: column;
   }
+
   main {
     flex-grow: 1;
   }
