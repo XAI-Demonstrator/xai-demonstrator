@@ -10,7 +10,8 @@ def test_that_standard_images_are_preprocessed(generate_image):
     result = predict.preprocess(img)
     in_range = (np.where(np.logical_and(result >= -1, result <= 1), 1, 0)).reshape(-1,)  # 1 if in [-1, 1] 0 otherwise
 
-    assert result.shape == (1, 224, 224, 3) and sum(in_range) == len(in_range)
+    assert result.shape == (1, 224, 224, 3)
+    assert sum(in_range) == len(in_range)
 
 
 # def test_that_a_prediction_is_generated(generate_image):
