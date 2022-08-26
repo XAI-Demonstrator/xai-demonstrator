@@ -1,12 +1,8 @@
 <template>
-  <div class="wrapper">
-    <!-- remove "+1" to show text --->
-   <section v-if="(this.user_city_answer && this.round==this.nr_of_rounds + 1)" class="left xd-section xd-light">
-        <p class="short-text">Now you can finish the game!</p>
-    </section>
-       <section v-else class="left xd-section xd-light">
+  <div class="wrapper">    
+   <section  class="left xd-section xd-light">
         <p>Round: {{round}}/{{nr_of_rounds}}</p>
-  </section>
+   </section>   
  <!--   <section class="right row xd-section xd-light">
       <p>Score - You: {{score_user}} AI: {{score_ai}}</p>
   </section> --->
