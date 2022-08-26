@@ -3,9 +3,6 @@
    <section  class="left xd-section xd-light">
         <p>Round: {{round}}/{{nr_of_rounds}}</p>
    </section>   
- <!--   <section class="right row xd-section xd-light">
-      <p>Score - You: {{score_user}} AI: {{score_ai}}</p>
-  </section> --->
   </div>
 </template>
 <script>
