@@ -24,7 +24,7 @@ def preprocess(img):
 def explain(data):
     encoded_data = str(data)
     image = load_image(encoded_data)
-    pre_image = preprocess(img=image) # klappt wieder, nur die Frage ob das nicht ZU reundant ist.TODO
+    pre_image = preprocess(img=image)
     explanation = explain_cnn(pre_image, model)
     explain_id = uuid.uuid4()
     encoded_image_string = convert_explanation(explanation)
