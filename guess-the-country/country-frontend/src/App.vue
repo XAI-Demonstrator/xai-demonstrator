@@ -192,7 +192,6 @@ export default {
   },
   async created() {
     this.getMessage();
-    //this.getValues()
     this.getStreetview();
 
 
