@@ -43,6 +43,7 @@
         "**/tests/unit/**/*.spec.{j,t}s?(x)"
         ],
     }
+    ]
   },
   "browserslist": [
     "> 1%",
