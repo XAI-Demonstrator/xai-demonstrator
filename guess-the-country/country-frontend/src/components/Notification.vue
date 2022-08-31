@@ -1,6 +1,6 @@
 <template>
-  <div>
-      <section v-show="!explanation" class="xd-section xd-light" >
+  <div class="notification">
+      <section class="xd-section xd-light" >
         <!-- Question -->
         <section v-show="showQuestion">  
           <p v-if= "sequence_mode==='classic'">Your guess: Where has this Google Streetview picture been taken?</p>
@@ -86,6 +86,10 @@ export default {
 
 </script>
 <style scoped>
+.notification {
+  width: 100%;
+}
+
 .xd-section:last-child{
     text-align: center;
     margin-bottom: 12px;
@@ -93,5 +97,4 @@ export default {
 .short-text{
   line-height: 2;
 }
-
 </style>
