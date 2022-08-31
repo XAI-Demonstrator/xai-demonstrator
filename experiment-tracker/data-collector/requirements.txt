@@ -1,6 +1,6 @@
-fastapi==0.78.0
-pydantic==1.9.1
+fastapi==0.81.0
+pydantic==1.9.2
 couchdb==1.2
-uvicorn==0.17.6
+uvicorn==0.18.3
 
 git+https://github.com/xai-demonstrator/xai-demonstrator.git@cddb9fe42c002cf44252228781ca67b61f89181d#egg=xaidemo&subdirectory=common/backend-utils
