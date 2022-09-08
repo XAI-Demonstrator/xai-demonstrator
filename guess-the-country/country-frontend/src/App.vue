@@ -193,10 +193,18 @@ export default {
   async created() {
     this.getMessage();
     this.getStreetview();
+    this.getSequenceMode();
 
 
   },
   methods: {
+    // Reads sequence mode from the url and assigns to "sequence_mode"
+    getSequenceMode() {
+      let urlParams = new URLSearchParams(window.location.search.substring(1));
+      if (urlParams.has('mode')) {
+        this.sequence_mode = urlParams.get('mode');
+      }
+    },
     postValues() {
       axios
           .post(this.backendUrl + "/score", {
