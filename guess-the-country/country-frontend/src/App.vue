@@ -198,11 +198,11 @@ export default {
 
   },
   methods: {
-    // Reads sequence mode from the url and assigns to "sequence_mode"
+    // Try to read game-mode parameter from URL and assign to "sequence_mode"
     getSequenceMode() {
       let urlParams = new URLSearchParams(window.location.search.substring(1));
-      if (urlParams.has('mode')) {
-        this.sequence_mode = urlParams.get('mode');
+      if (urlParams.has('modus')) {
+        this.sequence_mode = urlParams.get('modus');
       }
     },
     postValues() {
