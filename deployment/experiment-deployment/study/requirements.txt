@@ -1,9 +1,0 @@
-fastapi==0.71.0
-uvicorn==0.16.0
-
-pydantic
-couchdb
-asyncio
-python-multipart
-
-git+https://github.com/xai-demonstrator/xai-demonstrator.git@318ad17a9ebf2760f4f23b45cfdc29d18d393ec4#egg=xaidemo&subdirectory=common/backend-utils
