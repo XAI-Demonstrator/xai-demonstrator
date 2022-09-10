@@ -105,6 +105,8 @@ jobs:
         env:
           COUCHDB_USER: ${{ secrets.COUCHDB_USER }}
           COUCHDB_PASSWORD: ${{ secrets.COUCHDB_PASSWORD }}
+          STREETVIEW_API_KEY: ${{ secrets.STREETVIEW_API_KEY }}
+          BATCH_SIZE: ${{ secrets.BATCH_SIZE }}
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
