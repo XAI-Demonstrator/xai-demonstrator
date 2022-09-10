@@ -112,7 +112,7 @@ export default {
     if (params.has("modus")) {
       return params.get("modus")
     }else{
-      return JSON.parse(process.env.VUE_APP_IMAGE_SEQUENCE_MODE)
+      return process.env.VUE_APP_IMAGE_SEQUENCE_MODE
     }
     },
   numOfRounds() {
