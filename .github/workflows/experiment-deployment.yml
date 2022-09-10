@@ -109,9 +109,11 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
-          envs: COUCHDB_USER,COUCHDB_PASSWORD
+          envs: COUCHDB_USER,COUCHDB_PASSWORD,STREETVIEW_API_KEY,BATCH_SIZE
           script: |
             set -e
+            export STREETVIEW_API_KEY=${STREETVIEW_API_KEY}
+            export BATCH_SIZE=${BATCH_SIZE}
             export COUCHDB_USER=${COUCHDB_USER}
             export COUCHDB_PASSWORD=${COUCHDB_PASSWORD}
             cd experiment-deployment/deployment/experiment-deployment/
