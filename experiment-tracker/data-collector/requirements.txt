@@ -1,4 +1,4 @@
-fastapi==0.81.0
+fastapi==0.82.0
 pydantic==1.10.1
 couchdb==1.2
 uvicorn==0.18.3
