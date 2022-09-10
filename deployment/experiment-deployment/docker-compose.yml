@@ -6,26 +6,26 @@ services:
         context: .
         dockerfile: ./nginx-frontend/Dockerfile
       depends_on:
-        - education
+        - country
       expose:
         - "80"
       environment:
-        - VIRTUAL_HOST=education.xaidemo.de
+        - VIRTUAL_HOST=gtc.xaidemo.de
         - VIRTUAL_PORT=80
-        - LETSENCRYPT_HOST=education.xaidemo.de
+        - LETSENCRYPT_HOST=gtc.xaidemo.de
         - LETSENCRYPT_EMAIL=xai.demonstrator@gmail.com
       restart: always
 
   education:      
-    image: ghcr.io/xai-demonstrator/digital-education-service:latest
+    image: ghcr.io/xai-demonstrator/guess-the-country-service:latest
     depends_on:
       - jaeger
       - collector
     expose:
       - "8000"
     environment:
-      - ROOT_PATH=/api/education
-      - SERVICE_NAME=education-service
+      - ROOT_PATH=/api/country
+      - SERVICE_NAME=country-service
       - TRACING_EXPORTER=jaeger
       - JAEGER_AGENT_HOST_NAME=jaeger
       - COLLECTOR_URL=http://collector:8000
@@ -76,8 +76,8 @@ services:
     expose:
       - "8000"
     environment:
-      - BACKEND_URL=http://education:8000
-      - BACKEND_SERVICE=education-service
+      - BACKEND_URL=http://country:8000
+      - BACKEND_SERVICE=country-service
       - COLLECTOR_URL=http://collector:8000
       - SERVICE_NAME=experiment-proxy
       - TRACING_EXPORTER=jaeger

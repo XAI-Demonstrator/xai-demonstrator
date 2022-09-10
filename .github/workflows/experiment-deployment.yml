@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   workflow_run:
     workflows:
-      - "Visual Inspection"
+      - "Guess the Country"
     branches:
       - master
     types:
@@ -21,8 +21,8 @@ jobs:
     strategy:
       matrix:
         include:
-          - service: education
-            repo_path: ./visual-inspection/inspection-frontend
+          - service: country
+            repo_path: ./guess-the-country/country-frontend
 
     runs-on: ubuntu-latest
     steps:
@@ -46,7 +46,7 @@ jobs:
           set -e
           cd ${{ matrix.repo_path }}
           npm install
-          npm run build -- --mode digital-education.experiment-deployment
+          npm run build -- --mode experiment-deployment
           mv dist ${{ matrix.service }}
 
       - name: Save build artifact
@@ -62,9 +62,16 @@ jobs:
     if: ${{ github.event_name == 'push' || github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     environment:
       name: experiment
-      url: https://education.xaidemo.de/
+      url: https://gtc.xaidemo.de/
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Download all frontends
+        uses: actions/download-artifact@v3
+        with:
+          path: "deployment/experiment-deployment/nginx-frontend/"
+
       - name: Wait for lock to release and place lock
         uses: appleboy/ssh-action@v0.1.5
         with:
@@ -83,42 +90,15 @@ jobs:
             cd experiment-deployment/deployment/experiment-deployment/ || exit 0
             sudo docker-compose down
 
-      - name: Copy docker-compose.yml to test server
+      - name: Copy experiment-deployment to server
         uses: appleboy/scp-action@v0.1.3
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
-          source: "deployment/experiment-deployment/docker-compose.yml"
+          source: "deployment/experiment-deployment/**"
           target: "experiment-deployment"
           rm: true
-
-      - name: Download all frontends
-        uses: actions/download-artifact@v3
-        with:
-          path: "deployment/experiment-deployment/nginx-frontend/"
-
-      - name: Copy build frontend to experiment server
-        uses: appleboy/scp-action@v0.1.3
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USER }}
-          key: ${{ secrets.SSH_KEY }}
-          source: "deployment/experiment-deployment/nginx-frontend/**"
-          target: "nginx-frontend/"
-          strip_components: 3
-          rm: true
-
-      - name: Copy couchdb to experiment server
-        uses: appleboy/scp-action@v0.1.3
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USER }}
-          key: ${{ secrets.SSH_KEY }}
-          source: "deployment/experiment-deployment/database/**"
-          target: "database/"
-          strip_components: 3
-          rm: true  
 
       - name: SSH Remote Commands
         uses: appleboy/ssh-action@v0.1.5
@@ -132,19 +112,18 @@ jobs:
           envs: COUCHDB_USER,COUCHDB_PASSWORD
           script: |
             set -e
-            mv nginx-frontend/ experiment-deployment/deployment/experiment-deployment/nginx-frontend/
-            mv database/ experiment-deployment/deployment/experiment-deployment/database/
             export COUCHDB_USER=${COUCHDB_USER}
             export COUCHDB_PASSWORD=${COUCHDB_PASSWORD}
             cd experiment-deployment/deployment/experiment-deployment/
             sudo -E docker-compose pull
-            sudo -E docker-compose up --build --scale education=5 --scale proxy=3 -d
+            sudo -E docker-compose up --build --scale country=5 --scale proxy=3 -d
             sleep 10 && rm ~/.experiment-deployment-lock
+
       - name: Slack Notification
         uses: rtCamp/action-slack-notify@v2.2.0
         env:
           SLACK_CHANNEL: xai-demonstrator-monitor
-          SLACK_MESSAGE: "Successfully deployed a new version to https://education.xaidemo.de/ :rocket:"
+          SLACK_MESSAGE: "Successfully deployed a new version to https://gtc.xaidemo.de/ :rocket:"
           SLACK_TITLE: New Experiment Deployment
           SLACK_USERNAME: Deployment Monitor
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
