@@ -12,7 +12,7 @@
           :score_user="this.score_user"
           :score_ai="this.score_ai"
           :user_city_answer="this.user_city_answer"
-          :nr_of_rounds="this.nr_of_rounds"
+          :nr_of_rounds="numOfRounds"
       />
       <Notification
           :prediction_city="prediction_city"
@@ -21,7 +21,7 @@
           :user_city_answer="user_city_answer"
           :explanation="explanation"
           :control="control"
-          :sequence_mode="sequence_mode"
+          :sequence_mode="sequenceMode"
       />
       <section class="xd-section xd-light">
         <img
@@ -39,13 +39,13 @@
           @city_selected="city_selected"
           :label_city="label_city"
           :user_city_answer="user_city_answer"
-          :sequence_mode="sequence_mode"
+          :sequence_mode="sequenceMode"
           :prediction_city="prediction_city"
           :explanation="explanation"
       />
       <!-- what do you guess, AI Button - treatment group -->
       <button
-          v-if="showAIGuessButton&&!control&&round<=nr_of_rounds"
+          v-if="showAIGuessButton&&!control&&round<=numOfRounds"
           type="button"
           class="xd-button xd-secondary"
           id="explain"
@@ -55,7 +55,7 @@
       </button>
       <!-- next button -->
       <button
-          v-if="showNextButton&& this.round < nr_of_rounds"
+          v-if="showNextButton&& this.round < numOfRounds"
           type="button"
           class="xd-button xd-secondary"
           id="new"
@@ -65,7 +65,7 @@
       </button>
       <!-- what do you guess, AI Button - control group -->
       <button
-          v-if="showAIGuessButton&&control&&round!=nr_of_rounds"
+          v-if="showAIGuessButton&&control&&round!=numOfRounds"
           type="button"
           class="xd-button xd-secondary"
           id="submit"
@@ -106,6 +106,25 @@ export default {
     Score,
   },
   computed: {
+    sequenceMode() {
+    const uri = window.location.search.substring(1);
+    let params = new URLSearchParams(uri);
+    if (params.has("modus")) {
+      return params.get("modus")
+    }else{
+      return JSON.parse(process.env.VUE_APP_IMAGE_SEQUENCE_MODE)
+    }
+    },
+  numOfRounds() {
+    const uri = window.location.search.substring(1);
+    let params = new URLSearchParams(uri);
+    if (params.has("num_of_rounds")) {
+      return params.get("num_of_rounds")
+    } else {
+      return JSON.parse(process.env.VUE_APP_NR_OF_ROUNDS)
+    }
+
+  },
     control() {
       const uri = window.location.search.substring(1);
       let params = new URLSearchParams(uri);
@@ -124,18 +143,18 @@ export default {
       },
     },
     showNextButton() {
-      if (this.sequence_mode === 'classic') {
+      if (this.sequenceMode === 'classic') {
         return this.explanation || (this.control && this.prediction_city)
-      } else if (this.sequence_mode === 'recommender' || this.sequence_mode === 'basic') {
+      } else if (this.sequenceMode === 'recommender' || this.sequenceMode === 'basic') {
         return this.user_city_answer
       } else {
         return false
       }
     },
     showAIGuessButton() {
-      if (this.sequence_mode === 'classic') {
+      if (this.sequenceMode === 'classic') {
         return !this.prediction_city && this.user_city_answer
-      } else if (this.sequence_mode === 'recommender') {
+      } else if (this.sequenceMode === 'recommender') {
         return !this.prediction_city
       } else {
         return false
@@ -174,7 +193,6 @@ export default {
         },
       ],
       url: process.env.VUE_APP_BACKEND_URL,
-      nr_of_rounds: JSON.parse(process.env.VUE_APP_NR_OF_ROUNDS),
       round: 1,
       useCaseTitle: "Guess the City",
       explanation: null,
@@ -187,24 +205,13 @@ export default {
       streetviewimage: null,
       explainimage: null,
       waitingForExplanation: false,
-      sequence_mode: process.env.VUE_APP_IMAGE_SEQUENCE_MODE,
     };
   },
-  async created() {
+ async created() {
     this.getMessage();
     this.getStreetview();
-    this.getSequenceMode();
-
-
   },
   methods: {
-    // Try to read game-mode parameter from URL and assign to "sequence_mode"
-    getSequenceMode() {
-      let urlParams = new URLSearchParams(window.location.search.substring(1));
-      if (urlParams.has('modus')) {
-        this.sequence_mode = urlParams.get('modus');
-      }
-    },
     postValues() {
       axios
           .post(this.backendUrl + "/score", {
