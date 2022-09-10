@@ -10,7 +10,7 @@
   "dependencies": {
     "@xai-demonstrator/xaidemo-ui": "^0.4.6",
     "core-js": "^3.25.0",
-    "vue": "^3.2.38",
+    "vue": "^3.2.39",
     "vue-i18n": "^9.2.2"
   },
   "devDependencies": {
