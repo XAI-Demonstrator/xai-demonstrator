@@ -16,7 +16,7 @@ services:
         - LETSENCRYPT_EMAIL=xai.demonstrator@gmail.com
       restart: always
 
-  education:      
+  country:
     image: ghcr.io/xai-demonstrator/guess-the-country-service:latest
     depends_on:
       - jaeger
@@ -72,7 +72,7 @@ services:
     image: ghcr.io/xai-demonstrator/experiment-proxy:latest
     depends_on:
       - collector
-      - education
+      - country
     expose:
       - "8000"
     environment:
