@@ -1,16 +1,16 @@
 <template>
-  <div>
+  <div class="selection">
     <section
-      class="xd-section xd-light"
-      v-if="showSelection" > 
-          <div v-for="city in cities" :key="city.city" class="element">
-            <input
-          type="Button"
-          class="xd-button xd-secondary"
-          v-bind:value="city.city"
-          v-on:click="answer_city(city.city)"
+        class="xd-section xd-light"
+        v-if="showSelection">
+      <div v-for="city in cities" :key="city.city" class="element">
+        <input
+            type="Button"
+            class="xd-button xd-secondary"
+            v-bind:value="city.city"
+            v-on:click="answer_city(city.city)"
         />
-          </div>
+      </div>
     </section>
   </div>
 </template>
@@ -32,11 +32,11 @@ export default {
     },
   },
   computed: {
-    showSelection () {
-      if (this.sequence_mode==='classic'||this.sequence_mode==='basic'){
+    showSelection() {
+      if (this.sequence_mode === 'classic' || this.sequence_mode === 'basic') {
         return (!this.user_city_answer)
-      } else if (this.sequence_mode==='recommender'){
-        return (this.prediction_city&&!this.user_city_answer&&this.explanation)
+      } else if (this.sequence_mode === 'recommender') {
+        return (this.prediction_city && !this.user_city_answer && this.explanation)
       } else {
         return false
       }
@@ -44,23 +44,23 @@ export default {
   },
   data() {
     return {
-          cities: [
-            {
-              city: "Tel Aviv",
-              backend: "Tel_Aviv",
-            },
-            {
-              city: "Jerusalem",
-              backend: "Westjerusalem",
-            },
-            {
-              city: "Berlin",
-              backend: "Berlin",
-            },
-            {
-              city: "Hamburg",
-              backend: "Hamburg",
-            }
+      cities: [
+        {
+          city: "Tel Aviv",
+          backend: "Tel_Aviv",
+        },
+        {
+          city: "Jerusalem",
+          backend: "Westjerusalem",
+        },
+        {
+          city: "Berlin",
+          backend: "Berlin",
+        },
+        {
+          city: "Hamburg",
+          backend: "Hamburg",
+        }
       ],
     };
   },
@@ -72,22 +72,19 @@ export default {
 };
 </script>
 <style scoped>
+.selection {
+  width: 100%;
+}
+
 .element {
-  flex: 1;
-   margin-bottom: 10px;
+  margin-bottom: 10px;
 }
+
 .element:last-child {
-   margin-bottom: 0px;
-}
-.flex-style {
-display: flex; 
-gap: 10px
+  margin-bottom: 0;
 }
 
 .xd-section:last-child {
   margin-bottom: 12px;
 }
-
-
-
 </style>

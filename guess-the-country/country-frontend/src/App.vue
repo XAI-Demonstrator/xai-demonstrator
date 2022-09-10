@@ -65,7 +65,9 @@
       </button>
       <!-- what do you guess, AI Button - control group -->
       <button
+get_url_query_parameters_gtc
           v-if="showAIGuessButton&&control&&round!=numOfRounds"
+
           type="button"
           class="xd-button xd-secondary"
           id="submit"
@@ -357,21 +359,19 @@ export default {
   display: flex;
   justify-content: space-between;
   position: relative;
-  overflow: hidden;
 }
 
 main {
-  display: block;
+  display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
 @media screen and (max-width: 450px) {
   #app {
-    /* display: flex; */
     flex-direction: column;
     padding-left: 0;
     padding-right: 0;
-    overflow: scroll !important;
   }
 }
 
@@ -394,10 +394,6 @@ main {
 
   main {
     flex-grow: 1;
-  }
-
-  body {
-    align-items: baseline !important;
   }
 
   main section {
