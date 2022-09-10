@@ -64,7 +64,14 @@ jobs:
       name: experiment
       url: https://gtc.xaidemo.de/
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Download all frontends
+        uses: actions/download-artifact@v3
+        with:
+          path: "deployment/experiment-deployment/nginx-frontend/"
+
       - name: Wait for lock to release and place lock
         uses: appleboy/ssh-action@v0.1.5
         with:
@@ -83,41 +90,14 @@ jobs:
             cd experiment-deployment/deployment/experiment-deployment/ || exit 0
             sudo docker-compose down
 
-      - name: Copy docker-compose.yml to test server
+      - name: Copy experiment-deployment to server
         uses: appleboy/scp-action@v0.1.3
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
-          source: "deployment/experiment-deployment/docker-compose.yml"
+          source: "deployment/experiment-deployment/**"
           target: "experiment-deployment"
-          rm: true
-
-      - name: Download all frontends
-        uses: actions/download-artifact@v3
-        with:
-          path: "deployment/experiment-deployment/nginx-frontend/"
-
-      - name: Copy build frontend to experiment server
-        uses: appleboy/scp-action@v0.1.3
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USER }}
-          key: ${{ secrets.SSH_KEY }}
-          source: "deployment/experiment-deployment/nginx-frontend/**"
-          target: "nginx-frontend/"
-          strip_components: 3
-          rm: true
-
-      - name: Copy couchdb to experiment server
-        uses: appleboy/scp-action@v0.1.3
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USER }}
-          key: ${{ secrets.SSH_KEY }}
-          source: "deployment/experiment-deployment/database/**"
-          target: "database/"
-          strip_components: 3
           rm: true
 
       - name: SSH Remote Commands
@@ -132,14 +112,13 @@ jobs:
           envs: COUCHDB_USER,COUCHDB_PASSWORD
           script: |
             set -e
-            mv nginx-frontend/ experiment-deployment/deployment/experiment-deployment/nginx-frontend/
-            mv database/ experiment-deployment/deployment/experiment-deployment/database/
             export COUCHDB_USER=${COUCHDB_USER}
             export COUCHDB_PASSWORD=${COUCHDB_PASSWORD}
             cd experiment-deployment/deployment/experiment-deployment/
             sudo -E docker-compose pull
             sudo -E docker-compose up --build --scale country=5 --scale proxy=3 -d
             sleep 10 && rm ~/.experiment-deployment-lock
+
       - name: Slack Notification
         uses: rtCamp/action-slack-notify@v2.2.0
         env:
