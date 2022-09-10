@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   workflow_run:
     workflows:
-      - "Visual Inspection"
+      - "Guess the Country"
     branches:
       - master
     types:
@@ -21,8 +21,8 @@ jobs:
     strategy:
       matrix:
         include:
-          - service: education
-            repo_path: ./visual-inspection/inspection-frontend
+          - service: country
+            repo_path: ./guess-the-country/country-frontend
 
     runs-on: ubuntu-latest
     steps:
@@ -46,7 +46,7 @@ jobs:
           set -e
           cd ${{ matrix.repo_path }}
           npm install
-          npm run build -- --mode digital-education.experiment-deployment
+          npm run build -- --mode experiment-deployment
           mv dist ${{ matrix.service }}
 
       - name: Save build artifact
@@ -62,7 +62,7 @@ jobs:
     if: ${{ github.event_name == 'push' || github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     environment:
       name: experiment
-      url: https://education.xaidemo.de/
+      url: https://gtc.xaidemo.de/
     steps:
       - uses: actions/checkout@v3
       - name: Wait for lock to release and place lock
@@ -118,7 +118,7 @@ jobs:
           source: "deployment/experiment-deployment/database/**"
           target: "database/"
           strip_components: 3
-          rm: true  
+          rm: true
 
       - name: SSH Remote Commands
         uses: appleboy/ssh-action@v0.1.5
@@ -138,13 +138,13 @@ jobs:
             export COUCHDB_PASSWORD=${COUCHDB_PASSWORD}
             cd experiment-deployment/deployment/experiment-deployment/
             sudo -E docker-compose pull
-            sudo -E docker-compose up --build --scale education=5 --scale proxy=3 -d
+            sudo -E docker-compose up --build --scale country=5 --scale proxy=3 -d
             sleep 10 && rm ~/.experiment-deployment-lock
       - name: Slack Notification
         uses: rtCamp/action-slack-notify@v2.2.0
         env:
           SLACK_CHANNEL: xai-demonstrator-monitor
-          SLACK_MESSAGE: "Successfully deployed a new version to https://education.xaidemo.de/ :rocket:"
+          SLACK_MESSAGE: "Successfully deployed a new version to https://gtc.xaidemo.de/ :rocket:"
           SLACK_TITLE: New Experiment Deployment
           SLACK_USERNAME: Deployment Monitor
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
