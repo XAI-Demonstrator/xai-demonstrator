@@ -24,6 +24,8 @@ services:
     expose:
       - "8000"
     environment:
+      - GOOGLE_MAPS_API_TOKEN=${STREETVIEW_API_KEY}
+      - BATCH_SIZE=${BATCH_SIZE}
       - ROOT_PATH=/api/country
       - SERVICE_NAME=country-service
       - TRACING_EXPORTER=jaeger
@@ -82,7 +84,6 @@ services:
       - SERVICE_NAME=experiment-proxy
       - TRACING_EXPORTER=jaeger
       - JAEGER_AGENT_HOST_NAME=jaeger
-
 
 networks:
   default:
