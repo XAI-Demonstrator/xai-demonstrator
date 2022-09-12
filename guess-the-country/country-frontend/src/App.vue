@@ -42,6 +42,7 @@
           :sequence_mode="sequenceMode"
           :prediction_city="prediction_city"
           :explanation="explanation"
+          :control = "control"
       />
       <!-- what do you guess, AI Button - treatment group -->
       <button
@@ -65,9 +66,7 @@
       </button>
       <!-- what do you guess, AI Button - control group -->
       <button
-get_url_query_parameters_gtc
-          v-if="showAIGuessButton&&control&&round!=numOfRounds"
-
+          v-if="showAIGuessButton&&control&&round<=numOfRounds"
           type="button"
           class="xd-button xd-secondary"
           id="submit"

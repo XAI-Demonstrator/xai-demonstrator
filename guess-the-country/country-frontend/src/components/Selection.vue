@@ -27,16 +27,21 @@ export default {
     prediction_city: {
       type: String,
     },
-    explanation: {
+      explanation: {
       type: Object,
     },
+    control: {
+      type: Boolean,
+    }
   },
+
   computed: {
-    showSelection() {
-      if (this.sequence_mode === 'classic' || this.sequence_mode === 'basic') {
+    showSelection () {
+      if (this.sequence_mode==='classic'||this.sequence_mode==='basic'){
         return (!this.user_city_answer)
-      } else if (this.sequence_mode === 'recommender') {
-        return (this.prediction_city && !this.user_city_answer && this.explanation)
+      } else if (this.sequence_mode==='recommender'){
+          if (this.control){return (this.prediction_city&&!this.user_city_answer)}
+          else {return (this.prediction_city&&!this.user_city_answer&&this.explanation)}
       } else {
         return false
       }
