@@ -107,43 +107,37 @@ export default {
     Score,
   },
   computed: {
-    sequenceMode() {
+    searchParams() {
       const uri = window.location.search.substring(1);
-      let params = new URLSearchParams(uri);
-      if (params.has("modus")) {
-        return params.get("modus")
+      return new URLSearchParams(uri);
+    },
+    sequenceMode() {
+      if (this.searchParams.has("modus")) {
+        return this.searchParams.get("modus")
       } else {
         return process.env.VUE_APP_IMAGE_SEQUENCE_MODE
       }
     },
     numOfRounds() {
-      const uri = window.location.search.substring(1);
-      let params = new URLSearchParams(uri);
-      if (params.has("num_of_rounds")) {
-        return params.get("num_of_rounds")
+      if (this.searchParams.has("num_of_rounds")) {
+        return this.searchParams.get("num_of_rounds")
       } else {
         return JSON.parse(process.env.VUE_APP_NR_OF_ROUNDS)
       }
     },
     roundOffset() {
-      const uri = window.location.search.substring(1);
-      let params = new URLSearchParams(uri);
-      if (params.has("round_offset")) {
-        return params.get("round_offset")
+      if (this.searchParams.has("round_offset")) {
+        return this.searchParams.get("round_offset")
       } else {
         return 0
       }
     },
     control() {
-      const uri = window.location.search.substring(1);
-      let params = new URLSearchParams(uri);
-      return params.has("control");
+      return this.searchParams.has("control");
     },
     backendUrl() {
-      const uri = window.location.search.substring(1);
-      let params = new URLSearchParams(uri);
-      if (params.has("player")) {
-        let player_id = params.get("player");
+      if (this.searchParams.has("player")) {
+        let player_id = this.searchParams.get("player");
         return this.url + "/" + player_id;
       } else {
         return this.url;
