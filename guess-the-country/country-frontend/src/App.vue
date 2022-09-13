@@ -127,7 +127,7 @@ export default {
     },
     roundOffset() {
       if (this.searchParams.has("round_offset")) {
-        return this.searchParams.get("round_offset")
+        return JSON.parse(this.searchParams.get("round_offset"))
       } else {
         return 0
       }
