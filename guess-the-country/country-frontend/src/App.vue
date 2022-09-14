@@ -27,12 +27,12 @@
         <img
             v-if="explanation"
             class="xd-border-secondary;"
-            v-bind:src="this.explainimage"
+            v-bind:src="this.explainImage"
         />
         <img
             v-if="!explanation"
             class="xd-border-secondary;"
-            v-bind:src="this.streetviewimage"
+            v-bind:src="this.streetviewImage"
         />
       </section>
       <Selection
@@ -42,7 +42,7 @@
           :sequence_mode="sequenceMode"
           :prediction_city="prediction_city"
           :explanation="explanation"
-          :control = "control"
+          :control="control"
       />
       <!-- what do you guess, AI Button - treatment group -->
       <button
@@ -107,41 +107,41 @@ export default {
     Score,
   },
   computed: {
-    sequenceMode() {
-    const uri = window.location.search.substring(1);
-    let params = new URLSearchParams(uri);
-    if (params.has("modus")) {
-      return params.get("modus")
-    }else{
-      return process.env.VUE_APP_IMAGE_SEQUENCE_MODE
-    }
-    },
-  numOfRounds() {
-    const uri = window.location.search.substring(1);
-    let params = new URLSearchParams(uri);
-    if (params.has("num_of_rounds")) {
-      return params.get("num_of_rounds")
-    } else {
-      return JSON.parse(process.env.VUE_APP_NR_OF_ROUNDS)
-    }
-
-  },
-    control() {
+    searchParams() {
       const uri = window.location.search.substring(1);
-      let params = new URLSearchParams(uri);
-      return params.has("control");
+      return new URLSearchParams(uri);
     },
-    backendUrl: {
-      get: function () {
-        const uri = window.location.search.substring(1);
-        let params = new URLSearchParams(uri);
-        if (params.has("player")) {
-          let player_id = params.get("player");
-          return this.url + "/" + player_id;
-        } else {
-          return this.url;
-        }
-      },
+    sequenceMode() {
+      if (this.searchParams.has("modus")) {
+        return this.searchParams.get("modus")
+      } else {
+        return process.env.VUE_APP_IMAGE_SEQUENCE_MODE
+      }
+    },
+    numOfRounds() {
+      if (this.searchParams.has("num_of_rounds")) {
+        return this.searchParams.get("num_of_rounds")
+      } else {
+        return JSON.parse(process.env.VUE_APP_NR_OF_ROUNDS)
+      }
+    },
+    roundOffset() {
+      if (this.searchParams.has("round_offset")) {
+        return JSON.parse(this.searchParams.get("round_offset"))
+      } else {
+        return 0
+      }
+    },
+    control() {
+      return this.searchParams.has("control");
+    },
+    backendUrl() {
+      if (this.searchParams.has("player")) {
+        let player_id = this.searchParams.get("player");
+        return this.url + "/" + player_id;
+      } else {
+        return this.url;
+      }
     },
     showNextButton() {
       if (this.sequenceMode === 'classic') {
@@ -203,12 +203,12 @@ export default {
       score_ai: 0,
       score_user: 0,
       msg: "",
-      streetviewimage: null,
-      explainimage: null,
+      streetviewImage: null,
+      explainImage: null,
       waitingForExplanation: false,
     };
   },
- async created() {
+  async created() {
     this.getMessage();
     this.getStreetview();
   },
@@ -218,7 +218,7 @@ export default {
           .post(this.backendUrl + "/score", {
             ai_score: this.score_ai,
             player_score: this.score_user,
-            rounds: this.round,
+            rounds: this.round + this.roundOffset,
           })
           .then((res) => {
             console.log(res);
@@ -242,7 +242,7 @@ export default {
     },
     city_selected(value) {
       this.user_city_answer = value;
-      if (this.user_city_answer == this.label_city) {
+      if (this.user_city_answer === this.label_city) {
         this.score_user = 1 + this.score_user;
       }
       this.postValues()
@@ -265,7 +265,7 @@ export default {
             rounds: this.round,
           })
           .then((res) => {
-            this.streetviewimage = res.data.image;
+            this.streetviewImage = res.data.image;
             let label = this.label_to_label(res.data.class_label);
             this.label_city = label.city;
           })
@@ -275,7 +275,7 @@ export default {
     },
     submitFile() {
       this.waitingForExplanation = true;
-      const blob = new Blob([this.streetviewimage]);
+      const blob = new Blob([this.streetviewImage]);
 
       let form = new FormData();
       form.append("file", blob);
@@ -291,7 +291,7 @@ export default {
             let label = this.label_to_label(res.data.class_label);
             this.prediction_city = label.city;
             this.waitingForExplanation = false;
-            if (this.prediction_city == this.label_city) {
+            if (this.prediction_city === this.label_city) {
               this.score_ai = this.score_ai + 1;
             }
             this.postValues();
@@ -304,7 +304,7 @@ export default {
       this.submitFile();
       this.waitingForExplanation = true;
 
-      const blob = new Blob([this.streetviewimage]);
+      const blob = new Blob([this.streetviewImage]);
 
       let form = new FormData();
       form.append("file", blob);
@@ -317,7 +317,7 @@ export default {
             },
           })
           .then((res) => {
-            this.explainimage = res.data.image;
+            this.explainImage = res.data.image;
             this.waitingForExplanation = false;
             this.explanation = res.data.explanation_id;
           })
@@ -337,7 +337,7 @@ export default {
     label_to_label(prediction) {
       for (let i in this.countrys) {
         for (let x in this.countrys[i].citys)
-          if (prediction == this.countrys[i].citys[x].backend) {
+          if (prediction === this.countrys[i].citys[x].backend) {
             return {
               country: this.countrys[i].country,
               city: this.countrys[i].citys[x].city,
