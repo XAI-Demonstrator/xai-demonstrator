@@ -118,7 +118,10 @@ jobs:
             export BATCH_SIZE=${BATCH_SIZE}
             export COUCHDB_USER=${COUCHDB_USER}
             export COUCHDB_PASSWORD=${COUCHDB_PASSWORD}
-            cd experiment-deployment/deployment/experiment-deployment/
+            cd ~/gtc-study-backend
+            git pull
+            cp ~/gtc-study-backend ~/experiment-deployment/deployment/experiment-deployment/
+            cd ~/experiment-deployment/deployment/experiment-deployment/
             sudo -E docker-compose pull
             sudo -E docker-compose up --build --scale country=5 --scale proxy=3 -d
             sleep 10 && rm ~/.experiment-deployment-lock

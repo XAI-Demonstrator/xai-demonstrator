@@ -33,6 +33,25 @@ services:
       - COLLECTOR_URL=http://collector:8000
       - EXPERIMENT=1
 
+  study:
+    build: gtc-study-backend/
+    depends_on:
+      - jaeger
+      - couchdb
+    expose:
+      - "8000"
+    environment:
+      - SERVICE_NAME=study-backend-service
+      - ROOT_PATH=/api/country
+      - DB_USER=${COUCHDB_USER}
+      - DB_PASSWORD=${COUCHDB_PASSWORD}
+      - DB_HOST=couchdb
+      - DB_PORT=5984
+      - TRACING_EXPORTER=jaeger
+      - JAEGER_AGENT_HOST_NAME=jaeger
+    volumes:
+      - ./../../../gtc-study-backend/images:/backend/images
+
   jaeger:
     image: jaegertracing/all-in-one
     expose:
