@@ -262,7 +262,7 @@ export default {
           .post(this.backendUrl + "/streetview", {
             ai_score: this.score_ai,
             player_score: this.score_user,
-            rounds: this.round,
+            rounds: this.round + this.roundOffset,
           })
           .then((res) => {
             this.streetviewImage = res.data.image;
