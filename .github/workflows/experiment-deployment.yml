@@ -120,7 +120,7 @@ jobs:
             export COUCHDB_PASSWORD=${COUCHDB_PASSWORD}
             cd ~/gtc-study-backend
             git pull
-            cp ~/gtc-study-backend ~/experiment-deployment/deployment/experiment-deployment/
+            cp -r ~/gtc-study-backend ~/experiment-deployment/deployment/experiment-deployment/
             cd ~/experiment-deployment/deployment/experiment-deployment/
             sudo -E docker-compose pull
             sudo -E docker-compose up --build --scale country=5 --scale proxy=3 -d
