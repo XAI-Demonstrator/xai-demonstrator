@@ -97,8 +97,8 @@ services:
     expose:
       - "8000"
     environment:
-      - BACKEND_URL=http://study:8000
-      - BACKEND_SERVICE=study-backend-service
+      - BACKEND_URL=http://country:8000
+      - BACKEND_SERVICE=country-service
       - COLLECTOR_URL=http://collector:8000
       - SERVICE_NAME=experiment-proxy
       - TRACING_EXPORTER=jaeger
