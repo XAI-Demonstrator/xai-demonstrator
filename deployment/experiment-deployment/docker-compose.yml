@@ -34,7 +34,7 @@ services:
       - EXPERIMENT=1
 
   study:
-    build: gtc-study-backend/
+    build: ./gtc-study-backend
     depends_on:
       - jaeger
       - couchdb
@@ -50,7 +50,7 @@ services:
       - TRACING_EXPORTER=jaeger
       - JAEGER_AGENT_HOST_NAME=jaeger
     volumes:
-      - ./../../../gtc-study-backend/images:/backend/images
+      - ./gtc-study-backend/images:/backend/images
 
   jaeger:
     image: jaegertracing/all-in-one
