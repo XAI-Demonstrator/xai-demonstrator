@@ -49,6 +49,8 @@ services:
       - DB_PORT=5984
       - TRACING_EXPORTER=jaeger
       - JAEGER_AGENT_HOST_NAME=jaeger
+    volumes:
+      - ./../../../gtc-study-backend/images:/backend/images
 
   jaeger:
     image: jaegertracing/all-in-one
