@@ -219,9 +219,9 @@ export default {
             ai_score: this.score_ai,
             player_score: this.score_user,
             rounds: this.round + this.roundOffset,
-            prediction_city: this.prediction_city,
-            label_city: this.label_city,
-            user_city_answer: this.user_city_answer
+            prediction_city: String(this.prediction_city),
+            label_city: String(this.label_city),
+            user_city_answer: String(this.user_city_answer)
           })
           .then((res) => {
             console.log(res);
@@ -238,6 +238,7 @@ export default {
             this.round = res.data.rounds;
             this.score_ai = res.data.ai_score;
             this.score_user = res.data.player_score;
+
           })
           .catch((error) => {
             console.error(error);
