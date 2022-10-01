@@ -37,7 +37,7 @@
     "jest": "^27.1.0",
     "miragejs": "^0.1.45",
     "request": "^2.88.2",
-    "sass": "^1.52.1",
+    "sass": "^1.55.0",
     "sass-loader": "^13.0.2"
   },
   "eslintConfig": {
