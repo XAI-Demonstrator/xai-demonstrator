@@ -2,7 +2,7 @@ wheel
 numpy
 
 pydantic==1.10.2
-fastapi==0.82.0
+fastapi==0.85.0
 uvicorn==0.18.3
 aiofiles==0.8.0
 python-multipart==0.0.5
