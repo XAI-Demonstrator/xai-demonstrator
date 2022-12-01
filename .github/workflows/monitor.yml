@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: URL Health Check
-        uses: Jtalk/url-health-check-action@v2
+        uses: Jtalk/url-health-check-action@v3
         with:
           url: https://test.xaidemo.de
           max-attempts: 3
@@ -31,7 +31,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: URL Health Check
-        uses: Jtalk/url-health-check-action@v2
+        uses: Jtalk/url-health-check-action@v3
         with:
           url: https://gtc.xaidemo.de/
           max-attempts: 3
@@ -53,7 +53,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: URL Health Check
-        uses: Jtalk/url-health-check-action@v2
+        uses: Jtalk/url-health-check-action@v3
         with:
           url: https://xai-demonstrator-prod.web.app/
           max-attempts: 3
