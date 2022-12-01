@@ -154,7 +154,7 @@ jobs:
           coveralls --service=github --finish
 
       - name: Create container and publish to Registry
-        uses: elgohr/Publish-Docker-Github-Action@v4
+        uses: elgohr/Publish-Docker-Github-Action@v5
         with:
           name: xai-demonstrator/review-sentiment-service
           username: ${{ github.actor }}
