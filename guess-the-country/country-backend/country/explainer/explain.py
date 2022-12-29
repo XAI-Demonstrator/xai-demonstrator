@@ -13,6 +13,7 @@ class Explanation(BaseModel):
     explanation_id: uuid.UUID
     image: bytes
 
+
 @traced
 def explain(data):
     encoded_data = str(data)
@@ -51,4 +52,5 @@ def explain_cnn(image, model_=model):
                                                            num_of_samples=500,
                                                            p=0.9)
 
-    return render_explanation(image, segment_mask, segment_weights, positive="violet", coverage=0.15, opacity=0.3)
+    return render_explanation(image, segment_mask, segment_weights, positive="violet", coverage=0.15, opacity=0.5)
+
