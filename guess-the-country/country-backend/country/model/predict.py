@@ -8,7 +8,7 @@ from pydantic import BaseModel
 from xaidemo.tracing import traced
 
 PATH = pathlib.Path(__file__).parent
-
+IMG_SIZE = 224
 model = tf.keras.models.load_model(PATH / "my_model")
 
 class Prediction(BaseModel):
@@ -40,7 +40,7 @@ def predict_image(image):
     return result
 
 @traced
-def preprocess(img, IMG_SIZE=224):
+def preprocess(img):
     img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     # resize image to match model's expected sizing
     img_resize = cv2.resize(img_rgb, (IMG_SIZE, IMG_SIZE))

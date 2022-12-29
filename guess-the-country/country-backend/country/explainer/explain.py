@@ -1,11 +1,14 @@
 import base64
+import uuid
+
 import cv2
 import numpy as np
-from ..model.predict import model, load_image, preprocess
 from pydantic import BaseModel
-import uuid
+from visualime.explain import explain_classification, render_explanation
 from xaidemo.tracing import traced
-from .new_lime_ import explain_image
+
+from ..model.predict import model, load_image, preprocess
+
 
 class Explanation(BaseModel):
     explanation_id: uuid.UUID
@@ -16,21 +19,23 @@ class Explanation(BaseModel):
 def explain(data):
     encoded_data = str(data)
     image = load_image(encoded_data)
-    pre_image = preprocess(image)
-    explanation = explain_cnn(np.squeeze(pre_image), model)
-    explain_id = uuid.uuid4()
+    pre_image = preprocess(img=image)
+
+    explanation = explain_cnn(pre_image, model)
+    explanation_id = uuid.uuid4()
+
     encoded_image_string = convert_explanation(explanation)
     encoded_bytes = bytes("data:image/png;base64,",
                           encoding="utf-8") + encoded_image_string
     return Explanation(
-        explanation_id=explain_id,
+        explanation_id=explanation_id,
         image=encoded_bytes
     )
 
 
 @traced
 def convert_explanation(explanation):
-    image = ((explanation + 1) * 127.5).astype(np.uint8)
+    image = np.array(explanation, dtype="float32")
     image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     img_resized = cv2.resize(image_rgb, (448, 448),
                              interpolation=cv2.INTER_CUBIC)
@@ -40,6 +45,12 @@ def convert_explanation(explanation):
 
 
 @traced
-def explain_cnn(img, model):
-    return explain_image(img=img, seg_method="felzenszwalb", seg_settings={}, num_of_samples=500, samples_p=0.9,
-                         model_=model, threshold=0.5, volume=20, colour="violet", transparency=0.7)
+def explain_cnn(image, model_=model):
+    segment_mask, segment_weights = explain_classification(image=image,
+                                                           segmentation_method="felzenszwalb",
+                                                           segmentation_settings={},
+                                                           predict_fn=model_.predict_,
+                                                           num_of_samples=500,
+                                                           p=0.9)
+
+    return render_explanation(image, segment_mask, segment_weights, positive="violet", coverage=0.15, opacity=0.5)
