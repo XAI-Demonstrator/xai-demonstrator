@@ -1,12 +1,13 @@
 import base64
+import uuid
+
 import cv2
 import numpy as np
-from ..model.predict import model, load_image, preprocess
 from pydantic import BaseModel
-import uuid
-from xaidemo.tracing import traced
-import tensorflow as tf
 from visualime.explain import explain_classification, render_explanation
+from xaidemo.tracing import traced
+
+from ..model.predict import model, load_image, preprocess
 
 
 class Explanation(BaseModel):
@@ -53,4 +54,3 @@ def explain_cnn(image, model_=model):
                                                            p=0.9)
 
     return render_explanation(image, segment_mask, segment_weights, positive="violet", coverage=0.15, opacity=0.5)
-
