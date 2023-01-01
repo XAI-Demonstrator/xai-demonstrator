@@ -60,7 +60,7 @@ jobs:
           path: ./deployment/prod-deployment/frontends/public
 
       - name: Deploy to Firebase
-        uses: w9jds/firebase-action@v11.5.0
+        uses: w9jds/firebase-action@v11.18.0
         with:
           args: deploy --only hosting
         env:
