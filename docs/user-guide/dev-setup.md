@@ -97,6 +97,9 @@ Then, first run `pip install -r requirements.txt` to install the backend's depen
 To install the test dependencies that are only required for testing and development purposes,
 run `pip install -r requirements-test.txt`.
 
+Next, run the following command to download the machine-learning model for the use case:
+`./download_models.sh my_model`.
+
 To check that everything works as expected, run `pytest tests/` to execute the unit test suite.
 
 ## What's next?
