@@ -46,7 +46,19 @@ services:
       - TRACING_EXPORTER=jaeger
       - JAEGER_AGENT_HOST_NAME=jaeger
       - GOOGLE_MAPS_API_TOKEN=${STREETVIEW_API_KEY}
-      - BATCH_SIZE=${BATCH_SIZE}
+      - BATCH_SIZE=8
+
+  education:
+    image: ghcr.io/xai-demonstrator/digital-education-service:latest
+    depends_on:
+      - jaeger
+    expose:
+      - 8000
+    environment:
+      - ROOT_PATH=/api/education
+      - SERVICE_NAME=education-service
+      - TRACING_EXPORTER=jaeger
+      - JAEGER_AGENT_HOST_NAME=jaeger
 
   jaeger:
     image: jaegertracing/all-in-one
