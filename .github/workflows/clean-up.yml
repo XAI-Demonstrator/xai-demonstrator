@@ -79,7 +79,7 @@ jobs:
       url: https://test.xaidemo.de
     steps:
       - name: Remove stale Docker images
-        uses: appleboy/ssh-action@v0.1.5
+        uses: appleboy/ssh-action@v0.1.7
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
