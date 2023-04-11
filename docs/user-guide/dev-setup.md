@@ -44,6 +44,7 @@ the _XAI Demonstrator_'s code is stored in a [Git](https://git-scm.com/) reposit
 
 - **macOS**: `brew install git`
 - **Linux (Debian-based)**: `apt-get install git`
+- **Linux (Arch-based)**: `pacman -S git`
 - **Windows**: Download installer from [the official website](https://git-scm.com/download/win)
 
 ### Clone the repository
