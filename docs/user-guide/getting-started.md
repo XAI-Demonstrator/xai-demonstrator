@@ -81,7 +81,7 @@ a terminal (again, if you're on Windows, we recommend you use the _Git Bash_ tha
 ships with _Git_):
 
 ```bash
-cd xai-demonstrator/deployments/test-local
+cd xai-demonstrator/deployment/test-local
 docker-compose up
 ```
 
