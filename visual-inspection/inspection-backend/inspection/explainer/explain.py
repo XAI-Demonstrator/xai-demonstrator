@@ -44,7 +44,6 @@ def explain(image_file: IO[bytes],
             settings: Union[None, Dict[str, Any]] = None) -> Explanation:
     settings = settings or {}
     model = get_model(model_id)
-
     explanation_id = uuid.uuid4()
     add_span_attributes({"explanation.id": str(explanation_id),
                          "explanation.method": method,
