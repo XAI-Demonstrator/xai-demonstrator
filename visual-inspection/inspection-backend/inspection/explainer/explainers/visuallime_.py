@@ -36,7 +36,7 @@ def visuallime_explanation(input_img: np.ndarray,
                                                            num_of_samples=config.explainer.num_samples, )
 
     img_pil = render_explanation(image=input_img, segment_mask=segment_mask, segment_weights=segment_weights,
-                                 )
+                                 positive=(0, 255, 0), negative=(255, 0, 0))
     # Mark the boundaries of the segments and convert the image from RGBA to RGB
     img_np = mark_boundaries(np.array(img_pil), segment_mask)[:, :, :3]
 
