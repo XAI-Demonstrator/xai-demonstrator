@@ -1,5 +1,5 @@
-wheel
-numpy
+wheel~=0.38.4
+numpy~=1.24.2
 
 pydantic==1.10.2
 fastapi[all]==0.88.0
@@ -7,7 +7,7 @@ uvicorn==0.20.0
 aiofiles==22.1.0
 python-multipart==0.0.5
 lime==0.2.0.1
-
+visualime==0.0.5
 tensorflow-cpu==2.11.0
 Pillow==9.3.0
 
