@@ -1,6 +1,7 @@
 site_name: XAI Demonstrator
 copyright: © 2021 The XAI Demonstrator Team
 repo_url: https://github.com/xai-demonstrator/xai-demonstrator
+edit_uri: edit/master
 
 docs_dir: '.'
 theme: material
