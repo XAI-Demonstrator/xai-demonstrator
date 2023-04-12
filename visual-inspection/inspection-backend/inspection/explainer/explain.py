@@ -22,7 +22,7 @@ EXPLAINERS = {
 @traced
 def generate_output_image(raw_image: np.ndarray,
                           size: Tuple[int, int]) -> bytes:
-    exp_image = Image.fromarray((255 * raw_image).astype(np.uint8))
+    exp_image = Image.fromarray(raw_image)
     exp_image = exp_image.resize(size, Image.BICUBIC)
 
     buffered = io.BytesIO()
