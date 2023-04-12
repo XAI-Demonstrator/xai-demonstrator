@@ -31,10 +31,11 @@ def visuallime_explanation(input_img: np.ndarray,
     input_img = input_img.astype(np.uint8)
 
     segment_mask, segment_weights = explain_classification(image=input_img, predict_fn=model_,
-                                                           segmentation_method="felzenszwalb",
-                                                           num_of_samples=128)
+                                                           segmentation_method=config.explainer.segmentation_method,
+                                                           num_of_samples=config.explainer.num_samples,)
 
-    img_pil = render_explanation(image=input_img, segment_mask=segment_mask, segment_weights=segment_weights)
+    img_pil = render_explanation(image=input_img, segment_mask=segment_mask, segment_weights=segment_weights,
+                                 )
     # Mark the boundaries of the segments and convert the image from RGBA to RGB
     img_np = mark_boundaries(np.array(img_pil), segment_mask)[:, :, :3]
 
