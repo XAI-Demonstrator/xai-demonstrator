@@ -9,14 +9,15 @@ from .config import LIMEConfiguration
 
 def mark_boundaries(img: np.ndarray,
                     mask: np.ndarray,
-                    color: tuple = (255, 0, 0,
-                                    255)) -> np.ndarray:  # TODO mark only the boundaries adjacent to the highlighted sgements
+                    color: np.array = np.array([255, 255, 0, 180])
+                    ) -> np.ndarray:
+    # TODO mark only the boundaries adjacent to the highlighted sgements
     for i in range(1, mask.shape[0] - 1):
         for j in range(1, mask.shape[1] - 1):
             if mask[i, j] != mask[i - 1, j]:
-                img[i, j] = color
+                img[i, j] = img[i, j] * (255 - color[3]) / 255 + color * color[3] / 255
             elif mask[i, j] != mask[i, j - 1]:
-                img[i, j] = color
+                img[i, j] = img[i, j] * (255 - color[3]) / 255 + color * color[3] / 255
     return img
 
 
@@ -32,7 +33,7 @@ def visuallime_explanation(input_img: np.ndarray,
 
     segment_mask, segment_weights = explain_classification(image=input_img, predict_fn=model_,
                                                            segmentation_method=config.explainer.segmentation_method,
-                                                           num_of_samples=config.explainer.num_samples,)
+                                                           num_of_samples=config.explainer.num_samples, )
 
     img_pil = render_explanation(image=input_img, segment_mask=segment_mask, segment_weights=segment_weights,
                                  )
