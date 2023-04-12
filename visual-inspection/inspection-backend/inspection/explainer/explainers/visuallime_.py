@@ -1,5 +1,7 @@
 import numpy as np
 import tensorflow as tf
+from xaidemo.tracing import add_span_attributes, traced
+
 from visualime.explain import explain_classification, render_explanation
 
 from .config import LIMEConfiguration
@@ -18,6 +20,7 @@ def mark_boundaries(img: np.ndarray,
     return img
 
 
+@traced(label="compute_explanation", attributes={"explanation.method": "visuallime"})
 def visuallime_explanation(input_img: np.ndarray,
                            model_: tf.keras.models.Model,
                            **settings) -> np.ndarray:

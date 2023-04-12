@@ -60,4 +60,4 @@ def render_explanation(explanation: lime_image.ImageExplanation,
         hide_rest=False
     )
 
-    return mark_boundaries(image / 2 + 0.5, mask)
+    return (mark_boundaries(image / 2 + 0.5, mask) * 255).astype("uint8")
