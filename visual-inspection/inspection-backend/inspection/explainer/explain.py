@@ -9,7 +9,7 @@ from pydantic import BaseModel
 from xaidemo.tracing import add_span_attributes, traced
 
 from .explainers.lime_ import lime_explanation
-from .explainers.visuallime_ import visualime_explanation
+from .explainers.visualime_ import visualime_explanation
 from ..model.model import get_model
 from ..model.predict import preprocess
 
