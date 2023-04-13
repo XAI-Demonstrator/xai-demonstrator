@@ -123,7 +123,7 @@ describe('ExplainInspection.vue', () => {
 
         const expected = new FormData();
         expected.append("file", "fake-blob")
-        expected.append("method", "lime")
+        expected.append("method", "visuallime")
         expected.append("settings", JSON.stringify({"explainer": {"num_samples": "20"}}))
 
         const mockPost = axios.post.mockImplementationOnce(() => Promise.resolve(response))
@@ -150,7 +150,7 @@ describe('ExplainInspection.vue', () => {
         }
 
         const expected = new FormData();
-        expected.append("method", "lime")
+        expected.append("method", "visuallime")
 
         const mockPost = axios.post.mockImplementationOnce(() => Promise.resolve(response))
 
@@ -176,7 +176,7 @@ describe('ExplainInspection.vue', () => {
         }
 
         const expected = new FormData();
-        expected.append("method", "lime")
+        expected.append("method", "visuallime")
 
         const mockPost = axios.post.mockImplementationOnce(() => Promise.resolve(response))
 
