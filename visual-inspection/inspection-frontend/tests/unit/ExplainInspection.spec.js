@@ -113,7 +113,7 @@ describe('ExplainInspection.vue', () => {
     })
 
     it('passes query parameters to backend', async () => {
-        window.location.search = "?method=lime&explainer.num_samples=20"
+        window.location.search = "?method=visuallime&explainer.num_samples=20"
 
         const response = {
             data: {
@@ -141,7 +141,7 @@ describe('ExplainInspection.vue', () => {
     })
 
     it('only adds settings if specified', async () => {
-        window.location.search = "?method=lime"
+        window.location.search = "?method=visuallime"
 
         const response = {
             data: {
@@ -188,7 +188,7 @@ describe('ExplainInspection.vue', () => {
 
         const payload = mockPost.mock.calls[0][1]
 
-        expect(payload.has('method')).toBe(false)
+        expect(payload.has('method')).toBe(true)
         expect(payload.has('settings')).toBe(false)
     })
 
