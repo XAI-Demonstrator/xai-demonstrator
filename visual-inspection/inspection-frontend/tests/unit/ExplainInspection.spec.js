@@ -113,7 +113,7 @@ describe('ExplainInspection.vue', () => {
     })
 
     it('passes query parameters to backend', async () => {
-        window.location.search = "?method=lime&explainer.num_samples=20"
+        window.location.search = "?method=visualime&explainer.num_samples=20"
 
         const response = {
             data: {
@@ -123,7 +123,7 @@ describe('ExplainInspection.vue', () => {
 
         const expected = new FormData();
         expected.append("file", "fake-blob")
-        expected.append("method", "lime")
+        expected.append("method", "visualime")
         expected.append("settings", JSON.stringify({"explainer": {"num_samples": "20"}}))
 
         const mockPost = axios.post.mockImplementationOnce(() => Promise.resolve(response))
@@ -141,7 +141,7 @@ describe('ExplainInspection.vue', () => {
     })
 
     it('only adds settings if specified', async () => {
-        window.location.search = "?method=lime"
+        window.location.search = "?method=visualime"
 
         const response = {
             data: {
@@ -150,7 +150,7 @@ describe('ExplainInspection.vue', () => {
         }
 
         const expected = new FormData();
-        expected.append("method", "lime")
+        expected.append("method", "visualime")
 
         const mockPost = axios.post.mockImplementationOnce(() => Promise.resolve(response))
 
@@ -176,7 +176,7 @@ describe('ExplainInspection.vue', () => {
         }
 
         const expected = new FormData();
-        expected.append("method", "lime")
+        expected.append("method", "visualime")
 
         const mockPost = axios.post.mockImplementationOnce(() => Promise.resolve(response))
 
@@ -188,7 +188,7 @@ describe('ExplainInspection.vue', () => {
 
         const payload = mockPost.mock.calls[0][1]
 
-        expect(payload.has('method')).toBe(false)
+        expect(payload.has('method')).toBe(true)
         expect(payload.has('settings')).toBe(false)
     })
 

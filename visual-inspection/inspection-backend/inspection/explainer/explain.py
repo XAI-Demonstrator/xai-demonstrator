@@ -9,18 +9,20 @@ from pydantic import BaseModel
 from xaidemo.tracing import add_span_attributes, traced
 
 from .explainers.lime_ import lime_explanation
+from .explainers.visualime_ import visualime_explanation
 from ..model.model import get_model
 from ..model.predict import preprocess
 
 EXPLAINERS = {
-    "lime": lime_explanation
+    "lime": lime_explanation,
+    "visualime": visualime_explanation
 }
 
 
 @traced
 def generate_output_image(raw_image: np.ndarray,
                           size: Tuple[int, int]) -> bytes:
-    exp_image = Image.fromarray((255 * raw_image).astype(np.uint8))
+    exp_image = Image.fromarray(raw_image)
     exp_image = exp_image.resize(size, Image.BICUBIC)
 
     buffered = io.BytesIO()
@@ -42,7 +44,6 @@ def explain(image_file: IO[bytes],
             settings: Union[None, Dict[str, Any]] = None) -> Explanation:
     settings = settings or {}
     model = get_model(model_id)
-
     explanation_id = uuid.uuid4()
     add_span_attributes({"explanation.id": str(explanation_id),
                          "explanation.method": method,

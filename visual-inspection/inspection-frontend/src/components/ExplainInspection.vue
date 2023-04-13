@@ -46,6 +46,9 @@ export default {
       if (method) {
         form.append('method', method);
       }
+      else{
+        form.append('method', 'visualime');
+      }
 
       const settings = Object
           .keys(allParams)

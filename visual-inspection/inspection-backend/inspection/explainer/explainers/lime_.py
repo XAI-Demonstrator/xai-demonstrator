@@ -1,7 +1,7 @@
+from pydantic import BaseModel
 import numpy as np
 import tensorflow as tf
 from lime import lime_image
-from pydantic import BaseModel
 from skimage.segmentation import mark_boundaries
 from xaidemo.tracing import traced
 
@@ -12,6 +12,7 @@ class ExplainerConfiguration(BaseModel):
     top_labels: int = 5
     num_samples: int = 100
     num_features: int = 10000
+    segmentation_method: str = 'felzenszwalb'
 
     class Config:
         extra = 'forbid'
@@ -60,4 +61,4 @@ def render_explanation(explanation: lime_image.ImageExplanation,
         hide_rest=False
     )
 
-    return mark_boundaries(image / 2 + 0.5, mask)
+    return (mark_boundaries(image / 2 + 0.5, mask) * 255).astype("uint8")
