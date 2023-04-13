@@ -34,7 +34,7 @@ def mark_boundaries(img: np.ndarray,
                     mask: np.ndarray,
                     color: np.array = np.array([255, 255, 0, 180])
                     ) -> np.ndarray:
-    # TODO mark only the boundaries adjacent to the highlighted sgements
+    # TODO use function in visualime
     for i in range(1, mask.shape[0] - 1):
         for j in range(1, mask.shape[1] - 1):
             if mask[i, j] != mask[i - 1, j]:
