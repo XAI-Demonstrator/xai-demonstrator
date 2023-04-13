@@ -21,7 +21,7 @@ EXPLAINERS = {
 def generate_output_image(raw_image: np.ndarray,
                           size: Tuple[int, int]) -> bytes:
     exp_image = Image.fromarray((255 * raw_image).astype(np.uint8))
-    exp_image = exp_image.resize(size, Image.BICUBIC)
+    exp_image = exp_image.resize(size, Image.Resampling.BICUBIC)
 
     buffered = io.BytesIO()
     exp_image.save(buffered, format="png")
