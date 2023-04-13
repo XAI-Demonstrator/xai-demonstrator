@@ -47,7 +47,7 @@ export default {
         form.append('method', method);
       }
       else{
-        form.append('method', 'visuallime');
+        form.append('method', 'visualime');
       }
 
       const settings = Object
