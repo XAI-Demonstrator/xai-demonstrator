@@ -1,11 +1,34 @@
+from pydantic import BaseModel
 import numpy as np
 import tensorflow as tf
 from xaidemo.tracing import add_span_attributes, traced
-
 from visualime.explain import explain_classification, render_explanation
 
-from .config import LIMEConfiguration
+class ExplainerConfiguration(BaseModel):
+    top_labels: int = 5
+    num_samples: int = 100
+    num_features: int = 10000
+    segmentation_method: str = 'felzenszwalb'
 
+    class Config:
+        extra = 'forbid'
+
+
+class RendererConfiguration(BaseModel):
+    num_features: int = 5
+    min_weight: float = 0.0
+    positive_only: bool = False
+
+    class Config:
+        extra = 'forbid'
+
+
+class VisuaLIMEConfiguration(BaseModel):
+    explainer: ExplainerConfiguration = ExplainerConfiguration()
+    renderer: RendererConfiguration = RendererConfiguration()
+
+    class Config:
+        extra = 'forbid'
 
 def mark_boundaries(img: np.ndarray,
                     mask: np.ndarray,
@@ -21,11 +44,11 @@ def mark_boundaries(img: np.ndarray,
     return img
 
 
-@traced(label="compute_explanation", attributes={"explanation.method": "visuallime"})
-def visuallime_explanation(input_img: np.ndarray,
-                           model_: tf.keras.models.Model,
-                           **settings) -> np.ndarray:
-    config = LIMEConfiguration(**settings)
+@traced(label="compute_explanation", attributes={"explanation.method": "visualime"})
+def visualime_explanation(input_img: np.ndarray,
+                          model_: tf.keras.models.Model,
+                          **settings) -> np.ndarray:
+    config = VisuaLIMEConfiguration(**settings)
 
     # Convert the image from the range [-1, 1] to [0, 255]
     input_img = (input_img / 2 + 0.5) * 255

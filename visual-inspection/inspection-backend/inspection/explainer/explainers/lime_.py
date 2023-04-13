@@ -1,11 +1,38 @@
+from pydantic import BaseModel
 import numpy as np
 import tensorflow as tf
 from lime import lime_image
 from skimage.segmentation import mark_boundaries
 from xaidemo.tracing import traced
-from .config import LIMEConfiguration, RendererConfiguration
 
 _lime = lime_image.LimeImageExplainer()
+
+
+class ExplainerConfiguration(BaseModel):
+    top_labels: int = 5
+    num_samples: int = 100
+    num_features: int = 10000
+    segmentation_method: str = 'felzenszwalb'
+
+    class Config:
+        extra = 'forbid'
+
+
+class RendererConfiguration(BaseModel):
+    num_features: int = 5
+    min_weight: float = 0.0
+    positive_only: bool = False
+
+    class Config:
+        extra = 'forbid'
+
+
+class LIMEConfiguration(BaseModel):
+    explainer: ExplainerConfiguration = ExplainerConfiguration()
+    renderer: RendererConfiguration = RendererConfiguration()
+
+    class Config:
+        extra = 'forbid'
 
 
 @traced(label="compute_explanation", attributes={"explanation.method": "lime"})
