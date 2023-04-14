@@ -3,6 +3,8 @@ import numpy as np
 import tensorflow as tf
 from xaidemo.tracing import add_span_attributes, traced
 from visualime.explain import explain_classification, render_explanation
+from visualime.visualize import mark_boundaries
+
 
 class ExplainerConfiguration(BaseModel):
     top_labels: int = 5
@@ -30,19 +32,6 @@ class VisuaLIMEConfiguration(BaseModel):
     class Config:
         extra = 'forbid'
 
-def mark_boundaries(img: np.ndarray,
-                    mask: np.ndarray,
-                    color: np.array = np.array([255, 255, 0, 180])
-                    ) -> np.ndarray:
-    # TODO use function in visualime
-    for i in range(1, mask.shape[0] - 1):
-        for j in range(1, mask.shape[1] - 1):
-            if mask[i, j] != mask[i - 1, j]:
-                img[i, j] = img[i, j] * (255 - color[3]) / 255 + color * color[3] / 255
-            elif mask[i, j] != mask[i, j - 1]:
-                img[i, j] = img[i, j] * (255 - color[3]) / 255 + color * color[3] / 255
-    return img
-
 
 @traced(label="compute_explanation", attributes={"explanation.method": "visualime"})
 def visualime_explanation(input_img: np.ndarray,
@@ -61,6 +50,5 @@ def visualime_explanation(input_img: np.ndarray,
     img_pil = render_explanation(image=input_img, segment_mask=segment_mask, segment_weights=segment_weights,
                                  positive=(0, 255, 0), negative=(255, 0, 0))
     # Mark the boundaries of the segments and convert the image from RGBA to RGB
-    img_np = mark_boundaries(np.array(img_pil), segment_mask)[:, :, :3]
-
+    img_np = mark_boundaries(np.array(img_pil)[:, :, :3], segment_mask)
     return img_np

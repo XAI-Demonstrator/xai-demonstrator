@@ -4,7 +4,7 @@ uvicorn==0.20.0
 aiofiles==22.1.0
 python-multipart==0.0.5
 lime==0.2.0.1
-visualime==0.0.5
+visualime==0.0.6
 tensorflow-cpu==2.11.0
 Pillow==9.3.0
 
