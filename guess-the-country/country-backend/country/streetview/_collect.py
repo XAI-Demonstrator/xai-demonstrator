@@ -1,14 +1,8 @@
 import base64
-import io
-import json
 import random
-import os
-
 from urllib.error import URLError
 from urllib.request import urlopen
 
-from itertools import cycle
-from PIL import Image
 from pydantic import BaseModel
 from shapely.geometry import Polygon
 from xaidemo.http_client import AioHttpClientSession
@@ -200,28 +194,40 @@ jerusalem = {
 
 country_array = [tel_aviv, jerusalem, berlin, hamburg]
 
-with open('/country/streetview/filename2class.json', 'r') as f:
-    filename2class = json.load(f)
-
-
-filenames = [f for f in filename2class] 
-random.shuffle(filenames)
-file_iter = cycle(filenames)
-
 
 @traced
 async def get_streetview(API_KEY):
-    filename = next(file_iter)
-    try: 
-        image = Image.open(f"/country/streetview/streetview_images/{filename}")
-    except:
-        raise Exception(f'FILE NOT FOUND!')
-
-    buffered = io.BytesIO()
-    image.save(buffered, format="JPEG")
-    encoded_image_string = base64.b64encode(buffered.getvalue())
-    encoded_bytes = bytes("data:image/png;base64,",
+    async with AioHttpClientSession() as session:
+        nominated_country = random.randint(0, 3)
+        poly = country_array[nominated_country]['polygon']
+        status = False
+        while status != 'OK':
+            coord = generate_random(poly)
+            lng = coord[0][0]
+            lat = coord[0][1]
+            locstring = str(lat) + "," + str(lng)
+            try:
+                async with session.get(
+                        API_URL + "?key=" + API_KEY + "&location=" + locstring + "&source=outdoor") as response:
+                    json_body = (await response.json())
+                    status = json_body['status']
+                    print(status)
+                    if status == 'REQUEST_DENIED':
+                        print("NO API-KEY is definied, please set environment variable GOOGLE_MAPS_API_TOKEN")
+                        break
+            except AioHttpClientSession.exceptions.TimeoutError:
+                print(AioHttpClientSession.exceptions.TimeoutError)
+        print("    ========== Got one! ==========")
+        url = GOOGLE_URL + API_KEY + "&location=" + locstring
+        try:
+            contents = urlopen(url).read()
+            # urlretrieve(url, outfile)
+        except URLError:
+            print(URLError)
+        status = False
+        encoded_image_string = base64.b64encode(contents)
+        encoded_bytes = bytes("data:image/png;base64,",
                               encoding="utf-8") + encoded_image_string
     return Streetview(
         image=encoded_bytes,
-        class_label=filename2class[filename])
+        class_label=country_array[nominated_country]['city'])

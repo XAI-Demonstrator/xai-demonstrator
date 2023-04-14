@@ -19,9 +19,9 @@ class Explanation(BaseModel):
 def explain(data):
     encoded_data = str(data)
     image = load_image(encoded_data)
-    pre_image = preprocess(img=image)
+    preproc_image = preprocess(img=image)
 
-    explanation = explain_cnn(pre_image, model)
+    explanation = explain_cnn(np.array(image), preproc_image, model)
     explanation_id = uuid.uuid4()
 
     encoded_image_string = convert_explanation(explanation)
@@ -45,12 +45,18 @@ def convert_explanation(explanation):
 
 
 @traced
-def explain_cnn(image, model_=model):
-    segment_mask, segment_weights = explain_classification(image=image,
+def explain_cnn(image, preproc_image, model_=model):
+    try:
+        segment_mask, segment_weights = explain_classification(image=preproc_image,
                                                            segmentation_method="felzenszwalb",
                                                            segmentation_settings={},
-                                                           predict_fn=model_.predict_,
-                                                           num_of_samples=500,
-                                                           p=0.9)
+                                                           predict_fn=model_.predict,
+                                                           num_of_samples=100,
+                                                           p=0.5)
 
-    return render_explanation(image, segment_mask, segment_weights, positive="violet", coverage=0.15, opacity=0.5)
+        return render_explanation(preproc_image, segment_mask, segment_weights, 
+                                  positive="violet", coverage=0.15, opacity=0.5)
+
+    except ZeroDivisionError:
+        return image
+

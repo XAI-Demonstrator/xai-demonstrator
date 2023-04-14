@@ -7,14 +7,14 @@
         v-bind:title="useCaseTitle"
     />
     <main>
-      <Score
+      <Score if 
           :round="this.round"
           :score_user="this.score_user"
           :score_ai="this.score_ai"
           :user_city_answer="this.user_city_answer"
           :nr_of_rounds="numOfRounds"
       />
-      <Notification
+      <Notification v-if="round<=numOfRounds"
           :prediction_city="prediction_city"
           :msg="msg"
           :label_city="label_city"
@@ -23,7 +23,7 @@
           :control="control"
           :sequence_mode="sequenceMode"
       />
-      <section class="xd-section xd-light">
+      <section class="xd-section xd-light" v-if="round<=numOfRounds">
         <img
             v-if="explanation"
             class="xd-border-secondary;"
@@ -35,7 +35,7 @@
             v-bind:src="this.streetviewImage"
         />
       </section>
-      <Selection
+      <Selection v-if="round<=numOfRounds"
           @city_selected="city_selected"
           :label_city="label_city"
           :user_city_answer="user_city_answer"
@@ -64,6 +64,16 @@
       >
         Next round
       </button>
+
+      <button
+          v-else-if="showNextButton&& this.round == numOfRounds"
+          type="button"
+          class="xd-button xd-secondary"
+          id="new"
+          v-on:click="restart()"
+      >
+       Finish Game
+      </button>
       <!-- what do you guess, AI Button - control group -->
       <button
           v-if="showAIGuessButton&&control&&round<=numOfRounds"
@@ -79,6 +89,7 @@
           class="indicator"
           v-bind:visible="waitingForExplanation"
       />
+    
     </main>
   </div>
 </template>
@@ -91,6 +102,7 @@ import {
   XAIStudioRibbon,
   GitHubRibbon,
 } from "@xai-demonstrator/xaidemo-ui";
+
 import Notification from "@/components/Notification";
 import Selection from "@/components/Selection";
 import Score from "./components/Score.vue";

@@ -1,15 +1,18 @@
 <template>
   <div class="wrapper">    
    <section  class="left xd-section xd-light">
-        <p>Round: {{round}}/{{nr_of_rounds}}</p>
+        <p v-if="round<=nr_of_rounds"> Round: {{round}}/{{nr_of_rounds}} </p>
+        <h1 v-else-if="relativeScore>=0.8"> {{String.fromCodePoint(0x1F913)}} {{score_user}} - {{score_ai}} {{String.fromCodePoint(0x1F916)}} </h1>
+        <h1 v-else-if="relativeScore>=0.4"> {{String.fromCodePoint(0x1FAE0)}} {{score_user}} - {{score_ai}} {{String.fromCodePoint(0x1F916)}} </h1>
+        <h1 v-else> Final Scores: {{String.fromCodePoint(0x1F61E)}} {{score_user}} - {{score_ai}} {{String.fromCodePoint(0x1F916)}} </h1>
    </section>   
   </div>
 </template>
-<script>
 
+<script>
 export default {
   name: "Score",
-props: {
+  props: {
       score_user: {
           type: Number,
       },
@@ -25,8 +28,13 @@ props: {
   nr_of_rounds: {
         type: Number
   }
-}
-}
+ },
+  computed: {
+    relativeScore () {
+      return this.score_user / this.nr_of_rounds
+    }
+  }
+};
 </script>
 <style scoped>
 

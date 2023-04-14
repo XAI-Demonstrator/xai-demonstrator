@@ -1,26 +1,37 @@
+import random
+from shapely.geometry import Point
+
+def generate_random(polygon):
+    points = []
+    minx, miny, maxx, maxy = polygon.bounds
+    while len(points) < 1:
+        pnt = Point(random.uniform(minx, maxx), random.uniform(miny, maxy))
+        if polygon.contains(pnt):
+            points.append(pnt)
+    return list(points[0].coords)
+
+#---------------------------------------------------------------------------
+
 import base64
 import io
 import json
 import random
-import os
+import requests as r
+import time
 
 from urllib.error import URLError
 from urllib.request import urlopen
 
-from itertools import cycle
+from hashlib import blake2b
 from PIL import Image
 from pydantic import BaseModel
 from shapely.geometry import Polygon
-from xaidemo.http_client import AioHttpClientSession
-from xaidemo.tracing import traced
-
-from .polygon import generate_random
-
 
 class Streetview(BaseModel):
     image: bytes
     class_label: str
 
+API_KEY = "AIzaSyCeEJ6A7q2xDvSUPGo6VZJuh1umbxzIXA0"
 
 GOOGLE_URL = (
     "http://maps.googleapis.com/maps/api/streetview?size=448x448&sensor=false&"
@@ -200,28 +211,40 @@ jerusalem = {
 
 country_array = [tel_aviv, jerusalem, berlin, hamburg]
 
-with open('/country/streetview/filename2class.json', 'r') as f:
-    filename2class = json.load(f)
+class_dict = {}
+num_imgs = 50
+for _ in range(num_imgs):
+    # stratified sampling to ensure balance
+    for nominated_country in range(4):
+        poly = country_array[nominated_country]['polygon']
+        
+        status = None
+        while status != 'OK':
+            coord = generate_random(poly)
+            lng = coord[0][0]
+            lat = coord[0][1]
+            locstring = str(lat) + "," + str(lng)
+            response = r.get(API_URL + "?key=" + API_KEY + "&location=" + locstring + "&source=outdoor")
+            json_body = response.json()
+            status = json_body['status']
+
+        #print("========== Got one! ==========")
+
+        url = GOOGLE_URL + API_KEY + "&location=" + locstring
+        try:
+            contents = urlopen(url).read()
+            # urlretrieve(url, outfile)
+        except URLError:
+            print(URLError)
+
+        filename = f"{blake2b(contents, digest_size=20).hexdigest()}.jpg"
+        
+        image = Image.open(io.BytesIO(contents))
+        class_label = country_array[nominated_country]['city']
+        image.save(f"streetview_images/{filename}")
+        class_dict[filename] = country_array[nominated_country]["city"]
 
 
-filenames = [f for f in filename2class] 
-random.shuffle(filenames)
-file_iter = cycle(filenames)
-
-
-@traced
-async def get_streetview(API_KEY):
-    filename = next(file_iter)
-    try: 
-        image = Image.open(f"/country/streetview/streetview_images/{filename}")
-    except:
-        raise Exception(f'FILE NOT FOUND!')
-
-    buffered = io.BytesIO()
-    image.save(buffered, format="JPEG")
-    encoded_image_string = base64.b64encode(buffered.getvalue())
-    encoded_bytes = bytes("data:image/png;base64,",
-                              encoding="utf-8") + encoded_image_string
-    return Streetview(
-        image=encoded_bytes,
-        class_label=filename2class[filename])
+with open("filename2class.json", 'w') as f:
+     json.dump(class_dict, f, indent=4)
+    
