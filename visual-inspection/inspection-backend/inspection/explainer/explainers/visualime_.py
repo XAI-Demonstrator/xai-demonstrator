@@ -1,3 +1,4 @@
+from typing import Literal
 from pydantic import BaseModel
 import numpy as np
 import tensorflow as tf
@@ -7,10 +8,9 @@ from visualime.visualize import mark_boundaries
 
 
 class ExplainerConfiguration(BaseModel):
-    top_labels: int = 5
     num_samples: int = 100
     num_features: int = 10000
-    segmentation_method: str = 'felzenszwalb'
+    segmentation_method: Literal["felzenszwalb", "slic", "quickshift", "watershed"] = 'felzenszwalb'
 
     class Config:
         extra = 'forbid'
@@ -45,7 +45,8 @@ def visualime_explanation(input_img: np.ndarray,
 
     segment_mask, segment_weights = explain_classification(image=input_img, predict_fn=model_,
                                                            segmentation_method=config.explainer.segmentation_method,
-                                                           num_of_samples=config.explainer.num_samples, )
+                                                           num_of_samples=config.explainer.num_samples,
+                                                           num_segments_to_select=config.explainer.num_features)
 
     img_pil = render_explanation(image=input_img, segment_mask=segment_mask, segment_weights=segment_weights,
                                  positive=(0, 255, 0), negative=(255, 0, 0))
