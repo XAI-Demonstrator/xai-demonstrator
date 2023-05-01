@@ -58,7 +58,7 @@ jobs:
 
       - name: Publish xaidemo-ui package
         if: ${{ github.actor != 'dependabot[bot]' }}
-        uses: JS-DevTools/npm-publish@v1
+        uses: JS-DevTools/npm-publish@v2
         with:
           token: ${{ secrets.NPM_TOKEN }}
           package: ./common/vue-components/xaidemo-ui/package.json
