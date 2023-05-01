@@ -1,4 +1,4 @@
 -r requirements-base.txt
 
 --find-links https://download.pytorch.org/whl/cu100/torch_stable.html
-torch==1.12.1
+torch==2.0.0
