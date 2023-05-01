@@ -1,5 +1,5 @@
 fastapi[all]==0.88.0
-uvicorn==0.20.0
+uvicorn==0.22.0
 visualime==0.0.4
 
 pydantic
