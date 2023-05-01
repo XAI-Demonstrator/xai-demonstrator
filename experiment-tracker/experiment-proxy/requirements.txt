@@ -2,6 +2,6 @@ fastapi==0.82.0
 pydantic==1.10.2
 python-multipart==0.0.5
 aiohttp==3.8.1
-uvicorn==0.18.3
+uvicorn==0.22.0
 
 git+https://github.com/xai-demonstrator/xai-demonstrator.git@cddb9fe42c002cf44252228781ca67b61f89181d#egg=xaidemo&subdirectory=common/backend-utils
