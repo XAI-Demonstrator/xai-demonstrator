@@ -1,4 +1,4 @@
-fastapi[all]==0.88.0
+fastapi[all]==0.95.2
 uvicorn==0.20.0
 visualime==0.0.4
 
