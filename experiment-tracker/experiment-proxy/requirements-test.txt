@@ -1,6 +1,6 @@
 pytest
 pytest-asyncio==0.19.0
-pytest-env==0.6.2
+pytest-env==0.8.2
 pytest-cov
 coveralls
 aioresponses==0.7.3
