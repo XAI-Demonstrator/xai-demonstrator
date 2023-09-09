@@ -7,13 +7,7 @@
         v-bind:title="useCaseTitle"
     />
     <main>
-      <Score
-          :round="this.round"
-          :score_user="this.score_user"
-          :score_ai="this.score_ai"
-          :user_city_answer="this.user_city_answer"
-          :nr_of_rounds="numOfRounds"
-      />
+      <Score />
       <Notification
           :prediction_city="prediction_city"
           :msg="msg"
@@ -165,10 +159,10 @@ export default {
 
   data() {
     return {
-      countrys: [
+      countries: [
         {
           country: "Israel",
-          citys: [
+          cities: [
             {
               city: "Tel Aviv",
               backend: "Tel_Aviv",
@@ -181,7 +175,7 @@ export default {
         },
         {
           country: "Germany",
-          citys: [
+          cities: [
             {
               city: "Berlin",
               backend: "Berlin",
@@ -342,12 +336,12 @@ export default {
     },
 
     label_to_label(prediction) {
-      for (let i in this.countrys) {
-        for (let x in this.countrys[i].citys)
-          if (prediction === this.countrys[i].citys[x].backend) {
+      for (let i in this.countries) {
+        for (let x in this.countries[i].citys)
+          if (prediction === this.countries[i].citys[x].backend) {
             return {
-              country: this.countrys[i].country,
-              city: this.countrys[i].citys[x].city,
+              country: this.countries[i].country,
+              city: this.countries[i].citys[x].city,
             };
           }
       }
