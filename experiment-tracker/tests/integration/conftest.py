@@ -2,7 +2,7 @@ import io
 
 import png
 import pytest
-from pydantic import BaseSettings
+from pydantic_settings import BaseSettings
 
 
 class TestSettings(BaseSettings):

@@ -10,7 +10,7 @@ from fastapi import FastAPI
 from opentelemetry.instrumentation.aiohttp_client import (
     AioHttpClientInstrumentor
 )
-from pydantic import BaseSettings
+from pydantic_settings import BaseSettings
 
 
 __all__ = ["set_up", "AioHttpClientSession"]

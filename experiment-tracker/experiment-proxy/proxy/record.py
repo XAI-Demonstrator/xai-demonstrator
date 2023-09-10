@@ -7,11 +7,11 @@ from .config import settings
 
 
 class RequestData(BaseModel):
-    raw: Optional[str]
-    content_type: Optional[str]
-    decoded: Optional[dict]
+    raw: Optional[str] = None
+    content_type: Optional[str] = None
+    decoded: Optional[dict] = None
 
-    @root_validator
+    @root_validator(skip_on_failure=True)
     def all_or_nothing(cls, values):
         entries = [values.get("raw"), values.get("content_type"), values.get("decoded")]
         is_none = [(entry is None or not entry) for entry in entries]
@@ -21,11 +21,11 @@ class RequestData(BaseModel):
 
 
 class ResponseData(BaseModel):
-    raw: Optional[str]
+    raw: Optional[str] = None
     status_code: int
-    decoded: Optional[dict]
+    decoded: Optional[dict] = None
 
-    @root_validator
+    @root_validator(skip_on_failure=True)
     def all_or_nothing(cls, values):
         entries = [values.get("raw"), values.get("decoded")]
         is_none = [(entry is None or not entry) for entry in entries]
