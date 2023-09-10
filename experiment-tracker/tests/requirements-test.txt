@@ -1,5 +1,6 @@
 pytest
 pydantic
+pydantic-settings
 pypng
 aiohttp
 pytest-asyncio
