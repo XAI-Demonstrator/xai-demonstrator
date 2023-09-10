@@ -10,7 +10,7 @@ class TrackingSettings(BaseSettings):
     collector_url: Optional[str]
     collector_timeout: int = 60
 
-    @root_validator
+    @root_validator(skip_on_failure=True)
     def experiment_requires_collector(cls, values):
         if values.get("experiment"):
             if not values.get("collector_url", False):
