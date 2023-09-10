@@ -11,7 +11,7 @@ class RequestData(BaseModel):
     content_type: Optional[str]
     decoded: Optional[dict]
 
-    @root_validator
+    @root_validator(skip_on_failure=True)
     def all_or_nothing(cls, values):
         entries = [values.get("raw"), values.get("content_type"), values.get("decoded")]
         is_none = [(entry is None or not entry) for entry in entries]
@@ -25,7 +25,7 @@ class ResponseData(BaseModel):
     status_code: int
     decoded: Optional[dict]
 
-    @root_validator
+    @root_validator(skip_on_failure=True)
     def all_or_nothing(cls, values):
         entries = [values.get("raw"), values.get("decoded")]
         is_none = [(entry is None or not entry) for entry in entries]
