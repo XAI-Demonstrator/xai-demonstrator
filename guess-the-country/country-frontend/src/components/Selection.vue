@@ -1,8 +1,7 @@
 <template>
   <div class="selection">
     <section
-        class="xd-section xd-light"
-        v-if="showSelection">
+        class="xd-section xd-light">
       <div v-for="city in cities" :key="city.city" class="element">
         <input
             type="Button"
@@ -27,7 +26,7 @@ export default {
     prediction_city: {
       type: String,
     },
-      explanation: {
+    explanation: {
       type: Object,
     },
     control: {
@@ -36,19 +35,11 @@ export default {
   },
 
   computed: {
-    showSelection () {
-      if (this.sequence_mode==='classic'||this.sequence_mode==='basic'){
-        return (!this.user_city_answer)
-      } else if (this.sequence_mode==='recommender'){
-          if (this.control){return (this.prediction_city&&!this.user_city_answer)}
-          else {return (this.prediction_city&&!this.user_city_answer&&this.explanation)}
-      } else {
-        return false
-      }
-    }
+
   },
   data() {
     return {
+      /* TODO: Load this from config */
       cities: [
         {
           city: "Tel Aviv",

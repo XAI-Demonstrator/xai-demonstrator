@@ -1,0 +1,18 @@
+{
+  "Tel_Aviv": {
+    "country": "Israel",
+    "city": "Tel Aviv"
+  },
+  "Westjerusalem": {
+    "country": "Israel",
+    "city": "Jerusalem"
+  },
+  "Berlin": {
+    "country": "Germany",
+    "city": "Berlin"
+  },
+  "Hamburg": {
+    "country": "Germany",
+    "city": "Hamburg"
+  }
+}

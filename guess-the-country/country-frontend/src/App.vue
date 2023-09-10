@@ -3,97 +3,47 @@
     <GitHubRibbon url="https://github.com/xai-demonstrator/xai-demonstrator"/>
     <XAIStudioRibbon url="https://www.xai-studio.de"/>
     <UseCaseHeader
-        v-bind:standalone="Boolean(true)"
+        v-bind:standalone="!Boolean(backendUrl)"
         v-bind:title="useCaseTitle"
     />
     <main>
-      <Score />
-      <Notification
-          :prediction_city="prediction_city"
-          :msg="msg"
-          :label_city="label_city"
-          :user_city_answer="user_city_answer"
-          :explanation="explanation"
-          :control="control"
-          :sequence_mode="sequenceMode"
+      <Score/>
+      <Notification ref="notification"
+                    :playerInControlGroup="playerInControlGroup"
+                    :sequenceMode="sequenceMode"
+                    :backendUrl="backendUrl"
       />
-      <section class="xd-section xd-light">
-        <img
-            v-if="explanation"
-            class="xd-border-secondary;"
-            v-bind:src="this.explainImage"
-        />
-        <img
-            v-if="!explanation"
-            class="xd-border-secondary;"
-            v-bind:src="this.streetviewImage"
-        />
-      </section>
-      <Selection
-          @city_selected="city_selected"
-          :label_city="label_city"
-          :user_city_answer="user_city_answer"
-          :sequence_mode="sequenceMode"
-          :prediction_city="prediction_city"
-          :explanation="explanation"
-          :control="control"
+      <StreetView ref="streetview" :backendUrl="backendUrl"/>
+      <Selection v-if="showSelection"
+                 @city_selected="judgeRound"
       />
-      <!-- what do you guess, AI Button - treatment group -->
       <button
-          v-if="showAIGuessButton&&!control&&round<=numOfRounds"
+          v-show="!showSelection"
           type="button"
           class="xd-button xd-secondary"
-          id="explain"
-          v-on:click="explain()"
+          v-on:click="buttonClick"
       >
-        What do you guess, AI?
+        {{ buttonLabel }}
       </button>
-      <!-- next button -->
-      <button
-          v-if="showNextButton&& this.round < numOfRounds"
-          type="button"
-          class="xd-button xd-secondary"
-          id="new"
-          v-on:click="restart()"
-      >
-        Next round
-      </button>
-      <!-- what do you guess, AI Button - control group -->
-      <button
-          v-if="showAIGuessButton&&control&&round<=numOfRounds"
-          type="button"
-          class="xd-button xd-secondary"
-          id="submit"
-          v-on:click="submitFile()"
-      >
-        What do you guess, AI?
-      </button>
-
-      <SpinningIndicator
-          class="indicator"
-          v-bind:visible="waitingForExplanation"
-      />
     </main>
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import {
-  UseCaseHeader,
-  SpinningIndicator,
-  XAIStudioRibbon,
-  GitHubRibbon,
-} from "@xai-demonstrator/xaidemo-ui";
+import {GitHubRibbon, UseCaseHeader, XAIStudioRibbon,} from "@xai-demonstrator/xaidemo-ui";
 import Notification from "@/components/Notification";
 import Selection from "@/components/Selection";
-import Score from "./components/Score.vue";
+import Score from "@/components/Score.vue";
+import {gameStore} from "@/stores/gameStore";
+import {roundStore, resetRoundStore} from "@/stores/roundStore";
+import StreetView from "@/components/StreetView.vue";
 
 export default {
   name: "App",
   components: {
+    StreetView,
     UseCaseHeader,
-    SpinningIndicator,
     GitHubRibbon,
     XAIStudioRibbon,
     Notification,
@@ -126,31 +76,51 @@ export default {
         return 0
       }
     },
-    control() {
+    playerInControlGroup() {
       return this.searchParams.has("control");
     },
-    backendUrl() {
+    playerId() {
       if (this.searchParams.has("player")) {
-        let player_id = this.searchParams.get("player");
-        return this.url + "/" + player_id;
+        return this.searchParams.get("player");
+      } else {
+        return ""
+      }
+    },
+    round() {
+      return gameStore.round
+    },
+    scoreAI() {
+      return gameStore.scoreAI
+    },
+    scoreHuman() {
+      return gameStore.scoreHuman
+    },
+    gameFinished() {
+      return (gameStore.round === gameStore.totalNumOfRounds)
+    },
+    backendUrl() {
+      if (this.playerId !== "") {
+        return this.url + "/" + this.playerId;
       } else {
         return this.url;
       }
     },
-    showNextButton() {
-      if (this.sequenceMode === 'classic') {
-        return this.explanation || (this.control && this.prediction_city)
-      } else if (this.sequenceMode === 'recommender' || this.sequenceMode === 'basic') {
-        return this.user_city_answer
+    buttonLabel() {
+      if (this.gameFinished) {
+        return "Start again!"
       } else {
-        return false
+        return "Button!"
       }
     },
-    showAIGuessButton() {
-      if (this.sequenceMode === 'classic') {
-        return !this.prediction_city && this.user_city_answer
+    showSelection() {
+      if (this.sequenceMode === 'classic' || this.sequenceMode === 'basic') {
+        return (roundStore.humanCity === "")
       } else if (this.sequenceMode === 'recommender') {
-        return !this.prediction_city
+        if (this.playerInControlGroup) {
+          return (roundStore.aiCity !== "" && roundStore.humanCity !== "")
+        } else {
+          return (roundStore.aiCity !== "" && roundStore.humanCity !== "")
+        }
       } else {
         return false
       }
@@ -159,192 +129,74 @@ export default {
 
   data() {
     return {
-      countries: [
-        {
-          country: "Israel",
-          cities: [
-            {
-              city: "Tel Aviv",
-              backend: "Tel_Aviv",
-            },
-            {
-              city: "Jerusalem",
-              backend: "Westjerusalem",
-            },
-          ],
-        },
-        {
-          country: "Germany",
-          cities: [
-            {
-              city: "Berlin",
-              backend: "Berlin",
-            },
-            {
-              city: "Hamburg",
-              backend: "Hamburg",
-            },
-          ],
-        },
-      ],
       url: process.env.VUE_APP_BACKEND_URL,
-      round: 1,
       useCaseTitle: "Guess the City",
-      explanation: null,
-      prediction_city: null,
-      label_city: null,
-      user_city_answer: null,
-      score_ai: 0,
-      score_user: 0,
-      msg: "",
-      streetviewImage: null,
-      explainImage: null,
-      waitingForExplanation: false,
     };
   },
-  async created() {
-    this.getMessage();
-    this.getStreetview();
+  async mounted() {
+    await this.$refs.notification.getMessage();
+    await this.startGame()
   },
   methods: {
-    postValues() {
-      axios
+    buttonClick() {
+      if (this.gameFinished) {
+        this.startGame()
+      } else {
+        this.$refs.streetview.explain()
+      }
+    },
+    startGame() {
+      gameStore.round = 0
+      gameStore.roundOffset = this.roundOffset
+      gameStore.totalNumOfRounds = this.numOfRounds
+      gameStore.scoreAI = 0
+      gameStore.scoreHuman = 0
+      this.startRound()
+    },
+    async startRound() {
+      resetRoundStore()
+      gameStore.round = 1 + gameStore.round
+      roundStore.currentRound = gameStore.round + gameStore.roundOffset
+      await this.$refs.streetview.getStreetview();
+    },
+    judgeRound(humanResponse) {
+      roundStore.humanCity = humanResponse;
+      if (roundStore.humanCity === roundStore.trueCity) {
+        gameStore.scoreHuman = 1 + gameStore.scoreHuman;
+      }
+      this.recordRound()
+      if (gameStore.round < gameStore.totalNumOfRounds) {
+        this.startRound()
+      } else {
+        this.finishGame()
+      }
+    },
+    async recordRound() {
+      /* TODO: Only do this if running an experiment */
+      await axios
           .post(this.backendUrl + "/score", {
-            ai_score: this.score_ai,
-            player_score: this.score_user,
-            rounds: this.round + this.roundOffset,
-            prediction_city: String(this.prediction_city),
-            label_city: String(this.label_city),
-            user_city_answer: String(this.user_city_answer)
-          })
-          .then((res) => {
-            console.log(res);
-
+            ...gameStore,
+            ...roundStore
           })
           .catch((error) => {
             console.error(error);
           });
     },
-    async getValues() {
+    finishGame() {
+      console.log("Done")
+    },
+    async finalScore() {
+      /* TODO: Only do this if running an experiment */
       await axios
           .get(this.backendUrl + "/final_score")
           .then((res) => {
-            this.round = res.data.rounds;
-            this.score_ai = res.data.ai_score;
-            this.score_user = res.data.player_score;
-
+            gameStore.round = res.data.rounds;
+            gameStore.scoreAI = res.data.ai_score;
+            gameStore.scoreHuman = res.data.player_score;
           })
           .catch((error) => {
             console.error(error);
           });
-    },
-    city_selected(value) {
-      this.user_city_answer = value;
-      if (this.user_city_answer === this.label_city) {
-        this.score_user = 1 + this.score_user;
-      }
-      this.postValues()
-    },
-    getMessage() {
-      axios
-          .get(this.backendUrl + "/msg")
-          .then((res) => {
-            this.msg = res.data.data;
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-    },
-    getStreetview() {
-      axios
-          .post(this.backendUrl + "/streetview", {
-            ai_score: this.score_ai,
-            player_score: this.score_user,
-            rounds: this.round + this.roundOffset,
-            prediction_city: String(this.prediction_city),
-            label_city: String(this.label_city),
-            user_city_answer: String(this.user_city_answer)
-          })
-          .then((res) => {
-            this.streetviewImage = res.data.image;
-            let label = this.label_to_label(res.data.class_label);
-            this.label_city = label.city;
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-    },
-    submitFile() {
-      this.waitingForExplanation = true;
-      const blob = new Blob([this.streetviewImage]);
-
-      let form = new FormData();
-      form.append("file", blob);
-
-      axios
-          .post(this.backendUrl + "/predict", form, {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "multipart/form-data",
-            },
-          })
-          .then((res) => {
-            let label = this.label_to_label(res.data.class_label);
-            this.prediction_city = label.city;
-            this.waitingForExplanation = false;
-            if (this.prediction_city === this.label_city) {
-              this.score_ai = this.score_ai + 1;
-            }
-            this.postValues();
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-    },
-    explain() {
-      this.submitFile();
-      this.waitingForExplanation = true;
-
-      const blob = new Blob([this.streetviewImage]);
-
-      let form = new FormData();
-      form.append("file", blob);
-
-      axios
-          .post(this.backendUrl + "/explain", form, {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "multipart/form-data",
-            },
-          })
-          .then((res) => {
-            this.explainImage = res.data.image;
-            this.waitingForExplanation = false;
-            this.explanation = res.data.explanation_id;
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-    },
-
-    restart() {
-      this.explanation = null;
-      this.prediction_city = null;
-      this.user_city_answer = null;
-      this.round = this.round + 1;
-      this.getStreetview();
-    },
-
-    label_to_label(prediction) {
-      for (let i in this.countries) {
-        for (let x in this.countries[i].citys)
-          if (prediction === this.countries[i].citys[x].backend) {
-            return {
-              country: this.countries[i].country,
-              city: this.countries[i].citys[x].city,
-            };
-          }
-      }
     },
   },
 };
