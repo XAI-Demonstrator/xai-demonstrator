@@ -87,6 +87,7 @@ export default {
             if (roundStore.trueCity === roundStore.aiCity) {
               gameStore.scoreAI = gameStore.scoreAI + 1;
             }
+            roundStore.predictionId = res.data.prediction_id
             this.waitingForBackend = false
             this.$emit("prediction-received", true)
           })
@@ -115,6 +116,7 @@ export default {
           .then((res) => {
             this.explainImage = res.data.image;
             this.explanation = res.data.explanation_id;
+            roundStore.explanationId = this.explanation
             this.waitingForBackend = false
             this.$emit("explanation-received", true)
           })

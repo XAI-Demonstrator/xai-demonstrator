@@ -9,6 +9,8 @@ export const roundStore = reactive({
     humanCity: "",
     humanCountry: "",
     currentRound: 0,
+    predictionId: "",
+    explanationId: ""
 })
 
 export function resetRoundStore() {
@@ -18,6 +20,7 @@ export function resetRoundStore() {
     roundStore.aiCountry = ""
     roundStore.humanCity = ""
     roundStore.humanCountry = ""
+    roundStore.explanationId = ""
     roundStore.currentRound = 0
 }
 

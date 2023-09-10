@@ -16,8 +16,8 @@
       </section>
       <!-- treatment group (with explanation), AI guess -->
       <section v-show="showAIGuess&&!playerInControlGroup">
-        <p>My guess is: {{ roundStore.aiCity }}
-          <br>In particular, the colored areas below have helped me form my guess. </p>
+        <p>My guess is: {{ roundStore.aiCity }}</p>
+        <p v-if="roundStore.explanationId">In particular, the colored areas below have helped me form my guess.</p>
         <p v-if="sequenceMode==='recommender'">What is your guess?</p>
       </section>
     </section>
