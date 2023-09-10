@@ -7,7 +7,7 @@ from pydantic_settings import BaseSettings
 class TrackingSettings(BaseSettings):
     experiment: bool = False
     service_name: str
-    collector_url: Optional[str]
+    collector_url: Optional[str] = None
     collector_timeout: int = 60
 
     @root_validator(skip_on_failure=True)
