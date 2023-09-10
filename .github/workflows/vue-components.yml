@@ -63,7 +63,7 @@ jobs:
           token: ${{ secrets.NPM_TOKEN }}
           package: ./common/vue-components/xaidemo-ui/package.json
           access: public
-          check-version: true
+          strategy: upgrade
           dry-run: ${{ github.ref != 'refs/heads/master' }}
 
       - name: Slack Notification
