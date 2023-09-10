@@ -1,6 +1,7 @@
 from typing import Optional
 
-from pydantic import BaseSettings, root_validator
+from pydantic import root_validator
+from pydantic_settings import BaseSettings
 
 
 class TrackingSettings(BaseSettings):
