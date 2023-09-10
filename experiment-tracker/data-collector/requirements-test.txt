@@ -2,3 +2,4 @@ pytest
 pytest-env
 pytest-cov
 coveralls
+httpx
