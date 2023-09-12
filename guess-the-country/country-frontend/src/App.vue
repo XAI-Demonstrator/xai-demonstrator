@@ -30,7 +30,7 @@
 
 <script>
 import axios from "axios";
-import {v4 as uuidv4} from "uuidv4";
+import {v4 as uuidv4} from "uuid";
 import {GitHubRibbon, UseCaseHeader, XAIStudioRibbon,} from "@xai-demonstrator/xaidemo-ui";
 import Notification from "@/components/Notification";
 import Selection from "@/components/Selection";
