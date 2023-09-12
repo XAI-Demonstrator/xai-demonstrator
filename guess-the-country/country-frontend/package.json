@@ -13,8 +13,8 @@
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore --fix src"
   },
   "dependencies": {
-    "@xai-demonstrator/xaidemo-ui": "^0.4.7",
-    "axios": "^0.27.2",
+    "@xai-demonstrator/xaidemo-ui": "^0.4.8",
+    "axios": "^1.5.0",
     "uuid": "^9.0.1",
     "vue": "^3.3.4"
   },
