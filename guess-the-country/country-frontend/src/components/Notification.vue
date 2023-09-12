@@ -13,7 +13,6 @@
   </div>
 </template>
 <script>
-import axios from "axios";
 import {roundStore} from "@/stores/roundStore";
 
 export default {
@@ -43,25 +42,6 @@ export default {
     showFinal() {
       return this.gameState === "finished"
     }
-  },
-
-  data() {
-    return {
-      msg: "Hello",
-      backendUrl: ""
-    }
-  },
-  methods: {
-    async getMessage() {
-      await axios
-          .get(this.backendUrl + "/msg")
-          .then((res) => {
-            this.msg = res.data.data;
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-    },
   }
 }
 

@@ -11,7 +11,6 @@
       <Score/>
       <Notification ref="notification"
                     :gameState="gameState"
-                    :backendUrl="backendUrl"
       />
       <StreetView ref="streetview" :backendUrl="backendUrl"/>
       <Selection v-if="showSelection"
@@ -125,7 +124,6 @@ export default {
     };
   },
   async mounted() {
-    await this.$refs.notification.getMessage();
     this.localPlayerId = uuidv4();
     await this.startGame()
   },
