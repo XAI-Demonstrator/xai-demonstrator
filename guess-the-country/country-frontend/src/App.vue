@@ -114,7 +114,6 @@ export default {
       }
     }
   },
-
   data() {
     return {
       url: process.env.VUE_APP_BACKEND_URL,
