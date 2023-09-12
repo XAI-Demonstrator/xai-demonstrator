@@ -1,13 +1,12 @@
 <template>
   <div class="selection">
-    <section
-        class="xd-section xd-light">
+    <section class="xd-section xd-light">
       <div v-for="city in cities" :key="city.city" class="element">
         <input
-            type="Button"
-            class="xd-button xd-secondary"
-            v-bind:value="city.city"
-            v-on:click="answer_city(city.city)"
+          type="Button"
+          class="xd-button xd-secondary"
+          :value="city.city"
+          @click="selectCity(city.city)"
         />
       </div>
     </section>
@@ -15,28 +14,8 @@
 </template>
 <script>
 export default {
-  name: "Selection",
-  props: {
-    user_city_answer: {
-      type: String,
-    },
-    sequence_mode: {
-      type: String,
-    },
-    prediction_city: {
-      type: String,
-    },
-    explanation: {
-      type: Object,
-    },
-    control: {
-      type: Boolean,
-    }
-  },
-
-  computed: {
-
-  },
+  name: "CitySelector",
+  emits: ["citySelected"],
   data() {
     return {
       /* TODO: Load this from config */
@@ -56,13 +35,15 @@ export default {
         {
           city: "Hamburg",
           backend: "Hamburg",
-        }
+        },
       ],
     };
   },
+
+  computed: {},
   methods: {
-    answer_city(city) {
-      this.$emit("city_selected", city);
+    selectCity(city) {
+      this.$emit("citySelected", city);
     },
   },
 };

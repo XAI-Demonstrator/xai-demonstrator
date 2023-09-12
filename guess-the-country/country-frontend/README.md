@@ -1,9 +1,10 @@
 # country-frontend
 
 > A Vue.js project
+
 ## Build Setup
 
-``` bash
+```bash
 # install dependencies
 npm install
 
@@ -28,6 +29,6 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 ## Environment Variables
 
 | Variable              | Description | Default Value |
-|-----------------------|-------------|---------------|
+| --------------------- | ----------- | ------------- |
 | `VUE_APP_BACKEND_URL` | Backend url | `""`          |
 | `VUE_APP_PUBLIC_PATH` | Public path | `"/"`         |

@@ -1,26 +1,22 @@
 <template>
   <div id="app" class="xd-app">
-    <GitHubRibbon url="https://github.com/xai-demonstrator/xai-demonstrator"/>
-    <XAIStudioRibbon url="https://www.xai-studio.de"/>
+    <GitHubRibbon url="https://github.com/xai-demonstrator/xai-demonstrator" />
+    <XAIStudioRibbon url="https://www.xai-studio.de" />
     <UseCaseHeader
-        :standalone="!Boolean(backendUrl)"
-        :title="useCaseTitle"
-        :reload="!experiment"
+      :standalone="!Boolean(backendUrl)"
+      :title="useCaseTitle"
+      :reload="!experiment"
     />
     <main>
-      <Score :showScore="!experiment" />
-      <Notification ref="notification"
-                    :gameState="gameState"
-      />
-      <StreetView ref="streetview" :backendUrl="backendUrl"/>
-      <Selection v-if="showSelection"
-                 @city_selected="judgeRound"
-      />
+      <ScoreBox :show-score="!experiment" />
+      <MessageBox :game-state="gameState" />
+      <StreetView ref="streetview" :backend-url="backendUrl" />
+      <CitySelector v-if="showSelection" @city-selected="judgeRound" />
       <button
-          v-show="showButton"
-          type="button"
-          class="xd-button xd-secondary"
-          v-on:click="buttonClick"
+        v-show="showButton"
+        type="button"
+        class="xd-button xd-secondary"
+        @click="buttonClick"
       >
         {{ buttonLabel }}
       </button>
@@ -30,13 +26,17 @@
 
 <script>
 import axios from "axios";
-import {v4 as uuidv4} from "uuid";
-import {GitHubRibbon, UseCaseHeader, XAIStudioRibbon,} from "@xai-demonstrator/xaidemo-ui";
-import Notification from "@/components/Notification.vue";
-import Selection from "@/components/Selection.vue";
-import Score from "@/components/Score.vue";
-import {gameStore} from "@/stores/gameStore.js";
-import {roundStore, resetRoundStore} from "@/stores/roundStore.js";
+import { v4 as uuidv4 } from "uuid";
+import {
+  GitHubRibbon,
+  UseCaseHeader,
+  XAIStudioRibbon,
+} from "@xai-demonstrator/xaidemo-ui";
+import MessageBox from "@/components/MessageBox.vue";
+import CitySelector from "@/components/CitySelector.vue";
+import ScoreBox from "@/components/ScoreBox.vue";
+import { gameStore } from "@/stores/gameStore.js";
+import { roundStore, resetRoundStore } from "@/stores/roundStore.js";
 import StreetView from "@/components/StreetView.vue";
 
 export default {
@@ -46,9 +46,17 @@ export default {
     UseCaseHeader,
     GitHubRibbon,
     XAIStudioRibbon,
-    Notification,
-    Selection,
-    Score,
+    MessageBox,
+    CitySelector,
+    ScoreBox,
+  },
+  data() {
+    return {
+      url: import.meta.env.VITE_BACKEND_URL,
+      useCaseTitle: "Guess the City",
+      gameState: "start",
+      localPlayerId: "",
+    };
   },
   computed: {
     searchParams() {
@@ -57,27 +65,27 @@ export default {
     },
     numOfRounds() {
       if (this.searchParams.has("num_of_rounds")) {
-        return this.searchParams.get("num_of_rounds")
+        return this.searchParams.get("num_of_rounds");
       } else {
-        return JSON.parse(import.meta.env.VITE_NR_OF_ROUNDS)
+        return JSON.parse(import.meta.env.VITE_NR_OF_ROUNDS);
       }
     },
     roundOffset() {
       if (this.searchParams.has("round_offset")) {
-        return JSON.parse(this.searchParams.get("round_offset"))
+        return JSON.parse(this.searchParams.get("round_offset"));
       } else {
-        return 0
+        return 0;
       }
     },
     externalPlayerId() {
       if (this.searchParams.has("player")) {
         return this.searchParams.get("player");
       } else {
-        return ""
+        return "";
       }
     },
     experiment() {
-      return this.externalPlayerId !== ""
+      return this.externalPlayerId !== "";
     },
     backendUrl() {
       if (this.externalPlayerId !== "") {
@@ -87,128 +95,120 @@ export default {
       }
     },
     showSelection() {
-      return this.gameState === "guess"
+      return this.gameState === "guess";
     },
     showButton() {
       switch (this.gameState) {
         case "guess":
-          return false
+          return false;
         case "explain":
-          return roundStore.explanationId !== ""
+          return roundStore.explanationId !== "";
         case "finished":
-          return !this.experiment
+          return !this.experiment;
         default:
-          return true
+          return true;
       }
     },
     buttonLabel() {
       switch (this.gameState) {
         case "ask":
-          return "What do you think?"
+          return "What do you think?";
         case "explain":
-          return "Next round!"
+          return "Next round!";
         case "finished":
-          return "Start again!"
+          return "Start again!";
         default:
-          return "Button"
+          return "Button";
       }
-    }
-  },
-  data() {
-    return {
-      url: import.meta.env.VITE_BACKEND_URL,
-      useCaseTitle: "Guess the City",
-      gameState: "start",
-      localPlayerId: ""
-    };
+    },
   },
   async mounted() {
     this.localPlayerId = uuidv4();
-    await this.startGame()
+    await this.startGame();
   },
   methods: {
     buttonClick() {
       switch (this.gameState) {
         case "ask":
-          this.explain()
-          break
+          this.explain();
+          break;
         case "explain":
-          this.startRound()
-          break
+          this.startRound();
+          break;
         case "finished":
-          this.startGame()
+          this.startGame();
       }
     },
     startGame() {
-      gameStore.round = 0
-      gameStore.roundOffset = this.roundOffset
-      gameStore.totalNumOfRounds = this.numOfRounds
-      gameStore.scoreAI = 0
-      gameStore.scoreHuman = 0
-      gameStore.gameId = uuidv4()
+      gameStore.round = 0;
+      gameStore.roundOffset = this.roundOffset;
+      gameStore.totalNumOfRounds = this.numOfRounds;
+      gameStore.scoreAI = 0;
+      gameStore.scoreHuman = 0;
+      gameStore.gameId = uuidv4();
       if (this.externalPlayerId !== "") {
-        gameStore.playerId = this.externalPlayerId
+        gameStore.playerId = this.externalPlayerId;
       } else {
-        gameStore.playerId = this.localPlayerId
+        gameStore.playerId = this.localPlayerId;
       }
-      this.startRound()
+      this.startRound();
     },
     async startRound() {
-      this.gameState = "start"
-      resetRoundStore()
-      gameStore.round = 1 + gameStore.round
-      roundStore.currentRound = gameStore.round + gameStore.roundOffset
-      await this.guess()
+      this.gameState = "start";
+      resetRoundStore();
+      gameStore.round = 1 + gameStore.round;
+      roundStore.currentRound = gameStore.round + gameStore.roundOffset;
+      await this.guess();
     },
     async guess() {
-      this.gameState = "guess"
+      this.gameState = "guess";
       await this.$refs.streetview.getStreetview();
     },
     async explain() {
-      this.gameState = "explain"
-      await this.$refs.streetview.predict()
-      await this.$refs.streetview.explain()
+      this.gameState = "explain";
+      await this.$refs.streetview.predict();
+      await this.$refs.streetview.explain();
     },
     judgeRound(humanResponse) {
       roundStore.humanCity = humanResponse;
       if (roundStore.humanCity === roundStore.trueCity) {
         gameStore.scoreHuman = 1 + gameStore.scoreHuman;
       }
-      this.recordRound()
+      this.recordRound();
       if (gameStore.round >= gameStore.totalNumOfRounds) {
-        this.finishGame()
+        this.finishGame();
       } else {
-        this.gameState = "ask"
+        this.gameState = "ask";
       }
     },
     async recordRound() {
       if (this.experiment) {
         await axios
-            .post(this.backendUrl + "/score", {
-              ...gameStore,
-              ...roundStore
-            })
-            .catch((error) => {
-              console.error(error);
-            });
+          .post(this.backendUrl + "/score", {
+            ...gameStore,
+            ...roundStore,
+          })
+          .catch((error) => {
+            console.error(error);
+          });
       }
     },
     async finishGame() {
-      this.gameState = "finished"
-      await this.finalScore()
+      this.gameState = "finished";
+      await this.finalScore();
     },
     async finalScore() {
       if (this.experiment) {
         await axios
-            .get(this.backendUrl + "/final_score")
-            .then((res) => {
-              gameStore.round = res.data.rounds;
-              gameStore.scoreAI = res.data.ai_score;
-              gameStore.scoreHuman = res.data.player_score;
-            })
-            .catch((error) => {
-              console.error(error);
-            });
+          .get(this.backendUrl + "/final_score")
+          .then((res) => {
+            gameStore.round = res.data.rounds;
+            gameStore.scoreAI = res.data.ai_score;
+            gameStore.scoreHuman = res.data.player_score;
+          })
+          .catch((error) => {
+            console.error(error);
+          });
       }
     },
   },

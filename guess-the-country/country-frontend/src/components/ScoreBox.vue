@@ -1,28 +1,34 @@
 <template>
   <div class="wrapper">
     <section class="left xd-section xd-light">
-      <p>Round:  {{ gameStore.round + gameStore.roundOffset }}/{{ gameStore.totalNumOfRounds }}</p>
-      <p v-if="showScore">Score: {{gameStore.scoreHuman}} : {{gameStore.scoreAI}}</p>
+      <p>
+        Round: {{ gameStore.round + gameStore.roundOffset }}/{{
+          gameStore.totalNumOfRounds
+        }}
+      </p>
+      <p v-if="showScore">
+        Score: {{ gameStore.scoreHuman }} : {{ gameStore.scoreAI }}
+      </p>
     </section>
   </div>
 </template>
 <script>
-import {gameStore} from "@/stores/gameStore.js";
+import { gameStore } from "@/stores/gameStore.js";
 
 export default {
-  name: "Score",
+  name: "ScoreBox",
   props: {
     showScore: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
   computed: {
     gameStore() {
-      return gameStore
+      return gameStore;
     },
-  }
-}
+  },
+};
 </script>
 <style scoped>
 .wrapper {
