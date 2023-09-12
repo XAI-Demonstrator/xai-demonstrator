@@ -13,7 +13,7 @@
   </div>
 </template>
 <script>
-import {roundStore} from "@/stores/roundStore";
+import {roundStore} from "@/stores/roundStore.js";
 
 export default {
   name: "Notification",

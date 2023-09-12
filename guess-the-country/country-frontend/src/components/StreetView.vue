@@ -20,8 +20,8 @@
 <script>
 import {SpinningIndicator} from "@xai-demonstrator/xaidemo-ui";
 import axios from "axios";
-import {gameStore} from "@/stores/gameStore";
-import {roundStore, setGroundTruth, setAiResponse} from "@/stores/roundStore";
+import {gameStore} from "@/stores/gameStore.js";
+import {roundStore, setGroundTruth, setAiResponse} from "@/stores/roundStore.js";
 
 export default {
   name: 'StreetView',

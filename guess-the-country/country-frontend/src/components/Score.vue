@@ -7,7 +7,7 @@
   </div>
 </template>
 <script>
-import {gameStore} from "@/stores/gameStore";
+import {gameStore} from "@/stores/gameStore.js";
 
 export default {
   name: "Score",

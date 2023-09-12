@@ -32,11 +32,11 @@
 import axios from "axios";
 import {v4 as uuidv4} from "uuid";
 import {GitHubRibbon, UseCaseHeader, XAIStudioRibbon,} from "@xai-demonstrator/xaidemo-ui";
-import Notification from "@/components/Notification";
-import Selection from "@/components/Selection";
+import Notification from "@/components/Notification.vue";
+import Selection from "@/components/Selection.vue";
 import Score from "@/components/Score.vue";
-import {gameStore} from "@/stores/gameStore";
-import {roundStore, resetRoundStore} from "@/stores/roundStore";
+import {gameStore} from "@/stores/gameStore.js";
+import {roundStore, resetRoundStore} from "@/stores/roundStore.js";
 import StreetView from "@/components/StreetView.vue";
 
 export default {
@@ -59,7 +59,7 @@ export default {
       if (this.searchParams.has("num_of_rounds")) {
         return this.searchParams.get("num_of_rounds")
       } else {
-        return JSON.parse(process.env.VUE_APP_NR_OF_ROUNDS)
+        return JSON.parse(import.meta.env.VITE_NR_OF_ROUNDS)
       }
     },
     roundOffset() {
@@ -116,7 +116,7 @@ export default {
   },
   data() {
     return {
-      url: process.env.VUE_APP_BACKEND_URL,
+      url: import.meta.env.VITE_BACKEND_URL,
       useCaseTitle: "Guess the City",
       gameState: "start",
       localPlayerId: ""
