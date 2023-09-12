@@ -56,13 +56,6 @@ export default {
       const uri = window.location.search.substring(1);
       return new URLSearchParams(uri);
     },
-    sequenceMode() {
-      if (this.searchParams.has("modus")) {
-        return this.searchParams.get("modus")
-      } else {
-        return process.env.VUE_APP_IMAGE_SEQUENCE_MODE
-      }
-    },
     numOfRounds() {
       if (this.searchParams.has("num_of_rounds")) {
         return this.searchParams.get("num_of_rounds")
@@ -77,10 +70,7 @@ export default {
         return 0
       }
     },
-    playerInControlGroup() {
-      return this.searchParams.has("control");
-    },
-    playerId() {
+    externalPlayerId() {
       if (this.searchParams.has("player")) {
         return this.searchParams.get("player");
       } else {
@@ -88,25 +78,13 @@ export default {
       }
     },
     experiment() {
-      return this.playerId !== ""
+      return this.externalPlayerId !== ""
     },
     backendUrl() {
-      if (this.playerId !== "") {
-        return this.url + "/" + this.playerId;
+      if (this.externalPlayerId !== "") {
+        return this.url + "/" + this.externalPlayerId;
       } else {
         return this.url;
-      }
-    },
-    buttonLabel() {
-      switch (this.gameState) {
-        case "ask":
-          return "What do you think?"
-        case "explain":
-          return "Next round!"
-        case "finished":
-          return "Start again!"
-        default:
-          return "Button"
       }
     },
     showSelection() {
@@ -122,6 +100,18 @@ export default {
           return !this.experiment
         default:
           return true
+      }
+    },
+    buttonLabel() {
+      switch (this.gameState) {
+        case "ask":
+          return "What do you think?"
+        case "explain":
+          return "Next round!"
+        case "finished":
+          return "Start again!"
+        default:
+          return "Button"
       }
     }
   },
@@ -159,8 +149,8 @@ export default {
       gameStore.scoreAI = 0
       gameStore.scoreHuman = 0
       gameStore.gameId = uuidv4()
-      if (this.playerId !== "") {
-        gameStore.playerId = this.playerId
+      if (this.externalPlayerId !== "") {
+        gameStore.playerId = this.externalPlayerId
       } else {
         gameStore.playerId = this.localPlayerId
       }
