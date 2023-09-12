@@ -1,24 +1,13 @@
 <template>
   <div class="notification">
     <section class="xd-section xd-light">
-      <!-- Question -->
-      <section v-show="showQuestion">
-        <p v-if="sequenceMode==='classic'">Your guess: Where has this Google Streetview picture been taken?</p>
-        <p v-else>Where has this Google Streetview picture been taken?</p>
-      </section>
-      <!-- User guess -->
-      <section v-show="showUserGuess">
-        <p class="short-text">Your guess is: {{ roundStore.humanCity }}</p>
-      </section>
-      <!-- control group (without explanation), AI guess -->
-      <section v-show="showAIGuess&&playerInControlGroup">
-        <p class="short-text">My guess is: {{ roundStore.aiCity }}</p>
-      </section>
-      <!-- treatment group (with explanation), AI guess -->
-      <section v-show="showAIGuess&&!playerInControlGroup">
-        <p>My guess is: {{ roundStore.aiCity }}</p>
-        <p v-if="roundStore.explanationId">In particular, the colored areas below have helped me form my guess.</p>
-        <p v-if="sequenceMode==='recommender'">What is your guess?</p>
+      <section>
+        <p v-show="showQuestion">Where has this Google Streetview picture been taken?</p>
+        <p v-show="showHumanAnswer">Your guess is: {{ roundStore.humanCity }}.</p>
+        <p v-show="showThinking">Let me think for a second...</p>
+        <p v-show="showAiAnswer">I think this picture was taken in {{ roundStore.aiCity }}.</p>
+        <p v-show="roundStore.explanationId">In particular, the colored areas below have helped me form my guess:</p>
+        <p v-show="showFinal">That was fun!</p>
       </section>
     </section>
   </div>
@@ -30,43 +19,30 @@ import {roundStore} from "@/stores/roundStore";
 export default {
   name: "Notification",
   props: {
-    playerInControlGroup: {
-      type: Boolean
-    },
-    sequenceMode: {
-      type: String
-    },
+    gameState: {
+      type: String,
+      default: "start"
+    }
   },
   computed: {
     roundStore() {
       return roundStore
     },
+    showHumanAnswer() {
+      return this.gameState === "ask"
+    },
+    showThinking() {
+      return this.gameState === "explain" && !roundStore.aiCity
+    },
+    showAiAnswer() {
+      return this.gameState === "explain" && roundStore.aiCity
+    },
     showQuestion() {
-      if (this.sequenceMode === 'classic' || this.sequenceMode === 'basic') {
-        return !roundStore.humanCity
-      } else if (this.sequenceMode === 'recommender') {
-        return !roundStore.aiCity
-      } else {
-        return false
-      }
+      return this.gameState === "guess"
     },
-    showUserGuess() {
-      if (this.sequenceMode === 'classic') {
-        return roundStore.humanCity && !roundStore.aiCity
-      } else if (this.sequenceMode === 'recommender' || this.sequenceMode === 'basic') {
-        return roundStore.humanCity
-      } else {
-        return false
-      }
-    },
-    showAIGuess() {
-      if (this.sequenceMode === 'classic') {
-        return roundStore.aiCity
-      } else if (this.sequenceMode === 'recommender') {
-        return roundStore.aiCity && !roundStore.humanCity
-      } else
-        return false
-    },
+    showFinal() {
+      return this.gameState === "finished"
+    }
   },
 
   data() {

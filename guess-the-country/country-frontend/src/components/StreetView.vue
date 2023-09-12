@@ -1,18 +1,18 @@
 <template>
   <section class="xd-section xd-light">
     <img
-        v-if="explanation"
+        v-if="roundStore.explanationId"
         class="xd-border-secondary"
-        v-bind:src="this.explainImage"
+        :src="this.explainImage"
     />
     <img
         v-else
         class="xd-border-secondary"
-        v-bind:src="this.streetviewImage"
+        :src="this.streetviewImage"
     />
     <SpinningIndicator
         class="indicator"
-        v-bind:visible="waitingForBackend"
+        :visible="waitingForBackend"
     />
   </section>
 </template>
@@ -42,10 +42,14 @@ export default {
       waitingForBackend: false
     }
   },
+  computed: {
+      roundStore() {
+        return roundStore
+      }
+  },
   methods: {
     async getStreetview() {
       this.waitingForBackend = true
-      this.$emit("streetview-requested")
 
       await axios
           .post(this.backendUrl + "/streetview", {
@@ -56,19 +60,14 @@ export default {
             this.streetviewImage = res.data.image;
             setGroundTruth(res.data.class_label);
             this.waitingForBackend = false
-            this.$emit("streetview-received", true)
           })
           .catch((error) => {
             console.log(error);
             this.waitingForBackend = false
-            this.$emit("streetview-received", false)
           });
-
-      await this.predict()
     },
     async predict() {
       this.waitingForBackend = true
-      this.$emit("prediction-requested")
 
       const blob = new Blob([this.streetviewImage]);
 
@@ -89,17 +88,14 @@ export default {
             }
             roundStore.predictionId = res.data.prediction_id
             this.waitingForBackend = false
-            this.$emit("prediction-received", true)
           })
           .catch((error) => {
             console.error(error);
             this.waitingForBackend = false
-            this.$emit("prediction-received", false)
           });
     },
     async explain() {
       this.waitingForBackend = true
-      this.$emit("explanation-requested")
 
       const blob = new Blob([this.streetviewImage]);
 
@@ -115,15 +111,12 @@ export default {
           })
           .then((res) => {
             this.explainImage = res.data.image;
-            this.explanation = res.data.explanation_id;
-            roundStore.explanationId = this.explanation
+            roundStore.explanationId = res.data.explanation_id;
             this.waitingForBackend = false
-            this.$emit("explanation-received", true)
           })
           .catch((error) => {
             console.error(error);
             this.waitingForBackend = false
-            this.$emit("explanation-received", false)
           });
     },
   }

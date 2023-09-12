@@ -9,8 +9,7 @@
     <main>
       <Score/>
       <Notification ref="notification"
-                    :playerInControlGroup="playerInControlGroup"
-                    :sequenceMode="sequenceMode"
+                    :gameState="gameState"
                     :backendUrl="backendUrl"
       />
       <StreetView ref="streetview" :backendUrl="backendUrl"/>
@@ -18,7 +17,7 @@
                  @city_selected="judgeRound"
       />
       <button
-          v-show="!showSelection"
+          v-show="showButton"
           type="button"
           class="xd-button xd-secondary"
           v-on:click="buttonClick"
@@ -86,18 +85,6 @@ export default {
         return ""
       }
     },
-    round() {
-      return gameStore.round
-    },
-    scoreAI() {
-      return gameStore.scoreAI
-    },
-    scoreHuman() {
-      return gameStore.scoreHuman
-    },
-    gameFinished() {
-      return (gameStore.round === gameStore.totalNumOfRounds)
-    },
     backendUrl() {
       if (this.playerId !== "") {
         return this.url + "/" + this.playerId;
@@ -106,31 +93,37 @@ export default {
       }
     },
     buttonLabel() {
-      if (this.gameFinished) {
-        return "Start again!"
-      } else {
-        return "Button!"
+      switch (this.gameState) {
+        case "ask":
+          return "What do you think?"
+        case "explain":
+          return "Next round!"
+        case "finished":
+          return "Start again!"
+        default:
+          return "Button"
       }
     },
     showSelection() {
-      if (this.sequenceMode === 'classic' || this.sequenceMode === 'basic') {
-        return (roundStore.humanCity === "")
-      } else if (this.sequenceMode === 'recommender') {
-        if (this.playerInControlGroup) {
-          return (roundStore.aiCity !== "" && roundStore.humanCity !== "")
-        } else {
-          return (roundStore.aiCity !== "" && roundStore.humanCity !== "")
-        }
-      } else {
-        return false
-      }
+      return this.gameState === "guess"
     },
+    showButton() {
+      switch (this.gameState) {
+        case "guess":
+          return false
+        case "explain":
+          return roundStore.explanationId !== ""
+        default:
+          return true
+      }
+    }
   },
 
   data() {
     return {
       url: process.env.VUE_APP_BACKEND_URL,
       useCaseTitle: "Guess the City",
+      gameState: "start"
     };
   },
   async mounted() {
@@ -139,10 +132,15 @@ export default {
   },
   methods: {
     buttonClick() {
-      if (this.gameFinished) {
-        this.startGame()
-      } else {
-        this.$refs.streetview.explain()
+      switch (this.gameState) {
+        case "ask":
+          this.explain()
+          break
+        case "explain":
+          this.startRound()
+          break
+        case "finished":
+          this.startGame()
       }
     },
     startGame() {
@@ -154,10 +152,20 @@ export default {
       this.startRound()
     },
     async startRound() {
+      this.gameState = "start"
       resetRoundStore()
       gameStore.round = 1 + gameStore.round
       roundStore.currentRound = gameStore.round + gameStore.roundOffset
+      await this.guess()
+    },
+    async guess() {
+      this.gameState = "guess"
       await this.$refs.streetview.getStreetview();
+    },
+    async explain() {
+      this.gameState = "explain"
+      await this.$refs.streetview.predict()
+      await this.$refs.streetview.explain()
     },
     judgeRound(humanResponse) {
       roundStore.humanCity = humanResponse;
@@ -165,10 +173,10 @@ export default {
         gameStore.scoreHuman = 1 + gameStore.scoreHuman;
       }
       this.recordRound()
-      if (gameStore.round < gameStore.totalNumOfRounds) {
-        this.startRound()
-      } else {
+      if (gameStore.round >= gameStore.totalNumOfRounds) {
         this.finishGame()
+      } else {
+        this.gameState = "ask"
       }
     },
     async recordRound() {
@@ -183,7 +191,7 @@ export default {
           });
     },
     finishGame() {
-      console.log("Done")
+      this.gameState = "finished"
     },
     async finalScore() {
       /* TODO: Only do this if running an experiment */

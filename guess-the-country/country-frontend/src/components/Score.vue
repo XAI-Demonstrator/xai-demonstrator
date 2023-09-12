@@ -1,8 +1,8 @@
 <template>
   <div class="wrapper">
     <section class="left xd-section xd-light">
-      <p>Round: {{ round + roundOffset }}/{{ totalNumOfRounds }}</p>
-      <p v-if="showScore">Score: {{scoreHuman}} : {{scoreAI}}</p>
+      <p>Round:  {{ gameStore.round + gameStore.roundOffset }}/{{ gameStore.totalNumOfRounds }}</p>
+      <p v-if="showScore">Score: {{gameStore.scoreHuman}} : {{gameStore.scoreAI}}</p>
     </section>
   </div>
 </template>
@@ -18,21 +18,9 @@ export default {
     }
   },
   computed: {
-    round() {
-      return gameStore.round
+    gameStore() {
+      return gameStore
     },
-    roundOffset() {
-      return gameStore.roundOffset
-    },
-    totalNumOfRounds() {
-      return gameStore.totalNumOfRounds
-    },
-    scoreAI() {
-      return gameStore.scoreAI
-    },
-    scoreHuman() {
-      return gameStore.scoreHuman
-    }
   }
 }
 </script>
