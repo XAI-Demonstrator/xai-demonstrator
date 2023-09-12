@@ -31,6 +31,7 @@
 
 <script>
 import axios from "axios";
+import {v4 as uuidv4} from "uuidv4";
 import {GitHubRibbon, UseCaseHeader, XAIStudioRibbon,} from "@xai-demonstrator/xaidemo-ui";
 import Notification from "@/components/Notification";
 import Selection from "@/components/Selection";
@@ -129,11 +130,13 @@ export default {
     return {
       url: process.env.VUE_APP_BACKEND_URL,
       useCaseTitle: "Guess the City",
-      gameState: "start"
+      gameState: "start",
+      localPlayerId: ""
     };
   },
   async mounted() {
     await this.$refs.notification.getMessage();
+    this.localPlayerId = uuidv4();
     await this.startGame()
   },
   methods: {
@@ -155,6 +158,12 @@ export default {
       gameStore.totalNumOfRounds = this.numOfRounds
       gameStore.scoreAI = 0
       gameStore.scoreHuman = 0
+      gameStore.gameId = uuidv4()
+      if (this.playerId !== "") {
+        gameStore.playerId = this.playerId
+      } else {
+        gameStore.playerId = this.localPlayerId
+      }
       this.startRound()
     },
     async startRound() {

@@ -5,5 +5,7 @@ export const gameStore = reactive({
     roundOffset: 0,
     totalNumOfRounds: 0,
     scoreAI: 0,
-    scoreHuman: 0
+    scoreHuman: 0,
+    gameId: "",
+    playerId: ""
 })
