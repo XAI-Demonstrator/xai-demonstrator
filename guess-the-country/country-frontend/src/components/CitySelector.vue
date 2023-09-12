@@ -1,49 +1,25 @@
 <template>
   <div class="selection">
     <section class="xd-section xd-light">
-      <div v-for="city in cities" :key="city.city" class="element">
+      <div v-for="city in cities" :key="city" class="element">
         <input
-          type="Button"
+          type="button"
           class="xd-button xd-secondary"
-          :value="city.city"
-          @click="selectCity(city.city)"
+          :value="city"
+          @click="$emit('citySelected', city)"
         />
       </div>
     </section>
   </div>
 </template>
 <script>
+import config from "@/assets/config.json";
 export default {
   name: "CitySelector",
   emits: ["citySelected"],
-  data() {
-    return {
-      /* TODO: Load this from config */
-      cities: [
-        {
-          city: "Tel Aviv",
-          backend: "Tel_Aviv",
-        },
-        {
-          city: "Jerusalem",
-          backend: "Westjerusalem",
-        },
-        {
-          city: "Berlin",
-          backend: "Berlin",
-        },
-        {
-          city: "Hamburg",
-          backend: "Hamburg",
-        },
-      ],
-    };
-  },
-
-  computed: {},
-  methods: {
-    selectCity(city) {
-      this.$emit("citySelected", city);
+  computed: {
+    cities() {
+      return Object.values(config).map((item) => item.city);
     },
   },
 };
