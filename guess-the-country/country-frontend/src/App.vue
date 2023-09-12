@@ -8,7 +8,7 @@
         :reload="!experiment"
     />
     <main>
-      <Score/>
+      <Score :showScore="!experiment" />
       <Notification ref="notification"
                     :gameState="gameState"
       />
