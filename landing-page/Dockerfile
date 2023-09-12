@@ -1,4 +1,4 @@
-FROM node:14-alpine as builder
+FROM node:14-alpine as builder14
 
 RUN mkdir /frontend
 WORKDIR /frontend
@@ -20,6 +20,8 @@ WORKDIR /education
 COPY ./visual-inspection/inspection-frontend/ .
 RUN npm install && npm run build -- --mode digital-education.test-deployment
 
+FROM node:18-alpine as builder18
+
 RUN mkdir /country
 WORKDIR /country
 COPY ./guess-the-country/country-frontend/ .
@@ -31,14 +33,14 @@ COPY ./landing-page/nginx.conf /etc/nginx/nginx.conf
 
 RUN rm -rf /usr/share/nginx/html/*
 
-COPY --from=builder /frontend/dist/ /usr/share/nginx/html
+COPY --from=builder14 /frontend/dist/ /usr/share/nginx/html
 RUN mkdir /usr/share/nginx/html/sentiment \
     && mkdir /usr/share/nginx/html/inspection \
     && mkdir /usr/share/nginx/html/country \
     && mkdir /usr/share/nginx/html/education
-COPY --from=builder /sentiment/dist/ /usr/share/nginx/html/sentiment
-COPY --from=builder /inspection/dist/ /usr/share/nginx/html/inspection
-COPY --from=builder /education/dist/ /usr/share/nginx/html/education
-COPY --from=builder /country/dist/ /usr/share/nginx/html/country
+COPY --from=builder14 /sentiment/dist/ /usr/share/nginx/html/sentiment
+COPY --from=builder14 /inspection/dist/ /usr/share/nginx/html/inspection
+COPY --from=builder14 /education/dist/ /usr/share/nginx/html/education
+COPY --from=builder18 /country/dist/ /usr/share/nginx/html/country
 
 ENTRYPOINT ["nginx", "-g", "daemon off;"]
