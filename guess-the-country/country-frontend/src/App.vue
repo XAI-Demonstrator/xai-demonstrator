@@ -3,8 +3,9 @@
     <GitHubRibbon url="https://github.com/xai-demonstrator/xai-demonstrator"/>
     <XAIStudioRibbon url="https://www.xai-studio.de"/>
     <UseCaseHeader
-        v-bind:standalone="!Boolean(backendUrl)"
-        v-bind:title="useCaseTitle"
+        :standalone="!Boolean(backendUrl)"
+        :title="useCaseTitle"
+        :reload="!experiment"
     />
     <main>
       <Score/>
@@ -85,6 +86,9 @@ export default {
         return ""
       }
     },
+    experiment() {
+      return this.playerId !== ""
+    },
     backendUrl() {
       if (this.playerId !== "") {
         return this.url + "/" + this.playerId;
@@ -113,6 +117,8 @@ export default {
           return false
         case "explain":
           return roundStore.explanationId !== ""
+        case "finished":
+          return !this.experiment
         default:
           return true
       }
@@ -180,41 +186,40 @@ export default {
       }
     },
     async recordRound() {
-      /* TODO: Only do this if running an experiment */
-      await axios
-          .post(this.backendUrl + "/score", {
-            ...gameStore,
-            ...roundStore
-          })
-          .catch((error) => {
-            console.error(error);
-          });
+      if (this.experiment) {
+        await axios
+            .post(this.backendUrl + "/score", {
+              ...gameStore,
+              ...roundStore
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+      }
     },
-    finishGame() {
+    async finishGame() {
       this.gameState = "finished"
+      await this.finalScore()
     },
     async finalScore() {
-      /* TODO: Only do this if running an experiment */
-      await axios
-          .get(this.backendUrl + "/final_score")
-          .then((res) => {
-            gameStore.round = res.data.rounds;
-            gameStore.scoreAI = res.data.ai_score;
-            gameStore.scoreHuman = res.data.player_score;
-          })
-          .catch((error) => {
-            console.error(error);
-          });
+      if (this.experiment) {
+        await axios
+            .get(this.backendUrl + "/final_score")
+            .then((res) => {
+              gameStore.round = res.data.rounds;
+              gameStore.scoreAI = res.data.ai_score;
+              gameStore.scoreHuman = res.data.player_score;
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+      }
     },
   },
 };
 </script>
 
 <style>
-.header-icon {
-  visibility: hidden;
-}
-
 #app {
   display: flex;
   justify-content: space-between;
