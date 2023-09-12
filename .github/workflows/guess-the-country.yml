@@ -101,7 +101,7 @@ jobs:
           set -e
           cd ./guess-the-country/country-frontend/
           echo $PWD
-          npm run test:unit
+          npm run coverage
 
       - name: Report coverage
         if: github.ref == 'refs/heads/master'
