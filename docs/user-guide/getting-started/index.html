@@ -1,0 +1,960 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../../..">
+      
+      
+        <link rel="next" href="../dev-setup/">
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.6">
+    
+    
+      
+        <title>Getting started - XAI Demonstrator</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.558e4712.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.2505c338.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#getting-started" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="XAI Demonstrator" class="md-header__button md-logo" aria-label="XAI Demonstrator" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            XAI Demonstrator
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Getting started
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/xai-demonstrator/xai-demonstrator" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="XAI Demonstrator" class="md-nav__button md-logo" aria-label="XAI Demonstrator" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    XAI Demonstrator
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/xai-demonstrator/xai-demonstrator" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_2" type="checkbox" id="__nav_2" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2" tabindex="0" aria-expanded="true">
+          User Guide
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="User Guide" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          User Guide
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Getting started
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Getting started
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#get-the-source-code" class="md-nav__link">
+    Get the source code
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#install-docker" class="md-nav__link">
+    Install Docker
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#run-your-very-own-xai-demonstrator-instance" class="md-nav__link">
+    Run your very own XAI Demonstrator instance
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#run-a-single-use-case" class="md-nav__link">
+    Run a single use case
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#modify-a-use-case" class="md-nav__link">
+    Modify a use case
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#whats-next" class="md-nav__link">
+    What's next?
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../dev-setup/" class="md-nav__link">
+        Set Up Your Development Environment
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../use-cases/" class="md-nav__link">
+        Creating use cases
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../deployment/" class="md-nav__link">
+        Permanent deployment
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_3" type="checkbox" id="__nav_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3" tabindex="0" aria-expanded="false">
+          Use Cases
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Use Cases" data-md-level="1">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          Use Cases
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../review-sentiment/" class="md-nav__link">
+        Review Sentiment
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../visual-inspection/" class="md-nav__link">
+        Visual Inspection
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../guess-the-country/" class="md-nav__link">
+        Guess the Country
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4" tabindex="0" aria-expanded="false">
+          Experiment Tracking
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Experiment Tracking" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Experiment Tracking
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../experiment-tracker/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../experiment-tracker/experiment-proxy/" class="md-nav__link">
+        Experiment Proxy
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../experiment-tracker/data-collector/" class="md-nav__link">
+        Data Collector
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../common/backend-utils/xaidemo/tracking/" class="md-nav__link">
+        Instrumentation
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5" tabindex="0" aria-expanded="false">
+          Tech Notes
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Tech Notes" data-md-level="1">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Tech Notes
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tech-notes/monorepo/" class="md-nav__link">
+        Monorepo
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tech-notes/tech-stack/" class="md-nav__link">
+        Selecting the XAI Demonstrator's Tech Stack
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tech-notes/gcp/" class="md-nav__link">
+        Deploying to Google Cloud Platform
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/" class="md-nav__link">
+        About
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#get-the-source-code" class="md-nav__link">
+    Get the source code
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#install-docker" class="md-nav__link">
+    Install Docker
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#run-your-very-own-xai-demonstrator-instance" class="md-nav__link">
+    Run your very own XAI Demonstrator instance
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#run-a-single-use-case" class="md-nav__link">
+    Run a single use case
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#modify-a-use-case" class="md-nav__link">
+    Modify a use case
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#whats-next" class="md-nav__link">
+    What's next?
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+
+<h1 id="getting-started">Getting started<a class="headerlink" href="#getting-started" title="Permanent link">#</a></h1>
+<p>This guide describes how to download the source code, launch your very own
+<em>XAI Demonstrator</em> instance, and make a first change.</p>
+<h2 id="get-the-source-code">Get the source code<a class="headerlink" href="#get-the-source-code" title="Permanent link">#</a></h2>
+<p>If you just want to quickly try out the <em>XAI Demonstrator</em> and
+do not have <em>Git</em> installed, you can simply download the source code
+<a href="https://github.com/XAI-Demonstrator/xai-demonstrator/archive/refs/heads/master.zip">as a ZIP file</a>,
+unpack the file on your computer, and skip to the next section.</p>
+<p>However, if you plan to contribute to the <em>XAI Demonstrator</em> project and perhaps even
+develop your own uses cases, it makes sense to retrieve the source code using <em>Git</em>.
+<em>Git</em> is a so-called <a href="https://en.wikipedia.org/wiki/Version_control">version control system</a>
+that keeps track of all the changes that are made and enables teams to work
+on the same piece of software without making a mess.</p>
+<p>Don't worry if you've never used <em>Git</em> before.
+Throughout this user guide, we'll show you all the commands you need in detail.</p>
+<div class="admonition note">
+<p class="admonition-title">Installing <em>Git</em></p>
+<p>To install <em>Git</em>, see the instructions <a href="./dev-setup#install-git">here</a>.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Configuring <em>Git</em> on Windows</p>
+<p>Windows uses a different method to mark line endings in text files.
+To avoid issues, please run the following command to configure <em>Git</em>
+<em>prior to</em> running <code>git clone</code> to keep the original line endings:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>core.autocrlf<span class="w"> </span><span class="nb">false</span>
+</code></pre></div>
+<p>If this is not configured correctly, shell scripts that are copied
+into the Docker images will have Windows-style line endings and 
+cannot be executed in the Linux environments of the images.
+For more information, see
+<a href="https://unix.stackexchange.com/questions/433444/cant-run-script-file-in-docker-no-such-file-or-directory/626437">this post on Unix StackExchange</a>.</p>
+</div>
+<p>To download ("check out") the <em>XAI Demonstrator</em> source code from <em>GitHub</em>,
+open a terminal (on Windows, we recommend the <em>Git Bash</em> that ships with <em>Git</em>),
+navigate to the folder you'd like to store the source code in, and run the
+following <em>Git</em> command:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/xai-demonstrator/xai-demonstrator.git
+</code></pre></div>
+<p>After a couple of seconds, you'll find  the entire <em>XAI Demonstrator</em> source
+code in a new folder called <code>xai-demonstrator</code>.</p>
+<h2 id="install-docker">Install <em>Docker</em><a class="headerlink" href="#install-docker" title="Permanent link">#</a></h2>
+<p>All parts of the <em>XAI Demonstrator</em> are packaged and run as <em>Docker</em> containers.
+These are best thought of as self-contained units that contain all required
+dependencies and runtimes.</p>
+<div class="admonition note">
+<p class="admonition-title">Docker containers and images</p>
+<p>Readers familar with <em>Docker</em> terminology might note and perhaps object to
+our use of the term "container" to refer to both the "Docker image" and
+the "Docker container".</p>
+<p>This is not an oversight, but an intentional simplification. We will
+distinguish between the two when it becomes necessary later.</p>
+</div>
+<p>To run the <em>XAI Demonstrator</em> or individual use cases locally on your computer,
+you need to install <em>Docker</em> (but nothing else).
+<em>Docker</em> is available for all common operating systems.
+See <a href="https://docs.docker.com/engine/install/">the instructions in the <em>Docker</em> documentation</a>
+to learn how to install <em>Docker Engine</em> on your computer.
+Make sure you install the <code>docker-compose</code> utility as well.</p>
+<h2 id="run-your-very-own-xai-demonstrator-instance">Run your very own XAI Demonstrator instance<a class="headerlink" href="#run-your-very-own-xai-demonstrator-instance" title="Permanent link">#</a></h2>
+<p>To launch the full <em>XAI Demonstrator</em>, you can use the <code>test-local</code> deployment 
+configuration. To launch this most minimal version, run the following commands in
+a terminal (again, if you're on Windows, we recommend you use the <em>Git Bash</em> that
+ships with <em>Git</em>):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nb">cd</span><span class="w"> </span>xai-demonstrator/deployment/test-local
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>docker-compose<span class="w"> </span>up
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Download size</p>
+<p>This will download several GB of files from the <em>GitHub Container Registry</em>!</p>
+</div>
+<div class="admonition info">
+<p class="admonition-title">Permissions</p>
+<p>Depending on your operating system and the precise configuration of your
+<em>Docker</em> installation, you might need to execute <code>docker-compose up</code> with
+"super user" (MacOS and Linux) or "administrator" (Windows) privileges.   </p>
+</div>
+<p>After the downloads complete and the containers are spun up, you can visit your
+very own <em>XAI Demonstrator</em> at <a href="http://localhost:8000/">http://localhost:8000/</a>.</p>
+<p>To launch this instance of the <em>XAI Demonstrator</em>, we used only a very small part
+of the source code: The file
+<a href="https://github.com/XAI-Demonstrator/xai-demonstrator/blob/master/deployment/test-local/docker-compose.yml"><code>deployment/test-local/docker-compose.yml</code></a>.
+It instructs the <em>Docker Engine</em> to download and launch several containers
+(four at the time of writing) that together comprise the <em>XAI Demonstrator</em>.</p>
+<p>The <code>test-local</code> deployment configuration utilizes pre-built containers.
+While this is great for quickly launching the <em>XAI Demonstrator</em>, if we
+want to make changes to the code and test it, we need to build our own
+containers from the source code stored locally on our computer.</p>
+<p>As we'll see in the next section, this is not much more involved than
+what we did so far. For now, terminate the <em>XAI Demonstrator</em> instance.
+In most terminals, this is accomplished by pressing <kbd>Ctrl</kbd> + <kbd>C</kbd>
+(or <kbd>Cmd</kbd> + <kbd>C</kbd> on Macs).</p>
+<h2 id="run-a-single-use-case">Run a single use case<a class="headerlink" href="#run-a-single-use-case" title="Permanent link">#</a></h2>
+<p>The core components of the <em>XAI Demonstrator</em> are its use cases.
+Each use case illustrates and demonstrates an XAI concept or method.</p>
+<p>By design, the use cases are self-contained. On the one hand, this gives
+developers a lot of freedom in selecting, e.g., machine-learning
+models and XAI libraries. On the other hand, it means that we can launch
+a use case as a standalone instance.</p>
+<p>To do this, navigate to a use case's main directory (in this guide, we'll
+work with the <em>Visual Inspection</em> use case):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nb">cd</span><span class="w"> </span>xai-demonstrator/visual-inspection
+</code></pre></div>
+<p>Next, we will instruct <em>Docker</em> to assemble a new container from the files 
+in the current directory (<code>.</code>) and store it under the name <code>visual-inspection-service</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>visual-inspection-service<span class="w"> </span>.
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Download size</p>
+<p>This will download potentially several GB of files from different package repositories!</p>
+</div>
+<p>While waiting for the command to complete, you can take a look at the
+<a href="https://github.com/XAI-Demonstrator/xai-demonstrator/blob/master/visual-inspection/Dockerfile"><code>Dockerfile</code></a>.
+(We'll dive into the details of this file <a href="../use-cases/">later</a>, so don't
+if at first sight it appears to be very complicated.)</p>
+<p>When you scroll through the file, you can see that <em>Docker</em> is instructed to <code>COPY</code>
+source code from the <code>inspection-frontend</code> and <code>inspection-backend</code>. You might also
+recognize some of the commands like <code>pip</code>, <code>npm</code>, or <code>apt-get</code> that are used to 
+install the software dependencies required to run the use case.</p>
+<p>Once <code>docker build</code> completes, you can launch the container:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>docker<span class="w"> </span>run<span class="w"> </span>-p<span class="w"> </span><span class="m">8000</span>:8000<span class="w"> </span>visual-inspection-service
+</code></pre></div>
+<p>If you now visit <a href="http://localhost:8000/">http://localhost:8000/</a>, you will 
+directly see the frontend for the <em>Visual Inspection</em> use case. (You might
+have to wait for a couple of seconds until the connection can be established.)</p>
+<p>This instance of the use case should behave the same as the instance you launched
+using the <code>test-local</code> deployment configuration: Both are based on the latest
+version of the source code. The only difference is that instead of using a 
+container that was built on <em>GitHub</em>, you built it yourself on your own computer.</p>
+<p>Let's change that! Terminate the <em>Visual Inspection</em> instance by pressing
+<kbd>Ctrl</kbd> + <kbd>C</kbd> (or <kbd>Cmd</kbd> + <kbd>C</kbd> on Macs)
+in the terminal.</p>
+<h2 id="modify-a-use-case">Modify a use case<a class="headerlink" href="#modify-a-use-case" title="Permanent link">#</a></h2>
+<p>To see how quickly changes can be made and be tested, we will slightly modify the
+user interface. Of course, making more impactful changes or creating new use cases
+will involve significantly more effort and steps, which we will dive into in later
+parts of this user guide.</p>
+<p>For now, we will navigate to the file
+<a href="https://github.com/XAI-Demonstrator/xai-demonstrator/blob/master/visual-inspection/inspection-frontend/src/components/ExplainInspection.vue"><code>visual-inspection/inspection-frontend/src/compoents/ExplainInspection.vue</code></a>
+and open it with a text editor.</p>
+<p>You will find that a <code>&lt;button&gt;</code> is defined within the first lines of the file. That's
+the button that users click to request an explanation for the machine learning model's
+classification of the object in the selected part of the image.</p>
+<p>Find the text on the button and modify it. As long as you make sure to not delete the
+angle brackets that surround it, there's nothing that can really go wrong. (The worst
+that can happen is that you make the text so long that the layout looks funky.)</p>
+<p>At the time of writing, the relevant parts of the code looked like:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>      <span class="p">&lt;</span><span class="nt">button</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;xd-button xd-secondary&quot;</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>              <span class="na">v-show</span><span class="o">=</span><span class="s">&quot;!waitingForExplanation&quot;</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>              <span class="na">v-bind:disabled</span><span class="o">=</span><span class="s">&quot;!predictionReady&quot;</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>              <span class="na">v-on:click</span><span class="o">=</span><span class="s">&quot;buttonClicked&quot;</span><span class="p">&gt;</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>        Woran erkennst du das?
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>      <span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+</code></pre></div></p>
+<p>And we might change it to an English translation:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>      <span class="p">&lt;</span><span class="nt">button</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;xd-button xd-secondary&quot;</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>              <span class="na">v-show</span><span class="o">=</span><span class="s">&quot;!waitingForExplanation&quot;</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>              <span class="na">v-bind:disabled</span><span class="o">=</span><span class="s">&quot;!predictionReady&quot;</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>              <span class="na">v-on:click</span><span class="o">=</span><span class="s">&quot;buttonClicked&quot;</span><span class="p">&gt;</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>        What makes you think so?
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>      <span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+</code></pre></div></p>
+<p>Once you've changed the line, you can repeat the steps that build and launch the
+container from the previous section:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>visual-inspection-service<span class="w"> </span>.
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>docker<span class="w"> </span>run<span class="w"> </span>-p<span class="w"> </span><span class="m">8000</span>:8000<span class="w"> </span>visual-inspection-service
+</code></pre></div></p>
+<p>Once that's done, head to <a href="http://localhost:8000/">http://localhost:8000/</a> and
+check that the text on the button has indeed changed.</p>
+<h2 id="whats-next">What's next?<a class="headerlink" href="#whats-next" title="Permanent link">#</a></h2>
+<p>Congratulations! You have not only set up everything that's necessary to run your very
+own <em>XAI Demonstrator</em>, but already made changes to the source code of a use case and
+tested the results.</p>
+<p>In the next part of the user guide, we will
+<a href="../dev-setup/">set up your local development environment</a>.
+That will equip you with all the tools you need to conveniently make changes
+to individual components of the <em>XAI Demonstrator</em> and develop your own use cases.</p>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      © 2021 The XAI Demonstrator Team
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": [], "search": "../../../assets/javascripts/workers/search.e5c33ebb.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.51d95adb.min.js"></script>
+      
+    
+  </body>
+</html>
