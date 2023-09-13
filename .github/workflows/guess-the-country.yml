@@ -77,10 +77,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Node 14
+      - name: Set up Node 18
         uses: actions/setup-node@v3
         with:
-          node-version: '14'
+          node-version: '18'
 
       - uses: actions/cache@v3.3.1
         with:
@@ -101,7 +101,7 @@ jobs:
           set -e
           cd ./guess-the-country/country-frontend/
           echo $PWD
-          npm run test:unit
+          npm run coverage
 
       - name: Report coverage
         if: github.ref == 'refs/heads/master'

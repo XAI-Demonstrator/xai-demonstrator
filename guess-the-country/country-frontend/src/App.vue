@@ -1,355 +1,214 @@
 <template>
   <div id="app" class="xd-app">
-    <GitHubRibbon url="https://github.com/xai-demonstrator/xai-demonstrator"/>
-    <XAIStudioRibbon url="https://www.xai-studio.de"/>
+    <GitHubRibbon url="https://github.com/xai-demonstrator/xai-demonstrator" />
+    <XAIStudioRibbon url="https://www.xai-studio.de" />
     <UseCaseHeader
-        v-bind:standalone="Boolean(true)"
-        v-bind:title="useCaseTitle"
+      :standalone="!Boolean(backendUrl)"
+      :title="useCaseTitle"
+      :reload="!experiment"
     />
     <main>
-      <Score
-          :round="this.round"
-          :score_user="this.score_user"
-          :score_ai="this.score_ai"
-          :user_city_answer="this.user_city_answer"
-          :nr_of_rounds="numOfRounds"
-      />
-      <Notification
-          :prediction_city="prediction_city"
-          :msg="msg"
-          :label_city="label_city"
-          :user_city_answer="user_city_answer"
-          :explanation="explanation"
-          :control="control"
-          :sequence_mode="sequenceMode"
-      />
-      <section class="xd-section xd-light">
-        <img
-            v-if="explanation"
-            class="xd-border-secondary;"
-            v-bind:src="this.explainImage"
-        />
-        <img
-            v-if="!explanation"
-            class="xd-border-secondary;"
-            v-bind:src="this.streetviewImage"
-        />
-      </section>
-      <Selection
-          @city_selected="city_selected"
-          :label_city="label_city"
-          :user_city_answer="user_city_answer"
-          :sequence_mode="sequenceMode"
-          :prediction_city="prediction_city"
-          :explanation="explanation"
-          :control="control"
-      />
-      <!-- what do you guess, AI Button - treatment group -->
+      <ScoreBox :show-score="!experiment" />
+      <MessageBox :game-state="gameState" />
+      <StreetView ref="streetview" :backend-url="backendUrl" />
+      <CitySelector v-if="showSelection" @city-selected="judgeRound" />
       <button
-          v-if="showAIGuessButton&&!control&&round<=numOfRounds"
-          type="button"
-          class="xd-button xd-secondary"
-          id="explain"
-          v-on:click="explain()"
+        v-show="showButton"
+        type="button"
+        class="xd-button xd-secondary"
+        @click="buttonClick"
       >
-        What do you guess, AI?
+        {{ buttonLabel }}
       </button>
-      <!-- next button -->
-      <button
-          v-if="showNextButton&& this.round < numOfRounds"
-          type="button"
-          class="xd-button xd-secondary"
-          id="new"
-          v-on:click="restart()"
-      >
-        Next round
-      </button>
-      <!-- what do you guess, AI Button - control group -->
-      <button
-          v-if="showAIGuessButton&&control&&round<=numOfRounds"
-          type="button"
-          class="xd-button xd-secondary"
-          id="submit"
-          v-on:click="submitFile()"
-      >
-        What do you guess, AI?
-      </button>
-
-      <SpinningIndicator
-          class="indicator"
-          v-bind:visible="waitingForExplanation"
-      />
     </main>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import { v4 as uuidv4 } from "uuid";
 import {
-  UseCaseHeader,
-  SpinningIndicator,
-  XAIStudioRibbon,
   GitHubRibbon,
+  UseCaseHeader,
+  XAIStudioRibbon,
 } from "@xai-demonstrator/xaidemo-ui";
-import Notification from "@/components/Notification";
-import Selection from "@/components/Selection";
-import Score from "./components/Score.vue";
+import MessageBox from "@/components/MessageBox.vue";
+import CitySelector from "@/components/CitySelector.vue";
+import ScoreBox from "@/components/ScoreBox.vue";
+import { gameStore } from "@/stores/gameStore.js";
+import { roundStore, resetRoundStore } from "@/stores/roundStore.js";
+import StreetView from "@/components/StreetView.vue";
 
 export default {
   name: "App",
   components: {
+    StreetView,
     UseCaseHeader,
-    SpinningIndicator,
     GitHubRibbon,
     XAIStudioRibbon,
-    Notification,
-    Selection,
-    Score,
+    MessageBox,
+    CitySelector,
+    ScoreBox,
+  },
+  data() {
+    return {
+      url: import.meta.env.VITE_BACKEND_URL,
+      useCaseTitle: "Guess the City",
+      gameState: "start",
+      localPlayerId: "",
+    };
   },
   computed: {
     searchParams() {
       const uri = window.location.search.substring(1);
       return new URLSearchParams(uri);
     },
-    sequenceMode() {
-      if (this.searchParams.has("modus")) {
-        return this.searchParams.get("modus")
-      } else {
-        return process.env.VUE_APP_IMAGE_SEQUENCE_MODE
-      }
-    },
     numOfRounds() {
       if (this.searchParams.has("num_of_rounds")) {
-        return this.searchParams.get("num_of_rounds")
+        return this.searchParams.get("num_of_rounds");
       } else {
-        return JSON.parse(process.env.VUE_APP_NR_OF_ROUNDS)
+        return JSON.parse(import.meta.env.VITE_NR_OF_ROUNDS);
       }
     },
     roundOffset() {
       if (this.searchParams.has("round_offset")) {
-        return JSON.parse(this.searchParams.get("round_offset"))
+        return JSON.parse(this.searchParams.get("round_offset"));
       } else {
-        return 0
+        return 0;
       }
     },
-    control() {
-      return this.searchParams.has("control");
+    externalPlayerId() {
+      if (this.searchParams.has("player")) {
+        return this.searchParams.get("player");
+      } else {
+        return "";
+      }
+    },
+    experiment() {
+      return this.externalPlayerId !== "";
     },
     backendUrl() {
-      if (this.searchParams.has("player")) {
-        let player_id = this.searchParams.get("player");
-        return this.url + "/" + player_id;
+      if (this.externalPlayerId !== "") {
+        return this.url + "/" + this.externalPlayerId;
       } else {
         return this.url;
       }
     },
-    showNextButton() {
-      if (this.sequenceMode === 'classic') {
-        return this.explanation || (this.control && this.prediction_city)
-      } else if (this.sequenceMode === 'recommender' || this.sequenceMode === 'basic') {
-        return this.user_city_answer
-      } else {
-        return false
+    showSelection() {
+      return this.gameState === "guess";
+    },
+    showButton() {
+      switch (this.gameState) {
+        case "guess":
+          return false;
+        case "explain":
+          return roundStore.explanationId !== "";
+        case "finished":
+          return !this.experiment;
+        default:
+          return true;
       }
     },
-    showAIGuessButton() {
-      if (this.sequenceMode === 'classic') {
-        return !this.prediction_city && this.user_city_answer
-      } else if (this.sequenceMode === 'recommender') {
-        return !this.prediction_city
-      } else {
-        return false
+    buttonLabel() {
+      switch (this.gameState) {
+        case "ask":
+          return "What do you think?";
+        case "explain":
+          return "Next round!";
+        case "finished":
+          return "Start again!";
+        default:
+          return "Button";
       }
     },
   },
-
-  data() {
-    return {
-      countrys: [
-        {
-          country: "Israel",
-          citys: [
-            {
-              city: "Tel Aviv",
-              backend: "Tel_Aviv",
-            },
-            {
-              city: "Jerusalem",
-              backend: "Westjerusalem",
-            },
-          ],
-        },
-        {
-          country: "Germany",
-          citys: [
-            {
-              city: "Berlin",
-              backend: "Berlin",
-            },
-            {
-              city: "Hamburg",
-              backend: "Hamburg",
-            },
-          ],
-        },
-      ],
-      url: process.env.VUE_APP_BACKEND_URL,
-      round: 1,
-      useCaseTitle: "Guess the City",
-      explanation: null,
-      prediction_city: null,
-      label_city: null,
-      user_city_answer: null,
-      score_ai: 0,
-      score_user: 0,
-      msg: "",
-      streetviewImage: null,
-      explainImage: null,
-      waitingForExplanation: false,
-    };
-  },
-  async created() {
-    this.getMessage();
-    this.getStreetview();
+  async mounted() {
+    this.localPlayerId = uuidv4();
+    await this.startGame();
   },
   methods: {
-    postValues() {
-      axios
+    buttonClick() {
+      switch (this.gameState) {
+        case "ask":
+          this.explain();
+          break;
+        case "explain":
+          this.startRound();
+          break;
+        case "finished":
+          this.startGame();
+      }
+    },
+    startGame() {
+      gameStore.round = 0;
+      gameStore.roundOffset = this.roundOffset;
+      gameStore.totalNumOfRounds = this.numOfRounds;
+      gameStore.scoreAI = 0;
+      gameStore.scoreHuman = 0;
+      gameStore.gameId = uuidv4();
+      if (this.externalPlayerId !== "") {
+        gameStore.playerId = this.externalPlayerId;
+      } else {
+        gameStore.playerId = this.localPlayerId;
+      }
+      this.startRound();
+    },
+    async startRound() {
+      this.gameState = "start";
+      resetRoundStore();
+      gameStore.round = 1 + gameStore.round;
+      roundStore.currentRound = gameStore.round + gameStore.roundOffset;
+      await this.guess();
+    },
+    async guess() {
+      this.gameState = "guess";
+      await this.$refs.streetview.getStreetview();
+    },
+    async explain() {
+      this.gameState = "explain";
+      await this.$refs.streetview.predict();
+      await this.$refs.streetview.explain();
+    },
+    judgeRound(humanResponse) {
+      roundStore.humanCity = humanResponse;
+      if (roundStore.humanCity === roundStore.trueCity) {
+        gameStore.scoreHuman = 1 + gameStore.scoreHuman;
+      }
+      this.recordRound();
+      if (gameStore.round >= gameStore.totalNumOfRounds) {
+        this.finishGame();
+      } else {
+        this.gameState = "ask";
+      }
+    },
+    async recordRound() {
+      if (this.experiment) {
+        await axios
           .post(this.backendUrl + "/score", {
-            ai_score: this.score_ai,
-            player_score: this.score_user,
-            rounds: this.round + this.roundOffset,
-            prediction_city: String(this.prediction_city),
-            label_city: String(this.label_city),
-            user_city_answer: String(this.user_city_answer)
-          })
-          .then((res) => {
-            console.log(res);
-
+            ...gameStore,
+            ...roundStore,
           })
           .catch((error) => {
             console.error(error);
           });
+      }
     },
-    async getValues() {
-      await axios
+    async finishGame() {
+      this.gameState = "finished";
+      await this.finalScore();
+    },
+    async finalScore() {
+      if (this.experiment) {
+        await axios
           .get(this.backendUrl + "/final_score")
           .then((res) => {
-            this.round = res.data.rounds;
-            this.score_ai = res.data.ai_score;
-            this.score_user = res.data.player_score;
-
+            gameStore.round = res.data.rounds;
+            gameStore.scoreAI = res.data.ai_score;
+            gameStore.scoreHuman = res.data.player_score;
           })
           .catch((error) => {
             console.error(error);
           });
-    },
-    city_selected(value) {
-      this.user_city_answer = value;
-      if (this.user_city_answer === this.label_city) {
-        this.score_user = 1 + this.score_user;
-      }
-      this.postValues()
-    },
-    getMessage() {
-      axios
-          .get(this.backendUrl + "/msg")
-          .then((res) => {
-            this.msg = res.data.data;
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-    },
-    getStreetview() {
-      axios
-          .post(this.backendUrl + "/streetview", {
-            ai_score: this.score_ai,
-            player_score: this.score_user,
-            rounds: this.round + this.roundOffset,
-            prediction_city: String(this.prediction_city),
-            label_city: String(this.label_city),
-            user_city_answer: String(this.user_city_answer)
-          })
-          .then((res) => {
-            this.streetviewImage = res.data.image;
-            let label = this.label_to_label(res.data.class_label);
-            this.label_city = label.city;
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-    },
-    submitFile() {
-      this.waitingForExplanation = true;
-      const blob = new Blob([this.streetviewImage]);
-
-      let form = new FormData();
-      form.append("file", blob);
-
-      axios
-          .post(this.backendUrl + "/predict", form, {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "multipart/form-data",
-            },
-          })
-          .then((res) => {
-            let label = this.label_to_label(res.data.class_label);
-            this.prediction_city = label.city;
-            this.waitingForExplanation = false;
-            if (this.prediction_city === this.label_city) {
-              this.score_ai = this.score_ai + 1;
-            }
-            this.postValues();
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-    },
-    explain() {
-      this.submitFile();
-      this.waitingForExplanation = true;
-
-      const blob = new Blob([this.streetviewImage]);
-
-      let form = new FormData();
-      form.append("file", blob);
-
-      axios
-          .post(this.backendUrl + "/explain", form, {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "multipart/form-data",
-            },
-          })
-          .then((res) => {
-            this.explainImage = res.data.image;
-            this.waitingForExplanation = false;
-            this.explanation = res.data.explanation_id;
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-    },
-
-    restart() {
-      this.explanation = null;
-      this.prediction_city = null;
-      this.user_city_answer = null;
-      this.round = this.round + 1;
-      this.getStreetview();
-    },
-
-    label_to_label(prediction) {
-      for (let i in this.countrys) {
-        for (let x in this.countrys[i].citys)
-          if (prediction === this.countrys[i].citys[x].backend) {
-            return {
-              country: this.countrys[i].country,
-              city: this.countrys[i].citys[x].city,
-            };
-          }
       }
     },
   },
@@ -357,10 +216,6 @@ export default {
 </script>
 
 <style>
-.header-icon {
-  visibility: hidden;
-}
-
 #app {
   display: flex;
   justify-content: space-between;
