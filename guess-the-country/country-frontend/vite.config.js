@@ -1,20 +1,25 @@
-import { defineConfig } from "vite";
+import { defineConfig, loadEnv } from "vite";
 import vue from "@vitejs/plugin-vue";
 
 const path = require("path");
 
 // https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [vue()],
-  resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./src"),
+// eslint-disable-next-line no-unused-vars
+export default defineConfig(({ command, mode }) => {
+  const env = loadEnv(mode, process.cwd(), "");
+  return {
+    plugins: [vue()],
+    resolve: {
+      alias: {
+        "@": path.resolve(__dirname, "./src"),
+      },
     },
-  },
-  test: {
-    environment: "happy-dom",
-    coverage: {
-      reporter: ['text', 'json', 'lcov']
-    }
-  },
+    base: env.VITE_PUBLIC_PATH,
+    test: {
+      environment: "happy-dom",
+      coverage: {
+        reporter: ["text", "json", "lcov"],
+      },
+    },
+  };
 });
