@@ -26,28 +26,6 @@ jobs:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           MSG_MINIMAL: true
 
-  experiment:
-    name: Check Experiment Deployment
-    runs-on: ubuntu-latest
-    steps:
-      - name: URL Health Check
-        uses: Jtalk/url-health-check-action@v3
-        with:
-          url: https://gtc.xaidemo.de/
-          max-attempts: 3
-          retry-delay: 30s
-      - name: Notify Slack
-        if: ${{ failure() }}
-        uses: rtCamp/action-slack-notify@v2.2.0
-        env:
-          SLACK_CHANNEL: xai-demonstrator-monitor
-          SLACK_MESSAGE: 'Cannot reach test deployment at https://gtc.xaidemo.de/ :disappointed:'
-          SLACK_TITLE: Experiment Deployment Is Down
-          SLACK_USERNAME: Deployment Monitor
-          SLACK_COLOR: danger
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          MSG_MINIMAL: true
-
   prod:
     name: Check Prod Deployment
     runs-on: ubuntu-latest
