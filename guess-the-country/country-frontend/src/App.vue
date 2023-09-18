@@ -143,7 +143,7 @@ export default {
       gameStore.round = 0;
       gameStore.roundOffset = this.roundOffset;
       gameStore.totalNumOfRounds = this.numOfRounds;
-      gameStore.scoreAI = 0;
+      gameStore.scoreAi = 0;
       gameStore.scoreHuman = 0;
       gameStore.gameId = uuidv4();
       if (this.externalPlayerId !== "") {
@@ -203,8 +203,8 @@ export default {
           .get(this.backendUrl + "/final_score")
           .then((res) => {
             gameStore.round = res.data.rounds;
-            gameStore.scoreAI = res.data.ai_score;
-            gameStore.scoreHuman = res.data.player_score;
+            gameStore.scoreAi = res.data.scoreAi;
+            gameStore.scoreHuman = res.data.scoreHuman
           })
           .catch((error) => {
             console.error(error);

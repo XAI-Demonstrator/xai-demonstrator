@@ -55,7 +55,7 @@ export default {
         })
         .then((res) => {
           this.streetviewImage = res.data.image;
-          setGroundTruth(res.data.class_label);
+          setGroundTruth(res.data.city);
           this.waitingForBackend = false;
         })
         .catch((error) => {
@@ -81,7 +81,7 @@ export default {
         .then((res) => {
           setAiResponse(res.data.class_label);
           if (roundStore.trueCity === roundStore.aiCity) {
-            gameStore.scoreAI = gameStore.scoreAI + 1;
+            gameStore.scoreAi = gameStore.scoreAi + 1;
           }
           roundStore.predictionId = res.data.prediction_id;
           this.waitingForBackend = false;

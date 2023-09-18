@@ -7,7 +7,7 @@
         }}
       </p>
       <p v-if="showScore">
-        Score: {{ gameStore.scoreHuman }} : {{ gameStore.scoreAI }}
+        Score: {{ gameStore.scoreHuman }} : {{ gameStore.scoreAi }}
       </p>
     </section>
   </div>
