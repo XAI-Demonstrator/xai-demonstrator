@@ -1,13 +1,16 @@
 import base64
+import io
 import uuid
+from typing import IO
 
-import cv2
 import numpy as np
+from PIL import Image
 from pydantic import BaseModel
 from visualime.explain import explain_classification, render_explanation
 from xaidemo.tracing import traced
 
-from ..model.predict import model, load_image, preprocess
+from ..config import settings
+from ..model.predict import model, preprocess
 
 
 class Explanation(BaseModel):
@@ -16,32 +19,29 @@ class Explanation(BaseModel):
 
 
 @traced
-def explain(data):
-    encoded_data = str(data)
-    image = load_image(encoded_data)
-    pre_image = preprocess(img=image)
+def explain(image_file: IO[bytes]) -> Explanation:
+    image = Image.open(image_file)
+    preprocessed_image = preprocess(image)
 
-    explanation = explain_cnn(pre_image, model)
-    explanation_id = uuid.uuid4()
+    explanation = explain_cnn(preprocessed_image, model)
 
-    encoded_image_string = convert_explanation(explanation)
-    encoded_bytes = bytes("data:image/png;base64,",
-                          encoding="utf-8") + encoded_image_string
     return Explanation(
-        explanation_id=explanation_id,
-        image=encoded_bytes
+        explanation_id=uuid.uuid4(),
+        image=convert_explanation(explanation)
     )
 
 
 @traced
-def convert_explanation(explanation):
-    image = np.array(explanation, dtype="float32")
-    image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    img_resized = cv2.resize(image_rgb, (448, 448),
-                             interpolation=cv2.INTER_CUBIC)
-    retval, buffer = cv2.imencode('.png', img_resized)
-    encoded_image_string = base64.b64encode(buffer)
-    return encoded_image_string
+def convert_explanation(explanation: np.ndarray):
+    image = Image.fromarray(explanation.astype(np.float32))
+
+    image = image.resize((settings.streetview_image_size, settings.streetview_image_size),
+                         Image.Resampling.BICUBIC)
+    buffered = io.BytesIO()
+    image.save(buffered, format="png")
+    encoded_image_string = base64.b64encode(buffered.getvalue())
+
+    return bytes("data:image/png;base64,", encoding="utf-8") + encoded_image_string
 
 
 @traced
@@ -49,7 +49,7 @@ def explain_cnn(image, model_=model):
     segment_mask, segment_weights = explain_classification(image=image,
                                                            segmentation_method="felzenszwalb",
                                                            segmentation_settings={},
-                                                           predict_fn=model_.predict_,
+                                                           predict_fn=model_.predict,
                                                            num_of_samples=500,
                                                            p=0.9)
 

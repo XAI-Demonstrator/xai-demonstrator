@@ -1,29 +1,6 @@
-import base64
-import random
-from urllib.error import URLError
-from urllib.request import urlopen
+from shapely import Polygon
 
-from pydantic import BaseModel
-from shapely.geometry import Polygon
-from xaidemo.http_client import AioHttpClientSession
-from xaidemo.tracing import traced
-
-from .polygon import generate_random
-
-
-class Streetview(BaseModel):
-    image: bytes
-    class_label: str
-
-
-GOOGLE_URL = (
-    "http://maps.googleapis.com/maps/api/streetview?size=448x448&sensor=false&"
-    "size=640x640&source=outdoor&key="
-)
-
-API_URL = "https://maps.googleapis.com/maps/api/streetview/metadata"  # Not billed
-
-hamburg = {
+HAMBURG = {
     "country": "Germany",
     "city": "Hamburg",
     "polygon": Polygon(
@@ -85,7 +62,7 @@ hamburg = {
          (9.9556355, 53.5519014), (9.9556355, 53.5499637), (9.9548201, 53.5485869), (9.9531893, 53.5463685)])
 }
 
-berlin = {
+BERLIN = {
     "country": "Germany",
     "city": "Berlin",
     "polygon": Polygon(
@@ -153,10 +130,9 @@ berlin = {
          (13.4686579, 52.5000926), (13.4688099, 52.5007736), (13.4691103, 52.501492), (13.4696038, 52.502341),
          (13.4698399, 52.502328), (13.4700759, 52.5030986), (13.4693571, 52.5031835)])
 }
-
-tel_aviv = {
+TEL_AVIV = {
     "country": "Israel",
-    "city": "Tel_Aviv",
+    "city": "Tel Aviv",
     "polygon": Polygon(
         [(34.775838, 32.1030508), (34.7701732, 32.0968887), (34.7663108, 32.0880357), (34.7657958, 32.0794908),
          (34.7642938, 32.0776181), (34.7607318, 32.0697087), (34.7595945, 32.0660538), (34.753286, 32.0564522),
@@ -172,9 +148,9 @@ tel_aviv = {
          (34.7777498, 32.10114), (34.775838, 32.1030508)])
 }
 
-jerusalem = {
+WEST_JERUSALEM = {
     "country": "Israel",
-    "city": "Westjerusalem",
+    "city": "West Jerusalem",
     "polygon": Polygon(
         [(35.1817982, 31.7716133), (35.1801823, 31.7690279), (35.176277, 31.7691009), (35.1740883, 31.7681887),
          (35.1743458, 31.765963), (35.1731012, 31.7635914), (35.1723288, 31.7619859), (35.1747749, 31.7612196),
@@ -192,42 +168,4 @@ jerusalem = {
          (35.1844951, 31.7763532), (35.1817982, 31.7716133)])
 }
 
-country_array = [tel_aviv, jerusalem, berlin, hamburg]
-
-
-@traced
-async def get_streetview(API_KEY):
-    async with AioHttpClientSession() as session:
-        nominated_country = random.randint(0, 3)
-        poly = country_array[nominated_country]['polygon']
-        status = False
-        while status != 'OK':
-            coord = generate_random(poly)
-            lng = coord[0][0]
-            lat = coord[0][1]
-            locstring = str(lat) + "," + str(lng)
-            try:
-                async with session.get(
-                        API_URL + "?key=" + API_KEY + "&location=" + locstring + "&source=outdoor") as response:
-                    json_body = (await response.json())
-                    status = json_body['status']
-                    print(status)
-                    if status == 'REQUEST_DENIED':
-                        print("NO API-KEY is definied, please set environment variable GOOGLE_MAPS_API_TOKEN")
-                        break
-            except AioHttpClientSession.exceptions.TimeoutError:
-                print(AioHttpClientSession.exceptions.TimeoutError)
-        print("    ========== Got one! ==========")
-        url = GOOGLE_URL + API_KEY + "&location=" + locstring
-        try:
-            contents = urlopen(url).read()
-            # urlretrieve(url, outfile)
-        except URLError:
-            print(URLError)
-        status = False
-        encoded_image_string = base64.b64encode(contents)
-        encoded_bytes = bytes("data:image/png;base64,",
-                              encoding="utf-8") + encoded_image_string
-    return Streetview(
-        image=encoded_bytes,
-        class_label=country_array[nominated_country]['city'])
+CITY_BOUNDARIES = [TEL_AVIV, WEST_JERUSALEM, BERLIN, HAMBURG]
