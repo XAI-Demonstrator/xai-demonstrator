@@ -57,7 +57,7 @@ jobs:
        - name: SSH Remote Commands
          uses: appleboy/ssh-action@v0.1.10
          env:
-           STREETVIEW_API_KEY: ${{ secrets.STREETVIEW_API_KEY }}
+           STREETVIEW_STATIC_API_TOKEN: ${{ secrets.STREETVIEW_API_KEY }}
            BATCH_SIZE: ${{ secrets.BATCH_SIZE }}
          with:
            host: ${{ secrets.HOST }}
@@ -66,7 +66,7 @@ jobs:
            envs: STREETVIEW_API_KEY,BATCH_SIZE
            script: |
              set -e
-             export STREETVIEW_API_KEY=${STREETVIEW_API_KEY}
+             export STREETVIEW_STATIC_API_TOKEN=${STREETVIEW_STATIC_API_TOKEN}
              export BATCH_SIZE=${BATCH_SIZE}
              cd test-deployment/deployment/test-deployment/
              sudo -E docker-compose pull
