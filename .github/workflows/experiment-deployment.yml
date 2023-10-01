@@ -73,7 +73,7 @@ jobs:
           path: "deployment/experiment-deployment/nginx-frontend/"
 
       - name: Wait for lock to release and place lock
-        uses: appleboy/ssh-action@v0.1.10
+        uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
@@ -101,7 +101,7 @@ jobs:
           rm: true
 
       - name: SSH Remote Commands
-        uses: appleboy/ssh-action@v0.1.10
+        uses: appleboy/ssh-action@v1.0.0
         env:
           COUCHDB_USER: ${{ secrets.COUCHDB_USER }}
           COUCHDB_PASSWORD: ${{ secrets.COUCHDB_PASSWORD }}
