@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set Up Node Environment
         uses: actions/setup-node@v3
@@ -65,7 +65,7 @@ jobs:
       url: https://gtc.xaidemo.de/
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Download all frontends
         uses: actions/download-artifact@v3
