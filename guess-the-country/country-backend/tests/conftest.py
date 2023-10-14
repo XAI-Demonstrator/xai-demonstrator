@@ -9,9 +9,7 @@ import asyncio
 @pytest.fixture
 def generate_rgb_image():
     def _generate(width, height):
-        rgb = np.random.randint(255, size=(width, height, 3), dtype=np.uint8)
-
-        return rgb
+        return np.random.randint(0, 255, size=(width, height, 3), dtype=np.uint8)
 
     return _generate
 

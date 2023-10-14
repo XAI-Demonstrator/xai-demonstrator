@@ -15,7 +15,11 @@ PATH = pathlib.Path(__file__).parent
 MODEL_INPUT_IMG_SIZE = 224
 MODEL_OUTPUT_MAP = ["Tel Aviv", "West Jerusalem", "Berlin", "Hamburg"]
 
-model = tf.keras.models.load_model(PATH / "my_model")
+try:
+    model = tf.keras.models.load_model(PATH / "my_model")
+except OSError:
+    print("No model file!")
+    model = None
 
 
 class Prediction(BaseModel):

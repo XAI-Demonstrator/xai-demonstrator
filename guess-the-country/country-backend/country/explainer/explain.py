@@ -10,7 +10,7 @@ from visualime.explain import explain_classification, render_explanation
 from xaidemo.tracing import traced
 
 from ..config import settings
-from ..model.predict import model, preprocess
+from ..model.predict import preprocess, model
 
 
 class Explanation(BaseModel):
