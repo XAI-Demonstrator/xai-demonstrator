@@ -143,8 +143,8 @@ export default {
       gameStore.round = 0;
       gameStore.roundOffset = this.roundOffset;
       gameStore.totalNumOfRounds = this.numOfRounds;
-      gameStore.scoreAI = 0;
-      gameStore.scoreHuman = 0;
+      gameStore.aiScore = 0;
+      gameStore.humanScore = 0;
       gameStore.gameId = uuidv4();
       if (this.externalPlayerId !== "") {
         gameStore.playerId = this.externalPlayerId;
@@ -172,7 +172,7 @@ export default {
     judgeRound(humanResponse) {
       roundStore.humanCity = humanResponse;
       if (roundStore.humanCity === roundStore.trueCity) {
-        gameStore.scoreHuman = 1 + gameStore.scoreHuman;
+        gameStore.humanScore = 1 + gameStore.humanScore;
       }
       this.recordRound();
       if (gameStore.round >= gameStore.totalNumOfRounds) {
@@ -203,8 +203,8 @@ export default {
           .get(this.backendUrl + "/final_score")
           .then((res) => {
             gameStore.round = res.data.rounds;
-            gameStore.scoreAI = res.data.ai_score;
-            gameStore.scoreHuman = res.data.player_score;
+            gameStore.aiScore = res.data.scoreAi;
+            gameStore.humanScore = res.data.scoreHuman
           })
           .catch((error) => {
             console.error(error);

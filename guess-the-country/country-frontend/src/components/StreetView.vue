@@ -55,7 +55,7 @@ export default {
         })
         .then((res) => {
           this.streetviewImage = res.data.image;
-          setGroundTruth(res.data.class_label);
+          setGroundTruth(res.data.city);
           this.waitingForBackend = false;
         })
         .catch((error) => {
@@ -72,16 +72,11 @@ export default {
       form.append("file", blob);
 
       await axios
-        .post(this.backendUrl + "/predict", form, {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "multipart/form-data",
-          },
-        })
+        .post(this.backendUrl + "/predict", form)
         .then((res) => {
           setAiResponse(res.data.class_label);
           if (roundStore.trueCity === roundStore.aiCity) {
-            gameStore.scoreAI = gameStore.scoreAI + 1;
+            gameStore.aiScore = gameStore.aiScore + 1;
           }
           roundStore.predictionId = res.data.prediction_id;
           this.waitingForBackend = false;

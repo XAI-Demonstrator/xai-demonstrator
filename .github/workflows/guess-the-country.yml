@@ -45,18 +45,13 @@ jobs:
           flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
           # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
           flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-      
-      - name: Download model
-        run: |
-          set -e
-          cd ./guess-the-country/country-backend
-          ./download_model.sh
 
       - name: Run unit tests with pytest
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           COVERALLS_FLAG_NAME: country-backend-unit
           COVERALLS_PARALLEL: ${{ github.ref == 'refs/heads/master' }}
+          STREETVIEW_STATIC_API_TOKEN: ${{ secrets.STREETVIEW_API_TEST_TOKEN }}
         run: |
           set -e
           cd ./guess-the-country/country-backend
@@ -159,6 +154,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         COVERALLS_FLAG_NAME: country-backend-unit
         COVERALLS_PARALLEL: true
+        STREETVIEW_STATIC_API_TOKEN: ${{ secrets.STREETVIEW_API_TEST_TOKEN }}
       run: |
         set -e
         cd ./guess-the-country/country-backend

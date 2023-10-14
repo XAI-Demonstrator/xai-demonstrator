@@ -1,11 +1,12 @@
-fastapi[all]==0.88.0
-uvicorn==0.20.0
-visualime==0.0.4
+fastapi==0.103.1
+uvicorn==0.23.2
+visualime==0.1.0
 
-pydantic
-shapely
-opencv-python
-tensorflow-cpu==2.11.0
-python-multipart
+pydantic<2.0
+typing-extensions==4.5.0
+shapely==2.0.1
+Pillow==10.0.0
+tensorflow-cpu==2.13.0
+python-multipart==0.0.6
 
 git+https://github.com/xai-demonstrator/xai-demonstrator.git@318ad17a9ebf2760f4f23b45cfdc29d18d393ec4#egg=xaidemo&subdirectory=common/backend-utils
