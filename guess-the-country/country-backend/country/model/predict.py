@@ -1,6 +1,8 @@
 import pathlib
 import uuid
 from typing import IO
+from io import BytesIO
+import base64
 
 import numpy as np
 import tensorflow as tf
@@ -23,7 +25,7 @@ class Prediction(BaseModel):
 
 @traced
 def predict_city(image_file: IO[bytes]) -> Prediction:
-    image = Image.open(image_file)
+    image = Image.open(BytesIO(base64.b64decode(image_file.read()[21:])))
     preprocessed_image = preprocess(image)
     city = predict_image(image=preprocessed_image)
     return Prediction(prediction_id=uuid.uuid4(),

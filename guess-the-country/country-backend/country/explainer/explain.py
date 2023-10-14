@@ -20,10 +20,10 @@ class Explanation(BaseModel):
 
 @traced
 def explain(image_file: IO[bytes]) -> Explanation:
-    image = Image.open(image_file)
+    image = Image.open(io.BytesIO(base64.b64decode(image_file.read()[21:])))
     preprocessed_image = preprocess(image)
 
-    explanation = explain_cnn(preprocessed_image, model)
+    explanation = explain_cnn(preprocessed_image[0], model)
 
     return Explanation(
         explanation_id=uuid.uuid4(),
@@ -51,6 +51,7 @@ def explain_cnn(image, model_=model):
                                                            segmentation_settings={},
                                                            predict_fn=model_.predict,
                                                            num_of_samples=500,
+                                                           segment_selection_method="forward_selection",
                                                            p=0.9)
 
     return render_explanation(image, segment_mask, segment_weights, positive="violet", coverage=0.15, opacity=0.5)

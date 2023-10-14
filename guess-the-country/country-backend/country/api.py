@@ -1,9 +1,11 @@
-from fastapi import APIRouter, UploadFile, File
+from fastapi import APIRouter, UploadFile, File, HTTPException
+from starlette.status import HTTP_500_INTERNAL_SERVER_ERROR
 
 from .streetview.client import get_random_streetview_image, StreetViewImage
 from .model.predict import predict_city, Prediction
 from .explainer.explain import explain, Explanation
 from pydantic import BaseModel
+from .config import settings
 
 api = APIRouter()
 
@@ -13,8 +15,8 @@ class ScoreRequest(BaseModel):
     round: int
     roundOffset: int
     totalNumOfRounds: int
-    scoreAi: int
-    scoreHuman: int
+    aiScore: int
+    humanScore: int
     gameId: str
     playerId: str
     # roundStore
@@ -37,6 +39,9 @@ class FinalScoreResponse(BaseModel):
 
 @api.post("/streetview")
 async def streetview(score_request: ScoreRequest) -> StreetViewImage:
+    if not settings.streetview_static_api_token:
+        raise HTTPException(status_code=HTTP_500_INTERNAL_SERVER_ERROR,
+                            detail="No StreetView API key was provided to the backend service!")
     return await get_random_streetview_image()
 
 
