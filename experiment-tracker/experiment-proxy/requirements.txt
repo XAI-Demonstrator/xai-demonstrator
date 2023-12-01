@@ -1,5 +1,5 @@
 fastapi==0.103.1
-pydantic==2.3.0
+pydantic==2.5.2
 pydantic-settings==2.0.3
 python-multipart==0.0.6
 aiohttp==3.8.5
