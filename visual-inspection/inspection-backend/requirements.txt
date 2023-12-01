@@ -1,7 +1,7 @@
 wheel
 numpy
 
-pydantic==1.10.2
+pydantic==2.5.2
 fastapi[all]==0.88.0
 uvicorn==0.20.0
 aiofiles==22.1.0
