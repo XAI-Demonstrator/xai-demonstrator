@@ -6,7 +6,7 @@ on:
       - 'review-sentiment/**'
       - '!review-sentiment/tests/**'
       - '!review-sentiment/**.md'
-      - 'github/workflows/review-sentiment.yml'
+      - '.github/workflows/review-sentiment.yml'
 
 jobs:
   test-backend:
