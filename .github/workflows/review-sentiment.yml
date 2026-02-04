@@ -6,6 +6,7 @@ on:
       - 'review-sentiment/**'
       - '!review-sentiment/tests/**'
       - '!review-sentiment/**.md'
+      - 'github/workflows/review-sentiment.yml'
 
 jobs:
   test-backend:
@@ -19,7 +20,7 @@ jobs:
         with:
           python-version: 3.8
 
-      - uses: actions/cache@v3.3.1
+      - uses: actions/cache@v4
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('./review-sentiment/sentiment-backend/requirements*.txt') }}
@@ -72,7 +73,7 @@ jobs:
         with:
           node-version: '14'
 
-      - uses: actions/cache@v3.3.1
+      - uses: actions/cache@v4
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('./review-sentiment/sentiment-frontend/package-lock.json') }}
