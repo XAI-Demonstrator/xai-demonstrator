@@ -8,6 +8,8 @@ on:
       - 'review-sentiment/sentiment-frontend/**'
       - 'visual-inspection/inspection-frontend/**'
       - 'guess-the-country/country-frontend/**'
+      - '.github/workflows/landing-page.yml'
+
 
 jobs:
   test:
