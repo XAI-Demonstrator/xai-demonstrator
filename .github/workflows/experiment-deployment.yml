@@ -15,6 +15,7 @@ on:
     paths:
       - "deployment/experiment-deployment/**"
       - "!deployment/experiment-deployment/**.md"
+      - '.github/workflows/experiment-deployment.yml'
 
 jobs:
   build-frontends:

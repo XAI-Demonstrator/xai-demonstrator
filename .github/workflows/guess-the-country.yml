@@ -7,6 +7,7 @@ on:
       - 'guess-the-country/**'
       - '!guess-the-country/tests/**'
       - '!guess-the-country/**.md'
+      - '.github/workflows/guess-the-country.yml'
 
 jobs:
   test-backend:
@@ -20,7 +21,7 @@ jobs:
         with:
           python-version: 3.8
 
-      - uses: actions/cache@v3.3.1
+      - uses: actions/cache@v4
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('./guess-the-country/country-backend/requirements*.txt') }}
@@ -82,7 +83,7 @@ jobs:
         with:
           node-version: '18'
 
-      - uses: actions/cache@v3.3.1
+      - uses: actions/cache@v4
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('./guess-the-country/country-frontend/package-lock.json') }}
@@ -133,7 +134,7 @@ jobs:
       with:
         python-version: 3.8
 
-    - uses: actions/cache@v3.3.1
+    - uses: actions/cache@v4
       with:
         path: ~/.cache/pip
         key: ${{ runner.os }}-pip-${{ hashFiles('./guess-the-country/country-backend/requirements*.txt') }}

@@ -5,6 +5,7 @@ on:
     paths:
       - 'common/backend-utils/**'
       - '!common/backend-utils/**.md'
+      - '.github/workflows/backend-utils.yml'
 
 jobs:
   test-xaidemo:
@@ -16,7 +17,7 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: 3.8
-      - uses: actions/cache@v3.3.1
+      - uses: actions/cache@v4
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('./common/backend-utils/setup.py') }}

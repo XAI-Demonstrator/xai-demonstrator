@@ -6,6 +6,7 @@ on:
     paths:
       - 'experiment-tracker/**'
       - '!experiment-tracker/**.md'
+      - '.github/workflows/experiment-tracker.yml'
 
 jobs:
   test-proxy:

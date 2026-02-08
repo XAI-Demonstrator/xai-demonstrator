@@ -18,6 +18,7 @@ on:
     paths:
       - 'deployment/test-deployment/**'
       - '!deployment/test-deployment/**.md'
+      - '.github/workflows/test-deployment.yml'
 
 jobs:
   deploy:

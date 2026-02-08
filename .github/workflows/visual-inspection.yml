@@ -7,6 +7,7 @@ on:
       - 'visual-inspection/**'
       - '!visual-inspection/tests/**'
       - '!visual-inspection/**.md'
+      - '.github/workflows/visual-inspection.yml'
 
 jobs:
   test-backend:
@@ -20,7 +21,7 @@ jobs:
         with:
           python-version: 3.8
 
-      - uses: actions/cache@v3.3.1
+      - uses: actions/cache@v4
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('./visual-inspection/inspection-backend/requirements*.txt') }}
@@ -80,7 +81,7 @@ jobs:
         with:
           node-version: '14'
 
-      - uses: actions/cache@v3.3.1
+      - uses: actions/cache@v4
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('./visual-inspection/inspection-frontend/package-lock.json') }}
