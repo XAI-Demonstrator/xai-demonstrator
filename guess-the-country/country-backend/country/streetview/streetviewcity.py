@@ -9,6 +9,9 @@ class StreetviewCity(BaseModel):
     city: str
     polygon: Polygon
 
+    class Config:
+     arbitrary_types_allowed = True
+
 hamburg = StreetviewCity(
     country="Germany",
     city="Hamburg",
