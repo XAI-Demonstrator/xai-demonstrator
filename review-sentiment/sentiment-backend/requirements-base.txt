@@ -1,9 +1,9 @@
 wheel
 numpy
 
-pydantic==1.10.2
-fastapi==0.82.0
-uvicorn==0.18.3
+pydantic==2.3.0
+fastapi[all]==0.115.4
+uvicorn[standard]==0.32.0
 transformers==4.21.3
 captum==0.5.0
 
