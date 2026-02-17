@@ -22,8 +22,7 @@ def prediction(input):
     pre_image = preprocess(image)
     prediction_id = uuid.uuid4()
     label = predict_image(image=pre_image)
-    return Prediction(prediction_id=prediction_id,
-                      class_label=label)
+    return Prediction(prediction_id=prediction_id, class_label=label)
 
 @traced
 def load_image(encoded_data):

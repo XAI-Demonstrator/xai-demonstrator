@@ -25,8 +25,7 @@ def explain(data):
     explanation_id = uuid.uuid4()
 
     encoded_image_string = convert_explanation(explanation)
-    encoded_bytes = bytes("data:image/png;base64,",
-                          encoding="utf-8") + encoded_image_string
+    encoded_bytes = bytes("data:image/png;base64,", encoding="utf-8") + encoded_image_string
     return Explanation(
         explanation_id=explanation_id,
         image=encoded_bytes
@@ -37,8 +36,7 @@ def explain(data):
 def convert_explanation(explanation):
     image = np.array(explanation, dtype="float32")
     image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    img_resized = cv2.resize(image_rgb, (448, 448),
-                             interpolation=cv2.INTER_CUBIC)
+    img_resized = cv2.resize(image_rgb, (448, 448), interpolation=cv2.INTER_CUBIC)
     retval, buffer = cv2.imencode('.png', img_resized)
     encoded_image_string = base64.b64encode(buffer)
     return encoded_image_string
@@ -46,11 +44,19 @@ def convert_explanation(explanation):
 
 @traced
 def explain_cnn(image, model_=model):
-    segment_mask, segment_weights = explain_classification(image=image,
-                                                           segmentation_method="felzenszwalb",
-                                                           segmentation_settings={},
-                                                           predict_fn=model_.predict_,
-                                                           num_of_samples=500,
-                                                           p=0.9)
+    segment_mask, segment_weights = explain_classification(
+        image=image,
+        segmentation_method="felzenszwalb",
+        segmentation_settings={},
+        predict_fn=model_.predict_,
+        num_of_samples=500,
+        p=0.9)
 
-    return render_explanation(image, segment_mask, segment_weights, positive="violet", coverage=0.15, opacity=0.5)
+    return render_explanation(
+        image,
+        segment_mask,
+        segment_weights,
+        positive="violet",
+        coverage=0.15,
+        opacity=0.5
+    )
