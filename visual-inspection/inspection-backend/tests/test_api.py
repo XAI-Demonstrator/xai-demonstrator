@@ -1,5 +1,3 @@
-import pytest
-
 from fastapi.testclient import TestClient
 
 from inspection import api, main
@@ -38,7 +36,7 @@ client = TestClient(main.app)
 
 
 def test_that_language_is_passed(generate_image, mocker):
-    p = mocker.patch.object(api, "predict")
+    p = mocker.patch.object(api, "predict", return_value=api.Prediction(prediction_id="uuid", class_label="ok"))
 
     response = client.post("/predict", files={"file": generate_image(200, 300)}, data={"language": "en"})
 
@@ -49,7 +47,7 @@ def test_that_language_is_passed(generate_image, mocker):
 
 
 def test_that_model_id_is_passed_for_prediction(generate_image, mocker):
-    p = mocker.patch.object(api, "predict")
+    p = mocker.patch.object(api, "predict", return_value=api.Prediction(prediction_id="uuid", class_label="ok"))
 
     response = client.post("/predict", files={"file": generate_image(200, 300)}, data={"model_id": "this-is-a-model"})
 
@@ -60,7 +58,7 @@ def test_that_model_id_is_passed_for_prediction(generate_image, mocker):
 
 
 def test_that_model_id_is_passed_for_explanation(generate_image, mocker):
-    p = mocker.patch.object(api, "explain")
+    p = mocker.patch.object(api, "explain", return_value=api.Explanation(explanation_id="uuid", image=b"dummy-bytes"))
 
     response = client.post("/explain", files={"file": generate_image(200, 300)}, data={"model_id": "this-is-a-model"})
 
