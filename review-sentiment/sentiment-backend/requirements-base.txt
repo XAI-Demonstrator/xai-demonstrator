@@ -4,7 +4,7 @@ numpy
 pydantic==2.3.0
 fastapi[all]==0.115.4
 uvicorn[standard]==0.32.0
-transformers==4.52.4
+transformers==4.32.0
 captum==0.5.0
 
 git+https://github.com/xai-demonstrator/xai-demonstrator.git@0539e8deb2ae68c9ee12aace9861718f8dcb6757#egg=xaidemo&subdirectory=common/backend-utils
