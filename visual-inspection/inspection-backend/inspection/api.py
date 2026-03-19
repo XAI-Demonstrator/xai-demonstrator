@@ -28,6 +28,32 @@ class ExplanationRequest(BaseModel):
     class Config:
         extra = 'forbid'
 
+    @field_validator("settings", mode="before")
+    @classmethod
+    def coerce_settings_values(cls, value: Dict[str, Dict[str, object]]):
+        coerced = {}
+        for section, params in value.items():
+            new_params = {}
+            for key, v in params.items():
+                if isinstance(v, str):
+                    if v.lower() == "true":
+                        new_v = True
+                    elif v.lower() == "false":
+                        new_v = False
+                    else:
+                        try:
+                            new_v = int(v)
+                        except ValueError:
+                            try:
+                                new_v = float(v)
+                            except ValueError:
+                                new_v = v
+                else:
+                    new_v = v
+                new_params[key] = new_v
+            coerced[section] = new_params
+        return coerced
+
     @field_validator("method")
     @classmethod
     def method_must_be_available(cls, v):
@@ -58,5 +84,11 @@ def explain_classification(file: UploadFile = File(...),
     else:
         request.method = method or request.method
         request.model_id = model_id or request.model_id
+
+        if request.method not in EXPLAINERS:
+            raise HTTPException(
+                status_code=HTTP_422_UNPROCESSABLE_ENTITY,
+                detail=f"{request.method} is not an available explanation method",
+            )
 
     return explain(file.file, model_id=request.model_id, method=request.method, settings=request.settings)
