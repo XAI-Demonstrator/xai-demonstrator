@@ -1,7 +1,7 @@
 from typing import Dict, Union, Optional
 
 from fastapi import APIRouter, File, Form, HTTPException, UploadFile
-from pydantic import BaseModel, StrictBool, StrictFloat, StrictInt, ValidationError, validator
+from pydantic import BaseModel, StrictBool, StrictFloat, StrictInt, ValidationError, field_validator
 from starlette.status import HTTP_400_BAD_REQUEST, HTTP_422_UNPROCESSABLE_ENTITY
 
 from .config import settings as _settings
@@ -29,10 +29,9 @@ class ExplanationRequest(BaseModel):
 
     class Config:
         extra = 'forbid'
-        validate_all = True
-        validate_assignment = True
 
-    @validator("method")
+    @field_validator("method")
+    @classmethod
     def method_must_be_available(cls, v):
         if v not in EXPLAINERS:
             raise ValueError(f"{v} is not an available explanation method")
@@ -53,7 +52,7 @@ def explain_classification(file: UploadFile = File(...),
     settings = settings or "{}"
 
     try:
-        request = ExplanationRequest.parse_raw('{"settings":' + settings + '}')
+        request = ExplanationRequest.model_validate_json('{"settings":' + settings + '}')
     except ValidationError as errors_out:
         raise HTTPException(
             status_code=HTTP_422_UNPROCESSABLE_ENTITY, detail=errors_out.errors()
