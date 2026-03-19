@@ -23,9 +23,7 @@ def predict_object(file: UploadFile = File(...),
 class ExplanationRequest(BaseModel):
     method: str = _settings.default_explainer
     model_id: str = _settings.default_model
-    settings: Dict[str, Dict[str, Union[StrictInt, StrictFloat, StrictBool,
-                                        int, float, bool,
-                                        str]]]
+    settings: Dict[str, Dict[str, Union[int, float, bool, str]]]
 
     class Config:
         extra = 'forbid'
