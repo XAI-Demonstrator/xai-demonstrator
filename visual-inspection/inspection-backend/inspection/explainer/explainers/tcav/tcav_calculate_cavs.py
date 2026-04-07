@@ -18,27 +18,19 @@ def _load_and_preprocess_images(
     target_size: Tuple[int, int] = (224, 224),
 ) -> np.ndarray:
     """Load images from disk, resize them to a common size and apply preprocessing.
-
-    Parameters
-    ----------
-    image_paths:
-        Iterable of file system paths pointing to image files.
-    preprocess_fn:
-        Function that takes a batch of images with shape (N, H, W, C) and
-        returns a preprocessed batch compatible with the target model.
-    target_size:
-        Spatial target size (height, width) used when loading each image.
-
-    Returns
-    -------
-    np.ndarray
-        Preprocessed image batch of shape (N, H, W, C).
+        -> Preprocessed image batch of shape (N, H, W, C).
     """
     images: list[np.ndarray] = []
+    total = len(image_paths)
 
-    for path in image_paths:
+    if total == 0:
+        print("[TCAV]   No image paths provided - returning empty array.")
+        return np.empty((0,), dtype="float32")
+
+    print(f"[TCAV]   Loading and preprocessing {total} images ...")
+
+    for idx, path in enumerate(image_paths, start=1):
         try:
-            print(f"[TCAV]   Loading image: {path}")
             # Ensure all images share a common spatial resolution and 3 channels (RGB)
             pil_img = tf.keras.utils.load_img(path, target_size=target_size)
             img_arr = tf.keras.utils.img_to_array(pil_img)
@@ -47,6 +39,9 @@ def _load_and_preprocess_images(
             print(
                 f"[TCAV]   WARNING: Could not load image '{path}' ({exc}); skipping this file.",
             )
+
+        if idx % 10 == 0 or idx == total:
+            print(f"[TCAV]     Loaded {idx}/{total} images...")
 
     if not images:
         print("[TCAV]   No valid images found - returning empty array.")
@@ -67,20 +62,7 @@ def _list_concept_image_paths(
     extensions: Tuple[str, ...] = ("*.png", "*.jpg", "*.jpeg"),
 ) -> list[str]:
     """Collect all image file paths for a given concept.
-
-    Parameters
-    ----------
-    concepts_root:
-        Root folder under which all concept subfolders live.
-    concept_name:
-        Concept subfolder name, relative to ``concepts_root``.
-    extensions:
-        File patterns that are treated as valid image types.
-
-    Returns
-    -------
-    list[str]
-        Sorted list of absolute or relative paths to image files for the concept.
+        --> Sorted list of absolute or relative paths to image files for the concept.
     """
     concept_dir = os.path.join(concepts_root, concept_name)
     paths: list[str] = []
@@ -185,11 +167,7 @@ def compute_and_store_cavs(
     C: float = 0.01,
     max_iter: int = 1000,
 ) -> Dict[str, str]:
-    """Compute and persist CAVs for all combinations of concepts and random concepts.
-
-    Returns a mapping from a logical key (``"<concept>__vs__<random>"``) to the
-    path of the corresponding ``.npz`` file on disk.
-    """
+    """Compute and persist CAVs for all combinations of concepts and random concepts."""
     os.makedirs(cav_output_dir, exist_ok=True)
 
     cav_files: Dict[str, str] = {}
