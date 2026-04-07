@@ -11,6 +11,8 @@ def _discover_concepts_from_root(concepts_root: str) -> Tuple[List[str], List[st
     concepts: List[str] = []
     randoms: List[str] = []
 
+    if not concepts_root:
+        return concepts, randoms
     if not os.path.isdir(concepts_root):
         return concepts, randoms
 
@@ -38,9 +40,10 @@ def _discover_concepts_from_root(concepts_root: str) -> Tuple[List[str], List[st
 def _resolve_explainer_config(config: TCAVExplainerConfiguration) -> TCAVExplainerConfiguration:
     concepts = config.concepts
     randoms = config.random_concepts
+    concepts_root = config.concepts_root or ""
 
     if concepts is None or randoms is None:
-        discovered_concepts, discovered_randoms = _discover_concepts_from_root(config.concepts_root)
+        discovered_concepts, discovered_randoms = _discover_concepts_from_root(concepts_root)
         if concepts is None:
             concepts = discovered_concepts
         if randoms is None:
@@ -87,16 +90,17 @@ def _load_manifest_entries(config: TCAVExplainerConfiguration) -> List[CAVLoadEn
 
 
 def load_cavs_for_config(config: TCAVExplainerConfiguration) -> Dict[str, np.ndarray]:
-    resolved_config = _resolve_explainer_config(config)
-    entries = _load_manifest_entries(resolved_config)
+    entries = _load_manifest_entries(config)
 
     if entries:
-        print(f"[TCAV] Loaded {len(entries)} CAV entries from manifest '{resolved_config.cav_manifest_filename}'.")
+        print(f"[TCAV] Loaded {len(entries)} CAV entries from manifest '{config.cav_manifest_filename}'.")
     else:
-        raise FileNotFoundError(
-            f"[TCAV] Could not load manifest '{resolved_config.cav_manifest_filename}' "
-            f"from '{resolved_config.cav_dir}' for bottleneck '{resolved_config.bottleneck_layer}'.",
+        resolved_config = _resolve_explainer_config(config)
+        print(
+            f"[TCAV] Could not load manifest '{resolved_config.cav_manifest_filename}'. "
+            "Falling back to generated entry list.",
         )
+        entries = _build_fallback_entries(resolved_config)
 
     cavs: Dict[str, np.ndarray] = {}
     missing_pairs = 0

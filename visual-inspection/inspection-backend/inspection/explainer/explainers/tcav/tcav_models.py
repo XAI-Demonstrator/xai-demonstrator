@@ -11,7 +11,7 @@ class TCAVExplainerConfiguration(BaseModel):
     bottleneck_layer: str = "global_average_pooling2d_1"
     num_random_experiments: int = 10
     cav_dir: str
-    concepts_root: str
+    concepts_root: Optional[str] = None
     cav_manifest_filename: str = "cav_manifest.json"
 
 

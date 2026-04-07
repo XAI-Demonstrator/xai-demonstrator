@@ -16,9 +16,8 @@ def test_tcav_explanation_roundtrip(generate_image):
     tcav_settings = {
         "explainer": {
             "bottleneck_layer": "global_average_pooling2d_1",
-            "num_random_experiments": 1,
             "cav_dir": "inspection/explainer/explainers/tcav/cavs",
-            "concepts_root": "inspection/explainer/explainers/tcav/concept_data",
+            "cav_manifest_filename": "cav_manifest.json",
         },
         "renderer": {
             "return_heatmap": True,
