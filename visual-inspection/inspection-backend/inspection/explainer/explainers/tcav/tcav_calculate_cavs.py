@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import os
 from glob import glob
 from typing import Callable, Dict, Iterable, Sequence, Tuple
@@ -166,11 +167,13 @@ def compute_and_store_cavs(
     *,
     C: float = 0.01,
     max_iter: int = 1000,
+    manifest_filename: str = "cav_manifest.json",
 ) -> Dict[str, str]:
     """Compute and persist CAVs for all combinations of concepts and random concepts."""
     os.makedirs(cav_output_dir, exist_ok=True)
 
     cav_files: Dict[str, str] = {}
+    manifest_entries: list[dict[str, str]] = []
     concept_list = list(concepts)
     random_list = list(random_concepts)
     total = len(concept_list) * len(random_list)
@@ -201,8 +204,25 @@ def compute_and_store_cavs(
 
             np.savez_compressed(filepath, cav=cav)
             cav_files[key] = filepath
+            manifest_entries.append(
+                {
+                    "concept": concept,
+                    "random_concept": rnd,
+                    "bottleneck_layer": bottleneck_layer_name,
+                    "filename": filename,
+                },
+            )
 
             print(f"[TCAV] Saved: {filepath}")
+
+    manifest_path = os.path.join(cav_output_dir, manifest_filename)
+    manifest_payload = {
+        "schema_version": 1,
+        "entries": manifest_entries,
+    }
+    with open(manifest_path, "w", encoding="utf-8") as fp:
+        json.dump(manifest_payload, fp, indent=2)
+    print(f"[TCAV] Manifest saved: {manifest_path}")
 
     print(f"\n[TCAV] DONE. {len(cav_files)} CAV files created.")
     return cav_files

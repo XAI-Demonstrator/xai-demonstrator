@@ -15,12 +15,6 @@ def test_tcav_explanation_roundtrip(generate_image):
 
     tcav_settings = {
         "explainer": {
-            "concepts": [
-                "form_concepts/round",
-            ],
-            "random_concepts": [
-                "random_concepts/random_1",
-            ],
             "bottleneck_layer": "global_average_pooling2d_1",
             "num_random_experiments": 1,
             "cav_dir": "inspection/explainer/explainers/tcav/cavs",
