@@ -72,18 +72,13 @@ def run_tcav_on_image(
             explainer_input = preprocess_fn(input_image)[0]
             analysis = tcav_module.compute_tcav_analysis(explainer_input, model, **tcav_settings)
 
-            top_k = max(1, tcav_settings["renderer"]["top_k_concepts"])
-            top_scores = [(score.concept, score.score) for score in analysis.ranked_concept_scores[:top_k]]
-            if tcav_settings["renderer"]["return_heatmap"]:
-                output_image_array = tcav_render_module.render_tcav_overlay(
-                    explainer_input,
-                    top_scores,
-                    top_k=top_k,
-                )
-            else:
-                output_image_array = tcav_render_module.deprocess_mobilenet_v2_image(explainer_input)
+            ranked_scores = [(score.concept, score.score) for score in analysis.ranked_concept_scores]
+            output_image_array = tcav_render_module.render_tcav_score_panel(
+                ranked_scores,
+                top_k=None,
+            )
 
-            output_image = image_result_dir / "tcav_output.png"
+            output_image = image_result_dir / "tcav_scores.png"
             _save_png(output_image_array, output_image)
 
             result = {
