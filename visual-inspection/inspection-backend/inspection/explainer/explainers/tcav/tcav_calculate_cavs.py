@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import os
 from glob import glob
+from pathlib import Path
 from typing import Callable, Dict, Iterable, Sequence, Tuple
 
 import numpy as np
@@ -11,6 +12,75 @@ from sklearn.linear_model import LogisticRegression
 
 # Type alias for a batch preprocessing function to make signatures clearer
 PreprocessFn = Callable[[np.ndarray], np.ndarray]
+
+
+def _sanitize_name(value: str) -> str:
+    return value.replace("/", "_").replace("\\", "_")
+
+
+def _discover_known_concepts(concepts_root: str) -> tuple[list[str], list[str]]:
+    """Discover concept and random concept ids from the concept root directory."""
+    root = Path(concepts_root)
+    concepts: list[str] = []
+    randoms: list[str] = []
+
+    if not root.exists():
+        return concepts, randoms
+
+    random_root = root / "random_concepts"
+    if random_root.is_dir():
+        for child in sorted(random_root.iterdir()):
+            if child.is_dir():
+                randoms.append(f"random_concepts/{child.name}")
+
+    for group_dir in sorted(root.iterdir()):
+        if not group_dir.is_dir() or group_dir.name == "random_concepts":
+            continue
+        for child in sorted(group_dir.iterdir()):
+            if child.is_dir():
+                concepts.append(f"{group_dir.name}/{child.name}")
+
+    return concepts, randoms
+
+
+def _build_manifest_entries_from_npz(
+    cav_output_dir: str,
+    concepts_root: str,
+) -> list[dict[str, str]]:
+    """Rebuild manifest entries from files on disk to avoid dropping existing CAVs."""
+    concepts, randoms = _discover_known_concepts(concepts_root)
+    concept_map = {_sanitize_name(c): c for c in concepts}
+    random_map = {_sanitize_name(r): r for r in randoms}
+
+    entries: list[dict[str, str]] = []
+    for npz_path in sorted(Path(cav_output_dir).glob("*.npz")):
+        stem = npz_path.stem
+        try:
+            safe_pair, bottleneck_layer = stem.rsplit("__", maxsplit=1)
+            safe_concept, safe_random = safe_pair.split("__vs__", maxsplit=1)
+        except ValueError:
+            print(f"[TCAV] WARNING: Could not parse CAV filename '{npz_path.name}' for manifest rebuild.")
+            continue
+
+        concept = concept_map.get(safe_concept)
+        random_concept = random_map.get(safe_random)
+        if concept is None or random_concept is None:
+            print(
+                "[TCAV] WARNING: Could not map filename back to concept names for "
+                f"'{npz_path.name}'. Skipping this file in manifest.",
+            )
+            continue
+
+        entries.append(
+            {
+                "concept": concept,
+                "random_concept": random_concept,
+                "bottleneck_layer": bottleneck_layer,
+                "filename": npz_path.name,
+            },
+        )
+
+    return entries
 
 
 def _load_and_preprocess_images(
@@ -197,8 +267,8 @@ def compute_and_store_cavs(
             )
 
             # Sanitize concept names for safe file names (avoid path separators)
-            safe_concept = concept.replace("/", "_").replace("\\", "_")
-            safe_rnd = rnd.replace("/", "_").replace("\\", "_")
+            safe_concept = _sanitize_name(concept)
+            safe_rnd = _sanitize_name(rnd)
             filename = f"{safe_concept}__vs__{safe_rnd}__{bottleneck_layer_name}.npz"
             filepath = os.path.join(cav_output_dir, filename)
 
@@ -216,6 +286,12 @@ def compute_and_store_cavs(
             print(f"[TCAV] Saved: {filepath}")
 
     manifest_path = os.path.join(cav_output_dir, manifest_filename)
+    rebuilt_entries = _build_manifest_entries_from_npz(cav_output_dir, concepts_root)
+    if rebuilt_entries:
+        manifest_entries = rebuilt_entries
+    else:
+        print("[TCAV] WARNING: Manifest rebuild from npz files yielded no entries; using in-memory entries.")
+
     manifest_payload = {
         "schema_version": 1,
         "entries": manifest_entries,

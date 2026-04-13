@@ -4,33 +4,22 @@ from inspection.explainer.explainers.tcav.tcav_calculate_cavs import compute_and
 
 
 def main() -> None:
-    """Entry point to compute and persist all TCAV CAVs for the configured concepts.
-
-    This script is intended to be run offline. It will:
-
-    * Load the configured model ("my_model" by default).
-    * Iterate over all configured concepts and random concepts.
-    * Compute CAVs for the chosen bottleneck layer.
-    * Store the resulting ``.npz`` files under ``cavs/``.
-    """
+    """Compute and persist TCAV CAVs for configured concept sets."""
     concepts_root = "inspection/explainer/explainers/tcav/concept_data"
     cav_output_dir = "inspection/explainer/explainers/tcav/cavs"
     concepts = [
-        "form_concepts/round",
+        # form concepts
+        "form_concepts/compact_rounded",
+        "form_concepts/cylindrical",
+        "form_concepts/oval",
         "form_concepts/rectangular",
-        "object_concepts/phone",
-        "object_concepts/keyboard",
-        "object_concepts/camera",
-        "object_concepts/cup",
-        "object_concepts/glasses",
-        "object_concepts/keys",
-        "object_concepts/mouse",
-        "object_concepts/notebook",
-        "visual_concepts/screen_surface",
-        "visual_concepts/metal",
-        "visual_concepts/paper",
-        "visual_concepts/white",
-        "visual_concepts/glass",
+        "form_concepts/round",
+        # Feature concepts
+        "feature_concepts/circular_opening",
+        "feature_concepts/has_handle",
+        "feature_concepts/has_keys_buttons",
+        "feature_concepts/has_lens",
+        "feature_concepts/has_screen",
     ]
 
     # At least one random concept is required for TCAV; multiple can help
@@ -38,14 +27,14 @@ def main() -> None:
         "random_concepts/random_1",
         "random_concepts/random_2",
         "random_concepts/random_3",
+        "random_concepts/random_4",
+        "random_concepts/random_5",
+        "random_concepts/random_6",
+        "random_concepts/random_7",
     ]
 
-    # Bottleneck layer used to extract activations for CAV training.
     bottleneck_layer_name = "global_average_pooling2d_1"
 
-    # NOTE: The model id must exist in ``inspection/model/models`` and be
-    # configured as part of the backend. For the visual inspection demo the
-    # default id is "my_model".
     model = get_model("my_model")
 
     cav_files = compute_and_store_cavs(

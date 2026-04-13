@@ -1,3 +1,4 @@
+import logging
 import os
 from typing import Dict, List, Tuple
 
@@ -5,6 +6,9 @@ import numpy as np
 
 from .read_cav_manifest import read_cav_manifest_entries
 from .tcav_models import CAVLoadEntry, TCAVExplainerConfiguration
+
+
+LOGGER = logging.getLogger(__name__)
 
 
 def _discover_concepts_from_root(concepts_root: str) -> Tuple[List[str], List[str]]:
@@ -61,6 +65,25 @@ def _resolve_explainer_config(config: TCAVExplainerConfiguration) -> TCAVExplain
     update_data = {"concepts": concepts, "random_concepts": randoms}
     return config.model_copy(update=update_data)
 
+
+def _build_fallback_entries(config: TCAVExplainerConfiguration) -> List[CAVLoadEntry]:
+    entries: List[CAVLoadEntry] = []
+    for concept in config.concepts or []:
+        for random_concept in config.random_concepts or []:
+            safe_concept = concept.replace("/", "_").replace("\\", "_")
+            safe_random = random_concept.replace("/", "_").replace("\\", "_")
+            filename = f"{safe_concept}__vs__{safe_random}__{config.bottleneck_layer}.npz"
+            entries.append(
+                CAVLoadEntry(
+                    concept=concept,
+                    random_concept=random_concept,
+                    bottleneck_layer=config.bottleneck_layer,
+                    filename=filename,
+                    file_path=os.path.join(config.cav_dir, filename),
+                ),
+            )
+    return entries
+
 def _load_manifest_entries(config: TCAVExplainerConfiguration) -> List[CAVLoadEntry]:
     raw_entries = read_cav_manifest_entries(config.cav_dir, config.cav_manifest_filename)
     entries: List[CAVLoadEntry] = []
@@ -90,15 +113,16 @@ def _load_manifest_entries(config: TCAVExplainerConfiguration) -> List[CAVLoadEn
 
 
 def load_cavs_for_config(config: TCAVExplainerConfiguration) -> Dict[str, np.ndarray]:
+    resolved_config = config
     entries = _load_manifest_entries(config)
 
     if entries:
-        print(f"[TCAV] Loaded {len(entries)} CAV entries from manifest '{config.cav_manifest_filename}'.")
+        LOGGER.info("[TCAV] Loaded %d CAV entries from manifest '%s'.", len(entries), config.cav_manifest_filename)
     else:
         resolved_config = _resolve_explainer_config(config)
-        print(
-            f"[TCAV] Could not load manifest '{resolved_config.cav_manifest_filename}'. "
-            "Falling back to generated entry list.",
+        LOGGER.info(
+            "[TCAV] Could not load manifest '%s'. Falling back to generated entry list.",
+            resolved_config.cav_manifest_filename,
         )
         entries = _build_fallback_entries(resolved_config)
 
@@ -118,6 +142,6 @@ def load_cavs_for_config(config: TCAVExplainerConfiguration) -> Dict[str, np.nda
             f"No CAVs found in '{resolved_config.cav_dir}' for bottleneck '{resolved_config.bottleneck_layer}'.",
         )
     if missing_pairs:
-        print(f"[TCAV] Missing {missing_pairs} concept/random CAV files; continuing with available files.")
+        LOGGER.warning("[TCAV] Missing %d concept/random CAV files; continuing with available files.", missing_pairs)
     return cavs
 

@@ -1,19 +1,22 @@
 import json
-import os
+import logging
+from pathlib import Path
 from typing import Dict, List
 
 
+LOGGER = logging.getLogger(__name__)
+
+
 def read_cav_manifest_entries(cav_dir: str, manifest_filename: str) -> List[Dict[str, str]]:
-    """Read and normalize CAV manifest entries."""
-    manifest_path = os.path.join(cav_dir, manifest_filename)
-    if not os.path.exists(manifest_path):
+    manifest_path = Path(cav_dir) / manifest_filename
+    if not manifest_path.exists():
         return []
 
     try:
-        with open(manifest_path, "r", encoding="utf-8") as file_obj:
+        with manifest_path.open("r", encoding="utf-8") as file_obj:
             payload = json.load(file_obj)
     except (OSError, json.JSONDecodeError) as exc:
-        print(f"[TCAV] WARNING: Could not read manifest '{manifest_path}' ({exc}).")
+        LOGGER.warning("[TCAV] Could not read manifest '%s' (%s).", manifest_path, exc)
         return []
 
     if isinstance(payload, dict):

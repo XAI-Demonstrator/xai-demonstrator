@@ -19,3 +19,5 @@ node_modules/
 /experiments
 /site
 guess-the-country/.env
+visual-inspection/inspection-backend/inspection/explainer/explainers/tcav/concept_data
+visual-inspection/tests/assets

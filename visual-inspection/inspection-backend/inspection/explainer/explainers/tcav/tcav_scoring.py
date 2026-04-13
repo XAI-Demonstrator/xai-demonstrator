@@ -13,6 +13,10 @@ def compute_concept_scores(acts_flat: np.ndarray, cavs: Dict[str, np.ndarray]) -
     for key, cav in cavs.items():
         concept_name = key.split("__vs__", maxsplit=1)[0]
         cav_flat = cav.reshape(-1)
+        if cav_flat.shape != acts_flat.shape:
+            raise ValueError(
+                f"Activation shape {acts_flat.shape} does not match CAV shape {cav_flat.shape} for '{key}'.",
+            )
         cav_norm = float(np.linalg.norm(cav_flat))
         score = float(np.dot(acts_flat, cav_flat)) / (acts_norm * cav_norm + EPSILON)
 
