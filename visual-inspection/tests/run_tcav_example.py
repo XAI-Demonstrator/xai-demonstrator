@@ -18,6 +18,7 @@ settings = importlib.import_module("inspection.config").settings
 model_module = importlib.import_module("inspection.model.model")
 predict_module = importlib.import_module("inspection.model.predict")
 tcav_module = importlib.import_module("inspection.explainer.explainers.tcav_")
+tcav_text_module = importlib.import_module("inspection.explainer.explainers.tcav_text")
 tcav_render_module = importlib.import_module("inspection.explainer.explainers.tcav.tcav_render")
 
 
@@ -71,6 +72,8 @@ def run_tcav_on_image(
         with Image.open(image_path) as input_image:
             explainer_input = preprocess_fn(input_image)[0]
             analysis = tcav_module.compute_tcav_analysis(explainer_input, model, **tcav_settings)
+            top_k = int(tcav_settings.get("renderer", {}).get("top_k_concepts", 2))
+            explanation_text = tcav_text_module.build_tcav_explanation_sentence(analysis, top_k=top_k)
 
             ranked_scores = [(score.concept, score.score) for score in analysis.ranked_concept_scores]
             output_image_array = tcav_render_module.render_tcav_score_panel(
@@ -80,11 +83,13 @@ def run_tcav_on_image(
 
             output_image = image_result_dir / "tcav_scores.png"
             _save_png(output_image_array, output_image)
+            print(f"[TCAV] Explanation text for {image_path.name}: {explanation_text}")
 
             result = {
                 "schema_version": 1,
                 "image_name": image_path.name,
                 "generated_at_utc": datetime.now(timezone.utc).isoformat(),
+                "explanation_text": explanation_text,
                 "concept_scores": analysis.concept_scores,
                 "ranked_concept_scores": [score.model_dump() for score in analysis.ranked_concept_scores],
             }

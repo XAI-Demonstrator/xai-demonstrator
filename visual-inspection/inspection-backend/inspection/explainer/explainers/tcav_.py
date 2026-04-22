@@ -1,5 +1,5 @@
 import logging
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 import numpy as np
 import tensorflow as tf
@@ -36,6 +36,7 @@ class TCAVAnalysis(BaseModel):
     ranked_concept_scores: List[TCAVConceptScore] = Field(default_factory=list)
 
 
+
 def compute_tcav_analysis(input_img: np.ndarray, model_: tf.keras.models.Model, **settings: object) -> TCAVAnalysis:
     config = TCAVConfiguration(**settings)
     cavs = load_cavs_for_config(config.explainer)
@@ -62,10 +63,11 @@ def compute_tcav_analysis(input_img: np.ndarray, model_: tf.keras.models.Model, 
 def tcav_explanation(
     input_img: np.ndarray,
     model_: tf.keras.models.Model,
+    analysis: Optional[TCAVAnalysis] = None,
     **settings: object,
 ) -> np.ndarray:
     config = TCAVConfiguration(**settings)
-    analysis = compute_tcav_analysis(input_img, model_, **settings)
+    analysis = analysis or compute_tcav_analysis(input_img, model_, **settings)
 
     concept_scores = analysis.concept_scores
     if not concept_scores:

@@ -60,7 +60,11 @@ def test_that_model_id_is_passed_for_prediction(generate_image, mocker):
 
 
 def test_that_model_id_is_passed_for_explanation(generate_image, mocker):
-    p = mocker.patch.object(api, "explain", return_value=api.Explanation(explanation_id=uuid.uuid4(), image=b"dummy-bytes", probability=0.5))
+    p = mocker.patch.object(
+        api,
+        "explain",
+        return_value=api.Explanation(explanation_id=uuid.uuid4(), image=b"dummy-bytes", explanation_str="dummy text"),
+    )
 
     response = client.post("/explain", files={"file": generate_image(200, 300)}, data={"model_id": "this-is-a-model"})
 

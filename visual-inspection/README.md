@@ -57,3 +57,8 @@ To change where the images are saved to, set the environment variable `LOG_PATH`
 ```shell
 export LOG_PATH=/home/myusername/log
 ```
+
+## Additional documentation
+
+- TCAV project context and plug-in architecture: [`README_TCAV_PLUGIN_CONTEXT.md`](./README_TCAV_PLUGIN_CONTEXT.md)
+- TCAV batch runner and output artifacts: [`tests/README.md`](./tests/README.md)

@@ -25,12 +25,13 @@ def test_tcav_explanation_roundtrip(generate_image):
         },
     }
 
-    output_img_bytes = explain.explain(
+    response = explain.explain(
         input_img,
         model_id=settings.default_model,
         method="tcav",
         settings=tcav_settings,
-    ).image
+    )
+    output_img_bytes = response.image
 
     assert output_img_bytes[:22] == bytes("data:image/png;base64,", encoding="utf-8")
 
@@ -38,3 +39,5 @@ def test_tcav_explanation_roundtrip(generate_image):
     output_img = Image.open(io.BytesIO(img_data))
 
     assert output_img.size == image_size
+    assert isinstance(response.explanation_str, str)
+    assert response.explanation_str
