@@ -6,7 +6,6 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List
 
-import numpy as np
 from PIL import Image
 
 TESTS_ROOT = Path(__file__).resolve().parent
@@ -18,8 +17,6 @@ settings = importlib.import_module("inspection.config").settings
 model_module = importlib.import_module("inspection.model.model")
 predict_module = importlib.import_module("inspection.model.predict")
 tcav_module = importlib.import_module("inspection.explainer.explainers.tcav_")
-tcav_text_module = importlib.import_module("inspection.explainer.explainers.tcav_text")
-tcav_render_module = importlib.import_module("inspection.explainer.explainers.tcav.tcav_render")
 
 
 def _tcav_settings(cav_dir: Path) -> Dict[str, Any]:
@@ -31,7 +28,6 @@ def _tcav_settings(cav_dir: Path) -> Dict[str, Any]:
         },
         "renderer": {
             "top_k_concepts": 3,
-            "return_heatmap": True,
         },
     }
 
@@ -48,10 +44,6 @@ def _iter_asset_images(assets_dir: Path) -> List[Path]:
 def _result_dir_name(image_path: Path) -> str:
     return f"{image_path.stem}_{image_path.suffix.lower().lstrip('.')}"
 
-
-def _save_png(image_array: np.ndarray, output_path: Path) -> None:
-    png_image = Image.fromarray((np.clip(image_array, 0.0, 1.0) * 255).astype(np.uint8))
-    png_image.save(output_path)
 
 
 def run_tcav_on_image(
@@ -72,17 +64,9 @@ def run_tcav_on_image(
         with Image.open(image_path) as input_image:
             explainer_input = preprocess_fn(input_image)[0]
             analysis = tcav_module.compute_tcav_analysis(explainer_input, model, **tcav_settings)
-            top_k = int(tcav_settings.get("renderer", {}).get("top_k_concepts", 2))
-            explanation_text = tcav_text_module.build_tcav_explanation_sentence(analysis, top_k=top_k)
+            top_k = int(tcav_settings.get("renderer", {}).get("top_k_concepts", 3))
+            explanation_text = tcav_module.build_tcav_explanation_sentence(analysis, top_k=top_k)
 
-            ranked_scores = [(score.concept, score.score) for score in analysis.ranked_concept_scores]
-            output_image_array = tcav_render_module.render_tcav_score_panel(
-                ranked_scores,
-                top_k=None,
-            )
-
-            output_image = image_result_dir / "tcav_scores.png"
-            _save_png(output_image_array, output_image)
             print(f"[TCAV] Explanation text for {image_path.name}: {explanation_text}")
 
             result = {

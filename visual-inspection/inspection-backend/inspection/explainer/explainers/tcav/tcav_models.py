@@ -18,7 +18,6 @@ class TCAVExplainerConfiguration(BaseModel):
 class TCAVRendererConfiguration(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    return_heatmap: bool = True
     top_k_concepts: int = Field(default=3, ge=1)
 
 
@@ -37,4 +36,3 @@ class CAVLoadEntry(BaseModel):
     bottleneck_layer: str
     filename: str
     file_path: str
-

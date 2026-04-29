@@ -30,4 +30,3 @@ def rank_concept_scores(concept_scores: Dict[str, float], *, by_absolute_value: 
     """Rank concept scores either by absolute strength or by raw score."""
     sort_key = (lambda item: abs(item[1])) if by_absolute_value else (lambda item: item[1])
     return sorted(concept_scores.items(), key=sort_key, reverse=True)
-

@@ -44,8 +44,8 @@ def _discover_known_concepts(concepts_root: str) -> tuple[list[str], list[str]]:
 
 
 def _build_manifest_entries_from_npz(
-    cav_output_dir: str,
-    concepts_root: str,
+        cav_output_dir: str,
+        concepts_root: str,
 ) -> list[dict[str, str]]:
     """Rebuild manifest entries from files on disk to avoid dropping existing CAVs."""
     concepts, randoms = _discover_known_concepts(concepts_root)
@@ -84,9 +84,9 @@ def _build_manifest_entries_from_npz(
 
 
 def _load_and_preprocess_images(
-    image_paths: Sequence[str],
-    preprocess_fn: PreprocessFn,
-    target_size: Tuple[int, int] = (224, 224),
+        image_paths: Sequence[str],
+        preprocess_fn: PreprocessFn,
+        target_size: Tuple[int, int] = (224, 224),
 ) -> np.ndarray:
     """Load images from disk, resize them to a common size and apply preprocessing.
         -> Preprocessed image batch of shape (N, H, W, C).
@@ -128,9 +128,9 @@ def _load_and_preprocess_images(
 
 
 def _list_concept_image_paths(
-    concepts_root: str,
-    concept_name: str,
-    extensions: Tuple[str, ...] = ("*.png", "*.jpg", "*.jpeg"),
+        concepts_root: str,
+        concept_name: str,
+        extensions: Tuple[str, ...] = ("*.png", "*.jpg", "*.jpeg"),
 ) -> list[str]:
     """Collect all image file paths for a given concept.
         --> Sorted list of absolute or relative paths to image files for the concept.
@@ -149,15 +149,15 @@ def _list_concept_image_paths(
 
 
 def compute_cav_for_concept(
-    model: tf.keras.Model,
-    bottleneck_layer_name: str,
-    concepts_root: str,
-    concept: str,
-    random_concept: str,
-    preprocess_fn: PreprocessFn,
-    *,
-    C: float = 0.01,
-    max_iter: int = 1000,
+        model: tf.keras.Model,
+        bottleneck_layer_name: str,
+        concepts_root: str,
+        concept: str,
+        random_concept: str,
+        preprocess_fn: PreprocessFn,
+        *,
+        C: float = 0.01,
+        max_iter: int = 1000,
 ) -> np.ndarray:
     """Compute a Concept Activation Vector (CAV) for one (concept, random) pair.
 
@@ -227,17 +227,17 @@ def compute_cav_for_concept(
 
 
 def compute_and_store_cavs(
-    model: tf.keras.Model,
-    bottleneck_layer_name: str,
-    concepts_root: str,
-    concepts: Iterable[str],
-    random_concepts: Iterable[str],
-    cav_output_dir: str,
-    preprocess_fn: PreprocessFn,
-    *,
-    C: float = 0.01,
-    max_iter: int = 1000,
-    manifest_filename: str = "cav_manifest.json",
+        model: tf.keras.Model,
+        bottleneck_layer_name: str,
+        concepts_root: str,
+        concepts: Iterable[str],
+        random_concepts: Iterable[str],
+        cav_output_dir: str,
+        preprocess_fn: PreprocessFn,
+        *,
+        C: float = 0.01,
+        max_iter: int = 1000,
+        manifest_filename: str = "cav_manifest.json",
 ) -> Dict[str, str]:
     """Compute and persist CAVs for all combinations of concepts and random concepts."""
     os.makedirs(cav_output_dir, exist_ok=True)
@@ -302,4 +302,3 @@ def compute_and_store_cavs(
 
     print(f"\n[TCAV] DONE. {len(cav_files)} CAV files created.")
     return cav_files
-

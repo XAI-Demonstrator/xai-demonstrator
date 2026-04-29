@@ -1,43 +1,75 @@
+import json
 import logging
-import os
+from pathlib import Path
 from typing import Dict, List, Tuple
 
 import numpy as np
 
-from .read_cav_manifest import read_cav_manifest_entries
 from .tcav_models import CAVLoadEntry, TCAVExplainerConfiguration
-
 
 LOGGER = logging.getLogger(__name__)
 
 
+def read_cav_manifest_entries(cav_dir: str, manifest_filename: str) -> List[Dict[str, str]]:
+    manifest_path = Path(cav_dir) / manifest_filename
+    if not manifest_path.exists():
+        return []
+
+    try:
+        with manifest_path.open("r", encoding="utf-8") as file_obj:
+            payload = json.load(file_obj)
+    except (OSError, json.JSONDecodeError) as exc:
+        LOGGER.warning("[TCAV] Could not read manifest '%s' (%s).", manifest_path, exc)
+        return []
+
+    if isinstance(payload, dict):
+        raw_entries = payload.get("entries", [])
+    elif isinstance(payload, list):
+        raw_entries = payload
+    else:
+        return []
+
+    normalized_entries: List[Dict[str, str]] = []
+    for raw in raw_entries:
+        if not isinstance(raw, dict):
+            continue
+
+        concept = str(raw.get("concept", ""))
+        random_concept = str(raw.get("random_concept", ""))
+        bottleneck_layer = str(raw.get("bottleneck_layer", ""))
+        filename = str(raw.get("filename", ""))
+
+        if not concept or not random_concept or not bottleneck_layer or not filename:
+            continue
+
+        normalized_entries.append(
+            {
+                "concept": concept,
+                "random_concept": random_concept,
+                "bottleneck_layer": bottleneck_layer,
+                "filename": filename,
+            },
+        )
+
+    return normalized_entries
+
+
 def _discover_concepts_from_root(concepts_root: str) -> Tuple[List[str], List[str]]:
-    concepts: List[str] = []
-    randoms: List[str] = []
+    root = Path(concepts_root)
+    if not concepts_root or not root.is_dir():
+        return [], []
 
-    if not concepts_root:
-        return concepts, randoms
-    if not os.path.isdir(concepts_root):
-        return concepts, randoms
+    random_root = root / "random_concepts"
+    randoms = [f"random_concepts/{child.name}" for child in sorted(random_root.iterdir()) if
+               child.is_dir()] if random_root.is_dir() else []
 
-    random_root = os.path.join(concepts_root, "random_concepts")
-    if os.path.isdir(random_root):
-        for child in sorted(os.listdir(random_root)):
-            child_path = os.path.join(random_root, child)
-            if os.path.isdir(child_path):
-                randoms.append(f"random_concepts/{child}")
-
-    for group in sorted(os.listdir(concepts_root)):
-        if group == "random_concepts":
-            continue
-        group_path = os.path.join(concepts_root, group)
-        if not os.path.isdir(group_path):
-            continue
-        for child in sorted(os.listdir(group_path)):
-            child_path = os.path.join(group_path, child)
-            if os.path.isdir(child_path):
-                concepts.append(f"{group}/{child}")
-
+    concepts = [
+        f"{group.name}/{child.name}"
+        for group in sorted(root.iterdir())
+        if group.is_dir() and group.name != "random_concepts"
+        for child in sorted(group.iterdir())
+        if child.is_dir()
+    ]
     return concepts, randoms
 
 
@@ -79,33 +111,29 @@ def _build_fallback_entries(config: TCAVExplainerConfiguration) -> List[CAVLoadE
                     random_concept=random_concept,
                     bottleneck_layer=config.bottleneck_layer,
                     filename=filename,
-                    file_path=os.path.join(config.cav_dir, filename),
+                    file_path=str(Path(config.cav_dir) / filename),
                 ),
             )
     return entries
+
 
 def _load_manifest_entries(config: TCAVExplainerConfiguration) -> List[CAVLoadEntry]:
     raw_entries = read_cav_manifest_entries(config.cav_dir, config.cav_manifest_filename)
     entries: List[CAVLoadEntry] = []
 
     for raw in raw_entries:
-        concept = str(raw.get("concept", ""))
-        random_concept = str(raw.get("random_concept", ""))
-        bottleneck_layer = str(raw.get("bottleneck_layer", ""))
-        filename = str(raw.get("filename", ""))
-
-        if not concept or not random_concept or not bottleneck_layer or not filename:
-            continue
+        # read_cav_manifest_entries already normalizes and validates entries
+        bottleneck_layer = raw["bottleneck_layer"]
         if bottleneck_layer != config.bottleneck_layer:
             continue
 
         entries.append(
             CAVLoadEntry(
-                concept=concept,
-                random_concept=random_concept,
+                concept=raw["concept"],
+                random_concept=raw["random_concept"],
                 bottleneck_layer=bottleneck_layer,
-                filename=filename,
-                file_path=os.path.join(config.cav_dir, filename),
+                filename=raw["filename"],
+                file_path=str(Path(config.cav_dir) / raw["filename"]),
             ),
         )
 
@@ -130,7 +158,7 @@ def load_cavs_for_config(config: TCAVExplainerConfiguration) -> Dict[str, np.nda
     missing_pairs = 0
 
     for entry in entries:
-        if not os.path.exists(entry.file_path):
+        if not Path(entry.file_path).exists():
             missing_pairs += 1
             continue
         with np.load(entry.file_path) as data:
@@ -144,4 +172,3 @@ def load_cavs_for_config(config: TCAVExplainerConfiguration) -> Dict[str, np.nda
     if missing_pairs:
         LOGGER.warning("[TCAV] Missing %d concept/random CAV files; continuing with available files.", missing_pairs)
     return cavs
-

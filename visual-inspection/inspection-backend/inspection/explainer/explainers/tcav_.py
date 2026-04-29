@@ -1,4 +1,6 @@
+import json
 import logging
+from pathlib import Path
 from typing import Dict, List, Optional
 
 import numpy as np
@@ -7,15 +9,12 @@ from pydantic import BaseModel, Field
 from xaidemo.tracing import traced
 
 from .tcav.tcav_loading import load_cavs_for_config
-from .tcav.tcav_models import CAVLoadEntry, TCAVConfiguration, TCAVExplainerConfiguration, TCAVRendererConfiguration
-from .tcav.tcav_render import deprocess_mobilenet_v2_image, render_tcav_overlay
+from .tcav.tcav_models import TCAVConfiguration, TCAVExplainerConfiguration, TCAVRendererConfiguration
 from .tcav.tcav_scoring import compute_concept_scores, rank_concept_scores
-
 
 LOGGER = logging.getLogger(__name__)
 
 __all__ = [
-    "CAVLoadEntry",
     "TCAVConceptScore",
     "TCAVAnalysis",
     "TCAVConfiguration",
@@ -23,7 +22,21 @@ __all__ = [
     "TCAVRendererConfiguration",
     "compute_tcav_analysis",
     "tcav_explanation",
+    "build_tcav_explanation_sentence",
+    "humanize_tcav_concept",
 ]
+
+_LABELS_PATH = Path(__file__).parent / "tcav" / "tcav_concept_labels_de.json"
+
+
+def _load_concept_labels() -> dict[str, str]:
+    try:
+        return json.loads(_LABELS_PATH.read_text(encoding="utf-8"))
+    except OSError:
+        return {}
+
+
+_CONCEPT_LABELS = _load_concept_labels()
 
 
 class TCAVConceptScore(BaseModel):
@@ -35,6 +48,48 @@ class TCAVAnalysis(BaseModel):
     concept_scores: Dict[str, float] = Field(default_factory=dict)
     ranked_concept_scores: List[TCAVConceptScore] = Field(default_factory=list)
 
+
+def _humanize_tcav_concept(concept: str) -> str:
+    mapped = _CONCEPT_LABELS.get(concept)
+    if mapped:
+        return mapped
+    fallback = concept.rsplit("/", 1)[-1].replace("_", " ").strip()
+    return fallback or concept
+
+
+def humanize_tcav_concept(concept: str) -> str:
+    return _humanize_tcav_concept(concept)
+
+
+def _describe_score_strength(score: float) -> str:
+    abs_score = abs(score)
+    if abs_score >= 0.25:
+        return "stark"
+    if abs_score >= 0.15:
+        return "mittel"
+    return "schwach"
+
+
+def _describe_score_direction(score: float) -> str:
+    return "unterstützt" if score >= 0 else "spricht gegen"
+
+
+def build_tcav_explanation_sentence(analysis: TCAVAnalysis, top_k: int = 3) -> str:
+    ranked = list(analysis.ranked_concept_scores)[: max(1, top_k)]
+    if not ranked:
+        return "Ich kann kein klares Konzept erkennen, das diese Vorhersage erklärt."
+
+    prefixes = ("Am wichtigsten ist", "Danach kommt", "Als drittes folgt")
+    sentences = []
+
+    for index, item in enumerate(ranked[:3]):
+        prefix = prefixes[index] if index < len(prefixes) else "Ausserdem gibt es"
+        sentences.append(
+            f"{prefix} '{_humanize_tcav_concept(item.concept)}'. "
+            f"Es {_describe_score_direction(item.score)} die Vorhersage ({_describe_score_strength(item.score)})."
+        )
+
+    return " ".join(sentences)
 
 
 def compute_tcav_analysis(input_img: np.ndarray, model_: tf.keras.models.Model, **settings: object) -> TCAVAnalysis:
@@ -61,26 +116,25 @@ def compute_tcav_analysis(input_img: np.ndarray, model_: tf.keras.models.Model, 
 
 @traced(label="compute_explanation", attributes={"explanation.method": "tcav"})
 def tcav_explanation(
-    input_img: np.ndarray,
-    model_: tf.keras.models.Model,
-    analysis: Optional[TCAVAnalysis] = None,
-    **settings: object,
+        input_img: np.ndarray,
+        model_: tf.keras.models.Model,
+        analysis: Optional[TCAVAnalysis] = None,
+        **settings: object,
 ) -> np.ndarray:
     config = TCAVConfiguration(**settings)
     analysis = analysis or compute_tcav_analysis(input_img, model_, **settings)
 
-    concept_scores = analysis.concept_scores
-    if not concept_scores:
+    if not analysis.concept_scores:
         LOGGER.warning("[TCAV] No concept scores computed.")
-        return deprocess_mobilenet_v2_image(input_img)
+        return _deprocess_mobilenet_v2_image(input_img)
 
-    ranked_all = [(item.concept, item.score) for item in analysis.ranked_concept_scores]
     k = max(1, config.renderer.top_k_concepts)
-    top = ranked_all[:k]
+    top_concepts = analysis.ranked_concept_scores[:k]
+    LOGGER.info("[TCAV] Concept scores (top-k): %s", [(c.concept, c.score) for c in top_concepts])
 
-    LOGGER.info("[TCAV] Concept scores (top-k): %s", top)
-    LOGGER.debug("[TCAV] Concept scores (all): %s", ranked_all)
+    return _deprocess_mobilenet_v2_image(input_img)
 
-    if config.renderer.return_heatmap:
-        return render_tcav_overlay(input_img, top, top_k=k)
-    return deprocess_mobilenet_v2_image(input_img)
+
+def _deprocess_mobilenet_v2_image(input_img: np.ndarray) -> np.ndarray:
+    restored = (input_img + 1.0) / 2.0
+    return np.clip(restored, 0.0, 1.0).astype(np.float32)

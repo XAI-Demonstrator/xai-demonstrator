@@ -8,9 +8,7 @@ from PIL import Image
 from pydantic import BaseModel
 from xaidemo.tracing import add_span_attributes, traced
 
-# from .explainers.lime_ import lime_explanation  TODO - JUST FOR TESTING
-from .explainers.tcav_ import compute_tcav_analysis, tcav_explanation
-from .explainers.tcav_text import build_tcav_explanation_sentence
+from .explainers.tcav_ import compute_tcav_analysis, tcav_explanation, build_tcav_explanation_sentence
 from ..model.model import get_model
 from ..model.predict import preprocess
 

@@ -1,6 +1,6 @@
-from inspection.model.model import get_model
 from inspection.explainer.explainers.tcav.preprocess_tcav import preprocess_batch
 from inspection.explainer.explainers.tcav.tcav_calculate_cavs import compute_and_store_cavs
+from inspection.model.model import get_model
 
 
 def main() -> None:

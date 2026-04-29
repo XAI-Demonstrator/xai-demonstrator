@@ -3,7 +3,6 @@ import io
 
 import pytest
 from PIL import Image
-
 from inspection.config import settings
 from inspection.explainer import explain
 
@@ -20,7 +19,6 @@ def test_tcav_explanation_roundtrip(generate_image):
             "cav_manifest_filename": "cav_manifest.json",
         },
         "renderer": {
-            "return_heatmap": True,
             "top_k_concepts": 1,
         },
     }

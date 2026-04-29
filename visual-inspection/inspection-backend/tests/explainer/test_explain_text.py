@@ -1,5 +1,5 @@
 from inspection.explainer.explainers.tcav_ import TCAVAnalysis, TCAVConceptScore
-from inspection.explainer.explainers.tcav_text import build_tcav_explanation_sentence, humanize_tcav_concept
+from inspection.explainer.explainers.tcav_ import build_tcav_explanation_sentence, humanize_tcav_concept
 
 
 def test_tcav_sentence_contains_top_concepts():
@@ -30,5 +30,3 @@ def test_tcav_sentence_fallback_when_no_concepts():
 
 def test_humanize_tcav_concept_uses_fallback_for_unknown_keys():
     assert humanize_tcav_concept("feature_concepts/custom_pattern") == "custom pattern"
-
-
