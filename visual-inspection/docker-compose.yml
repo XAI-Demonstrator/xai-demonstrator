@@ -1,7 +1,10 @@
-version: '3.7'
 
 services:
   inspection:
     build: .
+    environment:
+      default_explainer: tcav
+      root_path: ""
+      path_prefix: /api/inspection
     ports:
       - 8000:8000

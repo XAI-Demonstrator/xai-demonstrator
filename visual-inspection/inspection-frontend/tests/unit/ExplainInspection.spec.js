@@ -90,7 +90,8 @@ describe('ExplainInspection.vue', () => {
     it('requests an explanation', async () => {
         const response = {
             data: {
-                image: 'data:image/png;base64,'
+                image: 'data:image/png;base64,',
+                explanation_str: 'TCAV-Text'
             }
         }
         axios.post.mockImplementationOnce(() => Promise.resolve(response))
@@ -99,7 +100,10 @@ describe('ExplainInspection.vue', () => {
         await flushPromises()
 
         expect(wrapper.emitted('explanation-received')).toBeTruthy()
-        expect(wrapper.emitted('explanation-received')[0][0]).toStrictEqual('data:image/png;base64,')
+        expect(wrapper.emitted('explanation-received')[0][0]).toStrictEqual({
+            image: 'data:image/png;base64,',
+            explanationStr: 'TCAV-Text'
+        })
     })
 
     it('handles unavailable backend gracefully', async () => {

@@ -63,15 +63,17 @@ export default {
         form.append('settings', JSON.stringify(settings));
       }
 
-      await axios.post(this.backendUrl + '/explain', form)
-          .then(response => {
-            this.$emit('explanation-received', response.data.image)
-            this.waitingForExplanation = false;
-          })
-          .catch(error => {
-            console.log(error)
-            this.waitingForExplanation = false;
-          })
+      try {
+        const response = await axios.post(this.backendUrl + '/explain', form)
+        this.$emit('explanation-received', {
+          image: response.data.image,
+          explanationStr: response.data.explanation_str || null
+        })
+      } catch (error) {
+        console.log(error)
+      } finally {
+        this.waitingForExplanation = false
+      }
     }
   },
   data() {

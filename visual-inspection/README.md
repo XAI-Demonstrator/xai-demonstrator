@@ -19,7 +19,7 @@
 | `SERVICE_NAME`      | The name that the app uses as its identifier, e.g. when logging or emitting traces                                                                                  | `"inspection-service"` |
 | `ROOT_PATH`         | FastAPI root path ([doc](https://fastapi.tiangolo.com/advanced/behind-a-proxy/))                                                                                    | `""`                   |
 | `PATH_PREFIX`       | FastAPI router prefix ([doc](https://fastapi.tiangolo.com/tutorial/bigger-applications/#include-an-apirouter-with-a-custom-prefix-tags-responses-and-dependencies)) | `""`                   |
-| `DEFAULT_EXPLAINER` | The explanation generator to use if a request does not speficy one                                                                                                  | `"lime"`               |
+| `DEFAULT_EXPLAINER` | The explanation generator to use if a request does not speficy one                                                                                                  | `"tcav"`               |
 | `LOG_INPUT`         | Save input images to disk                                                                                                                                           | `False`                |
 | `LOG_PATH`          | Path to store the logged images                                                                                                                                     | `./log`                |
 
@@ -31,6 +31,8 @@ To launch a standalone instance of the service:
 cd visual-inspection
 docker-compose up
 ```
+
+The default demo container is configured to use TCAV so that `/explain` returns both the image response and the German explanation sentence without additional request parameters.
 
 ## Running the service locally (without Docker)
 

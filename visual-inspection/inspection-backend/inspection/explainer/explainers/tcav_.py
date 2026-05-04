@@ -93,7 +93,15 @@ def build_tcav_explanation_sentence(analysis: TCAVAnalysis, top_k: int = 3) -> s
 
 
 def compute_tcav_analysis(input_img: np.ndarray, model_: tf.keras.models.Model, **settings: object) -> TCAVAnalysis:
-    config = TCAVConfiguration(**settings)
+    defaults = {
+        "explainer": {
+            "cav_dir": "/inspection/explainer/explainers/tcav/cavs",
+        }
+    }
+    merged = dict(defaults)
+    # settings may contain nested dicts; merge shallowly so API-provided values override defaults
+    merged.update(settings or {})
+    config = TCAVConfiguration(**merged)
     cavs = load_cavs_for_config(config.explainer)
 
     bottleneck_layer = config.explainer.bottleneck_layer
@@ -121,7 +129,14 @@ def tcav_explanation(
         analysis: Optional[TCAVAnalysis] = None,
         **settings: object,
 ) -> np.ndarray:
-    config = TCAVConfiguration(**settings)
+    defaults = {
+        "explainer": {
+            "cav_dir": "/inspection/explainer/explainers/tcav/cavs",
+        }
+    }
+    merged = dict(defaults)
+    merged.update(settings or {})
+    config = TCAVConfiguration(**merged)
     analysis = analysis or compute_tcav_analysis(input_img, model_, **settings)
 
     if not analysis.concept_scores:
