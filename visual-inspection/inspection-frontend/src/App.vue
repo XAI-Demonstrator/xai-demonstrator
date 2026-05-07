@@ -51,9 +51,9 @@
                              v-bind:prediction-ready="currentPrediction"
                              v-on:explanation-requested="explanationRequested"
                              v-on:explanation-received="explanationReceived"/>
-          <div v-if="explanationText" class="explanation-text">
+          <div v-if="currentExplanationText" class="explanation-text">
             <p class="explanation-text__label">{{ $t('tcavExplanationLabel') }}</p>
-            <p class="explanation-text__content">{{ explanationText }}</p>
+            <p class="explanation-text__content">{{ currentExplanationText }}</p>
           </div>
         </div>
       </section>
@@ -127,7 +127,8 @@ export default {
       if (!this.waitingForExplanation) {
         this.currentPrediction = false;
         this.currentExplanation = false;
-        this.explanationText = null;
+        this.explanationTextByLanguage = null;
+        this.explanationTextFallback = null;
         await this.debouncedRequestInspection(canvas)
       }
     },
@@ -140,14 +141,29 @@ export default {
     async explanationRequested() {
       this.currentExplanation = false;
       this.waitingForExplanation = true;
-      this.explanationText = null;
+      this.explanationTextByLanguage = null;
+      this.explanationTextFallback = null;
       this.$refs.cropper.getResult().canvas.toBlob(await this.$refs.explainer.explain)
     },
     explanationReceived(explanation) {
       this.explanationImg = explanation.image;
-      this.explanationText = explanation.explanationStr;
+      this.explanationTextByLanguage = explanation.explanationStrs || null;
+      this.explanationTextFallback = explanation.explanationStr || null;
       this.currentExplanation = true;
       this.waitingForExplanation = false;
+    },
+    currentLanguage() {
+      return (this.$i18n.locale || 'de').split('-')[0].split('_')[0]
+    },
+    localizedExplanationText() {
+      const language = this.currentLanguage();
+      if (this.explanationTextByLanguage && this.explanationTextByLanguage[language]) {
+        return this.explanationTextByLanguage[language];
+      }
+      if (this.explanationTextFallback) {
+        return this.explanationTextFallback;
+      }
+      return null;
     },
     sizeRestrictions({minWidth, minHeight, maxWidth, maxHeight, imageSize}) {
       return {
@@ -165,7 +181,8 @@ export default {
       currentExplanation: false,
       waitingForExplanation: false,
       explanationImg: null,
-      explanationText: null,
+      explanationTextByLanguage: null,
+      explanationTextFallback: null,
       minExplanationImgSize: {
         width: 100,
         height: 100
@@ -198,6 +215,9 @@ export default {
   computed: {
     explanationStencil() {
       return componentMap['stencil']
+    },
+    currentExplanationText() {
+      return this.localizedExplanationText()
     },
     modelID() {
       return modelConfig.getModelId()
@@ -430,3 +450,4 @@ main section {
   }
 }
 </style>
+

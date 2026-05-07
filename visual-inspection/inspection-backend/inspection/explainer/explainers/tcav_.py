@@ -1,7 +1,7 @@
 import json
 import logging
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Literal
 
 import numpy as np
 import tensorflow as tf
@@ -23,20 +23,27 @@ __all__ = [
     "compute_tcav_analysis",
     "tcav_explanation",
     "build_tcav_explanation_sentence",
+    "build_tcav_explanation_sentences",
     "humanize_tcav_concept",
 ]
 
-_LABELS_PATH = Path(__file__).parent / "tcav" / "tcav_concept_labels_de.json"
+_LABELS_PATHS = {
+    "de": Path(__file__).parent / "tcav" / "tcav_concept_labels_de.json",
+    "en": Path(__file__).parent / "tcav" / "tcav_concept_labels_en.json",
+}
 
 
-def _load_concept_labels() -> dict[str, str]:
+def _load_concept_labels(path: Path) -> dict[str, str]:
     try:
-        return json.loads(_LABELS_PATH.read_text(encoding="utf-8"))
+        return json.loads(path.read_text(encoding="utf-8-sig").strip())
     except OSError:
         return {}
 
 
-_CONCEPT_LABELS = _load_concept_labels()
+_CONCEPT_LABELS = {
+    language: _load_concept_labels(path)
+    for language, path in _LABELS_PATHS.items()
+}
 
 
 class TCAVConceptScore(BaseModel):
@@ -49,47 +56,62 @@ class TCAVAnalysis(BaseModel):
     ranked_concept_scores: List[TCAVConceptScore] = Field(default_factory=list)
 
 
-def _humanize_tcav_concept(concept: str) -> str:
-    mapped = _CONCEPT_LABELS.get(concept)
+def _normalize_language(language: Literal["de", "en"] = "de") -> Literal["de", "en"]:
+    return language if language in _LABELS_PATHS else "de"
+
+
+def _humanize_tcav_concept(concept: str, language: Literal["de", "en"] = "de") -> str:
+    mapped = _CONCEPT_LABELS.get(_normalize_language(language), {}).get(concept)
     if mapped:
         return mapped
     fallback = concept.rsplit("/", 1)[-1].replace("_", " ").strip()
     return fallback or concept
 
 
-def humanize_tcav_concept(concept: str) -> str:
-    return _humanize_tcav_concept(concept)
+def humanize_tcav_concept(concept: str, language: Literal["de", "en"] = "de") -> str:
+    return _humanize_tcav_concept(concept, language=language)
 
 
-def _describe_score_strength(score: float) -> str:
+def _describe_score_strength(score: float, language: Literal["de", "en"] = "de") -> str:
     abs_score = abs(score)
     if abs_score >= 0.25:
-        return "stark"
+        return "stark" if language == "de" else "strong"
     if abs_score >= 0.15:
-        return "mittel"
-    return "schwach"
+        return "mittel" if language == "de" else "medium"
+    return "schwach" if language == "de" else "weak"
 
 
-def _describe_score_direction(score: float) -> str:
-    return "unterstützt" if score >= 0 else "spricht gegen"
-
-
-def build_tcav_explanation_sentence(analysis: TCAVAnalysis, top_k: int = 3) -> str:
+def build_tcav_explanation_sentence(analysis: TCAVAnalysis, top_k: int = 3, language: Literal["de", "en"] = "de") -> str:
+    language = _normalize_language(language)
     ranked = list(analysis.ranked_concept_scores)[: max(1, top_k)]
     if not ranked:
-        return "Kein Konzept erkennbar."
+        return "Kein Konzept erkennbar." if language == "de" else "No concept identifiable."
 
-    supporting = [(item, _describe_score_strength(item.score)) for item in ranked if item.score >= 0]
-    opposing   = [(item, _describe_score_strength(item.score)) for item in ranked if item.score <  0]
+    supporting = [(item, _describe_score_strength(item.score, language)) for item in ranked if item.score >= 0]
+    opposing = [(item, _describe_score_strength(item.score, language)) for item in ranked if item.score < 0]
 
     def fmt(items: list) -> str:
-        return ", ".join(f"{_humanize_tcav_concept(i.concept)} ({s})" for i, s in items)
+        return ", ".join(f"{_humanize_tcav_concept(i.concept, language=language)} ({s})" for i, s in items)
 
-    if supporting and opposing:
-        return f"Dafür spricht {fmt(supporting)}, dagegen {fmt(opposing)}."
-    if supporting:
-        return f"Die Vorhersage wird gestützt durch {fmt(supporting)}."
-    return f"Die Vorhersage wird geschwächt durch {fmt(opposing)}."
+    if language == "en":
+        if supporting and opposing:
+            return f"For this speaks {fmt(supporting)}, against it {fmt(opposing)}."
+        if supporting:
+            return f"The prediction is supported by {fmt(supporting)}."
+        return f"The prediction is weakened by {fmt(opposing)}."
+    else:
+        if supporting and opposing:
+            return f"Dafür spricht {fmt(supporting)}, dagegen {fmt(opposing)}."
+        if supporting:
+            return f"Die Vorhersage wird gestützt durch {fmt(supporting)}."
+        return f"Die Vorhersage wird geschwächt durch {fmt(opposing)}."
+
+
+def build_tcav_explanation_sentences(analysis: TCAVAnalysis, top_k: int = 3) -> dict[str, str]:
+    return {
+        "de": build_tcav_explanation_sentence(analysis, top_k=top_k, language="de"),
+        "en": build_tcav_explanation_sentence(analysis, top_k=top_k, language="en"),
+    }
 
 
 def compute_tcav_analysis(input_img: np.ndarray, model_: tf.keras.models.Model, **settings: object) -> TCAVAnalysis:

@@ -91,7 +91,11 @@ describe('ExplainInspection.vue', () => {
         const response = {
             data: {
                 image: 'data:image/png;base64,',
-                explanation_str: 'TCAV-Text'
+                explanation_str: 'TCAV-Text',
+                explanation_strs: {
+                    de: 'TCAV-Text-DE',
+                    en: 'TCAV-Text-EN'
+                }
             }
         }
         axios.post.mockImplementationOnce(() => Promise.resolve(response))
@@ -102,7 +106,11 @@ describe('ExplainInspection.vue', () => {
         expect(wrapper.emitted('explanation-received')).toBeTruthy()
         expect(wrapper.emitted('explanation-received')[0][0]).toStrictEqual({
             image: 'data:image/png;base64,',
-            explanationStr: 'TCAV-Text'
+            explanationStr: 'TCAV-Text',
+            explanationStrs: {
+                de: 'TCAV-Text-DE',
+                en: 'TCAV-Text-EN'
+            }
         })
     })
 
