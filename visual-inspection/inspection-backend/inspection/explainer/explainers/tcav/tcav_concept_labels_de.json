@@ -1,12 +1,13 @@
 {
-    "feature_concepts/circular_opening": "runde Öffnung",
-    "feature_concepts/has_handle": "Griff",
-    "feature_concepts/has_keys_buttons": "Tasten und Knöpfe",
-    "feature_concepts/has_lens": "Linse",
-    "feature_concepts/has_screen": "Bildschirm",
-    "form_concepts/compact_rounded": "kompakt und rund",
-    "form_concepts/cylindrical": "zylindrische Form",
-    "form_concepts/oval": "ovale Form",
-    "form_concepts/rectangular": "rechteckige Form",
-    "form_concepts/round": "runde Form"
+    "feature_concepts/circular_opening":  "eine runde Öffnung",
+    "feature_concepts/has_handle":        "ein Griff",
+    "feature_concepts/has_keys_buttons":  "Tasten und Knöpfe",
+    "feature_concepts/has_lens":          "eine Linse",
+    "feature_concepts/has_screen":        "ein Bildschirm",
+
+    "form_concepts/compact_rounded":      "eine kompakte Rundform",
+    "form_concepts/cylindrical":          "eine zylindrische Form",
+    "form_concepts/oval":                 "eine ovale Form",
+    "form_concepts/rectangular":          "eine rechteckige Form",
+    "form_concepts/round":                "eine runde Form"
 }

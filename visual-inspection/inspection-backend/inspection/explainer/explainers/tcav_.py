@@ -77,19 +77,19 @@ def _describe_score_direction(score: float) -> str:
 def build_tcav_explanation_sentence(analysis: TCAVAnalysis, top_k: int = 3) -> str:
     ranked = list(analysis.ranked_concept_scores)[: max(1, top_k)]
     if not ranked:
-        return "Ich kann kein klares Konzept erkennen, das diese Vorhersage erklärt."
+        return "Kein Konzept erkennbar."
 
-    prefixes = ("Am wichtigsten ist", "Danach kommt", "Als drittes folgt")
-    sentences = []
+    supporting = [(item, _describe_score_strength(item.score)) for item in ranked if item.score >= 0]
+    opposing   = [(item, _describe_score_strength(item.score)) for item in ranked if item.score <  0]
 
-    for index, item in enumerate(ranked[:3]):
-        prefix = prefixes[index] if index < len(prefixes) else "Ausserdem gibt es"
-        sentences.append(
-            f"{prefix} '{_humanize_tcav_concept(item.concept)}'. "
-            f"Es {_describe_score_direction(item.score)} die Vorhersage ({_describe_score_strength(item.score)})."
-        )
+    def fmt(items: list) -> str:
+        return ", ".join(f"{_humanize_tcav_concept(i.concept)} ({s})" for i, s in items)
 
-    return " ".join(sentences)
+    if supporting and opposing:
+        return f"Dafür spricht {fmt(supporting)}, dagegen {fmt(opposing)}."
+    if supporting:
+        return f"Die Vorhersage wird gestützt durch {fmt(supporting)}."
+    return f"Die Vorhersage wird geschwächt durch {fmt(opposing)}."
 
 
 def compute_tcav_analysis(input_img: np.ndarray, model_: tf.keras.models.Model, **settings: object) -> TCAVAnalysis:
