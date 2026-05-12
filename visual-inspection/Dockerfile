@@ -14,7 +14,7 @@ RUN mkdir -p /inspection/model/models && \
     unzip -o "my_model.zip" && \
     rm "my_model.zip"
 
-FROM python:3.11
+FROM python:3.11-slim
 
 WORKDIR /
 
