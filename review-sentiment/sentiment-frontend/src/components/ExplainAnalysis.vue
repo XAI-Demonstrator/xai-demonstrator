@@ -30,7 +30,7 @@ export default {
   },
   computed: {
     supportedExplainers() {
-      return ["integrated_gradients", "gradient_shap", "random_words", "shapley_value_sampling"]
+      return ["integrated_gradients", "gradient_shap", "random_words", "shapley_value_sampling", "random"]
     }
   },
   data() {
