@@ -91,7 +91,6 @@ describe('ExplainInspection.vue', () => {
         const response = {
             data: {
                 image: 'data:image/png;base64,',
-                explanation_str: 'TCAV-Text',
                 explanation_strs: {
                     de: 'TCAV-Text-DE',
                     en: 'TCAV-Text-EN'
