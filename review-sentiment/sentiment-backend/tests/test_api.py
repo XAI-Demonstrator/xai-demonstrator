@@ -2,17 +2,18 @@ import pytest
 
 from sentiment import api
 
-
 def test_that_the_explainer_availability_check_works(mocker):
     mocker.patch.object(api, 'EXPLAINERS', ["existing"])
 
     good_exp_req = api.ExplanationRequest(text="some text",
                                           target=3,
-                                          method="existing")
+                                          method="existing",
+                                          settings={})
     with pytest.raises(ValueError):
         bad_exp_req = api.ExplanationRequest(text="some text",
                                              target=3,
-                                             method="unavailable")
+                                             method="unavailable",
+                                             settings={})
 
 
 def test_that_loading_is_triggered(mocker):

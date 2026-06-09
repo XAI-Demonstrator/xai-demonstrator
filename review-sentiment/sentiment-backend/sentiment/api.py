@@ -1,7 +1,7 @@
 from typing import Any, Dict, Optional
 
 from fastapi import APIRouter
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, field_validator
 
 from .config import settings
 from .explainer.explainer import EXPLAINERS, Explanation, explain
@@ -14,7 +14,7 @@ api = APIRouter()
 class PredictionRequest(BaseModel):
     text: str
 
-    @validator("text")
+    @field_validator("text")
     def text_must_not_be_empty(cls, v):
         if not v.strip():
             raise ValueError("Text must not be empty")
@@ -37,19 +37,19 @@ class ExplanationRequest(BaseModel):
     method: str = settings.default_explainer
     settings: Optional[Dict[str, Any]]
 
-    @validator("text")
+    @field_validator("text")
     def text_must_not_be_empty(cls, v):
         if not v.strip():
             raise ValueError("Text must not be empty")
         return v
 
-    @validator("target")
+    @field_validator("target")
     def target_must_be_in_range(cls, v):
         if v < 0 or v > 4:
             raise ValueError("Target must be between 0 and 4")
         return v
 
-    @validator("method")
+    @field_validator("method")
     def method_must_be_available(cls, v):
         if v not in EXPLAINERS:
             raise ValueError(f"{v} is not an available explanation method")

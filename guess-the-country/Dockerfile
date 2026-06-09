@@ -9,7 +9,7 @@ RUN apk --no-cache add curl bash unzip
 COPY country-backend/download_model.sh /download_model.sh
 RUN mkdir country && mkdir country/model && /download_model.sh && ls -R country/model
 
-FROM python:3.8-slim
+FROM python:3.11-slim
 
 WORKDIR /
 

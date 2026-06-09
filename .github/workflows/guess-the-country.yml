@@ -7,6 +7,7 @@ on:
       - 'guess-the-country/**'
       - '!guess-the-country/tests/**'
       - '!guess-the-country/**.md'
+      - '.github/workflows/guess-the-country.yml'
 
 jobs:
   test-backend:
@@ -15,12 +16,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Python 3.8
+      - name: Set up Python 3.11
         uses: actions/setup-python@v4
         with:
-          python-version: 3.8
+          python-version: 3.11
 
-      - uses: actions/cache@v3.3.1
+      - uses: actions/cache@v4
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('./guess-the-country/country-backend/requirements*.txt') }}
@@ -82,7 +83,7 @@ jobs:
         with:
           node-version: '18'
 
-      - uses: actions/cache@v3.3.1
+      - uses: actions/cache@v4
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('./guess-the-country/country-frontend/package-lock.json') }}
@@ -128,12 +129,12 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Set up Python 3.8
+    - name: Set up Python 3.11
       uses: actions/setup-python@v4
       with:
-        python-version: 3.8
+        python-version: 3.11
 
-    - uses: actions/cache@v3.3.1
+    - uses: actions/cache@v4
       with:
         path: ~/.cache/pip
         key: ${{ runner.os }}-pip-${{ hashFiles('./guess-the-country/country-backend/requirements*.txt') }}

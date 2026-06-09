@@ -6,6 +6,7 @@ on:
       - 'docs/**'
       - '**.md'
       - 'mkdocs.yml'
+      - '.github/workflows/docs.yml'
 
 
 jobs:

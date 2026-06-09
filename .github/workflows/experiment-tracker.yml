@@ -6,6 +6,7 @@ on:
     paths:
       - 'experiment-tracker/**'
       - '!experiment-tracker/**.md'
+      - '.github/workflows/experiment-tracker.yml'
 
 jobs:
   test-proxy:
@@ -14,10 +15,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Python 3.8
+      - name: Set up Python 3.11
         uses: actions/setup-python@v4
         with:
-          python-version: 3.8
+          python-version: 3.11
 
       - name: Lint with flake8
         run: |
@@ -61,10 +62,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Python 3.8
+      - name: Set up Python 3.11
         uses: actions/setup-python@v4
         with:
-          python-version: 3.8
+          python-version: 3.11
 
       - name: Lint with flake8
         run: |
@@ -112,10 +113,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Python 3.8
+      - name: Set up Python 3.11
         uses: actions/setup-python@v4
         with:
-          python-version: 3.8
+          python-version: 3.11
 
       - name: Install test dependencies
         run: |

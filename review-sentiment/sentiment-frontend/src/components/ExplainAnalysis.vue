@@ -28,6 +28,11 @@ export default {
     TextHighlight,
     SpinningIndicator
   },
+  computed: {
+    supportedExplainers() {
+      return ["integrated_gradients", "gradient_shap", "random_words", "shapley_value_sampling", "random"]
+    }
+  },
   data() {
     return {
       explanationResult: null,
@@ -47,7 +52,7 @@ export default {
 
       let params = new URLSearchParams(window.location.search.substring(1));
       let method = params.get('method');
-      if (method) {
+      if (method && this.supportedExplainers.includes(method)) {
         data.method = method;
       }
 

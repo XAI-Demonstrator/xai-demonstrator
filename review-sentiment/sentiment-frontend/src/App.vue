@@ -46,15 +46,20 @@ export default {
     GitHubRibbon
   },
   data() {
+    const topics = ['movie', 'travel', "app", "customer-service"]
     return {
       useCaseTitle: this.$t('title'),
       introductionTexts: {
         'movie': this.$t('movie-prompt'),
-        'travel': this.$t('travel-prompt')
+        'travel': this.$t('travel-prompt'),
+        "app": this.$t('app-prompt'),
+        "customer-service": this.$t('customer-service-prompt')
       },
       defaultReviews: {
         'movie': this.$t('movie-example'),
-        'travel': this.$t('travel-example')
+        'travel': this.$t('travel-example'),
+        "app": this.$t('app-example'),
+        "customer-service": this.$t('customer-service-example')
       },
       infoText: [
         {
@@ -70,7 +75,7 @@ export default {
       infoLinkLabel: this.$t('infoLinkLabel'),
       reviewText: '',
       numberOfStars: null,
-      reviewTopic: ['movie', 'travel'][Math.floor(Math.random() * 2)],
+      reviewTopic: topics[Math.floor(Math.random() * topics.length)],
       backendUrl: process.env.VUE_APP_BACKEND_URL
     }
   },
@@ -115,6 +120,10 @@ export default {
     "movie-example": "Die Story war ziemlich vorhersehbar, würde ich nicht empfehlen...",
     "travel-prompt": "Wie hat dir deine letzte Reise gefallen?",
     "travel-example": "Der Zug kam natürlich zu spät, aber die Aussicht war einmalig!",
+    "app-prompt": "Wie hat dir die App gefallen?",
+    "app-example": "Die App ist langsam und stürzt andauernd ab!",
+    "customer-service-prompt": "Wie zufrieden warst du mit unserem Kundenservice?",
+    "customer-service-example": "Der Kundenservice war super freundlich und hilfsbereit.",
     "info1paragraph1": "Du interagierst mit einer KI, die anhand eines Bewertungstexts vorhersagt, wie viele Sterne das bewertete Produkt erhält. Aber eine KI ist nie perfekt!",
     "info1paragraph2": "XAI hilft dir, die Einschätzung der KI und ihre Zuverlässigkeit besser zu bewerten.",
     "info2headline": "Was steckt dahinter?",
@@ -129,6 +138,10 @@ export default {
     "movie-example": "The story was pretty predictable, wouldn't recommend it...",
     "travel-prompt": "Did you enjoy your last trip?",
     "travel-example": "Of course, the train was late, but the view was spectacular!",
+    "app-prompt": "How did you like the app?",
+    "app-example": "The app is slow and keeps crashing!",
+    "customer-service-prompt": "How satisfied are you with our customer service?",
+    "customer-service-example": "Customer service was super friendly and helpful.",
     "info1paragraph1": "You're interacting with an AI that based on a text can predict how many stars the reviewed product will receive. But an AI is never perfect!",
     "info1paragraph2": "XAI helps you to understand the AI's decision and assess its reliability.",
     "info2headline": "What's going on behind the scenes?",

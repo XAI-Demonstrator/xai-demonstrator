@@ -1,4 +1,4 @@
-from pydantic import BaseSettings
+from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
@@ -6,7 +6,7 @@ class Settings(BaseSettings):
     root_path: str = ""
     path_prefix: str = ""
     # Google Maps API access
-    google_maps_api_token = ""
+    google_maps_api_token: str = ""
     batch_size: int = 32
 
 

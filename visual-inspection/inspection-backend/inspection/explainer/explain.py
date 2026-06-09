@@ -1,19 +1,20 @@
 import base64
 import io
 import uuid
-from typing import Any, Dict, IO, Tuple, Union
+from typing import Any, Dict, IO, Optional, Tuple, Union
 
 import numpy as np
 from PIL import Image
 from pydantic import BaseModel
 from xaidemo.tracing import add_span_attributes, traced
 
-from .explainers.lime_ import lime_explanation
+from .explainers.tcav_ import compute_tcav_analysis, tcav_explanation, build_tcav_explanation_sentences
 from ..model.model import get_model
 from ..model.predict import preprocess
 
 EXPLAINERS = {
-    "lime": lime_explanation
+#    "lime": lime_explanation, TODO - JUST FOR TESTING
+    "tcav": tcav_explanation
 }
 
 
@@ -30,9 +31,12 @@ def generate_output_image(raw_image: np.ndarray,
     return bytes("data:image/png;base64,", encoding="utf-8") + encoded_image_string
 
 
+
 class Explanation(BaseModel):
     explanation_id: uuid.UUID
     image: bytes
+    explanation_str: Optional[str] = None
+    explanation_strs: Optional[Dict[str, str]] = None
 
 
 @traced
@@ -51,7 +55,19 @@ def explain(image_file: IO[bytes],
     input_image = Image.open(image_file)
     explainer_input = preprocess(input_image)[0]
 
-    raw_image = EXPLAINERS[method](explainer_input, model, **settings)
+    if method == "tcav":
+        analysis = compute_tcav_analysis(explainer_input, model, **settings)
+        raw_image = tcav_explanation(explainer_input, model, analysis=analysis, **settings)
+        renderer_settings = settings.get("renderer", {})
+        top_k = int(renderer_settings.get("top_k_concepts", 3))
+        explanation_strs = build_tcav_explanation_sentences(analysis, top_k=top_k)
 
-    return Explanation(explanation_id=explanation_id,
-                       image=generate_output_image(raw_image, input_image.size))
+        return Explanation(explanation_id=explanation_id,
+                           image=generate_output_image(raw_image, input_image.size),
+                           explanation_str=explanation_strs["de"],
+                           explanation_strs=explanation_strs)
+    else:
+        raw_image = EXPLAINERS[method](explainer_input, model, **settings)
+
+        return Explanation(explanation_id=explanation_id,
+                           image=generate_output_image(raw_image, input_image.size))
