@@ -167,7 +167,7 @@ RUN npm install && npm run build
 
 
 # SECOND STAGE
-FROM python:3.8-slim
+FROM python:3.11-slim
 WORKDIR /
 
 # Copy the backend code

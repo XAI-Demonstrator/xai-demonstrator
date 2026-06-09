@@ -82,7 +82,7 @@ Afterwards, you can launch the frontend development server using `npm run serve`
 
 ### Install Python
 
-The _XAI Demonstrator_'s backends require Python 3.8.
+The _XAI Demonstrator_'s backends require Python 3.11.
 We recommend that you set up a dedicated Python environment for your work on the XAI Demonstrator.
 While the different components and use cases each have their own set of requirements, to date these requirements are compatible.
 
