@@ -28,10 +28,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set Up Node Environment
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: "14"
 
@@ -51,7 +51,7 @@ jobs:
           mv dist ${{ matrix.service }}
 
       - name: Save build artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.service }}
           path: ${{ matrix.repo_path }}/${{ matrix.service }}
@@ -66,10 +66,10 @@ jobs:
       url: https://gtc.xaidemo.de/
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Download all frontends
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           path: "deployment/experiment-deployment/nginx-frontend/"
 
