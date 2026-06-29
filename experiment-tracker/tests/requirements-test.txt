@@ -2,8 +2,9 @@ pytest
 pydantic
 pydantic-settings
 pypng
-aiohttp
 pytest-asyncio
+aiohttp==3.11.18
+aioresponses==0.7.8
 
 opentelemetry-api
 opentelemetry-sdk
