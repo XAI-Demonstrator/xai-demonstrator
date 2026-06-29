@@ -18,10 +18,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set Up Node Environment
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '14'
 
@@ -41,7 +41,7 @@ jobs:
           mv dist ${{ matrix.service }}
 
       - name: Save build artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.service }}
           path: ${{ matrix.repo_path }}/${{ matrix.service }}
@@ -52,10 +52,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Download all frontends
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           path: ./deployment/prod-deployment/frontends/public
 
@@ -85,7 +85,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Cloud SDK
         uses: google-github-actions/setup-gcloud@v1.1.1
