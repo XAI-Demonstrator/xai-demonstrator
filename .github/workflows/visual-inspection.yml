@@ -125,7 +125,7 @@ jobs:
     if: github.ref == 'refs/heads/master'
     steps:
     - name: Checkout code
-      uses: actions/checkout@v
+      uses: actions/checkout@v4
 
     - name: Set up Python 3.11
       uses: actions/setup-python@v4
