@@ -3,6 +3,21 @@ import io
 import png
 import pytest
 
+from inspection.api import EXPLAINERS
+
+
+def pytest_configure(config):
+    config.addinivalue_line("markers", "lime: tests that require LIME to be active")
+    config.addinivalue_line("markers", "tcav: tests that require TCAV to be active")
+
+
+def pytest_collection_modifyitems(config, items):
+    for item in items:
+        if "lime" in item.keywords and "lime" not in EXPLAINERS:
+            item.add_marker(pytest.mark.skip(reason="LIME is not an active explainer"))
+        if "tcav" in item.keywords and "tcav" not in EXPLAINERS:
+            item.add_marker(pytest.mark.skip(reason="TCAV is not an active explainer"))
+
 
 @pytest.fixture
 def generate_image():
@@ -20,4 +35,3 @@ def generate_image():
         return f
 
     return _generate
-
