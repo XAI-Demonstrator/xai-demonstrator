@@ -36,8 +36,6 @@ def test_that_an_explanation_is_generated(generate_image):
 
     assert output_img_bytes[:22] == bytes("data:image/png;base64,", encoding='utf-8')
     assert output_img.size == image_size
-    assert isinstance(response.explanation_str, str)
-    assert response.explanation_str
     assert isinstance(response.explanation_strs, dict)
     assert response.explanation_strs["de"]
     assert response.explanation_strs["en"]

@@ -10,7 +10,7 @@ class TCAVExplainerConfiguration(BaseModel):
     random_concepts: Optional[List[str]] = None
     bottleneck_layer: str = "global_average_pooling2d_1"
     num_random_experiments: int = Field(default=10, ge=1)
-    cav_dir: str
+    cav_dir: str = "inspection/explainer/explainers/tcav/cavs"
     concepts_root: Optional[str] = None
     cav_manifest_filename: str = "cav_manifest.json"
 
