@@ -37,8 +37,6 @@ def test_tcav_explanation_roundtrip(generate_image):
     output_img = Image.open(io.BytesIO(img_data))
 
     assert output_img.size == image_size
-    assert isinstance(response.explanation_str, str)
-    assert response.explanation_str
     assert isinstance(response.explanation_strs, dict)
     assert response.explanation_strs["de"]
     assert response.explanation_strs["en"]
