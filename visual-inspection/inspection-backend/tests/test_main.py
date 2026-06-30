@@ -30,6 +30,7 @@ def test_that_invalid_model_returns_informative_404(generate_image, mocker):
 
 
 @pytest.mark.integration
+@pytest.mark.tcav
 def test_that_explanation_succeeds(generate_image):
     r = client.post("/explain", files={"file": generate_image(110, 224)})
 
@@ -37,6 +38,7 @@ def test_that_explanation_succeeds(generate_image):
 
 
 @pytest.mark.integration
+@pytest.mark.lime
 def test_that_explanation_request_is_accepted(generate_image):
     r = client.post("/explain", files={"file": generate_image(110, 224)},
                     data={"method": "lime",

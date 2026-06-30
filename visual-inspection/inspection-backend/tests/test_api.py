@@ -15,7 +15,7 @@ FULL_TYPED_SETTINGS = '''{"settings": {"explainer": {
 
 
 def test_explanation_request_parses_typed_values():
-    s = api.ExplanationRequest.parse_raw(FULL_TYPED_SETTINGS)
+    s = api.ExplanationRequest.model_validate_json(FULL_TYPED_SETTINGS)
 
     explainer = s.settings["explainer"]
     assert isinstance(explainer["int_compatible"], int)

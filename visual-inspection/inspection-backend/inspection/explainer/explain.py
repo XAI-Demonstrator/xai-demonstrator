@@ -13,7 +13,6 @@ from ..model.model import get_model
 from ..model.predict import preprocess
 
 EXPLAINERS = {
-#    "lime": lime_explanation, TODO - JUST FOR TESTING
     "tcav": tcav_explanation
 }
 
@@ -35,7 +34,6 @@ def generate_output_image(raw_image: np.ndarray,
 class Explanation(BaseModel):
     explanation_id: uuid.UUID
     image: bytes
-    explanation_str: Optional[str] = None
     explanation_strs: Optional[Dict[str, str]] = None
 
 
