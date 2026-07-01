@@ -32,7 +32,14 @@ def test_that_invalid_model_returns_informative_404(generate_image, mocker):
 @pytest.mark.integration
 @pytest.mark.tcav
 def test_that_explanation_succeeds(generate_image):
-    r = client.post("/explain", files={"file": generate_image(110, 224)})
+    r = client.post(
+        "/explain",
+        files={"file": generate_image(110, 224)},
+        data={
+            "method": "tcav",
+            "settings": '{"explainer": {"concepts_root": "inspection/explainer/explainers/tcav/cavs"}}'
+        }
+    )
 
     assert r.status_code == 200
 
