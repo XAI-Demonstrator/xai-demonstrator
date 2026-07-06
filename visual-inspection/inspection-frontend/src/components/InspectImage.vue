@@ -57,7 +57,9 @@ export default {
           .then(response => {
             this.prediction = response.data.class_label
             this.probability = response.data.probability
-            this.$emit('inspection-completed')
+            this.$emit('inspection-completed', {
+              label: response.data.class_label
+            })
           })
           .catch(error => {
             console.log(error)

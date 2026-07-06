@@ -72,45 +72,57 @@ def humanize_tcav_concept(concept: str, language: Literal["de", "en"] = "de") ->
     return _humanize_tcav_concept(concept, language=language)
 
 
-def _describe_score_strength(score: float, language: Literal["de", "en"] = "de") -> str:
-    abs_score = abs(score)
-    if abs_score >= 0.25:
-        return "stark" if language == "de" else "strong"
-    if abs_score >= 0.15:
-        return "mittel" if language == "de" else "medium"
-    return "schwach" if language == "de" else "weak"
-
-
-def build_tcav_explanation_sentence(analysis: TCAVAnalysis, top_k: int = 3, language: Literal["de", "en"] = "de") -> str:
+def build_tcav_explanation_sentence(
+    prediction: str,
+    analysis: TCAVAnalysis,
+    top_k: int = 2,
+    language: Literal["de", "en"] = "de",
+) -> str:
     language = _normalize_language(language)
-    ranked = list(analysis.ranked_concept_scores)[: max(1, top_k)]
-    if not ranked:
-        return "Kein Konzept erkennbar." if language == "de" else "No concept identifiable."
 
-    supporting = [(item, _describe_score_strength(item.score, language)) for item in ranked if item.score >= 0]
-    opposing = [(item, _describe_score_strength(item.score, language)) for item in ranked if item.score < 0]
+    concepts = [
+        _humanize_tcav_concept(item.concept, language)
+        for item in analysis.ranked_concept_scores
+        if item.score >= 0
+    ][:max(1, top_k)]
 
-    def fmt(items: list) -> str:
-        return ", ".join(f"{_humanize_tcav_concept(i.concept, language=language)} ({s})" for i, s in items)
+    prediction = _humanize_tcav_concept(prediction, language)
 
-    if language == "en":
-        if supporting and opposing:
-            return f"For this speaks {fmt(supporting)}, against it {fmt(opposing)}."
-        if supporting:
-            return f"The prediction is supported by {fmt(supporting)}."
-        return f"The prediction is weakened by {fmt(opposing)}."
+    if not concepts:
+        if language == "de":
+            return f'Die Vorhersage »{prediction}« wurde getroffen.'
+        return f'The prediction "{prediction}" was made.'
+
+    if language == "de":
+        if len(concepts) == 1:
+            concept_text = concepts[0]
+        elif len(concepts) == 2:
+            concept_text = f"{concepts[0]} und {concepts[1]}"
+        else:
+            concept_text = ", ".join(concepts[:-1]) + f" und {concepts[-1]}"
+
+        return (
+            f'Die Vorhersage »{prediction}« wurde getroffen, '
+            f'da auf dem Bild die Konzepte {concept_text} erkannt wurden.'
+        )
+
+    if len(concepts) == 1:
+        concept_text = concepts[0]
+    elif len(concepts) == 2:
+        concept_text = f"{concepts[0]} and {concepts[1]}"
     else:
-        if supporting and opposing:
-            return f"Dafür spricht {fmt(supporting)}, dagegen {fmt(opposing)}."
-        if supporting:
-            return f"Die Vorhersage wird gestützt durch {fmt(supporting)}."
-        return f"Die Vorhersage wird geschwächt durch {fmt(opposing)}."
+        concept_text = ", ".join(concepts[:-1]) + f", and {concepts[-1]}"
+
+    return (
+        f'The prediction "{prediction}" was made because the concepts '
+        f'{concept_text} were detected in the image.'
+    )
 
 
-def build_tcav_explanation_sentences(analysis: TCAVAnalysis, top_k: int = 3) -> dict[str, str]:
+def build_tcav_explanation_sentences(analysis: TCAVAnalysis, top_k: int = 3, prediction: str = None) -> dict[str, str]:
     return {
-        "de": build_tcav_explanation_sentence(analysis, top_k=top_k, language="de"),
-        "en": build_tcav_explanation_sentence(analysis, top_k=top_k, language="en"),
+        "de": build_tcav_explanation_sentence(prediction=prediction, analysis=analysis, top_k=top_k, language="de"),
+        "en": build_tcav_explanation_sentence(prediction=prediction, analysis=analysis, top_k=top_k, language="en"),
     }
 
 
@@ -121,7 +133,6 @@ def compute_tcav_analysis(input_img: np.ndarray, model_: tf.keras.models.Model, 
         }
     }
     merged = dict(defaults)
-    # settings may contain nested dicts; merge shallowly so API-provided values override defaults
     merged.update(settings or {})
     config = TCAVConfiguration(**merged)
     cavs = load_cavs_for_config(config.explainer)

@@ -66,7 +66,8 @@ class ExplanationRequest(BaseModel):
 def explain_classification(file: UploadFile = File(...),
                            method: Optional[str] = Form(None),
                            model_id: Optional[str] = Form(None),
-                           settings: Optional[str] = Form(None)) -> Explanation:
+                           settings: Optional[str] = Form(None),
+                           prediction_label: Optional[str] = Form(None)) -> Explanation:
     if settings is not None:
         if method is None:
             raise HTTPException(
@@ -91,4 +92,4 @@ def explain_classification(file: UploadFile = File(...),
                 detail=f"{request.method} is not an available explanation method",
             )
 
-    return explain(file.file, model_id=request.model_id, method=request.method, settings=request.settings)
+    return explain(file.file, model_id=request.model_id, method=request.method, settings=request.settings, prediction=prediction_label)

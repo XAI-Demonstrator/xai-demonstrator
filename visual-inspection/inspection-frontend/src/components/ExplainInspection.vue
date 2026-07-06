@@ -27,6 +27,10 @@ export default {
     predictionReady: {
       type: Boolean,
       default: false
+    },
+    predictionLabel: {
+      type: String,
+      default: null
     }
   },
   methods: {
@@ -46,6 +50,10 @@ export default {
       if (method) {
         form.append('method', method);
       }
+
+      if (this.predictionLabel) {
+      form.append('prediction_label', this.predictionLabel)
+    }
 
       const settings = Object
           .keys(allParams)

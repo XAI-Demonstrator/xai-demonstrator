@@ -49,6 +49,7 @@
                         v-on:inspection-completed="inspectionCompleted"/>
           <ExplainInspection v-if="enableExplanations" ref="explainer"
                              v-bind:prediction-ready="currentPrediction"
+                             v-bind:prediction-label="currentPredictionLabel"
                              v-on:explanation-requested="explanationRequested"
                              v-on:explanation-received="explanationReceived"/>
           <div v-if="currentExplanationText" class="explanation-text">
@@ -126,6 +127,7 @@ export default {
     async imageChanged({canvas}) {
       if (!this.waitingForExplanation) {
         this.currentPrediction = false;
+        this.currentPredictionLabel = null;
         this.currentExplanation = false;
         this.explanationTextByLanguage = null;
         this.explanationTextFallback = null;
@@ -137,6 +139,7 @@ export default {
     },
     inspectionCompleted() {
       this.currentPrediction = true;
+      this.currentPredictionLabel = prediction.label
     },
     async explanationRequested() {
       this.currentExplanation = false;
@@ -176,6 +179,7 @@ export default {
   },
   data() {
     return {
+      currentPredictionLabel: null,
       showConfiguration: false,
       currentPrediction: false,
       currentExplanation: false,
@@ -261,7 +265,7 @@ export default {
     "info2paragraph4": "<small>Erklärungen: <a href='https://github.com/tensorflow/tcav'>TCAV</a><br />",
     "info2paragraph5": "<small>Bild: Melinda Pack (Unsplash), <a href='https://creativecommons.org/publicdomain/zero/1.0/deed.en'>CC0</a> 1.0, via <a href='https://commons.wikimedia.org/wiki/File:Camera_keys_notebook_coffee_(Unsplash).jpg'>Wikimedia Commons</a></small>",
     "info2paragraph5digitalEducation": "<small>Bilder: Open Source / <a href='https://www.pexels.com/license'>Pexels</a>",
-    "tcavExplanationLabel": "TCAV-Erklärung",
+    "tcavExplanationLabel": "Erklärung",
     "infoLinkLabel": "Interesse geweckt? Hier gibt’s mehr Infos!"
   },
   "en": {
@@ -283,7 +287,7 @@ export default {
     "info2paragraph4": "<small>Explanations: <a href='https://github.com/tensorflow/tcav'>TCAV</a><br />",
     "info2paragraph5": "<small>Image: Melinda Pack (Unsplash), <a href='https://creativecommons.org/publicdomain/zero/1.0/deed.en'>CC0</a> 1.0, via <a href='https://commons.wikimedia.org/wiki/File:Camera_keys_notebook_coffee_(Unsplash).jpg'>Wikimedia Commons</a></small>",
     "info2paragraph5digitalEducation": "<small>Image: Open Source / <a href='https://www.pexels.com/license'>Pexels</a>",
-    "tcavExplanationLabel": "TCAV explanation",
+    "tcavExplanationLabel": "Explanation",
     "infoLinkLabel": "Want to learn more? (in German)"
   }
 }

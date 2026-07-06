@@ -34,6 +34,7 @@ def generate_output_image(raw_image: np.ndarray,
 class Explanation(BaseModel):
     explanation_id: uuid.UUID
     image: bytes
+    prediction_label: Optional[str] = None
     explanation_strs: Optional[Dict[str, str]] = None
 
 
@@ -41,7 +42,8 @@ class Explanation(BaseModel):
 def explain(image_file: IO[bytes],
             model_id: str,
             method: str,
-            settings: Union[None, Dict[str, Any]] = None) -> Explanation:
+            settings: Union[None, Dict[str, Any]] = None,
+            prediction_label: Optional[str] = None) -> Explanation:
     settings = settings or {}
     model = get_model(model_id)
 
@@ -58,12 +60,12 @@ def explain(image_file: IO[bytes],
         raw_image = tcav_explanation(explainer_input, model, analysis=analysis, **settings)
         renderer_settings = settings.get("renderer", {})
         top_k = int(renderer_settings.get("top_k_concepts", 3))
-        explanation_strs = build_tcav_explanation_sentences(analysis, top_k=top_k)
+        explanation_strs = build_tcav_explanation_sentences(analysis, top_k=top_k, prediction=prediction_label)
 
         return Explanation(explanation_id=explanation_id,
                            image=generate_output_image(raw_image, input_image.size),
-                           explanation_str=explanation_strs["de"],
-                           explanation_strs=explanation_strs)
+                           explanation_strs=explanation_strs,
+                           prediction_label=prediction_label)
     else:
         raw_image = EXPLAINERS[method](explainer_input, model, **settings)
 
