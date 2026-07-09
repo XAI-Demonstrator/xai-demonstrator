@@ -53,8 +53,11 @@
                              v-on:explanation-received="explanationReceived"/>
           <div v-if="currentExplanationText" class="explanation-text">
             <p class="explanation-text__label">{{ $t('tcavExplanationLabel') }}</p>
-            <p class="explanation-text__content">{{ currentExplanationText }}</p>
-          </div>
+            <p class="explanation-text__content"
+               v-html="currentExplanationText"
+            ></p>
+            <BarChart  v-if="conceptScores && conceptScores.length"  :explanation="conceptScores"/>
+            </div>
         </div>
       </section>
 
@@ -96,6 +99,7 @@ import ConfigureModel from "@/components/ConfigureModel";
 import {FloatingInfoButton, UseCaseHeader, XAIStudioRibbon, GitHubRibbon} from '@xai-demonstrator/xaidemo-ui';
 import {debounce} from "debounce";
 import {modelConfig} from '@/modelConfig.js'
+import BarChart from "@/components/BarChart.vue";
 
 /* https://forum.vuejs.org/t/vue-received-a-component-which-was-made-a-reactive-object/119004/2 */
 const componentMap = {
@@ -104,6 +108,7 @@ const componentMap = {
 export default {
   name: 'App',
   components: {
+    BarChart,
     Cropper,
     InspectImage,
     ExplainInspection,
@@ -128,7 +133,7 @@ export default {
         this.currentPrediction = false;
         this.currentExplanation = false;
         this.explanationTextByLanguage = null;
-        this.explanationTextFallback = null;
+        this.conceptScores = null;
         await this.debouncedRequestInspection(canvas)
       }
     },
@@ -142,13 +147,13 @@ export default {
       this.currentExplanation = false;
       this.waitingForExplanation = true;
       this.explanationTextByLanguage = null;
-      this.explanationTextFallback = null;
+      this.conceptScores = null;
       this.$refs.cropper.getResult().canvas.toBlob(await this.$refs.explainer.explain)
     },
     explanationReceived(explanation) {
       this.explanationImg = explanation.image;
       this.explanationTextByLanguage = explanation.explanationStrs || null;
-      this.explanationTextFallback = explanation.explanationStr || null;
+      this.conceptScores = explanation.conceptScores || null;
       this.currentExplanation = true;
       this.waitingForExplanation = false;
     },
@@ -159,9 +164,6 @@ export default {
       const language = this.currentLanguage();
       if (this.explanationTextByLanguage && this.explanationTextByLanguage[language]) {
         return this.explanationTextByLanguage[language];
-      }
-      if (this.explanationTextFallback) {
-        return this.explanationTextFallback;
       }
       return null;
     },
@@ -182,7 +184,7 @@ export default {
       waitingForExplanation: false,
       explanationImg: null,
       explanationTextByLanguage: null,
-      explanationTextFallback: null,
+      conceptScores: null,
       minExplanationImgSize: {
         width: 100,
         height: 100

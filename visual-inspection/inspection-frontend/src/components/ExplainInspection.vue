@@ -67,7 +67,8 @@ export default {
         const response = await axios.post(this.backendUrl + '/explain', form)
         this.$emit('explanation-received', {
           image: response.data.image,
-          explanationStrs: response.data.explanation_strs || null
+          explanationStrs: response.data.explanation_strs || null,
+          conceptScores: response.data.conceptScores || null
         })
       } catch (error) {
         console.log(error)

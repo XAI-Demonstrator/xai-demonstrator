@@ -1,13 +1,13 @@
 {
-    "feature_concepts/circular_opening":  "a circular opening",
-    "feature_concepts/has_handle":        "a handle",
+    "feature_concepts/circular_opening":  "circular opening",
+    "feature_concepts/has_handle":        "handle",
     "feature_concepts/has_keys_buttons":  "keys and buttons",
-    "feature_concepts/has_lens":          "a lens",
-    "feature_concepts/has_screen":        "a screen",
+    "feature_concepts/has_lens":          "lens",
+    "feature_concepts/has_screen":        "screen",
 
-    "form_concepts/compact_rounded":      "a compact rounded form",
-    "form_concepts/cylindrical":          "a cylindrical form",
-    "form_concepts/oval":                 "an oval form",
-    "form_concepts/rectangular":          "a rectangular form",
-    "form_concepts/round":                "a round form"
+    "form_concepts/compact_rounded":      "compact rounded form",
+    "form_concepts/cylindrical":          "cylindrical form",
+    "form_concepts/oval":                 "oval form",
+    "form_concepts/rectangular":          "rectangular form",
+    "form_concepts/round":                "round form"
 }

@@ -8,7 +8,8 @@ from PIL import Image
 from pydantic import BaseModel
 from xaidemo.tracing import add_span_attributes, traced
 
-from .explainers.tcav_ import compute_tcav_analysis, tcav_explanation, build_tcav_explanation_sentences
+from .explainers.tcav_ import compute_tcav_analysis, tcav_explanation, build_tcav_explanation_sentences, \
+    TCAVConceptScore
 from ..model.model import get_model
 from ..model.predict import preprocess
 
@@ -35,6 +36,7 @@ class Explanation(BaseModel):
     explanation_id: uuid.UUID
     image: bytes
     explanation_strs: Optional[Dict[str, str]] = None
+    conceptScores: Optional[list[TCAVConceptScore]] = None
 
 
 @traced
@@ -62,8 +64,8 @@ def explain(image_file: IO[bytes],
 
         return Explanation(explanation_id=explanation_id,
                            image=generate_output_image(raw_image, input_image.size),
-                           explanation_str=explanation_strs["de"],
-                           explanation_strs=explanation_strs)
+                           explanation_strs=explanation_strs,
+                           conceptScores=analysis.ranked_concept_scores)
     else:
         raw_image = EXPLAINERS[method](explainer_input, model, **settings)
 

@@ -72,45 +72,57 @@ def humanize_tcav_concept(concept: str, language: Literal["de", "en"] = "de") ->
     return _humanize_tcav_concept(concept, language=language)
 
 
-def _describe_score_strength(score: float, language: Literal["de", "en"] = "de") -> str:
-    abs_score = abs(score)
-    if abs_score >= 0.25:
-        return "stark" if language == "de" else "strong"
-    if abs_score >= 0.15:
-        return "mittel" if language == "de" else "medium"
-    return "schwach" if language == "de" else "weak"
-
-
-def build_tcav_explanation_sentence(analysis: TCAVAnalysis, top_k: int = 3, language: Literal["de", "en"] = "de") -> str:
+def build_tcav_explanation_sentence(
+    analysis: TCAVAnalysis,
+    top_k: int = 2,
+    language: Literal["de", "en"] = "de",
+) -> str:
     language = _normalize_language(language)
     ranked = list(analysis.ranked_concept_scores)[: max(1, top_k)]
     if not ranked:
         return "Kein Konzept erkennbar." if language == "de" else "No concept identifiable."
 
-    supporting = [(item, _describe_score_strength(item.score, language)) for item in ranked if item.score >= 0]
-    opposing = [(item, _describe_score_strength(item.score, language)) for item in ranked if item.score < 0]
+    concepts = [item for item in ranked]
+    if not concepts:
+        if language == "de":
+            return f'Error - Keine Konzepte erkannt'
+        return f'Error - No Concepts Detected'
 
-    def fmt(items: list) -> str:
-        return ", ".join(f"{_humanize_tcav_concept(i.concept, language=language)} ({s})" for i, s in items)
+    formatted = [
+        f"<strong>{_humanize_tcav_concept(item.concept, language)}</strong>"
+        for item in concepts
+    ]
 
-    if language == "en":
-        if supporting and opposing:
-            return f"For this speaks {fmt(supporting)}, against it {fmt(opposing)}."
-        if supporting:
-            return f"The prediction is supported by {fmt(supporting)}."
-        return f"The prediction is weakened by {fmt(opposing)}."
+    if language == "de":
+        if len(formatted) == 1:
+            concept_text = formatted[0]
+        elif len(formatted) == 2:
+            concept_text = f"{formatted[0]} und {formatted[1]}"
+        else:
+            concept_text = ", ".join(formatted[:-1]) + f" und {formatted[-1]}"
+
+        return (
+            f'Die Vorhersage wurde getroffen, '
+            f'da auf dem Bild die Konzepte {concept_text} erkannt wurden.'
+        )
+
+    if len(formatted) == 1:
+        concept_text = formatted[0]
+    elif len(formatted) == 2:
+        concept_text = f"{formatted[0]} and {formatted[1]}"
     else:
-        if supporting and opposing:
-            return f"Dafür spricht {fmt(supporting)}, dagegen {fmt(opposing)}."
-        if supporting:
-            return f"Die Vorhersage wird gestützt durch {fmt(supporting)}."
-        return f"Die Vorhersage wird geschwächt durch {fmt(opposing)}."
+        concept_text = ", ".join(formatted[:-1]) + f", and {formatted[-1]}"
+
+    return (
+        f'The prediction was made because the concepts '
+        f'{concept_text} were detected in the image.'
+    )
 
 
 def build_tcav_explanation_sentences(analysis: TCAVAnalysis, top_k: int = 3) -> dict[str, str]:
     return {
-        "de": build_tcav_explanation_sentence(analysis, top_k=top_k, language="de"),
-        "en": build_tcav_explanation_sentence(analysis, top_k=top_k, language="en"),
+        "de": build_tcav_explanation_sentence(analysis=analysis, top_k=top_k, language="de"),
+        "en": build_tcav_explanation_sentence(analysis=analysis, top_k=top_k, language="en"),
     }
 
 
