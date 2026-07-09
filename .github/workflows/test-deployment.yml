@@ -30,7 +30,7 @@ jobs:
      steps:
        - uses: actions/checkout@v4
        - name: Wait for lock to release and place lock
-         uses: appleboy/ssh-action@v0.1.10
+         uses: appleboy/ssh-action@v1.0.0
          with:
            host: ${{ secrets.HOST }}
            username: ${{ secrets.USER }}
@@ -56,7 +56,7 @@ jobs:
            target: "test-deployment"
            rm: true
        - name: SSH Remote Commands
-         uses: appleboy/ssh-action@v0.1.10
+         uses: appleboy/ssh-action@v1.0.0
          env:
            STREETVIEW_API_KEY: ${{ secrets.STREETVIEW_API_KEY }}
            BATCH_SIZE: ${{ secrets.BATCH_SIZE }}
