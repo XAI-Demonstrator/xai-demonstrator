@@ -53,10 +53,8 @@
                              v-on:explanation-received="explanationReceived"/>
           <div v-if="currentExplanationText" class="explanation-text">
             <p class="explanation-text__label">{{ $t('tcavExplanationLabel') }}</p>
-            <p class="explanation-text__content"
-               v-html="currentExplanationText"
-            ></p>
-            <BarChart  v-if="conceptScores && conceptScores.length"  :explanation="conceptScores"/>
+            <BarChart  v-if="conceptScores != null"  v-bind:explanation="conceptScores"/>
+            <p class="explanation-text__content">{{ $t('currentExplanationText') }}</p>
             </div>
         </div>
       </section>

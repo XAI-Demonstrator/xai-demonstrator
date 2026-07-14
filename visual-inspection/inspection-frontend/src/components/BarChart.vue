@@ -1,12 +1,12 @@
 <template>
   <div class="barchart">
-    <div class="line" v-for="pair in processedExplanation.slice(0,maxNumOfBars)" :key="pair.word + Math.random()">
+    <div class="line" v-for="pair in processedExplanation.slice(0,maxNumOfBars)" :key="pair.concept">
       <div class="bar">
         <div class="progress" v-bind:style="{'--importance': pair.score}"
              v-bind:class="{'xd-green': pair.score > 0, 'xd-red': pair.score < 0}">
         </div>
       </div>
-      <div class="word">{{ pair.word }}</div>
+      <div class="word">{{ pair.concept }}</div>
     </div>
     <div class="legend">
       <div class="legend-element">
@@ -52,7 +52,7 @@ export default {
     rescaleScores(explanation) {
       const factor = this.getScalingFactor(explanation)
       return explanation.map(function (pair) {
-        return {word: pair.word, score: pair.score * factor}
+        return {concept: pair.concept, score: pair.score * factor}
       })
     },
     getScalingFactor(explanation) {
@@ -67,12 +67,12 @@ export default {
 <i18n>
 {
     "de": {
-        "positive": "supports prediction",
-        "negative": "opposes prediction"
+        "positive": "unterstützt Vorhersage",
+        "negative": "wiederspricht Vorhersage"
     },
     "en": {
-        "positive": "unterstützt",
-        "negative": "wiederspricht"
+        "positive": "supports prediction",
+        "negative": "opposes prediction"
 	}
 }
 </i18n>
@@ -127,7 +127,7 @@ export default {
 }
 
 .progress {
-  width: max(calc(var(--importance) * 50%), calc(var(--importance) * -50%));
+  width: calc(max(var(--importance), calc(var(--importance) * -1)) * 50%);
   height: 12px;
   margin-left: min(calc(50% + var(--importance) * 50%), 50%);
   border-radius: 2px;
