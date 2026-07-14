@@ -53,9 +53,9 @@
                              v-on:explanation-received="explanationReceived"/>
           <div v-if="currentExplanationText" class="explanation-text">
             <p class="explanation-text__label">{{ $t('tcavExplanationLabel') }}</p>
-            <BarChart  v-if="conceptScores != null"  v-bind:explanation="conceptScores"/>
-            <p class="explanation-text__content">{{ $t('currentExplanationText') }}</p>
-            </div>
+            <p class="explanation-text__content" v-html="currentExplanationText"></p>
+            <BarChart v-if="conceptScores.length" :explanation="conceptScores"/>
+          </div>
         </div>
       </section>
 
@@ -131,7 +131,7 @@ export default {
         this.currentPrediction = false;
         this.currentExplanation = false;
         this.explanationTextByLanguage = null;
-        this.conceptScores = null;
+        this.conceptScores = [];
         await this.debouncedRequestInspection(canvas)
       }
     },
@@ -145,13 +145,13 @@ export default {
       this.currentExplanation = false;
       this.waitingForExplanation = true;
       this.explanationTextByLanguage = null;
-      this.conceptScores = null;
+      this.conceptScores = [];
       this.$refs.cropper.getResult().canvas.toBlob(await this.$refs.explainer.explain)
     },
     explanationReceived(explanation) {
       this.explanationImg = explanation.image;
       this.explanationTextByLanguage = explanation.explanationStrs || null;
-      this.conceptScores = explanation.conceptScores || null;
+      this.conceptScores = explanation.conceptScores || [];
       this.currentExplanation = true;
       this.waitingForExplanation = false;
     },
@@ -182,7 +182,7 @@ export default {
       waitingForExplanation: false,
       explanationImg: null,
       explanationTextByLanguage: null,
-      conceptScores: null,
+      conceptScores: [],
       minExplanationImgSize: {
         width: 100,
         height: 100

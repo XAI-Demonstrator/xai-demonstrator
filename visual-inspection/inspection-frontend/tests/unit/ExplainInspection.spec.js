@@ -108,8 +108,24 @@ describe('ExplainInspection.vue', () => {
             explanationStrs: {
                 de: 'TCAV-Text-DE',
                 en: 'TCAV-Text-EN'
-            }
+            },
+            conceptScores: []
         })
+    })
+
+    it('passes TCAV concept scores to its parent', async () => {
+        axios.post.mockImplementationOnce(() => Promise.resolve({
+            data: {
+                image: 'data:image/png;base64,',
+                concept_scores: [{concept: 'handle', score: -0.2}]
+            }
+        }))
+
+        await wrapper.vm.explain('fake-blob')
+        await flushPromises()
+
+        expect(wrapper.emitted('explanation-received')[0][0].conceptScores)
+            .toStrictEqual([{concept: 'handle', score: -0.2}])
     })
 
     it('handles unavailable backend gracefully', async () => {

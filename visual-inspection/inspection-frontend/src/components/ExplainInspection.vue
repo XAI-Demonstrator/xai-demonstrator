@@ -68,7 +68,9 @@ export default {
         this.$emit('explanation-received', {
           image: response.data.image,
           explanationStrs: response.data.explanation_strs || null,
-          conceptScores: response.data.conceptScores || null
+          // Accept the API's camelCase field and the snake_case variants used
+          // by earlier TCAV responses and standalone result files.
+          conceptScores: response.data.conceptScores || response.data.concept_scores || []
         })
       } catch (error) {
         console.log(error)
