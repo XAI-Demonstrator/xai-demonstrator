@@ -6,7 +6,7 @@
              v-bind:class="{'xd-green': pair.score > 0, 'xd-red': pair.score < 0}">
         </div>
       </div>
-      <div class="word">{{ pair.concept }}</div>
+      <div class="word">{{ pair.concept[currentLanguage()] }}</div>
     </div>
     <div class="legend">
       <div class="legend-element">
@@ -44,6 +44,10 @@ export default {
       return this.sortByScore(this.rescaleScores(this.explanation))
     }
   }, methods: {
+    currentLanguage() {
+      const lang = (this.$i18n.locale || 'de').split('-')[0].split('_')[0]
+      return ['de', 'en'].includes(lang) ? lang : 'de'
+    },
     sortByScore(explanation) {
       return [...explanation].sort(function (a, b) {
         return Math.abs(b.score) - Math.abs(a.score)
@@ -51,9 +55,10 @@ export default {
     },
     rescaleScores(explanation) {
       const factor = this.getScalingFactor(explanation)
-      return explanation.map(function (pair) {
-        return {concept: pair.concept, score: pair.score * factor}
-      })
+      return explanation.map(pair => ({
+        concept: pair.concept,
+        score: pair.score * factor
+      }))
     },
     getScalingFactor(explanation) {
       return Math.max(1.0, this.minLengthOfLongestBar / explanation.reduce(
@@ -66,14 +71,14 @@ export default {
 
 <i18n>
 {
-    "de": {
-        "positive": "unterstützt Vorhersage",
-        "negative": "wiederspricht Vorhersage"
-    },
-    "en": {
-        "positive": "supports prediction",
-        "negative": "opposes prediction"
-	}
+  "de": {
+    "positive": "unterstützt Vorhersage",
+    "negative": "wiederspricht Vorhersage"
+  },
+  "en": {
+    "positive": "supports prediction",
+    "negative": "opposes prediction"
+  }
 }
 </i18n>
 

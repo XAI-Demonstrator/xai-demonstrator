@@ -54,8 +54,10 @@
           <div v-if="currentExplanationText" class="explanation-text">
             <p class="explanation-text__label">{{ $t('tcavExplanationLabel') }}</p>
             <p class="explanation-text__content" v-html="currentExplanationText"></p>
-            <BarChart v-if="conceptScores.length" :explanation="conceptScores"/>
+            <!-- TODO: explanation not displayed correctly - it doesnt escape correctly so <strong>-Tags still included as plain text -->
           </div>
+          <BarChart v-if="conceptScores" v-bind:explanation="conceptScores"/>
+          <!-- TODO: why BarChart isn't rendered correctly? Also it does not appear in HTML code checked via Browser DevTools -->
         </div>
       </section>
 

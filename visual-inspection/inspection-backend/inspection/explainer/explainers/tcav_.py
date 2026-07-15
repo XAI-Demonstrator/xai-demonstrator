@@ -1,7 +1,7 @@
 import json
 import logging
 from pathlib import Path
-from typing import Dict, List, Optional, Literal
+from typing import Dict, List, Optional, Literal, Union
 
 import numpy as np
 import tensorflow as tf
@@ -45,9 +45,12 @@ _CONCEPT_LABELS = {
     for language, path in _LABELS_PATHS.items()
 }
 
+class ConceptLabel(BaseModel):
+    de: str
+    en: str
 
 class TCAVConceptScore(BaseModel):
-    concept: str
+    concept: ConceptLabel
     score: float
 
 
@@ -60,7 +63,10 @@ def _normalize_language(language: Literal["de", "en"] = "de") -> Literal["de", "
     return language if language in _LABELS_PATHS else "de"
 
 
-def _humanize_tcav_concept(concept: str, language: Literal["de", "en"] = "de") -> str:
+def _humanize_tcav_concept(concept: Union[str, ConceptLabel], language: Literal["de", "en"] = "de") -> str:
+    if isinstance(concept, ConceptLabel):
+        return concept.de if language == "de" else concept.en
+
     mapped = _CONCEPT_LABELS.get(_normalize_language(language), {}).get(concept)
     if mapped:
         return mapped
@@ -68,7 +74,7 @@ def _humanize_tcav_concept(concept: str, language: Literal["de", "en"] = "de") -
     return fallback or concept
 
 
-def humanize_tcav_concept(concept: str, language: Literal["de", "en"] = "de") -> str:
+def humanize_tcav_concept(concept: Union[str, ConceptLabel], language: Literal["de", "en"] = "de") -> str:
     return _humanize_tcav_concept(concept, language=language)
 
 
@@ -88,6 +94,7 @@ def build_tcav_explanation_sentence(
             return f'Error - Keine Konzepte erkannt'
         return f'Error - No Concepts Detected'
 
+    # TODO: here we set the strong-tags for concepts but those doesnt displayed as excpected. FRONTEND error?
     formatted = [
         f"<strong>{_humanize_tcav_concept(item.concept, language)}</strong>"
         for item in concepts
@@ -152,7 +159,16 @@ def compute_tcav_analysis(input_img: np.ndarray, model_: tf.keras.models.Model, 
     ranked_all = rank_concept_scores(concept_scores, by_absolute_value=True)
     return TCAVAnalysis(
         concept_scores=concept_scores,
-        ranked_concept_scores=[TCAVConceptScore(concept=concept, score=score) for concept, score in ranked_all],
+        ranked_concept_scores=[
+            TCAVConceptScore(
+                concept=ConceptLabel(
+                    de=_humanize_tcav_concept(concept, "de"),
+                    en=_humanize_tcav_concept(concept, "en"),
+                ),
+                score=score,
+            )
+            for concept, score in ranked_all
+        ]
     )
 
 

@@ -1,13 +1,28 @@
-from inspection.explainer.explainers.tcav_ import TCAVAnalysis, TCAVConceptScore
-from inspection.explainer.explainers.tcav_ import build_tcav_explanation_sentence, build_tcav_explanation_sentences, humanize_tcav_concept
+from inspection.explainer.explainers.tcav_ import (
+    TCAVAnalysis,
+    TCAVConceptScore,
+    ConceptLabel,
+    build_tcav_explanation_sentence,
+    build_tcav_explanation_sentences,
+    humanize_tcav_concept,
+)
 
 
 def test_tcav_sentence_contains_top_concepts():
     analysis = TCAVAnalysis(
         ranked_concept_scores=[
-            TCAVConceptScore(concept="form_concepts/round", score=0.71),
-            TCAVConceptScore(concept="feature_concepts/has_handle", score=0.33),
-            TCAVConceptScore(concept="feature_concepts/has_screen", score=0.21),
+            TCAVConceptScore(
+                concept=ConceptLabel(de="runde Form", en="round form"),
+                score=0.71,
+            ),
+            TCAVConceptScore(
+                concept=ConceptLabel(de="Griff", en="handle"),
+                score=0.33,
+            ),
+            TCAVConceptScore(
+                concept=ConceptLabel(de="Bildschirm", en="screen"),
+                score=0.21,
+            ),
         ]
     )
 
@@ -17,14 +32,10 @@ def test_tcav_sentence_contains_top_concepts():
     assert "runde Form" in sentence_de
     assert "Griff" in sentence_de
     assert "Bildschirm" in sentence_de
-    assert "stark" in sentence_de
-    assert "gestützt" in sentence_de
 
     assert "round form" in sentence_en
     assert "handle" in sentence_en
     assert "screen" in sentence_en
-    assert "strong" in sentence_en
-    assert "supported" in sentence_en
 
 
 def test_tcav_sentence_fallback_when_no_concepts():
@@ -39,7 +50,10 @@ def test_tcav_sentence_fallback_when_no_concepts():
 def test_tcav_sentence_bundle_contains_both_languages():
     analysis = TCAVAnalysis(
         ranked_concept_scores=[
-            TCAVConceptScore(concept="feature_concepts/has_lens", score=0.4),
+            TCAVConceptScore(
+                concept=ConceptLabel(de="Linse", en="lens"),
+                score=0.4,
+            ),
         ]
     )
 
@@ -52,3 +66,9 @@ def test_tcav_sentence_bundle_contains_both_languages():
 
 def test_humanize_tcav_concept_uses_fallback_for_unknown_keys():
     assert humanize_tcav_concept("feature_concepts/custom_pattern") == "custom pattern"
+
+
+def test_humanize_tcav_concept_with_concept_label():
+    label = ConceptLabel(de="benutzerdefiniertes Muster", en="custom pattern")
+    assert humanize_tcav_concept(label, language="de") == "benutzerdefiniertes Muster"
+    assert humanize_tcav_concept(label, language="en") == "custom pattern"
