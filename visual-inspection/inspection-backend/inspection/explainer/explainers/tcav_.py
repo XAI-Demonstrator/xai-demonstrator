@@ -94,9 +94,8 @@ def build_tcav_explanation_sentence(
             return f'Error - Keine Konzepte erkannt'
         return f'Error - No Concepts Detected'
 
-    # TODO: here we set the strong-tags for concepts but those doesnt displayed as excpected. FRONTEND error?
     formatted = [
-        f"<strong>{_humanize_tcav_concept(item.concept, language)}</strong>"
+        f"<<{_humanize_tcav_concept(item.concept, language)}>>"
         for item in concepts
     ]
 

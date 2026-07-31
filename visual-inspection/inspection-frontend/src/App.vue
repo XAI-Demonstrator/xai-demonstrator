@@ -55,7 +55,9 @@
             <p class="explanation-text__label">{{ $t('tcavExplanationLabel') }}</p>
             <p class="explanation-text__content" v-html="currentExplanationText"></p>
           </div>
+          <!-- TODO: why BarChart isn't rendered correctly? Also it does not appear in HTML code checked via Browser
           <BarChart v-if="conceptScores && conceptScores.length" v-bind:explanation="conceptScores"/>
+          -->
         </div>
       </section>
 
