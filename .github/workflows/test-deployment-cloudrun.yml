@@ -1,0 +1,180 @@
+name: Test Deployment (Cloud Run)
+
+on:
+  workflow_dispatch:
+
+env:
+  REGION: ${{ secrets.GCP_TESTAPP_REGION }}
+
+jobs:
+  build-frontends:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - service: landing
+            repo_path: ./landing-page/frontend
+            mode: test-deployment
+            node: '14'
+          - service: sentiment
+            repo_path: ./review-sentiment/sentiment-frontend
+            mode: test-deployment
+            node: '14'
+          - service: inspection
+            repo_path: ./visual-inspection/inspection-frontend
+            mode: visual-inspection.test-deployment
+            node: '14'
+          - service: education
+            repo_path: ./visual-inspection/inspection-frontend
+            mode: digital-education.test-deployment
+            node: '14'
+          - service: country
+            repo_path: ./guess-the-country/country-frontend
+            mode: test-deployment
+            node: '18'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Build frontend
+        run: |
+          set -e
+          cd ${{ matrix.repo_path }}
+          npm install
+          npm run build -- --mode ${{ matrix.mode }}
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.service }}
+          path: ${{ matrix.repo_path }}/dist
+          retention-days: 3
+
+  deploy-frontends:
+    needs: build-frontends
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download all frontends
+        uses: actions/download-artifact@v4
+        with:
+          path: ./_frontends
+
+      - name: Assemble Firebase public directory
+        run: |
+          set -e
+          PUBLIC=deployment/test-cloudrun/frontends/public
+          rm -rf "$PUBLIC"
+          mkdir -p "$PUBLIC"
+          # landing page is served from the site root
+          cp -r ./_frontends/landing/. "$PUBLIC"/
+          # each use case is served from its own sub path
+          for u in sentiment inspection education country; do
+            mkdir -p "$PUBLIC/$u"
+            cp -r "./_frontends/$u/." "$PUBLIC/$u"/
+          done
+          echo "Assembled public tree:"
+          find "$PUBLIC" -maxdepth 2 -type d | sort
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Deploy to Firebase Hosting
+        run: |
+          set -e
+          npm install -g firebase-tools
+          printf '%s' "$GCP_TESTAPP_SA_KEY" > "$RUNNER_TEMP/gcp-sa.json"
+          export GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/gcp-sa.json"
+          firebase deploy \
+            --only hosting \
+            --project "$GCP_TESTAPP_PROJECT_ID" \
+            --config deployment/test-cloudrun/frontends/firebase.json \
+            --non-interactive
+        env:
+          GCP_TESTAPP_PROJECT_ID: ${{ secrets.GCP_TESTAPP_PROJECT_ID }}
+          GCP_TESTAPP_SA_KEY: ${{ secrets.GCP_TESTAPP_SA_KEY }}
+
+  deploy-backends:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - service: review-sentiment
+            prefix: sentiment
+            memory: 8Gi
+            cpu: '4'
+            concurrency: 6
+          - service: visual-inspection
+            prefix: inspection
+            memory: 2Gi
+            cpu: '2'
+            concurrency: 12
+          - service: digital-education
+            prefix: education
+            memory: 2Gi
+            cpu: '2'
+            concurrency: 12
+          - service: guess-the-country
+            prefix: country
+            memory: 2Gi
+            cpu: '2'
+            concurrency: 8
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_TESTAPP_SA_KEY }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ secrets.GCP_TESTAPP_PROJECT_ID }}
+
+      - name: Log in to GitHub Container Registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker "${REGION}-docker.pkg.dev" --quiet
+
+      - name: Pull, tag and push container image
+        run: |
+          set -e
+          SRC="ghcr.io/xai-demonstrator/${{ matrix.service }}-service:latest"
+          DST="${REGION}-docker.pkg.dev/${{ secrets.GCP_TESTAPP_PROJECT_ID }}/xai-demonstrator/${{ matrix.service }}:${{ github.sha }}"
+          docker pull "$SRC"
+          docker tag "$SRC" "$DST"
+          docker push "$DST"
+          echo "IMAGE=$DST" >> "$GITHUB_ENV"
+
+      - name: Deploy to Cloud Run
+        run: |
+          set -e
+          EXTRA_ENV=""
+          if [ "${{ matrix.prefix }}" = "country" ]; then
+            EXTRA_ENV=",GOOGLE_MAPS_API_TOKEN=${STREETVIEW_API_KEY},BATCH_SIZE=${BATCH_SIZE:-16}"
+          fi
+          gcloud run deploy ${{ matrix.service }} \
+            --image "$IMAGE" \
+            --region "$REGION" \
+            --platform managed \
+            --allow-unauthenticated \
+            --port 8000 \
+            --cpu "${{ matrix.cpu }}" \
+            --memory "${{ matrix.memory }}" \
+            --min-instances 0 \
+            --max-instances 4 \
+            --concurrency "${{ matrix.concurrency }}" \
+            --timeout 300 \
+            --set-env-vars "PATH_PREFIX=/api/${{ matrix.prefix }},SERVICE_NAME=${{ matrix.service }},TRACING_EXPORTER=default${EXTRA_ENV}"
+        env:
+          STREETVIEW_API_KEY: ${{ secrets.STREETVIEW_API_KEY }}
+          BATCH_SIZE: ${{ secrets.BATCH_SIZE }}

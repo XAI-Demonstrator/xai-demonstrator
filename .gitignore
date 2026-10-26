@@ -7,6 +7,7 @@ __pycache__/
 htmlcov/
 node_modules/
 .idea/
+.claude/
 .DS_STORE
 
 # Binary files and archives

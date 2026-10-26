@@ -1,0 +1,34 @@
+{
+  "hosting": {
+    "public": "public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "trailingSlashes": true,
+    "rewrites": [
+      {
+        "source": "/api/sentiment/**",
+        "run": { "serviceId": "review-sentiment", "region": "europe-west3" }
+      },
+      {
+        "source": "/api/inspection/**",
+        "run": { "serviceId": "visual-inspection", "region": "europe-west3" }
+      },
+      {
+        "source": "/api/education/**",
+        "run": { "serviceId": "digital-education", "region": "europe-west3" }
+      },
+      {
+        "source": "/api/country/**",
+        "run": { "serviceId": "guess-the-country", "region": "europe-west3" }
+      },
+      { "source": "/sentiment/**", "destination": "/sentiment/index.html" },
+      { "source": "/inspection/**", "destination": "/inspection/index.html" },
+      { "source": "/education/**", "destination": "/education/index.html" },
+      { "source": "/country/**", "destination": "/country/index.html" },
+      { "source": "**", "destination": "/index.html" }
+    ]
+  }
+}
