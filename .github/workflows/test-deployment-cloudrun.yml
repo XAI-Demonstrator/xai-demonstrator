@@ -55,7 +55,7 @@ jobs:
           retention-days: 3
 
   deploy-frontends:
-    needs: build-frontends
+    needs: [build-frontends, deploy-backends]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
