@@ -1,24 +1,7 @@
 name: Test Deployment
 
 on:
-  workflow_dispatch:
-  workflow_run:
-    workflows:
-      - "Landing Page"
-      - "Review Sentiment"
-      - "Visual Inspection"
-      - "Guess the Country"
-    branches:
-      - master
-    types:
-      - completed
-  push:
-    branches:
-      - master
-    paths:
-      - 'deployment/test-deployment/**'
-      - '!deployment/test-deployment/**.md'
-      - '.github/workflows/test-deployment.yml'
+  workflow_dispatch
 
 jobs:
   deploy:
