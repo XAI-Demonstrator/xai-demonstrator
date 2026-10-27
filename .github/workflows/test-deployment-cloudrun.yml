@@ -118,9 +118,9 @@ jobs:
             concurrency: 12
           - service: digital-education
             prefix: education
-            memory: 2Gi
+            memory: 4Gi
             cpu: '2'
-            concurrency: 12
+            concurrency: 8
           - service: guess-the-country
             prefix: country
             memory: 2Gi
@@ -161,6 +161,9 @@ jobs:
           EXTRA_ENV=""
           if [ "${{ matrix.prefix }}" = "country" ]; then
             EXTRA_ENV=",GOOGLE_MAPS_API_TOKEN=${STREETVIEW_API_KEY},BATCH_SIZE=${BATCH_SIZE:-16}"
+          fi
+          if [ "${{ matrix.prefix }}" = "education" ]; then
+            EXTRA_ENV=",LAZY_MODELS=true"
           fi
           gcloud run deploy ${{ matrix.service }} \
             --image "$IMAGE" \

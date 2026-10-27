@@ -10,9 +10,12 @@ RUN npm install && export NODE_ENV=production && npm run build -- --mode ${FLAVO
 RUN apk --no-cache add curl bash unzip
 RUN mkdir -p /inspection/model/models && \
     cd /inspection/model/models && \
-    curl "https://storage.googleapis.com/xai-demo-assets/visual-inspection/models/my_model.zip" -o "my_model.zip" && \
-    unzip -o "my_model.zip" && \
-    rm "my_model.zip"
+    for model_id in ${MODEL_IDS}; do \
+      echo "Downloading model ${model_id}..." && \
+      curl -fSL "https://storage.googleapis.com/xai-demo-assets/visual-inspection/models/${model_id}.zip" -o "${model_id}.zip" && \
+      unzip -o "${model_id}.zip" && \
+      rm "${model_id}.zip"; \
+    done
 
 FROM python:3.11-slim
 
