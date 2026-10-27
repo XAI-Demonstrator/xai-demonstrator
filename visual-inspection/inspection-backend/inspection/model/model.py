@@ -1,6 +1,7 @@
 import json
 import logging
 import pathlib
+from collections import OrderedDict
 from typing import Optional, Dict
 
 import tensorflow as tf
@@ -44,17 +45,56 @@ def _load_models(path: pathlib.Path = PATH) -> Dict[str, tf.keras.models.Model]:
     return models
 
 
-MODELS = _load_models()
+def _index_model_paths(path: pathlib.Path = PATH) -> Dict[str, pathlib.Path]:
+    """Map each model id to its path WITHOUT loading the model (cheap, no TensorFlow)."""
+    index = {}
+    models_dir = path / "models"
+    if models_dir.exists():
+        for model_path in models_dir.iterdir():
+            index[model_path.with_suffix('').name] = model_path
+    return index
 
-default_model = MODELS[settings.default_model]
 
+def _get_or_load(model_id, paths, cache, cache_limit, loader):
+    if model_id in cache:
+        cache.move_to_end(model_id)
+        return cache[model_id]
 
-def get_model(model_id: str) -> tf.keras.models.Model:
-    try:
-        return MODELS[model_id]
-    except KeyError:
+    if model_id not in paths:
         raise HTTPException(status_code=HTTP_404_NOT_FOUND,
-                            detail=f"Unknown model id {model_id}. Available models are: {list(MODELS.keys())}")
+                            detail=f"Unknown model id {model_id}. "
+                                   f"Available models are: {sorted(paths)}")
+
+    model_obj = loader(paths[model_id])
+    cache[model_id] = model_obj
+    cache.move_to_end(model_id)
+    while len(cache) > max(1, cache_limit):
+        cache.popitem(last=False)
+    return model_obj
+
+
+if settings.lazy_models:
+    MODEL_PATHS = _index_model_paths()
+    MODELS: "OrderedDict[str, tf.keras.models.Model]" = OrderedDict()
+
+    default_model = None
+
+    def get_model(model_id: str) -> tf.keras.models.Model:
+        return _get_or_load(model_id, MODEL_PATHS, MODELS,
+                            settings.model_cache_limit, tf.keras.models.load_model)
+
+else:
+    # Eager loading (default): load all models at startup — unchanged behavior for visual-inspection.
+    MODELS = _load_models()
+
+    default_model = MODELS[settings.default_model]
+
+    def get_model(model_id: str) -> tf.keras.models.Model:
+        try:
+            return MODELS[model_id]
+        except KeyError:
+            raise HTTPException(status_code=HTTP_404_NOT_FOUND,
+                                detail=f"Unknown model id {model_id}. Available models are: {list(MODELS.keys())}")
 
 
 def decode_prediction(prediction) -> str:

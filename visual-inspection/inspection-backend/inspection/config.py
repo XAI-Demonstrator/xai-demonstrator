@@ -10,6 +10,8 @@ class Settings(BaseSettings):
     path_prefix: str = Field("", env="PATH_PREFIX")
     # Model configuration
     default_model: str = Field("my_model", env="DEFAULT_MODEL")
+    lazy_models: bool = Field(False, env="LAZY_MODELS")
+    model_cache_limit: int = Field(8, env="MODEL_CACHE_LIMIT")
     # Explanation configuration
     default_explainer: str = Field("tcav", env="DEFAULT_EXPLAINER")
     # Monitoring
