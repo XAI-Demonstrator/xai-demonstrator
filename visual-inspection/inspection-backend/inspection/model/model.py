@@ -55,6 +55,24 @@ def _index_model_paths(path: pathlib.Path = PATH) -> Dict[str, pathlib.Path]:
     return index
 
 
+def _get_or_load(model_id, paths, cache, cache_limit, loader):
+    if model_id in cache:
+        cache.move_to_end(model_id)
+        return cache[model_id]
+
+    if model_id not in paths:
+        raise HTTPException(status_code=HTTP_404_NOT_FOUND,
+                            detail=f"Unknown model id {model_id}. "
+                                   f"Available models are: {sorted(paths)}")
+
+    model_obj = loader(paths[model_id])
+    cache[model_id] = model_obj
+    cache.move_to_end(model_id)
+    while len(cache) > max(1, cache_limit):
+        cache.popitem(last=False)
+    return model_obj
+
+
 if settings.lazy_models:
     MODEL_PATHS = _index_model_paths()
     MODELS: "OrderedDict[str, tf.keras.models.Model]" = OrderedDict()
@@ -62,21 +80,8 @@ if settings.lazy_models:
     default_model = None
 
     def get_model(model_id: str) -> tf.keras.models.Model:
-        if model_id in MODELS:
-            MODELS.move_to_end(model_id)
-            return MODELS[model_id]
-
-        if model_id not in MODEL_PATHS:
-            raise HTTPException(status_code=HTTP_404_NOT_FOUND,
-                                detail=f"Unknown model id {model_id}. "
-                                       f"Available models are: {sorted(MODEL_PATHS)}")
-
-        model_obj = tf.keras.models.load_model(MODEL_PATHS[model_id])
-        MODELS[model_id] = model_obj
-        MODELS.move_to_end(model_id)
-        while len(MODELS) > max(1, settings.model_cache_limit):
-            MODELS.popitem(last=False)
-        return model_obj
+        return _get_or_load(model_id, MODEL_PATHS, MODELS,
+                            settings.model_cache_limit, tf.keras.models.load_model)
 
 else:
     # Eager loading (default): load all models at startup — unchanged behavior for visual-inspection.
